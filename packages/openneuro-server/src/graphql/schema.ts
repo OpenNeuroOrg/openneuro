@@ -539,7 +539,7 @@ export const typeDefs = `
     # Total size in bytes of this draft
     size: BigInt
     # Authors list from datacite.yml || dataset_description.json
-    contributors: [Contributor] 
+    creators: [Creator] 
   }
 
   # Tagged snapshot of a draft
@@ -580,7 +580,7 @@ export const typeDefs = `
     # Single list of files to download this snapshot (only available on snapshots)
     downloadFiles: [DatasetFile]
     # Authors list from datacite.yml || dataset_description.json
-    contributors: [Contributor] 
+    creators: [Creator] 
   }
 
   # RelatedObject nature of relationship
@@ -650,12 +650,12 @@ export const typeDefs = `
     EthicsApprovals: [String]
   }
 
-  # Defines the Contributor type in contributors.ts
-  type Contributor {
-    name: String!
-    firstname: String
-    lastname: String
-    id: String
+  # Defines the Creator type in creators.ts
+  type Creator {
+    name: String! 
+    givenName: String 
+    familyName: String 
+    orcid: String 
   }
 
 

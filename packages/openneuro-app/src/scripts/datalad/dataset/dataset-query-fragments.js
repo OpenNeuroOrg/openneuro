@@ -47,11 +47,11 @@ export const DRAFT_FRAGMENT = gql`
           version
         }
       }
-      contributors {
+      creators {
         name
-        firstname
-        lastname
-        id
+        givenName 
+        familyName 
+        orcid 
       }
     }
   }
@@ -229,11 +229,11 @@ export const SNAPSHOT_FIELDS = gql`
     }
     ...SnapshotIssues
     hexsha
-    contributors {
+    creators {
       name
-      firstname
-      lastname
-      id
+      givenName 
+      familyName 
+      orcid 
     }
   }
   ${SNAPSHOT_ISSUES}

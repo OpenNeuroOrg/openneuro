@@ -36,12 +36,12 @@ const mockDataset = {
       subjects: [],
     },
     readme: "This is a test dataset readme.",
-    contributors: [
+    creators: [
       {
         name: "Author One",
         firstname: "Author",
         lastname: "One",
-        id: "0000-0001-2345-6789",
+        orcid: "0000-0001-2345-6789",
       },
       { name: "Author Two", firstname: "Author", lastname: "Two", id: null }, // Example with no ORCID
     ],

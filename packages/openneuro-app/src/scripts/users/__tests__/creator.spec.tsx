@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react"
 import { MemoryRouter } from "react-router-dom"
 import { MockedProvider } from "@apollo/client/testing"
 import { vi } from "vitest"
-import { SingleContributorDisplay } from "../contributor"
+import { SingleCreatorDisplay } from "../creator"
 
 // --- Mock Dependencies ---
 vi.mock("../../queries/user", () => ({
@@ -20,17 +20,17 @@ vi.mock("../../assets/ORCIDiD_iconvector.svg", () => ({
   default: "mock-orcid-logo.svg",
 }))
 
-describe("SingleContributorDisplay - Basic Loading", () => {
+describe("SingleCreatorDisplay - Basic Loading", () => {
   const renderComponent = (props: {
-    contributor: { name?: string; id?: string | null }
+    creator: { name?: string; orcid?: string | null }
     isLast?: boolean
     separator?: React.ReactNode
   }) => {
     return render(
       <MemoryRouter>
         <MockedProvider>
-          <SingleContributorDisplay
-            contributor={props.contributor}
+          <SingleCreatorDisplay
+            creator={props.creator}
             isLast={props.isLast ?? true}
             separator={props.separator ?? null}
           />
@@ -53,24 +53,24 @@ describe("SingleContributorDisplay - Basic Loading", () => {
     })
   })
 
-  it("renders the component and displays the contributor name", async () => {
-    const contributor = { name: "Jane Doe", id: null }
-    renderComponent({ contributor })
+  it("renders the component and displays the creator name", async () => {
+    const creator = { name: "Jane Doe", orcid: null }
+    renderComponent({ creator })
     expect(screen.getByText("Jane Doe")).toBeInTheDocument()
   })
 
-  it("renders 'Unknown Contributor' if the contributor name is missing", async () => {
-    const contributor = { name: undefined, id: null }
-    renderComponent({ contributor })
-    expect(screen.getByText("Unknown Contributor")).toBeInTheDocument()
+  it("renders 'Unknown Creator' if the creator name is missing", async () => {
+    const creator = { name: undefined, orcid: null }
+    renderComponent({ creator })
+    expect(screen.getByText("Unknown Creator")).toBeInTheDocument()
   })
 
   it("renders the component and displays the ORCID link if an ID is provided", async () => {
     const testOrcid = "0000-0000-0000-0000"
-    const contributor = { name: "Author With ORCID", id: `ORCID:${testOrcid}` }
-    renderComponent({ contributor })
+    const creator = { name: "Author With ORCID", orcid: testOrcid }
+    renderComponent({ creator })
     const orcidLink = screen.getByLabelText(
-      `ORCID profile for ${contributor.name}`,
+      `ORCID profile for ${creator.name}`,
     )
     expect(orcidLink).toBeInTheDocument()
     expect(orcidLink).toHaveAttribute(

@@ -2,30 +2,26 @@ import React from "react"
 import type { FC } from "react"
 import { Link } from "react-router-dom"
 import { useUser } from "../queries/user"
-import type { Contributor } from "../types/contributors"
+import type { Creator } from "../types/creators"
 import ORCIDiDLogo from "../../assets/ORCIDiD_iconvector.svg"
 
-interface SingleContributorDisplayProps {
-  contributor: Contributor
+interface SingleCreatorDisplayProps {
+  creator: Creator
   isLast: boolean
   separator: React.ReactNode
 }
 
 /**
- * Displays a single contributor's name and ORCID link.
+ * Displays a single creator's name and ORCID link.
  * Conditionally links the name to a user profile if a user with the ORCID exists.
  */
-export const SingleContributorDisplay: FC<SingleContributorDisplayProps> = ({
-  contributor,
+export const SingleCreatorDisplay: FC<SingleCreatorDisplayProps> = ({
+  creator,
   isLast,
   separator,
 }) => {
-  // Clean the ORCID ID by removing 'ORCID:' prefix if it exists
-  const cleanORCID = contributor.id
-    ? contributor.id.replace(/^ORCID:/, "")
-    : null
-  const { user, loading } = useUser(cleanORCID || undefined)
-  const displayName = contributor.name || "Unknown Contributor"
+  const { user, loading } = useUser(creator.orcid || undefined)
+  const displayName = creator.name || "Unknown Creator"
   const orcidBaseURL = "https://orcid.org/"
 
   if (loading) {
@@ -42,20 +38,19 @@ export const SingleContributorDisplay: FC<SingleContributorDisplayProps> = ({
 
   return (
     <>
-      {/* Wrap name in Link to user profile if ORCID exists AND user was found */}
-      {cleanORCID && userExists
+      {creator.orcid && userExists
         ? (
-          <Link to={`/user/${cleanORCID}`}>
+          <Link to={`/user/${creator.orcid}`}>
             {displayName}
           </Link>
         )
         : displayName}
 
-      {cleanORCID && (
+      {creator.orcid && (
         <>
           {" "}
           <a
-            href={`${orcidBaseURL}${cleanORCID}`}
+            href={`${orcidBaseURL}${creator.orcid}`}
             target="_blank"
             rel="noopener noreferrer"
             aria-label={`ORCID profile for ${displayName}`}
