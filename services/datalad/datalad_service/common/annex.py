@@ -13,17 +13,23 @@ import datalad_service.config
 
 SERVICE_EMAIL = 'git@openneuro.org'
 SERVICE_USER = 'Git Worker'
-S3_BUCKETS_WHITELIST = ['openneuro.org', 'openneuro-dev-datalad-public', 'openneuro-derivatives', 'bobsrepository']
+S3_BUCKETS_WHITELIST = [
+    'openneuro.org',
+    'openneuro-dev-datalad-public',
+    'openneuro-derivatives',
+    'bobsrepository',
+]
 
 
 class EditAnnexedFileException(Exception):
     """Snapshot conflicts with existing name."""
+
     pass
+
 
 def init_annex(dataset_path):
     """Setup git-annex within an existing git repo"""
-    subprocess.run(['git-annex', 'init', 'OpenNeuro'],
-                   check=True, cwd=dataset_path)
+    subprocess.run(['git-annex', 'init', 'OpenNeuro'], check=True, cwd=dataset_path)
 
 
 def compute_git_hash(path, size):
@@ -55,8 +61,7 @@ def parse_ls_tree_line(gitTreeLine):
 
 def read_ls_tree_line(gitTreeLine, files, symlinkFilenames, symlinkObjects):
     """Read one line of `git ls-tree` and append to the correct buckets of files, symlinks, and objects."""
-    filename, mode, obj_type, obj_hash, size = parse_ls_tree_line(
-        gitTreeLine)
+    filename, mode, obj_type, obj_hash, size = parse_ls_tree_line(gitTreeLine)
     # Skip git / datalad files
     if filename.startswith('.git'):
         return
@@ -65,23 +70,40 @@ def read_ls_tree_line(gitTreeLine, files, symlinkFilenames, symlinkObjects):
     if filename == '.gitattributes':
         return
     # Check if the file is annexed or a submodule
-    if (mode == '120000'):
+    if mode == '120000':
         # Save annexed file symlinks for batch processing
         symlinkFilenames.append(filename)
         symlinkObjects.append(obj_hash)
-    elif (mode == '160000'):
+    elif mode == '160000':
         # Skip submodules
         return
     else:
         # Immediately append regular files
-        if (size == '-'):
+        if size == '-':
             # Tree objects do not have sizes and are never annexed
             files.append(
-                {'id': obj_hash, 'filename': filename, 'directory': True, 'annexed': False, 'size': 0, 'urls': []})
+                {
+                    'id': obj_hash,
+                    'filename': filename,
+                    'directory': True,
+                    'annexed': False,
+                    'size': 0,
+                    'urls': [],
+                }
+            )
         else:
             file_id = compute_file_hash(obj_hash, filename)
-            files.append({'filename': filename, 'size': int(size),
-                          'id': file_id, 'key': obj_hash, 'directory': False, 'urls': [], 'annexed': False})
+            files.append(
+                {
+                    'filename': filename,
+                    'size': int(size),
+                    'id': file_id,
+                    'key': obj_hash,
+                    'directory': False,
+                    'urls': [],
+                    'annexed': False,
+                }
+            )
 
 
 def compute_rmet(key, legacy=False):
@@ -95,8 +117,7 @@ def compute_rmet(key, legacy=False):
 
 
 def parse_remote_line(remoteLine):
-    remoteConfig = dict(item.split('=')
-                        for item in remoteLine[37:].split(' '))
+    remoteConfig = dict(item.split('=') for item in remoteLine[37:].split(' '))
     if remoteConfig['type'] == 'S3' and remoteConfig['bucket'] in S3_BUCKETS_WHITELIST:
         remoteUuid = remoteLine[0:36]
         remoteUrl = remoteConfig['publicurl'] if 'publicurl' in remoteConfig else None
@@ -133,18 +154,21 @@ def read_rmet_file(remote, catFile):
 
 def encode_remote_url(url):
     """S3 requires some characters to be encoded"""
-    return urllib.parse.quote_plus(url, safe="/:?=")
+    return urllib.parse.quote_plus(url, safe='/:?=')
 
 
 def get_repo_urls(path, files):
     """For each file provided, obtain the rmet data and append URLs if possible."""
     # First obtain the git-annex branch objects
     gitAnnexBranch = subprocess.Popen(
-        ['git', 'ls-tree', '-l', '-r', 'git-annex'], cwd=path, stdout=subprocess.PIPE, encoding='utf-8')
+        ['git', 'ls-tree', '-l', '-r', 'git-annex'],
+        cwd=path,
+        stdout=subprocess.PIPE,
+        encoding='utf-8',
+    )
     rmetObjects = {}
     for line in gitAnnexBranch.stdout:
-        filename, mode, obj_type, obj_hash, size = parse_ls_tree_line(
-            line.rstrip())
+        filename, mode, obj_type, obj_hash, size = parse_ls_tree_line(line.rstrip())
         rmetObjects[filename] = obj_hash
     if 'remote.log' not in rmetObjects:
         # Skip searching for URLs if no remote.log is present
@@ -170,8 +194,15 @@ def get_repo_urls(path, files):
         gitObjects += rmetObjects['trust.log'] + '\n'
     gitObjects += rmetObjects['remote.log'] + '\n'
     gitObjects += '\n'.join(rmetObjects[rmetPath] for rmetPath in rmetPaths)
-    catFileProcess = subprocess.run(['git', 'cat-file', '--batch=:::%(objectname)', '--buffer'],
-                                    cwd=path, stdout=subprocess.PIPE, input=gitObjects, encoding='utf-8', bufsize=0, text=True)
+    catFileProcess = subprocess.run(
+        ['git', 'cat-file', '--batch=:::%(objectname)', '--buffer'],
+        cwd=path,
+        stdout=subprocess.PIPE,
+        input=gitObjects,
+        encoding='utf-8',
+        bufsize=0,
+        text=True,
+    )
     catFile = io.StringIO(catFileProcess.stdout)
     # Read in trust.log and remote.log first
     trustLog = {}
@@ -193,7 +224,11 @@ def get_repo_urls(path, files):
         else:
             matchedRemote = parse_remote_line(line)
             # X remotes are dead
-            if matchedRemote and matchedRemote['uuid'] in trustLog and trustLog[matchedRemote['uuid']] == "X":
+            if (
+                matchedRemote
+                and matchedRemote['uuid'] in trustLog
+                and trustLog[matchedRemote['uuid']] == 'X'
+            ):
                 continue
             if matchedRemote:
                 remote = matchedRemote
@@ -216,19 +251,27 @@ def get_repo_urls(path, files):
 def get_repo_files(dataset, dataset_path, tree):
     """Read all files in a repo at a given branch, tag, or commit hash."""
     gitProcess = subprocess.Popen(
-        ['git', 'ls-tree', '-l', tree], cwd=dataset_path, stdout=subprocess.PIPE, encoding='utf-8')
+        ['git', 'ls-tree', '-l', tree],
+        cwd=dataset_path,
+        stdout=subprocess.PIPE,
+        encoding='utf-8',
+    )
     files = []
     symlinkFilenames = []
     symlinkObjects = []
     for line in gitProcess.stdout:
         gitTreeLine = line.rstrip()
-        read_ls_tree_line(gitTreeLine, files,
-                          symlinkFilenames, symlinkObjects)
+        read_ls_tree_line(gitTreeLine, files, symlinkFilenames, symlinkObjects)
     # After regular files, process all symlinks with one git cat-file --batch call
     # This is about 100x faster than one call per file for annexed file heavy datasets
     catFileInput = '\n'.join(symlinkObjects)
-    catFileProcess = subprocess.run(['git', 'cat-file', '--batch', '--buffer'],
-                                    cwd=dataset_path, stdout=subprocess.PIPE, input=catFileInput, encoding='utf-8')
+    catFileProcess = subprocess.run(
+        ['git', 'cat-file', '--batch', '--buffer'],
+        cwd=dataset_path,
+        stdout=subprocess.PIPE,
+        input=catFileInput,
+        encoding='utf-8',
+    )
     # Output looks like this:
     # dc9dde956f6f28e425a412a4123526e330668e7e blob 140
     # ../../.git/annex/objects/Q0/VP/MD5E-s1618574--43762c4310549dcc8c5c25567f42722d.nii.gz/MD5E-s1618574--43762c4310549dcc8c5c25567f42722d.nii.gz
@@ -240,8 +283,17 @@ def get_repo_files(dataset, dataset_path, tree):
             size = int(key.split('-', 2)[1].lstrip('s'))
             filename = symlinkFilenames[(index - 1) // 2]
             file_id = compute_file_hash(key, filename)
-            files.append({'filename': filename, 'size': int(
-                size), 'id': file_id, 'key': key, 'urls': [], 'annexed': True, 'directory': False})
+            files.append(
+                {
+                    'filename': filename,
+                    'size': int(size),
+                    'id': file_id,
+                    'key': key,
+                    'urls': [],
+                    'annexed': True,
+                    'directory': False,
+                }
+            )
     # Now find URLs for each file if available
     files = get_repo_urls(dataset_path, files)
     # Provide fallbacks for any URLs that did not match rmet exports
@@ -256,8 +308,9 @@ def get_repo_files(dataset, dataset_path, tree):
 
 def get_tag_info(dataset_path, tag):
     """`git annex info <tag>`"""
-    git_process = subprocess.run(['git-annex', 'info', '--json', tag],
-                                 cwd=dataset_path, capture_output=True)
+    git_process = subprocess.run(
+        ['git-annex', 'info', '--json', tag], cwd=dataset_path, capture_output=True
+    )
     return json.loads(git_process.stdout)
 
 
@@ -276,7 +329,7 @@ def is_git_annex_remote(dataset_path, remote):
         return False
 
 
-async def edit_annexed_file(path, expected_content, new_content, encoding="utf-8"):
+async def edit_annexed_file(path, expected_content, new_content, encoding='utf-8'):
     """
     Edit a git or annexed file by correctly removing the symlink and writing the new content.
 
@@ -286,7 +339,9 @@ async def edit_annexed_file(path, expected_content, new_content, encoding="utf-8
     # Test if the annexed target exists
     if os.path.exists(real_path):
         # Open the working tree or annexed path to verify contents
-        async with aiofiles.open(real_path, 'r', encoding='utf-8', newline='') as annexed_file:
+        async with aiofiles.open(
+            real_path, 'r', encoding='utf-8', newline=''
+        ) as annexed_file:
             annexed_file_contents = await annexed_file.read()
             if expected_content != annexed_file_contents:
                 raise EditAnnexedFileException('unexpected {path} content')

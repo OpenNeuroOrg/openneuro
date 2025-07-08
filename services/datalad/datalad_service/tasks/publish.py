@@ -19,7 +19,12 @@ from datalad_service.common.annex import get_tag_info, is_git_annex_remote
 from datalad_service.common.openneuro import clear_dataset_cache
 from datalad_service.common.git import git_show, git_tag, git_tag_tree
 from datalad_service.common.github import github_export
-from datalad_service.common.s3 import s3_export, get_s3_remote, get_s3_bucket, update_s3_sibling
+from datalad_service.common.s3 import (
+    s3_export,
+    get_s3_remote,
+    get_s3_bucket,
+    update_s3_sibling,
+)
 
 logger = logging.getLogger('datalad_service.' + __name__)
 
@@ -32,8 +37,7 @@ def github_sibling(dataset_path, dataset_id):
     Find a GitHub remote or create a new repo and configure the remote.
     """
     if not is_git_annex_remote(dataset_path, 'github'):
-        datalad_service.common.github.create_github_repo(
-            dataset_path, dataset_id)
+        datalad_service.common.github.create_github_repo(dataset_path, dataset_id)
 
 
 def s3_sibling(dataset_path):
@@ -62,7 +66,14 @@ def create_remotes(dataset_path):
     github_sibling(dataset_path, dataset)
 
 
-def export_dataset(dataset_path, cookies=None, s3_export=s3_export, github_export=github_export, update_s3_sibling=update_s3_sibling, github_enabled=DATALAD_GITHUB_EXPORTS_ENABLED):
+def export_dataset(
+    dataset_path,
+    cookies=None,
+    s3_export=s3_export,
+    github_export=github_export,
+    update_s3_sibling=update_s3_sibling,
+    github_enabled=DATALAD_GITHUB_EXPORTS_ENABLED,
+):
     """
     Export dataset to S3 and GitHub.
 
@@ -89,8 +100,7 @@ def check_remote_has_version(dataset_path, remote, tag):
     try:
         info = get_tag_info(dataset_path, tag)
         remotes = info.get('repositories containing these files', [])
-        remote_repo = [r for r in remotes if r.get(
-            'description') == f'[{remote}]']
+        remote_repo = [r for r in remotes if r.get('description') == f'[{remote}]']
         remote_id_A = remote_repo and remote_repo[0].get('uuid')
 
         # extract remote uuid and associated git tree id from `git show git-annex:export.log`
@@ -129,22 +139,26 @@ def delete_s3_sibling_executor(dataset_id):
         )
         paginator = client.get_paginator('list_object_versions')
         object_delete_list = []
-        for response in paginator.paginate(Bucket=get_s3_bucket(), Prefix=f'{dataset_id}/'):
+        for response in paginator.paginate(
+            Bucket=get_s3_bucket(), Prefix=f'{dataset_id}/'
+        ):
             versions = response.get('Versions', [])
             versions.extend(response.get('DeleteMarkers', []))
             object_delete_list.extend(
-                [{'VersionId': version['VersionId'], 'Key': version['Key']} for version in versions])
+                [
+                    {'VersionId': version['VersionId'], 'Key': version['Key']}
+                    for version in versions
+                ]
+            )
         for i in range(0, len(object_delete_list), 1000):
             client.delete_objects(
                 Bucket=get_s3_bucket(),
-                Delete={
-                    'Objects': object_delete_list[i:i+1000],
-                    'Quiet': True
-                }
+                Delete={'Objects': object_delete_list[i : i + 1000], 'Quiet': True},
             )
     except Exception as e:
         raise Exception(
-            f'Attempt to delete dataset {dataset_id} from {get_s3_remote()} has failed. ({e})')
+            f'Attempt to delete dataset {dataset_id} from {get_s3_remote()} has failed. ({e})'
+        )
 
 
 async def delete_github_sibling(dataset_id):
@@ -158,7 +172,8 @@ async def delete_github_sibling(dataset_id):
         await asyncio.sleep(0)
     except StopIteration as e:
         raise Exception(
-            f'Attempt to delete dataset {dataset_id} from GitHub has failed, because the dataset does not exist. ({e})')
+            f'Attempt to delete dataset {dataset_id} from GitHub has failed, because the dataset does not exist. ({e})'
+        )
 
 
 async def delete_siblings(dataset_id):

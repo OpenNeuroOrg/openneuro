@@ -11,7 +11,6 @@ from datalad_service.tasks.publish import delete_siblings
 
 
 class DatasetResource:
-
     """A Falcon API wrapper around underlying datalad/git-annex datasets."""
 
     def __init__(self, store):

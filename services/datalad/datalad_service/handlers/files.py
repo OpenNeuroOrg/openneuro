@@ -5,14 +5,18 @@ from pathlib import Path
 import falcon
 import pygit2
 
-from datalad_service.common.git import git_show, git_show_content, git_tree, OpenNeuroGitError
+from datalad_service.common.git import (
+    git_show,
+    git_show_content,
+    git_tree,
+    OpenNeuroGitError,
+)
 from datalad_service.common.user import get_user_info
 from datalad_service.common.stream import update_file
 from datalad_service.tasks.files import remove_files
 
 
 class FilesResource:
-
     def __init__(self, store):
         self.store = store
         self.logger = logging.getLogger('datalad_service.' + __name__)
@@ -30,17 +34,24 @@ class FilesResource:
                             filename = obj.name
                             break
                 try:
-                    resp.stream, resp.content_length = await git_show_content(repo, snapshot, filename)
+                    resp.stream, resp.content_length = await git_show_content(
+                        repo, snapshot, filename
+                    )
                     resp.status = falcon.HTTP_OK
                 except pygit2.GitError:
                     resp.status = falcon.HTTP_NOT_FOUND
                     resp.media = {'error': 'file not found in git tree'}
                 except OpenNeuroGitError:
                     resp.status = falcon.HTTP_NOT_FOUND
-                    resp.media = {'error': 'invalid symlink for annexed file', 'filename': filename}
+                    resp.media = {
+                        'error': 'invalid symlink for annexed file',
+                        'filename': filename,
+                    }
             except pygit2.GitError:
                 resp.status = falcon.HTTP_NOT_FOUND
-                resp.media = {'error': 'dataset repository does not exist or could not be opened'}
+                resp.media = {
+                    'error': 'dataset repository does not exist or could not be opened'
+                }
         except KeyError:
             # File is not present in tree
             resp.media = {'error': 'file not found in git tree'}
@@ -51,11 +62,9 @@ class FilesResource:
             resp.status = falcon.HTTP_NOT_FOUND
         except:
             # Some unknown error
-            resp.media = {
-                'error': 'an unknown error occurred accessing this file'}
+            resp.media = {'error': 'an unknown error occurred accessing this file'}
             resp.status = falcon.HTTP_INTERNAL_SERVER_ERROR
-            self.logger.exception(
-                f'An unknown error processing file "{filename}"')
+            self.logger.exception(f'An unknown error processing file "{filename}"')
 
     async def on_post(self, req, resp, dataset, filename):
         """Post will create new files and adds them to the annex if they do not exist, else update existing files."""
@@ -97,8 +106,7 @@ class FilesResource:
             files_to_delete = []
             dirs_to_delete = []
             paths_not_found = []
-            filenames = [filename.replace(':', '/')
-                         for filename in media['filenames']]
+            filenames = [filename.replace(':', '/') for filename in media['filenames']]
             for filename in filenames:
                 file_path = os.path.join(ds_path, filename)
                 if os.path.exists(file_path):
@@ -118,11 +126,23 @@ class FilesResource:
                 try:
                     if len(dirs_to_delete) > 0:
                         remove_files(
-                            self.store, dataset, dirs_to_delete, name=name, email=email, cookies=req.cookies)
+                            self.store,
+                            dataset,
+                            dirs_to_delete,
+                            name=name,
+                            email=email,
+                            cookies=req.cookies,
+                        )
                         resp.status = falcon.HTTP_INTERNAL_SERVER_ERROR
                     if len(files_to_delete) > 0:
-                        remove_files(self.store, dataset, files_to_delete,
-                                     name=name, email=email, cookies=req.cookies)
+                        remove_files(
+                            self.store,
+                            dataset,
+                            files_to_delete,
+                            name=name,
+                            email=email,
+                            cookies=req.cookies,
+                        )
                     resp.media = media_dict
                     resp.status = falcon.HTTP_OK
                 except:
@@ -130,8 +150,8 @@ class FilesResource:
                     raise
             else:
                 resp.media = {
-                    'error': f'the following files not found: {", ".join(paths_not_found)}'}
+                    'error': f'the following files not found: {", ".join(paths_not_found)}'
+                }
         else:
-            resp.media = {
-                'error': 'recursive query or request body is missing'}
+            resp.media = {'error': 'recursive query or request body is missing'}
             resp.status = falcon.HTTP_BAD_REQUEST

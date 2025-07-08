@@ -12,16 +12,12 @@ def log_git_event(dataset_id, commit, reference, token):
             }
         }
     """
-    variables = {
-        "datasetId": dataset_id,
-        "reference": reference,
-        "commit": commit
-    }
+    variables = {'datasetId': dataset_id, 'reference': reference, 'commit': commit}
     try:
         requests.post(
             GRAPHQL_ENDPOINT,
-            json={"query": query, "variables": variables},
-            headers={"Authorization": f"Bearer {token}"}
+            json={'query': query, 'variables': variables},
+            headers={'Authorization': f'Bearer {token}'},
         )
     except Exception as e:
-        print(f"Error logging git event: {e}")
+        print(f'Error logging git event: {e}')

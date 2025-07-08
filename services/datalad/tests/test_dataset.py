@@ -5,9 +5,7 @@ import pytest
 
 
 def test_get_dataset(client):
-    doc = {
-        'accession_number': 'ds000001'
-    }
+    doc = {'accession_number': 'ds000001'}
 
     response = client.simulate_get('/datasets/{}'.format('ds000001'))
     result_doc = json.loads(response.content)

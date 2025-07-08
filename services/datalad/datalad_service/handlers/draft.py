@@ -20,11 +20,16 @@ class DraftResource:
         if dataset and os.path.exists(dataset_path):
             repo = pygit2.Repository(dataset_path)
             commit = repo.revparse_single('HEAD')
-            resp.media = {'ref': str(commit.id),
-                          'hexsha': str(commit.id), # Deprecate 'hexsha' but retain for now
-                          'tree': str(commit.tree_id),
-                          'message': str(commit.message),
-                          'modified': datetime.datetime.fromtimestamp(commit.author.time).isoformat() + 'Z'}
+            resp.media = {
+                'ref': str(commit.id),
+                'hexsha': str(commit.id),  # Deprecate 'hexsha' but retain for now
+                'tree': str(commit.tree_id),
+                'message': str(commit.message),
+                'modified': datetime.datetime.fromtimestamp(
+                    commit.author.time
+                ).isoformat()
+                + 'Z',
+            }
             resp.status = falcon.HTTP_OK
         else:
             resp.status = falcon.HTTP_NOT_FOUND
@@ -57,6 +62,5 @@ class DraftResource:
                 raise
                 resp.status = falcon.HTTP_INTERNAL_SERVER_ERROR
         else:
-            resp.media = {
-                'error': 'Missing or malformed dataset parameter in request.'}
+            resp.media = {'error': 'Missing or malformed dataset parameter in request.'}
             resp.status = falcon.HTTP_UNPROCESSABLE_ENTITY

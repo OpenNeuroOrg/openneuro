@@ -6,13 +6,17 @@ import falcon
 
 from datalad_service.common.annex import EditAnnexedFileException
 from datalad_service.common.git import delete_tag
-from datalad_service.tasks.snapshots import create_snapshot, get_snapshot, get_snapshots, SnapshotExistsException
+from datalad_service.tasks.snapshots import (
+    create_snapshot,
+    get_snapshot,
+    get_snapshots,
+    SnapshotExistsException,
+)
 from datalad_service.tasks.files import get_tree
 from datalad_service.tasks.publish import export_dataset, monitor_remote_configs
 
 
 class SnapshotResource:
-
     """Snapshots on top of DataLad datasets."""
 
     def __init__(self, store):
@@ -34,8 +38,7 @@ class SnapshotResource:
                 # Tree returned objects but does not exist?
                 resp.status = falcon.HTTP_NOT_FOUND
         else:
-            tags = get_snapshots(self.store,
-                                 dataset)
+            tags = get_snapshots(self.store, dataset)
             resp.media = {'snapshots': tags}
             resp.status = falcon.HTTP_OK
 
@@ -54,15 +57,17 @@ class SnapshotResource:
 
         try:
             created = await create_snapshot(
-                self.store, dataset, snapshot, description_fields, snapshot_changes)
+                self.store, dataset, snapshot, description_fields, snapshot_changes
+            )
             resp.media = created
             resp.status = falcon.HTTP_OK
 
             if not skip_publishing:
                 monitor_remote_configs(ds_path)
                 # Publish after response
-                asyncio.get_event_loop().run_in_executor(None, export_dataset,
-                                                         ds_path, req.cookies)
+                asyncio.get_event_loop().run_in_executor(
+                    None, export_dataset, ds_path, req.cookies
+                )
         except SnapshotExistsException as err:
             resp.media = {'error': repr(err)}
             resp.status = falcon.HTTP_CONFLICT

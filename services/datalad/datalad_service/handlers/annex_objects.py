@@ -6,7 +6,6 @@ from datalad_service.tasks.files import remove_annex_object
 
 
 class AnnexObjectsResource:
-
     def __init__(self, store):
         self.store = store
         self.logger = logging.getLogger('datalad_service.' + __name__)
@@ -15,7 +14,7 @@ class AnnexObjectsResource:
         """Delete an existing annex_object on a dataset"""
         if annex_key:
             dataset_path = self.store.get_dataset_path(dataset)
-            if (not remove_annex_object(dataset_path, annex_key)):
+            if not remove_annex_object(dataset_path, annex_key):
                 # Failed to remove, the key most likely does not exist
                 resp.media = {'error': 'file does not exist'}
                 resp.status = falcon.HTTP_NOT_FOUND
