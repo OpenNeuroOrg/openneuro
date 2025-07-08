@@ -538,7 +538,7 @@ export const typeDefs = `
     head: String
     # Total size in bytes of this draft
     size: BigInt
-    # Authors list from datacite.yml || dataset_description.json
+    # Creators list from datacite.yml || Authors list from dataset_description.json
     creators: [Creator] 
   }
 

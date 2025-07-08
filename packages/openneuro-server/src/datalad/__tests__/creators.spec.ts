@@ -172,7 +172,7 @@ describe("creators (core functionality)", () => {
       text: () => Promise.resolve(dataciteYamlContent),
     })
     mockYamlLoad.mockReturnValueOnce(parsedDatacite)
-    mockDescription.mockResolvedValueOnce(null) // Ensure description doesn't provide authors
+    mockDescription.mockResolvedValueOnce(null)
     const result = await creators({
       id: MOCK_DATASET_ID,
       revision: MOCK_REVISION,

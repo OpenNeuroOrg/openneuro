@@ -43,7 +43,7 @@ const mockDataset = {
         lastname: "One",
         orcid: "0000-0001-2345-6789",
       },
-      { name: "Author Two", firstname: "Author", lastname: "Two", id: null }, // Example with no ORCID
+      { name: "Author Two", firstname: "Author", lastname: "Two", id: null },
     ],
   },
   snapshots: [],
