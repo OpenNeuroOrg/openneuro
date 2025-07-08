@@ -766,7 +766,7 @@ OCI-1131441 (R. Poldrack, PI) in any publications.
           class="col sidebar"
         >
           <div
-            class="dataset-meta-block undefined"
+            class="dataset-meta-block "
           >
             <h2
               class="dmb-heading"
@@ -776,7 +776,7 @@ OCI-1131441 (R. Poldrack, PI) in any publications.
             ds001032
           </div>
           <div
-            class="dataset-meta-block undefined"
+            class="dataset-meta-block "
           >
             <h2
               class="dmb-heading"
@@ -810,7 +810,7 @@ OCI-1131441 (R. Poldrack, PI) in any publications.
             </a>
           </div>
           <div
-            class="dataset-meta-block undefined"
+            class="dataset-meta-block "
           >
             <h2
               class="dmb-heading"
@@ -937,7 +937,7 @@ OCI-1131441 (R. Poldrack, PI) in any publications.
             N/A
           </div>
           <div
-            class="dataset-meta-block undefined"
+            class="dataset-meta-block "
           >
             <h2
               class="dmb-heading"
@@ -947,7 +947,7 @@ OCI-1131441 (R. Poldrack, PI) in any publications.
             Test User on 2021-12-17 - almost 2 years ago
           </div>
           <div
-            class="dataset-meta-block undefined"
+            class="dataset-meta-block "
           >
             <h2
               class="dmb-heading"
@@ -957,7 +957,7 @@ OCI-1131441 (R. Poldrack, PI) in any publications.
             2021-12-17 - almost 2 years ago
           </div>
           <div
-            class="dataset-meta-block undefined"
+            class="dataset-meta-block "
           >
             <h2
               class="dmb-heading"
@@ -967,7 +967,7 @@ OCI-1131441 (R. Poldrack, PI) in any publications.
             1
           </div>
           <div
-            class="dataset-meta-block undefined"
+            class="dataset-meta-block "
           >
             <h2
               class="dmb-heading"
@@ -977,7 +977,7 @@ OCI-1131441 (R. Poldrack, PI) in any publications.
             2
           </div>
           <div
-            class="dataset-meta-block undefined"
+            class="dataset-meta-block "
           >
             <h2
               class="dmb-heading"
@@ -991,7 +991,7 @@ OCI-1131441 (R. Poldrack, PI) in any publications.
             </a>
           </div>
           <div
-            class="dataset-meta-block undefined"
+            class="dataset-meta-block "
           >
             <h2
               class="dmb-heading"
@@ -1001,7 +1001,7 @@ OCI-1131441 (R. Poldrack, PI) in any publications.
             CC0
           </div>
           <div
-            class="dataset-meta-block undefined"
+            class="dataset-meta-block "
           >
             <h2
               class="dmb-heading"
@@ -1064,7 +1064,7 @@ OCI-1131441 (R. Poldrack, PI) in any publications.
             </h5>
           </div>
           <div
-            class="dataset-meta-block undefined"
+            class="dataset-meta-block "
           >
             <h2
               class="dmb-heading"
@@ -1073,7 +1073,7 @@ OCI-1131441 (R. Poldrack, PI) in any publications.
             </h2>
           </div>
           <div
-            class="dataset-meta-block undefined"
+            class="dataset-meta-block "
           >
             <h2
               class="dmb-heading"
