@@ -2,6 +2,7 @@ import json
 import os
 import subprocess
 import random
+import pygit2
 
 
 def audit_datasets(store):
