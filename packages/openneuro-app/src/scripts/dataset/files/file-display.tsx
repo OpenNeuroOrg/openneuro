@@ -1,5 +1,4 @@
 import React, { useContext } from "react"
-import PropTypes from "prop-types"
 import { useParams } from "react-router-dom"
 import FileView from "./file-view.jsx"
 import { apiPath } from "./file"
@@ -23,10 +22,16 @@ const PathBreadcrumb = styled.div`
   }
 `
 
+interface FileDisplayBreadcrumbProps {
+  filePath: string
+}
+
 /**
  * Create dataset -> dir -> filename breadcrumbs
  */
-export const FileDisplayBreadcrumb = ({ filePath }) => {
+export const FileDisplayBreadcrumb = (
+  { filePath }: FileDisplayBreadcrumbProps,
+) => {
   const tokens = filePath.split(":")
   return (
     <>
@@ -51,13 +56,23 @@ export const FileDisplayBreadcrumb = ({ filePath }) => {
   )
 }
 
-FileDisplayBreadcrumb.propTypes = {
-  filePath: PropTypes.string,
+interface FileDisplayFileArray {
+  filename: string
+  directory: boolean
+  urls: string[]
 }
 
-const FileDisplay = ({ dataset, snapshotTag = null, filePath }) => {
+interface FileDisplayProps {
+  datasetId: string
+  files: FileDisplayFileArray[]
+  snapshotTag?: string
+  filePath?: string
+}
+
+const FileDisplay = (
+  { datasetId, files, snapshotTag = null, filePath }: FileDisplayProps,
+) => {
   const { fetchMore } = useContext(DatasetQueryContext)
-  const files = snapshotTag ? dataset.files : dataset.draft.files
   const datasetFile = files.find((file) => file.filename === filePath)
   // If no file matches, we are missing data, load the next missing parent
   if (!datasetFile) {
@@ -66,7 +81,7 @@ const FileDisplay = ({ dataset, snapshotTag = null, filePath }) => {
       const path = components.slice(0, i).join(":")
       const file = files.find((file) => file.filename === path)
       if (file && file.directory) {
-        fetchMoreDirectory(fetchMore, dataset.id, snapshotTag, file)
+        fetchMoreDirectory(fetchMore, datasetId, snapshotTag, file)
         break
       }
     }
@@ -80,7 +95,7 @@ const FileDisplay = ({ dataset, snapshotTag = null, filePath }) => {
     )
   } else {
     const url = datasetFile?.urls?.[0] ||
-      apiPath(dataset.id, snapshotTag, filePath)
+      apiPath(datasetId, snapshotTag, filePath)
     return (
       <DatasetPageBorder className="dataset-form display-file">
         <PathBreadcrumb>
@@ -106,25 +121,23 @@ const FileDisplay = ({ dataset, snapshotTag = null, filePath }) => {
   }
 }
 
-FileDisplay.propTypes = {
-  datasetId: PropTypes.string,
-  filePath: PropTypes.string,
-  snapshotTag: PropTypes.string,
+interface FileDisplayRouteProps {
+  datasetId: string
+  files: FileDisplayFileArray[]
+  snapshotTag?: string
 }
 
-export const FileDisplayRoute = ({ dataset, snapshotTag }) => {
+export const FileDisplayRoute = (
+  { datasetId, files, snapshotTag }: FileDisplayRouteProps,
+) => {
   return (
     <FileDisplay
-      dataset={dataset}
+      datasetId={datasetId}
+      files={files}
       snapshotTag={snapshotTag}
       {...useParams()}
     />
   )
-}
-
-FileDisplayRoute.propTypes = {
-  datasetId: PropTypes.string,
-  snapshotTag: PropTypes.string,
 }
 
 export default FileDisplay
