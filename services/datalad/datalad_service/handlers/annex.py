@@ -17,8 +17,8 @@ def hashdirmixed(key):
     digest = hashlib.md5(key.encode()).digest()
     first_word = struct.unpack('<I', digest[:4])[0]
     nums = [first_word >> (6 * x) & 31 for x in range(4)]
-    letters = ["0123456789zqjxkmvwgpfZQJXKMVWGPF"[i] for i in nums]
-    return (f"{letters[1]:s}{letters[0]:s}", f"{letters[3]:s}{letters[2]:s}")
+    letters = ['0123456789zqjxkmvwgpfZQJXKMVWGPF'[i] for i in nums]
+    return (f'{letters[1]:s}{letters[0]:s}', f'{letters[3]:s}{letters[2]:s}')
 
 
 def key_to_path(key):

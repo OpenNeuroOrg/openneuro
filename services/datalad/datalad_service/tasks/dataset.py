@@ -3,6 +3,7 @@ Dataset global tasks
 
 Any operations that affect an entire dataset (such as creating snapshots)
 """
+
 import asyncio
 import os
 import stat
@@ -51,8 +52,7 @@ def create_dataset(store, dataset, author=None, initial_head='main'):
         raise Exception('Dataset already exists')
     if not author:
         author = pygit2.Signature(COMMITTER_NAME, COMMITTER_EMAIL)
-    repo = pygit2.init_repository(
-        dataset_path, False, initial_head=initial_head)
+    repo = pygit2.init_repository(dataset_path, False, initial_head=initial_head)
     init_annex(dataset_path)
     # Setup .gitattributes to limit what files are annexed by default
     with open(os.path.join(dataset_path, '.gitattributes'), 'w') as gitattributes:
@@ -61,8 +61,13 @@ def create_dataset(store, dataset, author=None, initial_head='main'):
     # Set a datalad UUID
     create_datalad_config(dataset_path)
     repo.index.add('.datalad/config')
-    git_commit(repo, ['.gitattributes', '.datalad/config'], author,
-               '[OpenNeuro] Dataset created', parents=[])
+    git_commit(
+        repo,
+        ['.gitattributes', '.datalad/config'],
+        author,
+        '[OpenNeuro] Dataset created',
+        parents=[],
+    )
     return str(repo.head.target)
 
 

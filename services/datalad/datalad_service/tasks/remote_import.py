@@ -13,7 +13,9 @@ def download_file(url, destination_filename):
             shutil.copyfileobj(r.raw, f)
 
 
-def remote_dataset_import(dataset_path, upload_path, import_id, url, name, email, cookies):
+def remote_dataset_import(
+    dataset_path, upload_path, import_id, url, name, email, cookies
+):
     """Given a zip file URL, download and unpack the URL into a dataset."""
     download_path = os.path.join(upload_path, f'{import_id}.zip')
     os.makedirs(upload_path, exist_ok=True)
@@ -32,8 +34,7 @@ def remote_dataset_import(dataset_path, upload_path, import_id, url, name, email
 
     # Copy into the repo
     dataset_id = os.path.basename(dataset_path)
-    move_files_into_repo(dataset_id, dataset_path,
-                         data_path, name, email, cookies)
+    move_files_into_repo(dataset_id, dataset_path, data_path, name, email, cookies)
 
     # Clean up all upload temporary data
     shutil.rmtree(upload_path)
@@ -46,14 +47,17 @@ def import_complete_mutation(import_id, success, message=''):
             'id': import_id,
             'success': success,
             'message': message,
-        }
+        },
     }
 
 
 def notify_import_complete(import_id, success, message, cookies):
     """Update the API when an import is complete."""
     r = requests.post(
-        url=GRAPHQL_ENDPOINT, json=import_complete_mutation(import_id, success, message), cookies=cookies)
+        url=GRAPHQL_ENDPOINT,
+        json=import_complete_mutation(import_id, success, message),
+        cookies=cookies,
+    )
     if r.status_code != 200:
         raise Exception(r.text)
 
@@ -63,11 +67,11 @@ def remote_import(dataset_path, upload_path, import_id, url, name, email, cookie
     success = True
     message = ''
     try:
-        remote_dataset_import(dataset_path, upload_path,
-                              import_id, url, name, email, cookies)
+        remote_dataset_import(
+            dataset_path, upload_path, import_id, url, name, email, cookies
+        )
     except Exception as e:
         success = False
-        message = ''.join(traceback.format_exception(
-            type(e), e, e.__traceback__))
+        message = ''.join(traceback.format_exception(type(e), e, e.__traceback__))
     finally:
         notify_import_complete(import_id, success, message, cookies)

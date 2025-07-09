@@ -6,6 +6,7 @@ from datalad_service.tasks.validator import validate_dataset_deno_call
 from unittest.mock import Mock
 from types import SimpleNamespace
 
+
 class MockLogger:
     pass
 
@@ -25,13 +26,12 @@ def mock_validator_crash(monkeypatch):
     async def return_bad_json(*args, **kwargs):
         async def noop():
             pass
+
         async def invalidJson():
             return (b'{invalidJson', b'')
-        return SimpleNamespace(
-            wait=noop,
-            kill=noop,
-            communicate=invalidJson
-        )
+
+        return SimpleNamespace(wait=noop, kill=noop, communicate=invalidJson)
+
     monkeypatch.setattr(asyncio, 'create_subprocess_exec', return_bad_json)
 
 

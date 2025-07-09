@@ -32,6 +32,7 @@ dev = [
     "pytest-asyncio>=1.0.0",
     "pytest-cov>=6.1.1",
     "pytest-xdist>=3.7.0",
+    "ruff>=0.12.2",
 ]
 
 [tool.hatch.version]
@@ -40,3 +41,6 @@ fallback-version = "0+unknown"
 
 [tool.hatch.version.raw-options]
 root = "../.."
+
+[tool.ruff.format]
+quote-style = "single"

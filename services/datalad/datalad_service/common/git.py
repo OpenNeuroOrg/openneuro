@@ -17,6 +17,7 @@ COMMITTER_EMAIL = 'git@openneuro.org'
 
 logger = logging.getLogger(__name__)
 
+
 class OpenNeuroGitError(Exception):
     """OpenNeuro git repo states that should not arise under normal use but may be a valid git operation in other contexts."""
 
@@ -63,7 +64,7 @@ async def git_show_content(repo, committish, filename):
     blob = commit.tree / filename
     blobio = pygit2.BlobIO(blob)
     initial_bytes = blobio.read(4096)
-    if initial_bytes.find(b".git/annex") != -1:
+    if initial_bytes.find(b'.git/annex') != -1:
         with blobio:
             result = str(from_bytes(initial_bytes + blobio.read()).best())
         # Resolve absolute path for annex target
@@ -72,10 +73,10 @@ async def git_show_content(repo, committish, filename):
         )
         # Verify the annex path is within the dataset dir
         if dataset_root == os.path.commonpath((dataset_root, target_path)):
-            file_obj = await aiofiles.open(target_path, "rb")
+            file_obj = await aiofiles.open(target_path, 'rb')
             return stream_from_reader(file_obj), os.path.getsize(target_path)
         else:
-            raise OpenNeuroGitError("Invalid symlinked path in git_show_content")
+            raise OpenNeuroGitError('Invalid symlinked path in git_show_content')
     else:
         # Git object
         return stream_from_reader(blobio, start=initial_bytes), blob.size
@@ -126,36 +127,43 @@ def git_rename_master_to_main(repo):
         repo.references['HEAD'].set_target('refs/heads/main')
 
 
-def git_commit(repo, file_paths, author=None, message="[OpenNeuro] Recorded changes", parents=None):
+def git_commit(
+    repo, file_paths, author=None, message='[OpenNeuro] Recorded changes', parents=None
+):
     """Commit array of paths at HEAD."""
     # master -> main if required
     git_rename_master_to_main(repo)
     # Early abort for this commit if HEAD is not main
     if repo.references['HEAD'].target != 'refs/heads/main':
         raise OpenNeuroGitError(
-            'HEAD points at invalid branch name ({}) and commit was aborted'.format(repo.references['HEAD'].target))
+            'HEAD points at invalid branch name ({}) and commit was aborted'.format(
+                repo.references['HEAD'].target
+            )
+        )
     # Refresh index with git-annex specific handling
-    annex_command = ["git-annex", "add"] + file_paths
+    annex_command = ['git-annex', 'add'] + file_paths
     try:
         subprocess.run(annex_command, check=True, capture_output=True, cwd=repo.workdir)
     except subprocess.CalledProcessError as e:
         sentry_sdk.capture_exception(e)
-        logger.error(f"Error running git-annex add for paths {file_paths}: {e}")
-        logger.error(f"Stderr: {e.stderr}")
-        logger.error(f"Stdout: {e.stdout}")
-        raise OpenNeuroGitError(f"git-annex add failed: {e.stderr}") from e
+        logger.error(f'Error running git-annex add for paths {file_paths}: {e}')
+        logger.error(f'Stderr: {e.stderr}')
+        logger.error(f'Stdout: {e.stdout}')
+        raise OpenNeuroGitError(f'git-annex add failed: {e.stderr}') from e
     # git-annex add updates the index, make sure we reload it
     try:
         repo.index.read(force=True)
-        logger.debug("Reloaded index after git-annex add.")
+        logger.debug('Reloaded index after git-annex add.')
     except Exception as e:
         sentry_sdk.capture_exception(e)
-        logger.error(f"Failed to read index after git-annex add: {e}")
-        raise OpenNeuroGitError(f"Failed to read index: {e}") from e
+        logger.error(f'Failed to read index after git-annex add: {e}')
+        raise OpenNeuroGitError(f'Failed to read index: {e}') from e
     return git_commit_index(repo, author, message, parents)
 
 
-def git_commit_index(repo, author=None, message="[OpenNeuro] Recorded changes", parents=None):
+def git_commit_index(
+    repo, author=None, message='[OpenNeuro] Recorded changes', parents=None
+):
     """Commit any existing index changes."""
     committer = pygit2.Signature(COMMITTER_NAME, COMMITTER_EMAIL)
     if not author:
@@ -166,6 +174,7 @@ def git_commit_index(repo, author=None, message="[OpenNeuro] Recorded changes", 
         parent_commits = parents
     tree = repo.index.write_tree()
     commit = repo.create_commit(
-        'refs/heads/main', author, committer, message, tree, parent_commits)
+        'refs/heads/main', author, committer, message, tree, parent_commits
+    )
     repo.head.set_target(commit)
     return commit

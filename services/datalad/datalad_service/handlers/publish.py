@@ -10,7 +10,6 @@ executor = ProcessPoolExecutor(4)
 
 
 class PublishResource:
-
     """A Falcon API wrapper around underlying datalad/git-annex datasets."""
 
     def __init__(self, store):

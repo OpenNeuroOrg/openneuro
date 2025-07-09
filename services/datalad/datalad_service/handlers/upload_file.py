@@ -18,7 +18,6 @@ def skip_invalid_files(filename):
 
 
 class UploadFileResource(UploadResource):
-
     def __init__(self, store):
         self.store = store
         self.logger = logging.getLogger('datalad_service.' + __name__)
@@ -26,7 +25,11 @@ class UploadFileResource(UploadResource):
     def _check_access(self, req, dataset, upload):
         user = 'user' in req.context and req.context['user'] or None
         # Check that this request includes the correct token
-        if user != None and 'dataset:upload' in user['scopes'] and user['dataset'] == dataset:
+        if (
+            user != None
+            and 'dataset:upload' in user['scopes']
+            and user['dataset'] == dataset
+        ):
             return True
         else:
             return False
@@ -39,8 +42,7 @@ class UploadFileResource(UploadResource):
             resp.media = {'error': 'Authentication required for uploads'}
             resp.status = falcon.HTTP_UNAUTHORIZED
         else:
-            resp.media = {
-                'error': 'You do not have permission to access this dataset'}
+            resp.media = {'error': 'You do not have permission to access this dataset'}
             resp.status = falcon.HTTP_FORBIDDEN
 
     async def on_post(self, req, resp, worker, dataset, upload, filename):
@@ -48,7 +50,7 @@ class UploadFileResource(UploadResource):
         if self._check_access(req, dataset, upload):
             if skip_invalid_files(filename):
                 # Allow the client to detect this but return 200 status
-                resp.media = {"skipped": True}
+                resp.media = {'skipped': True}
                 resp.status = falcon.HTTP_OK
                 return
             upload_path = self.store.get_upload_path(dataset, upload)
@@ -68,6 +70,6 @@ class UploadFileResource(UploadResource):
             upload_path = self.store.get_upload_path(dataset, upload)
             uploaded_files = os.listdir(upload_path)
             resp.status = falcon.HTTP_OK
-            resp.media = {"files": uploaded_files}
+            resp.media = {'files': uploaded_files}
         else:
             self._handle_failed_access(req, resp)

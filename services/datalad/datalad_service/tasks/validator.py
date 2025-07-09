@@ -12,10 +12,7 @@ logger = logging.getLogger('datalad_service.' + __name__)
 
 DENO_VALIDATOR_VERSION = '2.0.7'
 
-DENO_METADATA = {
-    'validator': 'schema',
-    'version': DENO_VALIDATOR_VERSION
-}
+DENO_METADATA = {'validator': 'schema', 'version': DENO_VALIDATOR_VERSION}
 
 
 def escape_ansi(text):
@@ -25,7 +22,9 @@ def escape_ansi(text):
 
 async def run_and_decode(args, logger):
     """Run a subprocess and return the JSON output."""
-    process = await asyncio.create_subprocess_exec(*args, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
+    process = await asyncio.create_subprocess_exec(
+        *args, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
+    )
     # Retrieve what we can from the process
     stdout, stderr = await process.communicate()
 
@@ -39,7 +38,6 @@ async def run_and_decode(args, logger):
         logger.error(stderr)
 
 
-
 async def validate_dataset_deno_call(dataset_path, ref, logger=logger):
     """
     Synchronous dataset validation.
@@ -49,12 +47,19 @@ async def validate_dataset_deno_call(dataset_path, ref, logger=logger):
     # Sync to packages/openneuro-app/src/scripts/workers/schema.worker.ts
     config_path = Path(__file__).parent / 'assets' / 'validator-config.json'
     return await run_and_decode(
-        ['deno', 'run', '-A',
-         f'jsr:@bids/validator@{DENO_VALIDATOR_VERSION}',
-         '--config', str(config_path),
-         '--json', dataset_path,
-         '--blacklistModalities', 'micr'],
-        logger=logger
+        [
+            'deno',
+            'run',
+            '-A',
+            f'jsr:@bids/validator@{DENO_VALIDATOR_VERSION}',
+            '--config',
+            str(config_path),
+            '--json',
+            dataset_path,
+            '--blacklistModalities',
+            'micr',
+        ],
+        logger=logger,
     )
 
 
@@ -69,10 +74,9 @@ def summary_mutation(dataset_id, ref, validator_output, validator_metadata):
     summary['validatorMetadata'] = validator_metadata
     return {
         'query': 'mutation ($summaryInput: SummaryInput!) { updateSummary(summary: $summaryInput) { id } }',
-        'variables':
-            {
-                'summaryInput': summary,
-            }
+        'variables': {
+            'summaryInput': summary,
+        },
     }
 
 
@@ -81,22 +85,24 @@ def issues_mutation(dataset_id, ref, issues, validator_metadata):
     Return the OpenNeuro mutation to update any validation issues.
     """
     # Workaround for bad "affects" values - drop them
-    for issue in issues["issues"]:
-        if "affects" in issue and not isinstance(issue["affects"], str):
-            del issue["affects"]
+    for issue in issues['issues']:
+        if 'affects' in issue and not isinstance(issue['affects'], str):
+            del issue['affects']
     validatorInput = {
         'datasetId': dataset_id,
         'id': ref,
-        'issues': issues["issues"],
-        'codeMessages': [{"code": key, "message": value} for key, value in issues["codeMessages"].items()],
-        'validatorMetadata': validator_metadata
+        'issues': issues['issues'],
+        'codeMessages': [
+            {'code': key, 'message': value}
+            for key, value in issues['codeMessages'].items()
+        ],
+        'validatorMetadata': validator_metadata,
     }
     return {
         'query': 'mutation ($issues: ValidatorInput!) { updateValidation(validation: $issues) }',
-        'variables':
-            {
-                'issues': validatorInput,
-            }
+        'variables': {
+            'issues': validatorInput,
+        },
     }
 
 
@@ -106,12 +112,21 @@ async def validate_dataset(dataset_id, dataset_path, ref, cookies=None, user='')
     if validator_output_deno:
         if 'issues' in validator_output_deno:
             r = requests.post(
-                url=GRAPHQL_ENDPOINT, json=issues_mutation(dataset_id, ref, validator_output_deno['issues'], DENO_METADATA), cookies=cookies)
+                url=GRAPHQL_ENDPOINT,
+                json=issues_mutation(
+                    dataset_id, ref, validator_output_deno['issues'], DENO_METADATA
+                ),
+                cookies=cookies,
+            )
             if r.status_code != 200 or 'errors' in r.json():
                 raise Exception(r.text)
         if 'summary' in validator_output_deno:
             r = requests.post(
-                url=GRAPHQL_ENDPOINT, json=summary_mutation(dataset_id, ref, validator_output_deno, DENO_METADATA), cookies=cookies)
+                url=GRAPHQL_ENDPOINT,
+                json=summary_mutation(
+                    dataset_id, ref, validator_output_deno, DENO_METADATA
+                ),
+                cookies=cookies,
+            )
             if r.status_code != 200 or 'errors' in r.json():
                 raise Exception(r.text)
-

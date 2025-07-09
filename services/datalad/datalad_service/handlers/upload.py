@@ -13,17 +13,24 @@ from datalad_service.common.user import get_user_info
 async def move_files(upload_path, dataset_path):
     for filename in pathlib.Path(upload_path).glob('**/*'):
         if os.path.isfile(filename):
-            target = os.path.join(dataset_path, os.path.relpath(
-                filename, start=upload_path))
+            target = os.path.join(
+                dataset_path, os.path.relpath(filename, start=upload_path)
+            )
             pathlib.Path(target).parent.mkdir(parents=True, exist_ok=True)
             await aioshutil.move(str(filename), target)
 
 
-async def move_files_into_repo(dataset_id, dataset_path, upload_path, name, email, cookies):
+async def move_files_into_repo(
+    dataset_id, dataset_path, upload_path, name, email, cookies
+):
     repo = pygit2.Repository(dataset_path)
-    unlock_files = [os.path.relpath(filename, start=upload_path) for filename in
-                    pathlib.Path(upload_path).glob('**/*') if os.path.islink(
-        os.path.join(dataset_path, os.path.relpath(filename, start=upload_path)))]
+    unlock_files = [
+        os.path.relpath(filename, start=upload_path)
+        for filename in pathlib.Path(upload_path).glob('**/*')
+        if os.path.islink(
+            os.path.join(dataset_path, os.path.relpath(filename, start=upload_path))
+        )
+    ]
     await move_files(upload_path, dataset_path)
     if name and email:
         author = pygit2.Signature(name, email)
@@ -41,8 +48,9 @@ class UploadResource:
         try:
             dataset_path = self.store.get_dataset_path(dataset_id)
             upload_path = self.store.get_upload_path(dataset_id, upload)
-            await move_files_into_repo(dataset_id, dataset_path, upload_path,
-                                 name, email, cookies)
+            await move_files_into_repo(
+                dataset_id, dataset_path, upload_path, name, email, cookies
+            )
             await aioshutil.rmtree(upload_path)
         except:
             self.logger.exception('Dataset upload could not be finalized')

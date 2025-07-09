@@ -20,8 +20,7 @@ import datalad_service.tasks.publish
 # boto has a hopelessly outdated vendored version of six that breaks
 # pytest imports. Until datalad removes boto, purge the six importer.
 boto_importers = [
-    importer for importer in sys.meta_path
-    if importer.__module__ == 'boto.vendored.six'
+    importer for importer in sys.meta_path if importer.__module__ == 'boto.vendored.six'
 ]
 for importer in boto_importers:
     sys.meta_path.remove(importer)
@@ -34,9 +33,9 @@ DATASET_DESCRIPTION = {
     'License': 'This is not a real dataset',
     'Name': 'Test fixture dataset',
 }
-CHANGES = '''1.0.0 2018-01-01
+CHANGES = """1.0.0 2018-01-01
   - Initial version
-'''
+"""
 
 # A list of patterns to avoid annexing in BIDS datasets
 BIDS_NO_ANNEX = [
@@ -46,7 +45,7 @@ BIDS_NO_ANNEX = [
     '*.bval',
     'README',
     'CHANGES',
-    '.bidsignore'
+    '.bidsignore',
 ]
 
 
@@ -112,17 +111,31 @@ class MockResponse:
 @pytest.fixture(autouse=True)
 def no_posts(monkeypatch):
     """Remove requests.post for all tests."""
+
     def mock_response(*args, **kwargs):
         return MockResponse()
-    monkeypatch.setattr(requests, "post", mock_response)
+
+    monkeypatch.setattr(requests, 'post', mock_response)
 
 
 @pytest.fixture(autouse=True)
 def no_init_remote(monkeypatch, tmpdir_factory):
     def mock_s3_remote_setup(dataset_path):
         path = tmpdir_factory.mktemp('fake_s3_remote')
-        subprocess.run(['git', 'annex', 'initremote', 's3-PUBLIC',
-                        'type=directory', f'directory={path}', 'encryption=none', 'exporttree=yes'], check=True, cwd=dataset_path)
+        subprocess.run(
+            [
+                'git',
+                'annex',
+                'initremote',
+                's3-PUBLIC',
+                'type=directory',
+                f'directory={path}',
+                'encryption=none',
+                'exporttree=yes',
+            ],
+            check=True,
+            cwd=dataset_path,
+        )
 
     def mock_github_remote_setup(dataset_path, dataset_id):
         path = tmpdir_factory.mktemp('fake_github_remote')
@@ -130,12 +143,18 @@ def no_init_remote(monkeypatch, tmpdir_factory):
         subprocess.run(['git', 'init'], check=True, cwd=path)
         subprocess.run(['git-annex', 'init'], check=True, cwd=path)
         # Add it to the dataset repo
-        subprocess.run(['git', 'remote', 'add', 'github',
-                        f'file:///{path}'], check=True, cwd=dataset_path)
-    monkeypatch.setattr(datalad_service.common.s3,
-                        "setup_s3_sibling", mock_s3_remote_setup)
-    monkeypatch.setattr(datalad_service.common.github,
-                        "create_github_repo", mock_github_remote_setup)
+        subprocess.run(
+            ['git', 'remote', 'add', 'github', f'file:///{path}'],
+            check=True,
+            cwd=dataset_path,
+        )
+
+    monkeypatch.setattr(
+        datalad_service.common.s3, 'setup_s3_sibling', mock_s3_remote_setup
+    )
+    monkeypatch.setattr(
+        datalad_service.common.github, 'create_github_repo', mock_github_remote_setup
+    )
 
 
 def mock_create_github(dataset, repo_name):
@@ -144,17 +163,19 @@ def mock_create_github(dataset, repo_name):
 
 @pytest.fixture
 def github_dryrun(monkeypatch):
-    monkeypatch.setattr(datalad_service.tasks.publish,
-                        'create_github_repo',
-                        mock_create_github)
+    monkeypatch.setattr(
+        datalad_service.tasks.publish, 'create_github_repo', mock_create_github
+    )
 
 
 @pytest.fixture(autouse=True)
 def no_publish(monkeypatch):
-    monkeypatch.setattr(datalad_service.tasks.publish,
-                        'github_export', lambda dataset, treeish: True)
-    monkeypatch.setattr(datalad_service.common.s3,
-                        's3_export', lambda dataset, target, treeish: True)
+    monkeypatch.setattr(
+        datalad_service.tasks.publish, 'github_export', lambda dataset, treeish: True
+    )
+    monkeypatch.setattr(
+        datalad_service.common.s3, 's3_export', lambda dataset, target, treeish: True
+    )
 
 
 @pytest.fixture
@@ -170,14 +191,17 @@ def mock_jwt_secret(monkeypatch):
 
 @pytest.fixture(autouse=True)
 def mock_server_url(monkeypatch):
-    monkeypatch.setattr(datalad_service.config,
-                        'CRN_SERVER_URL', 'http://localhost:9876')
+    monkeypatch.setattr(
+        datalad_service.config, 'CRN_SERVER_URL', 'http://localhost:9876'
+    )
 
 
 @pytest.fixture
 def client(datalad_store, monkeypatch):
     monkeypatch.setenv('DATALAD_DATASET_PATH', str(datalad_store.annex_path))
-    monkeypatch.setattr(datalad_service.config, 'DATALAD_DATASET_PATH', str(datalad_store.annex_path))
+    monkeypatch.setattr(
+        datalad_service.config, 'DATALAD_DATASET_PATH', str(datalad_store.annex_path)
+    )
     return testing.TestClient(create_app())
 
 
@@ -186,6 +210,10 @@ def mock_validate_dataset_task(monkeypatch):
     """
     Mocks the validate_dataset task to prevent event loop errors in tests.
     """
+
     async def async_noop_validator(*args, **kwargs):
         return None
-    monkeypatch.setattr('datalad_service.tasks.files.validate_dataset', async_noop_validator)
+
+    monkeypatch.setattr(
+        'datalad_service.tasks.files.validate_dataset', async_noop_validator
+    )

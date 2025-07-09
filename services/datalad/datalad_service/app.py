@@ -22,7 +22,11 @@ from datalad_service.handlers.tree import TreeResource
 from datalad_service.handlers.upload import UploadResource
 from datalad_service.handlers.upload_file import UploadFileResource
 from datalad_service.handlers.validation import ValidationResource
-from datalad_service.handlers.git import GitRefsResource, GitReceiveResource, GitUploadResource
+from datalad_service.handlers.git import (
+    GitRefsResource,
+    GitReceiveResource,
+    GitUploadResource,
+)
 from datalad_service.handlers.annex import GitAnnexResource
 from datalad_service.handlers.reexporter import ReexporterResource
 from datalad_service.handlers.reset import ResetResource
@@ -30,11 +34,13 @@ from datalad_service.handlers.remote_import import RemoteImportResource
 from datalad_service.middleware.auth import AuthenticateMiddleware
 from datalad_service.middleware.error import CustomErrorHandlerMiddleware
 
+
 def before_send(event):
     """Drop transactions that are marked as excluded."""
-    if event.get("transaction") == "excluded":
+    if event.get('transaction') == 'excluded':
         return None
     return event
+
 
 sentry_sdk.init(
     # Set traces_sample_rate to 1.0 to capture 100%
@@ -44,10 +50,11 @@ sentry_sdk.init(
     # of sampled transactions.
     # We recommend adjusting this value in production.
     profiles_sample_rate=1.0,
-    release=f"openneuro-datalad-service@{datalad_service.version.get_version()}",
+    release=f'openneuro-datalad-service@{datalad_service.version.get_version()}',
     server_name=socket.gethostname(),
     before_send=before_send,
 )
+
 
 class PathConverter(falcon.routing.converters.BaseConverter):
     """: is used because it is human readable as a separator, disallowed in filenames on Windows, and very rare in Unix filenames."""
@@ -58,7 +65,9 @@ class PathConverter(falcon.routing.converters.BaseConverter):
 
 def create_app():
     if not datalad_service.config.DATALAD_DATASET_PATH:
-        raise Exception("Required DATALAD_DATASET_PATH environment variable is not defined")
+        raise Exception(
+            'Required DATALAD_DATASET_PATH environment variable is not defined'
+        )
 
     middleware = [AuthenticateMiddleware(), CustomErrorHandlerMiddleware()]
 
@@ -106,41 +115,37 @@ def create_app():
     app.add_route('/datasets/{dataset}/objects/{obj}', dataset_objects)
 
     app.add_route('/datasets/{dataset}/snapshots', dataset_snapshots)
+    app.add_route('/datasets/{dataset}/snapshots/{snapshot}', dataset_snapshots)
+    app.add_route('/datasets/{dataset}/snapshots/{snapshot}/files', dataset_files)
     app.add_route(
-        '/datasets/{dataset}/snapshots/{snapshot}', dataset_snapshots)
-    app.add_route(
-        '/datasets/{dataset}/snapshots/{snapshot}/files', dataset_files)
-    app.add_route(
-        '/datasets/{dataset}/snapshots/{snapshot}/files/{filename:path}', dataset_files)
-    app.add_route(
-        '/datasets/{dataset}/snapshots/{snapshot}/annex-key/{annex_key}', dataset_annex_objects)
-
-    app.add_route(
-        '/datasets/{dataset}/publish', dataset_publish
+        '/datasets/{dataset}/snapshots/{snapshot}/files/{filename:path}', dataset_files
     )
-    app.add_route('/datasets/{dataset}/reexport-remotes',
-                  dataset_reexporter_resources)
-
     app.add_route(
-        '/datasets/{dataset}/upload/{upload}', dataset_upload
+        '/datasets/{dataset}/snapshots/{snapshot}/annex-key/{annex_key}',
+        dataset_annex_objects,
     )
+
+    app.add_route('/datasets/{dataset}/publish', dataset_publish)
+    app.add_route('/datasets/{dataset}/reexport-remotes', dataset_reexporter_resources)
+
+    app.add_route('/datasets/{dataset}/upload/{upload}', dataset_upload)
     app.add_route(
         '/uploads/{worker}/{dataset}/{upload}/{filename:path}', dataset_upload_file
     )
 
-    app.add_route('/git/{worker}/{dataset}/info/refs',
-                  dataset_git_refs_resource)
-    app.add_route('/git/{worker}/{dataset}/git-receive-pack',
-                  dataset_git_receive_resource)
-    app.add_route('/git/{worker}/{dataset}/git-upload-pack',
-                  dataset_git_upload_resource)
-    app.add_route('/git/{worker}/{dataset}/annex/{key}',
-                  dataset_git_annex_resource)
+    app.add_route('/git/{worker}/{dataset}/info/refs', dataset_git_refs_resource)
+    app.add_route(
+        '/git/{worker}/{dataset}/git-receive-pack', dataset_git_receive_resource
+    )
+    app.add_route(
+        '/git/{worker}/{dataset}/git-upload-pack', dataset_git_upload_resource
+    )
+    app.add_route('/git/{worker}/{dataset}/annex/{key}', dataset_git_annex_resource)
     # Serving keys internally as well (read only)
-    app.add_route('/datasets/{dataset}/annex/{key}',
-                  dataset_git_annex_resource)
+    app.add_route('/datasets/{dataset}/annex/{key}', dataset_git_annex_resource)
 
-    app.add_route('/datasets/{dataset}/import/{import_id}',
-                  dataset_remote_import_resource)
+    app.add_route(
+        '/datasets/{dataset}/import/{import_id}', dataset_remote_import_resource
+    )
 
     return app

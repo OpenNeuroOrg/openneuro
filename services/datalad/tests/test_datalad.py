@@ -1,4 +1,5 @@
 """Test DataLad tasks."""
+
 import os
 from unittest.mock import patch
 import uuid
@@ -25,19 +26,17 @@ def test_create_dataset(datalad_store):
     try:
         uuid.UUID(ds.id, version=4)
     except ValueError:
-        assert False, "dataset datalad id is not a valid uuid4"
+        assert False, 'dataset datalad id is not a valid uuid4'
 
 
 async def test_create_dataset_master(datalad_store):
     ds_id = 'ds000025'
     ds_path = os.path.join(datalad_store.annex_path, ds_id)
-    repo = pygit2.init_repository(
-        ds_path, False, initial_head='master')
+    repo = pygit2.init_repository(ds_path, False, initial_head='master')
     # Create an empty commit
     tree = repo.index.write_tree()
     test_author = pygit2.Signature('Test User', 'test@example.com')
-    repo.create_commit(
-        'refs/heads/master', test_author, test_author, 'test', tree, [])
+    repo.create_commit('refs/heads/master', test_author, test_author, 'test', tree, [])
     # Setup empty annex
     init_annex(ds_path)
     ds = Dataset(ds_path)
