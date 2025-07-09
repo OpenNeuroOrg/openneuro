@@ -30,7 +30,7 @@ export const brainInitiative = async (
   return await cache.get(async () => {
     try {
       const metadata = await Metadata.findOne({ datasetId: dataset.id })
-      if (metadata.grantFunderName.match(brainInitiativeMatch)) {
+      if (metadata?.grantFunderName?.match(brainInitiativeMatch)) {
         return true
       } else {
         // Fetch snapshot if metadata didn't match
