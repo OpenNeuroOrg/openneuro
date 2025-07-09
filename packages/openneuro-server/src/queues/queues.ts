@@ -14,7 +14,7 @@ export function setupQueues() {
     EQueueDeliveryModel.POINT_TO_POINT,
     (err) => {
       // The queue may already exist, don't log that error
-      if (err !== "QueueQueueExistsError") {
+      if (err && err.name !== "QueueQueueExistsError") {
         Sentry.captureException(err)
       }
     },
