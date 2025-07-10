@@ -13,6 +13,7 @@ from datalad_service.tasks.files import commit_files
 
 class SnapshotExistsException(Exception):
     """Snapshot conflicts with existing name."""
+
     pass
 
 
@@ -23,15 +24,28 @@ def get_snapshot(store, dataset, snapshot):
     hexsha = str(commit.id)
     created = commit.commit_time
     tree = str(commit.tree_id)
-    return {'id': f'{dataset}:{snapshot}', 'tag': snapshot, 'hexsha': hexsha, 'created': created, 'tree': tree}
+    return {
+        'id': f'{dataset}:{snapshot}',
+        'tag': snapshot,
+        'hexsha': hexsha,
+        'created': created,
+        'tree': tree,
+    }
 
 
 def get_snapshots(store, dataset):
     path = store.get_dataset_path(dataset)
     repo_tags = git_tag(pygit2.Repository(path))
     # Include an extra id field to uniquely identify snapshots
-    tags = [{'id': f'{dataset}:{tag.shorthand}', 'tag': tag.shorthand, 'hexsha': str(tag.target), 'created': tag.peel().commit_time}
-            for tag in repo_tags]
+    tags = [
+        {
+            'id': f'{dataset}:{tag.shorthand}',
+            'tag': tag.shorthand,
+            'hexsha': str(tag.target),
+            'created': tag.peel().commit_time,
+        }
+        for tag in repo_tags
+    ]
     return tags
 
 
@@ -41,7 +55,7 @@ cpan_version_prog = re.compile(r'^(\S+) (\d{4}-\d{2}-\d{2})$')
 def find_version(changelog_lines, tag):
     # extract the lines for the version being updated, if already in changelog
     found_version_start = False
-    for (i, line) in enumerate(changelog_lines):
+    for i, line in enumerate(changelog_lines):
         # check for version heading lines eg. "x.x.x yyyy-mm-dd"
         if cpan_version_prog.match(line):
             if line.startswith(tag):
@@ -61,22 +75,19 @@ def find_version(changelog_lines, tag):
 def edit_changes(changes, new_changes, tag, date):
     formatted_new_changes = [
         f'{tag} {date}',
-        *list(map(lambda change: f'  - {change}', new_changes))
+        *list(map(lambda change: f'  - {change}', new_changes)),
     ]
     changelog_lines = changes.rstrip().splitlines()
     (start, end) = find_version(changelog_lines, tag)
     if start is None:
         # add new version
-        changelog_lines = [
-            *formatted_new_changes,
-            *changelog_lines
-        ]
+        changelog_lines = [*formatted_new_changes, *changelog_lines]
     else:
         # update existing version
         changelog_lines = [
             *changelog_lines[:start],
             *formatted_new_changes,
-            *changelog_lines[end:]
+            *changelog_lines[end:],
         ]
     return '\n'.join(changelog_lines) + '\n'
 
@@ -89,7 +100,7 @@ async def get_head_changes(dataset_path):
             changes_bytes_list = []
             async for chunk in changes_stream:
                 changes_bytes_list.append(chunk)
-            return b"".join(changes_bytes_list).decode()
+            return b''.join(changes_bytes_list).decode()
     except KeyError:
         return ''
 
@@ -106,8 +117,7 @@ async def update_changes(store, dataset, tag, new_changes):
     dataset_path = store.get_dataset_path(dataset)
     if new_changes is not None and len(new_changes) > 0:
         current_date = datetime.today().strftime('%Y-%m-%d')
-        updated = await write_new_changes(
-            dataset_path, tag, new_changes, current_date)
+        updated = await write_new_changes(dataset_path, tag, new_changes, current_date)
         # Commit new content, run validator
         commit_files(store, dataset, ['CHANGES'])
         return updated
@@ -120,8 +130,7 @@ def validate_snapshot_name(store, dataset, snapshot):
     # Search for any existing tags
     tagged = [tag for tag in tags if tag.name == snapshot]
     if tagged:
-        raise SnapshotExistsException(
-            f'Tag "{snapshot}" already exists, name conflict')
+        raise SnapshotExistsException(f'Tag "{snapshot}" already exists, name conflict')
 
 
 def validate_datalad_config(store, dataset):
@@ -140,7 +149,9 @@ def save_snapshot(store, dataset, snapshot):
     repo.references.create(f'refs/tags/{snapshot}', str(repo.head.target))
 
 
-async def create_snapshot(store, dataset, snapshot, description_fields, snapshot_changes):
+async def create_snapshot(
+    store, dataset, snapshot, description_fields, snapshot_changes
+):
     """
     Create a new snapshot (git tag).
 

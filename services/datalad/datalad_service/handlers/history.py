@@ -29,14 +29,26 @@ class HistoryResource:
                 else:
                     diff = commit.tree.diff_to_tree()
                 for delta in diff.deltas:
-                    changes = {"old": delta.old_file.path, "new": delta.new_file.path,
-                               "mode": delta.new_file.mode, "binary": delta.is_binary, "status": delta.status_char()}
+                    changes = {
+                        'old': delta.old_file.path,
+                        'new': delta.new_file.path,
+                        'mode': delta.new_file.mode,
+                        'binary': delta.is_binary,
+                        'status': delta.status_char(),
+                    }
                     file_changes.append(changes)
                 new_log = {
-                    "id": str(commit.id), "date": commit.commit_time,
-                    "authorName": commit.author.name, "authorEmail": commit.author.email,
-                    "message": commit.message, "references": ",".join(references), "files": file_changes,
-                    "filesChanged": diff.stats.files_changed, "insertions": diff.stats.insertions, "deletions": diff.stats.deletions}
+                    'id': str(commit.id),
+                    'date': commit.commit_time,
+                    'authorName': commit.author.name,
+                    'authorEmail': commit.author.email,
+                    'message': commit.message,
+                    'references': ','.join(references),
+                    'files': file_changes,
+                    'filesChanged': diff.stats.files_changed,
+                    'insertions': diff.stats.insertions,
+                    'deletions': diff.stats.deletions,
+                }
                 log.append(new_log)
             resp.media = {'log': log}
             resp.status = falcon.HTTP_OK

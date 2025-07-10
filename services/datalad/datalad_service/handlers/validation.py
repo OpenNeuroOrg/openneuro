@@ -18,11 +18,14 @@ class ValidationResource:
             try:
                 dataset_path = self.store.get_dataset_path(dataset)
                 # Run the validator but don't block on the request
-                asyncio.create_task(validate_dataset(dataset, dataset_path, hexsha, req.cookies, user=name))
+                asyncio.create_task(
+                    validate_dataset(
+                        dataset, dataset_path, hexsha, req.cookies, user=name
+                    )
+                )
                 resp.status = falcon.HTTP_OK
             except:
                 resp.status = falcon.HTTP_INTERNAL_SERVER_ERROR
         else:
-            resp.media = {
-                'error': 'Missing or malformed dataset parameter in request.'}
+            resp.media = {'error': 'Missing or malformed dataset parameter in request.'}
             resp.status = falcon.HTTP_UNPROCESSABLE_ENTITY

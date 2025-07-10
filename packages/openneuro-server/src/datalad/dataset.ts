@@ -3,6 +3,7 @@
  *
  * See resolvers for interaction with other data sources.
  */
+import * as Sentry from "@sentry/node"
 import request from "superagent"
 import requestNode from "request"
 import objectHash from "object-hash"
@@ -72,8 +73,9 @@ export const createDataset = async (
     await notifications.snapshotReminder(datasetId)
     return ds
   } catch (e) {
+    Sentry.captureException(e)
     // eslint-disable-next-line
-    console.error(`Failed to create ${datasetId}`)
+    console.error(`Failed to create ${datasetId}: ${e}`)
     throw e
   }
 }

@@ -54,6 +54,9 @@
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json}": [
       "deno fmt *"
+    ],
+    "*.py": [
+      "uv --directory services/datalad run ruff format"
     ]
   },
   "dependenciesMeta": {

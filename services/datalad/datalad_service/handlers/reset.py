@@ -15,11 +15,13 @@ class ResetResource:
             try:
                 dataset_path = self.store.get_dataset_path(dataset)
                 gitProcess = subprocess.run(
-                    ['git', 'reset', '--hard', hexsha], check=True, cwd=dataset_path)
+                    ['git', 'reset', '--hard', hexsha], check=True, cwd=dataset_path
+                )
                 resp.status = falcon.HTTP_OK
             except subprocess.CalledProcessError:
                 resp.status = falcon.HTTP_INTERNAL_SERVER_ERROR
         else:
             resp.media = {
-                'error': 'Missing or malformed dataset or hexsha parameter in request.'}
+                'error': 'Missing or malformed dataset or hexsha parameter in request.'
+            }
             resp.status = falcon.HTTP_UNPROCESSABLE_ENTITY

@@ -13,7 +13,8 @@ def test_upload_file_no_auth(client):
     upload_id = '5da16a13-6028-4a53-808e-e828f5f280e5'
     file_data = 'Test dataset README'
     response = client.simulate_post(
-        f'/uploads/1/{ds_id}/{upload_id}/README', body=file_data)
+        f'/uploads/1/{ds_id}/{upload_id}/README', body=file_data
+    )
     assert response.status == falcon.HTTP_UNAUTHORIZED
 
 
@@ -22,10 +23,16 @@ def test_upload_file(client, datalad_store):
     upload_id = '5da16a13-6028-4a53-808e-e828f5f280e5'
     file_data = 'Test dataset README for new upload'
     response = client.simulate_post(
-        f'/uploads/1/{ds_id}/{upload_id}/README', body=file_data, headers={'cookie': 'accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmZDQ0ZjVjNS1iMjFiLTQyMGItOTU1NS1hZjg1NmVmYzk0NTIiLCJlbWFpbCI6Im5lbGxAc3F1aXNoeW1lZGlhLmNvbSIsInByb3ZpZGVyIjoiZ29vZ2xlIiwibmFtZSI6Ik5lbGwgSGFyZGNhc3RsZSIsImFkbWluIjp0cnVlLCJzY29wZXMiOlsiZGF0YXNldDp1cGxvYWQiXSwiZGF0YXNldCI6ImRzMDAyMDc0IiwiaWF0IjoxNTk3MTgzMDk5LCJleHAiOjEyNDI1NzI3ODA3fQ.1fsa6rZfAOGTmbQ3FJsGZD61tZddqIRAIFpRrAe2Tao'})
+        f'/uploads/1/{ds_id}/{upload_id}/README',
+        body=file_data,
+        headers={
+            'cookie': 'accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmZDQ0ZjVjNS1iMjFiLTQyMGItOTU1NS1hZjg1NmVmYzk0NTIiLCJlbWFpbCI6Im5lbGxAc3F1aXNoeW1lZGlhLmNvbSIsInByb3ZpZGVyIjoiZ29vZ2xlIiwibmFtZSI6Ik5lbGwgSGFyZGNhc3RsZSIsImFkbWluIjp0cnVlLCJzY29wZXMiOlsiZGF0YXNldDp1cGxvYWQiXSwiZGF0YXNldCI6ImRzMDAyMDc0IiwiaWF0IjoxNTk3MTgzMDk5LCJleHAiOjEyNDI1NzI3ODA3fQ.1fsa6rZfAOGTmbQ3FJsGZD61tZddqIRAIFpRrAe2Tao'
+        },
+    )
     assert response.status == falcon.HTTP_OK
     readme_path = os.path.join(
-        datalad_store.get_upload_path(ds_id, upload_id), 'README')
+        datalad_store.get_upload_path(ds_id, upload_id), 'README'
+    )
     # Check for the file in the upload bucket
     with open(readme_path) as f:
         assert f.read() == file_data
@@ -58,10 +65,12 @@ async def test_move_files(tmpdir_factory, new_dataset):
     await move_files(tmp_dir, new_dataset.path)
     new_dataset.save('sub-01')
     # Verify paths exist
-    assert os.path.isfile(os.path.join(
-        new_dataset.path, 'sub-01', 'anat', 'sub-01_T1w.nii.gz'))
-    assert os.path.isfile(os.path.join(
-        new_dataset.path, 'sub-01', 'anat', 'sub-01_T1w.json'))
+    assert os.path.isfile(
+        os.path.join(new_dataset.path, 'sub-01', 'anat', 'sub-01_T1w.nii.gz')
+    )
+    assert os.path.isfile(
+        os.path.join(new_dataset.path, 'sub-01', 'anat', 'sub-01_T1w.json')
+    )
 
 
 async def test_move_files_nesting(tmpdir_factory, new_dataset):
@@ -81,7 +90,9 @@ async def test_move_files_nesting(tmpdir_factory, new_dataset):
         f.write('dummy file.gz')
     new_dataset.save(nifti_path)
     await move_files(tmp_dir, new_dataset.path)
-    assert os.path.isfile(os.path.join(
-        new_dataset.path, 'sub-01', 'anat', 'sub-01_T1w.nii.gz'))
-    assert os.path.isfile(os.path.join(
-        new_dataset.path, 'sub-01', 'anat', 'sub-01_T1w.json'))
+    assert os.path.isfile(
+        os.path.join(new_dataset.path, 'sub-01', 'anat', 'sub-01_T1w.nii.gz')
+    )
+    assert os.path.isfile(
+        os.path.join(new_dataset.path, 'sub-01', 'anat', 'sub-01_T1w.json')
+    )

@@ -16,13 +16,12 @@ class DescriptionResource:
         if dataset:
             description_fields = (await req.get_media())['description_fields']
             if not any(description_fields):
-                resp.media = {
-                    'error': 'Missing description field updates.'
-                }
+                resp.media = {'error': 'Missing description field updates.'}
                 resp.status = falcon.HTTP_UNPROCESSABLE_ENTITY
             try:
                 updated = await update_description(
-                    self.store, dataset, description_fields)
+                    self.store, dataset, description_fields
+                )
                 dataset_description = updated
                 resp.media = dataset_description
                 resp.status = falcon.HTTP_OK
@@ -31,6 +30,5 @@ class DescriptionResource:
                 resp.media = {'error': 'dataset_description.json update failed'}
                 resp.status = falcon.HTTP_500
         else:
-            resp.media = {
-                'error': 'Missing or malformed dataset parameter in request.'}
+            resp.media = {'error': 'Missing or malformed dataset parameter in request.'}
             resp.status = falcon.HTTP_UNPROCESSABLE_ENTITY

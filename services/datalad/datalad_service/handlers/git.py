@@ -23,7 +23,7 @@ def _parse_commit(chunk):
             data = line[:terminator_position]
         else:
             data = line
-        _, target, reference = data.split(b" ")
+        _, target, reference = data.split(b' ')
         references.append((target.decode(), reference.decode()))
         if line.find(b'0000') != -1:
             break
@@ -83,8 +83,7 @@ class GitRefsResource:
                     dataset_path,
                     stdout=asyncio.subprocess.PIPE,
                 )
-                resp.content_type = 'application/x-{}-advertisement'.format(
-                    service)
+                resp.content_type = 'application/x-{}-advertisement'.format(service)
                 resp.text = prefix + await process.stdout.read()
                 resp.status = falcon.HTTP_OK
             else:
@@ -111,8 +110,8 @@ class GitReceiveResource:
         if dataset:
             dataset_path = self.store.get_dataset_path(dataset)
             process = await asyncio.create_subprocess_exec(
-                'git-receive-pack', 
-                '--stateless-rpc', 
+                'git-receive-pack',
+                '--stateless-rpc',
                 dataset_path,
                 stdin=asyncio.subprocess.PIPE,
                 stdout=asyncio.subprocess.PIPE,
@@ -128,7 +127,7 @@ class GitReceiveResource:
                 while True:
                     chunk = await req.stream.read(CHUNK_SIZE_BYTES)
                     if first_iteration:
-                        refs_updated =_parse_commit(chunk)
+                        refs_updated = _parse_commit(chunk)
                         first_iteration = False
                     if not chunk:
                         break
@@ -136,10 +135,12 @@ class GitReceiveResource:
             process.stdin.close()
             resp.stream = process.stdout
             resp.status = falcon.HTTP_OK
+
             # After this request finishes successfully, log it to the OpenNeuro API
             def schedule_git_event():
                 for new_commit, new_ref in refs_updated:
-                    log_git_event(dataset, new_commit, new_ref, req.context["token"])
+                    log_git_event(dataset, new_commit, new_ref, req.context['token'])
+
             resp.schedule_sync(schedule_git_event)
         else:
             resp.status = falcon.HTTP_UNPROCESSABLE_ENTITY
@@ -178,7 +179,7 @@ class GitUploadResource:
                     if not chunk:
                         break
                     process.stdin.write(chunk)
-            
+
             process.stdin.close()
             resp.stream = process.stdout
             resp.status = falcon.HTTP_OK

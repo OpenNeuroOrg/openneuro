@@ -24,21 +24,27 @@ def test_export_snapshots(no_init_remote, client, new_dataset):
     ds_id = os.path.basename(new_dataset.path)
     # Create 1.0.0
     response = client.simulate_post(
-        '/datasets/{}/snapshots/{}'.format(ds_id, '1.0.0'), body="")
+        '/datasets/{}/snapshots/{}'.format(ds_id, '1.0.0'), body=''
+    )
     assert response.status == falcon.HTTP_OK
     # Update a file
-    file_data = json.dumps({
-        "BIDSVersion": "1.0.2",
-        "License": "CC0",
-        "Name": "Test fixture new dataset",
-        "Authors": ["Test Authors", "Please Ignore"],
-    }, indent=4)
+    file_data = json.dumps(
+        {
+            'BIDSVersion': '1.0.2',
+            'License': 'CC0',
+            'Name': 'Test fixture new dataset',
+            'Authors': ['Test Authors', 'Please Ignore'],
+        },
+        indent=4,
+    )
     response = client.simulate_post(
-        f'/datasets/{ds_id}/files/dataset_description.json', body=file_data)
+        f'/datasets/{ds_id}/files/dataset_description.json', body=file_data
+    )
     assert response.status == falcon.HTTP_OK
     # Create 2.0.0
     response = client.simulate_post(
-        '/datasets/{}/snapshots/{}'.format(ds_id, '2.0.0'), body="")
+        '/datasets/{}/snapshots/{}'.format(ds_id, '2.0.0'), body=''
+    )
     assert response.status == falcon.HTTP_OK
     # Make it public
     create_remotes(new_dataset.path)
@@ -46,8 +52,13 @@ def test_export_snapshots(no_init_remote, client, new_dataset):
     s3_export_mock = Mock()
     github_export_mock = Mock()
     update_s3_sibling_mock = Mock()
-    export_dataset(new_dataset.path, s3_export=s3_export_mock,
-                   github_export=github_export_mock, update_s3_sibling=update_s3_sibling_mock, github_enabled=True)
+    export_dataset(
+        new_dataset.path,
+        s3_export=s3_export_mock,
+        github_export=github_export_mock,
+        update_s3_sibling=update_s3_sibling_mock,
+        github_enabled=True,
+    )
     # Verify export calls were made
     assert s3_export_mock.call_count == 1
     expect_calls = [call(new_dataset.path, 's3-PUBLIC', 'refs/tags/2.0.0')]
