@@ -29,7 +29,7 @@ RUN ln -s /srv/hooks /hooks \
 
 RUN uv sync --locked
 
-ENV PATH="/srv/.venv/bin:${PATH}"
+ENV PATH="/srv/.venv/bin:/root/.local/bin:${PATH}"
 
 HEALTHCHECK --interval=5s --timeout=30s --start-period=10s --retries=10 CMD [ "curl", "-f", "http://localhost/heartbeat" ]
 
