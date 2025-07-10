@@ -22,6 +22,8 @@ GIT_ATTRIBUTES = """* annex.backend=SHA256E
 *.tsv text eol=lf annex.largefiles=largerthan=1mb
 phenotype/*.tsv annex.largefiles=anything
 dataset_description.json annex.largefiles=nothing
+datacite.yml annex.largefiles=nothing
+datacite.yaml annex.largefiles=nothing
 .bidsignore annex.largefiles=nothing
 CHANGES text eol=lf annex.largefiles=nothing
 README* text eol=lf annex.largefiles=nothing

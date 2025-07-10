@@ -56,15 +56,15 @@ interface RawDataciteYml {
 }
 
 /**
- * Attempts to read and parse datacite.yml.
+ * Attempts to read and parse the datacite metadata file.
  */
 const getDataciteYml = async (
   datasetId: string,
   revision: string,
 ): Promise<RawDataciteYml | null> => {
-  const dataciteUrl = fileUrl(datasetId, "", "datacite.yml", revision)
+  const dataciteFileUrl = fileUrl(datasetId, "", "datacite", revision)
   try {
-    const res = await fetch(dataciteUrl)
+    const res = await fetch(dataciteFileUrl)
     const contentType = res.headers.get("content-type")
 
     if (res.status === 200) {
@@ -73,7 +73,7 @@ const getDataciteYml = async (
         !contentType?.includes("text/yaml")
       ) {
         Sentry.captureMessage(
-          `datacite.yml for ${datasetId}:${revision} served with unexpected Content-Type: ${contentType}. Attempting YAML parse anyway.`,
+          `Datacite file for ${datasetId}:${revision} served with unexpected Content-Type: ${contentType}. Attempting YAML parse anyway.`,
         )
       }
 
@@ -83,16 +83,16 @@ const getDataciteYml = async (
         return parsedYaml
       } catch (parseErr) {
         throw new Error(
-          `Found datacite.yml for dataset ${datasetId} (revision: ${revision}), but failed to parse it as YAML:`,
+          `Found datacite file for dataset ${datasetId} (revision: ${revision}), but failed to parse it as YAML:`,
           { cause: parseErr },
         )
       }
     } else if (res.status === 404) {
-      // common for datacite.yml to not exist
+      // common for datacite file to not exist
       return null
     } else {
       throw new Error(
-        `Attempted to read datacite.yml for dataset ${datasetId} (revision: ${revision}) and received status ${res.status}.`,
+        `Attempted to read datacite file for dataset ${datasetId} (revision: ${revision}) and received status ${res.status}.`,
       )
     }
   } catch (fetchErr) {
@@ -154,7 +154,7 @@ const normalizeBidsAuthors = (authors: unknown): Creator[] => {
 }
 
 /**
- * Get creators (authors) for a dataset, prioritizing datacite.yml,
+ * Get creators (authors) for a dataset, prioritizing datacite.yml/yaml,
  * checking resourceTypeGeneral for Dataset.
  */
 export const creators = async (obj: DatasetOrSnapshot): Promise<Creator[]> => {
@@ -165,7 +165,7 @@ export const creators = async (obj: DatasetOrSnapshot): Promise<Creator[]> => {
   const defaultAuthors: Creator[] = []
   let parsedCreators: Creator[] | null = null
 
-  // 1. Try to get creators from datacite.yml
+  // 1. Try to get creators from datacite (backend resolves .yml or .yaml)
   const dataciteCache = new CacheItem(redis, CacheType.dataciteYml, [
     datasetId,
     revisionShort,
@@ -186,26 +186,26 @@ export const creators = async (obj: DatasetOrSnapshot): Promise<Creator[]> => {
         )
         if (parsedCreators.length > 0) {
           Sentry.captureMessage(
-            `Loaded creators from datacite.yml for ${datasetId}:${revision} (ResourceType: ${resourceTypeGeneral})`,
+            `Loaded creators from datacite file for ${datasetId}:${revision} (ResourceType: ${resourceTypeGeneral})`,
           )
         } else {
-          // No creators found in datacite.yml even if resourceTypeGeneral is Dataset
+          // No creators found in datacite file even if resourceTypeGeneral is Dataset
           Sentry.captureMessage(
-            `datacite.yml for ${datasetId}:${revision} is Dataset type but provided no creators.`,
+            `Datacite file for ${datasetId}:${revision} is Dataset type but provided no creators.`,
           )
         }
       } else {
         Sentry.captureMessage(
-          `datacite.yml for ${datasetId}:${revision} found but resourceTypeGeneral is '${resourceTypeGeneral}', not 'Dataset'.`,
+          `Datacite file for ${datasetId}:${revision} found but resourceTypeGeneral is '${resourceTypeGeneral}', not 'Dataset'.`,
         )
       }
     }
   } catch (error) {
     Sentry.captureException(error)
-    // Continue to fallback if datacite.yml processing failed
+    // Continue to fallback if datacite file processing failed
   }
 
-  // 2. If datacite.yml didn't provide creators or was not a 'Dataset', try dataset_description.json
+  // 2. If datacite file didn't provide creators or was not a 'Dataset', try dataset_description.json
   if (!parsedCreators || parsedCreators.length === 0) {
     try {
       const datasetDescription = await description(obj)
