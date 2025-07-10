@@ -96,7 +96,7 @@ const getDataciteYml = async (
       )
     }
   } catch (fetchErr) {
-    Sentry.captureException(fetchErr) // Capture fetch errors
+    Sentry.captureException(fetchErr)
     return null
   }
 }
@@ -150,7 +150,7 @@ const normalizeBidsAuthors = (authors: unknown): Creator[] => {
       }
       return null
     })
-    .filter(Boolean) as Creator[] // Filter out nulls and assert type
+    .filter(Boolean) as Creator[]
 }
 
 /**
