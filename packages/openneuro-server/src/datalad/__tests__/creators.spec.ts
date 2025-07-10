@@ -73,7 +73,7 @@ describe("creators (core functionality)", () => {
   })
 
   // --- Test Scenarios for `creators` export function ---
-  it("should fall back to dataset_description.json if datacite.yml is 404", async () => {
+  it("should fall back to dataset_description.json if datacite file is 404", async () => {
     const datasetDescriptionJson = {
       Authors: ["Author One", "Author Two"],
     }
@@ -84,7 +84,7 @@ describe("creators (core functionality)", () => {
       text: () => Promise.resolve("Not Found"),
     })
 
-    // This mock implementation ensures the datacite.yml fetch is handled,
+    // This mock implementation ensures the datacite file fetch is handled,
     // and returns null for the cache, simulating the 404.
     mockCacheItemGet.mockImplementationOnce((fetcher) =>
       fetcher().then(() => null)
@@ -104,7 +104,7 @@ describe("creators (core functionality)", () => {
     )
   })
 
-  it("should fall back to dataset_description.json if datacite.yml parsing fails", async () => {
+  it("should fall back to dataset_description.json if datacite file parsing fails", async () => {
     const dataciteYamlContent = `invalid: - yaml`
     const datasetDescriptionJson = {
       Authors: ["BIDS Author A"],
@@ -129,12 +129,20 @@ describe("creators (core functionality)", () => {
     expect(result).toEqual([{ name: "BIDS Author A" }])
     expect(mockDescription).toHaveBeenCalled()
     expect(mockSentryCaptureException).toHaveBeenCalledWith(expect.any(Error))
+    // The specific error message for parsing failure is now generic, check for partial string match
+    expect(mockSentryCaptureException).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: expect.stringContaining(
+          `Found datacite file for dataset ${MOCK_DATASET_ID}`,
+        ),
+      }),
+    )
     expect(mockSentryCaptureMessage).toHaveBeenCalledWith(
       `Loaded creators from dataset_description.json via description resolver for ${MOCK_DATASET_ID}:${MOCK_REVISION}`,
     )
   })
 
-  it("should return empty array if both datacite.yml and dataset_description.json fail", async () => {
+  it("should return empty array if both datacite file and dataset_description.json fail", async () => {
     mockFetch.mockResolvedValueOnce({
       status: 500,
       headers: new Headers(),
@@ -154,7 +162,7 @@ describe("creators (core functionality)", () => {
     expect(mockSentryCaptureException).toHaveBeenCalledTimes(2)
   })
 
-  it("should return default empty array if no creators array in datacite.yml or dataset_description.json (or wrong resourceTypeGeneral in datacite.yml)", async () => {
+  it("should return default empty array if no creators array in datacite file or dataset_description.json (or wrong resourceTypeGeneral in datacite file)", async () => {
     const dataciteYamlContent =
       `data:\n  attributes:\n    types:\n      resourceTypeGeneral: Software\n    creators: []`
     const parsedDatacite = {
@@ -179,13 +187,13 @@ describe("creators (core functionality)", () => {
     })
     expect(result).toEqual([])
     expect(mockSentryCaptureMessage).toHaveBeenCalledWith(
-      `datacite.yml for ${MOCK_DATASET_ID}:${MOCK_REVISION} found but resourceTypeGeneral is 'Software', not 'Dataset'.`,
+      `Datacite file for ${MOCK_DATASET_ID}:${MOCK_REVISION} found but resourceTypeGeneral is 'Software', not 'Dataset'.`,
     )
     expect(mockDescription).toHaveBeenCalled()
     expect(mockSentryCaptureException).not.toHaveBeenCalled()
   })
 
-  it("should return default empty array if datacite.yml is Dataset type but provides no creators", async () => {
+  it("should return default empty array if datacite file is Dataset type but provides no creators", async () => {
     const dataciteYamlContent =
       `data:\n  attributes:\n    types:\n      resourceTypeGeneral: Dataset\n    creators: []`
     const parsedDatacite = {
@@ -212,13 +220,13 @@ describe("creators (core functionality)", () => {
 
     expect(result).toEqual([])
     expect(mockSentryCaptureMessage).toHaveBeenCalledWith(
-      `datacite.yml for ${MOCK_DATASET_ID}:${MOCK_REVISION} is Dataset type but provided no creators.`,
+      `Datacite file for ${MOCK_DATASET_ID}:${MOCK_REVISION} is Dataset type but provided no creators.`,
     )
     expect(mockDescription).toHaveBeenCalled()
     expect(mockSentryCaptureException).not.toHaveBeenCalled()
   })
 
-  it("should capture message if datacite.yml has unexpected content type but still parses", async () => {
+  it("should capture message if datacite file has unexpected content type but still parses", async () => {
     const dataciteYamlContent =
       `data:\n  attributes:\n    types:\n      resourceTypeGeneral: Dataset\n    creators: []`
     const parsedDatacite = {
@@ -246,12 +254,12 @@ describe("creators (core functionality)", () => {
     })
     expect(mockSentryCaptureMessage).toHaveBeenCalledWith(
       expect.stringContaining(
-        `datacite.yml for ${MOCK_DATASET_ID}:${MOCK_REVISION} served with unexpected Content-Type: text/plain. Attempting YAML parse anyway.`,
+        `Datacite file for ${MOCK_DATASET_ID}:${MOCK_REVISION} served with unexpected Content-Type: text/plain. Attempting YAML parse anyway.`,
       ),
     )
     expect(mockSentryCaptureException).not.toHaveBeenCalled()
     expect(mockSentryCaptureMessage).toHaveBeenCalledWith(
-      `datacite.yml for ${MOCK_DATASET_ID}:${MOCK_REVISION} is Dataset type but provided no creators.`,
+      `Datacite file for ${MOCK_DATASET_ID}:${MOCK_REVISION} is Dataset type but provided no creators.`,
     )
     expect(mockSentryCaptureMessage).toHaveBeenCalledWith(
       `Loaded creators from dataset_description.json via description resolver for ${MOCK_DATASET_ID}:${MOCK_REVISION}`,

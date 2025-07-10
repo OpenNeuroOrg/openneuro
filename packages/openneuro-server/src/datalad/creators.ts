@@ -102,7 +102,7 @@ const getDataciteYml = async (
 }
 
 /**
- * Normalizes datacite.yml creators to the Creator interface, extracting ORCID IDs.
+ * Normalizes datacite creators to the Creator interface, extracting ORCID IDs.
  * Returns Creator[]
  */
 export const normalizeDataciteCreators = (
@@ -154,7 +154,7 @@ const normalizeBidsAuthors = (authors: unknown): Creator[] => {
 }
 
 /**
- * Get creators (authors) for a dataset, prioritizing datacite.yml/yaml,
+ * Get creators (authors) for a dataset, prioritizing datacite
  * checking resourceTypeGeneral for Dataset.
  */
 export const creators = async (obj: DatasetOrSnapshot): Promise<Creator[]> => {
@@ -165,7 +165,7 @@ export const creators = async (obj: DatasetOrSnapshot): Promise<Creator[]> => {
   const defaultAuthors: Creator[] = []
   let parsedCreators: Creator[] | null = null
 
-  // 1. Try to get creators from datacite (backend resolves .yml or .yaml)
+  // 1. Try to get creators from datacite
   const dataciteCache = new CacheItem(redis, CacheType.dataciteYml, [
     datasetId,
     revisionShort,
