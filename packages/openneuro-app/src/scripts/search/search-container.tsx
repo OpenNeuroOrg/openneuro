@@ -120,6 +120,8 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
   const is_grant_portal = portalContent?.portal || false
   const grant = portalContent?.grant || null
 
+  const [initialLoading, setInitialLoading] = useState(true)
+
   useEffect(() => {
     setDefaultSearch(
       modality,
@@ -139,6 +141,13 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
   ])
 
   const { loading, data, fetchMore, variables } = useSearchResults()
+
+  useEffect(() => {
+    if (!loading && data) {
+      setInitialLoading(false)
+    }
+  }, [loading, data])
+
   const loadMore = () => {
     fetchMore({
       variables: {
@@ -276,7 +285,7 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
           </>
         )}
         renderLoading={() =>
-          loading
+          (initialLoading || loading)
             ? (
               <div className="search-loading">
                 <Loading />
