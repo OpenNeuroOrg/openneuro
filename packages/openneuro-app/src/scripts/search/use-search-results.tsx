@@ -411,7 +411,7 @@ export const useSearchResults = () => {
     // fetchPolicy is workaround for stuck loading bug (https://github.com/apollographql/react-apollo/issues/3270#issuecomment-579614837)
     // TODO: find better solution
     fetchPolicy: "cache-and-network",
-    nextFetchPolicy: "cache-first",
+    nextFetchPolicy: "cache-and-network",
     notifyOnNetworkStatusChange: true,
   })
 }

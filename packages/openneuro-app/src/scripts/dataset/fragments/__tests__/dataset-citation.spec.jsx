@@ -18,7 +18,7 @@ describe("formatCitation", () => {
   })
   it('should work with "BibTeX" input', () => {
     expect(formatCitation(snapshot, "BibTeX")).toEqual(`@dataset{ds999999:1.0.2,
-  author = {Jane Doe and Doe, John},
+  author = {Jane Doe AND Doe, John},
   title = {"A Test Dataset"},
   year = {2020},
   doi = {doinumbersgohere},

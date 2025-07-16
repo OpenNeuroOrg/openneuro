@@ -117,6 +117,7 @@ export const ADVANCED_SEARCH_DATASETS_QUERY = gql`
                 TracerName
                 TracerRadionuclide
               }
+              primaryModality
             }
             issues {
               severity
@@ -128,6 +129,7 @@ export const ADVANCED_SEARCH_DATASETS_QUERY = gql`
             description {
               Name
               Authors
+              DatasetDOI
             }
           }
           analytics {

@@ -40,6 +40,7 @@ const mockDataset = {
       totalFiles: 10,
       dataProcessed: true,
       pet: null,
+      primaryModality: "MRI",
     },
     validation: {
       errors: [],
