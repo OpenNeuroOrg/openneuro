@@ -10,7 +10,7 @@ interface IterableObject {
 }
 
 interface Props {
-  property: number | string | boolean | IterableObject
+  property: number | string | boolean | IterableObject | null // Added null to possible types
   propertyName: string
   emptyPropertyLabel?: string
   rootProperty?: boolean
@@ -18,44 +18,67 @@ interface Props {
 }
 
 export const RecursiveProperty: React.FC<Props> = (props) => {
+  const {
+    property,
+    propertyName,
+    emptyPropertyLabel,
+    rootProperty,
+    propertyNameProcessor,
+  } = props
+
+  // Determine if the property is "falsy - empty" but should be visible
+  const isEmptyValue = property === null ||
+    property === 0 ||
+    property === 0.0 ||
+    property === false ||
+    property === ""
+
   return (
     <div className="json-container">
-      {props.property
+      {property !== undefined && (property || isEmptyValue)
         ? (
-          typeof props.property === "number" ||
-            typeof props.property === "string" ||
-            typeof props.property === "boolean"
+          typeof property === "number" ||
+            typeof property === "string" ||
+            typeof property === "boolean"
             ? (
               <>
                 <span className="prop-name">
-                  {props.propertyNameProcessor!(props.propertyName)}:{" "}
+                  {propertyNameProcessor!(propertyName)}:{" "}
                 </span>
-                {props.property.toString()}
+                {property === null ? "null" : property.toString()}
               </>
             )
             : (
               <ExpandableProperty
-                title={props.propertyNameProcessor!(props.propertyName)}
-                expanded={!!props.rootProperty}
+                title={propertyNameProcessor!(propertyName)}
+                expanded={!!rootProperty}
               >
-                {Object.values(props.property).map(
-                  /* eslint-disable-next-line */
-                  (property, index, { length }) => (
-                    <RecursiveProperty
-                      key={index}
-                      property={property}
-                      propertyName={Object.getOwnPropertyNames(
-                        props.property,
-                      )[index]}
-                      propertyNameProcessor={props.propertyNameProcessor}
-                    />
-                  ),
-                )}
+                {Object.getOwnPropertyNames(property).length > 0
+                  ? (
+                    Object.values(property).map(
+                      /* eslint-disable-next-line */
+                      (propValue, index) => (
+                        <RecursiveProperty
+                          key={index}
+                          property={propValue as
+                            | number
+                            | string
+                            | boolean
+                            | IterableObject}
+                          propertyName={Object.getOwnPropertyNames(
+                            property,
+                          )[index]}
+                          propertyNameProcessor={propertyNameProcessor}
+                        />
+                      ),
+                    )
+                  )
+                  : <span className="empty-object-label">No properties</span>}
               </ExpandableProperty>
             )
         )
         : (
-          props.emptyPropertyLabel
+          property === undefined ? emptyPropertyLabel : null
         )}
     </div>
   )
