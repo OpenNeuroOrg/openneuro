@@ -5,12 +5,13 @@ import parseISO from "date-fns/parseISO"
 import { CopyToClipboard } from "react-copy-to-clipboard"
 import { Button } from "../../components/button/Button"
 import { Tooltip } from "../../components/tooltip/Tooltip"
+import { authorsCitationList } from "../../components/citation/authors-citation-list"
 
 export const formatCitation = (snapshot, style) => {
   const year = getYear(parseISO(snapshot.created))
   const authors = snapshot.description.Authors
-    ? snapshot.description.Authors.join(" and ")
-    : "NO AUTHORS FOUND"
+    ? authorsCitationList(snapshot.description.Authors)
+    : ""
   if (style === "Text") {
     return `${authors} (${year}). ${snapshot.description.Name}. OpenNeuro. [Dataset] doi: ${snapshot.description.DatasetDOI}`
   } else if (style === "BibTeX") {
