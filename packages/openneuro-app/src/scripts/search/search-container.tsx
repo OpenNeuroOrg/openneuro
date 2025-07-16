@@ -139,6 +139,7 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
   ])
 
   const { loading, data, fetchMore, variables } = useSearchResults()
+
   const loadMore = () => {
     fetchMore({
       variables: {
