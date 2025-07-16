@@ -83,9 +83,9 @@ export interface SearchResultItemProps {
         warnings: number
       }
       description: {
+        Authors: string[]
         Name: string
         DatasetDOI: string
-        Authors: string[]
       }
       creators: Creator[]
     }
