@@ -10,7 +10,7 @@ interface IterableObject {
 }
 
 interface Props {
-  property: number | string | boolean | IterableObject | null // Added null to possible types
+  property: number | string | boolean | IterableObject | null
   propertyName: string
   emptyPropertyLabel?: string
   rootProperty?: boolean
