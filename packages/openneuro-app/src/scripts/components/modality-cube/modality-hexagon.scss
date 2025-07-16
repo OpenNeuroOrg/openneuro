@@ -49,44 +49,95 @@
       transform: rotateZ(-60deg);
     }
 
-    &.mri { background-color: $mri-theme; }
-    &.eeg { background-color: $on-light-green; } // EEG uses on-light-green
-    &.pet { background-color: $pet-theme; }
-    &.ieeg { background-color: $ieeg-theme; }
-    &.meg { background-color: $meg-theme; }
-    &.nirs { background-color: $nirs-theme; }
+    &.mri {
+      background-color: $mri-theme;
+    }
+    &.eeg {
+      background-color: $on-light-green;
+    } // EEG uses on-light-green
+    &.pet {
+      background-color: $pet-theme;
+    }
+    &.ieeg {
+      background-color: $ieeg-theme;
+    }
+    &.meg {
+      background-color: $meg-theme;
+    }
+    &.nirs {
+      background-color: $nirs-theme;
+    }
+  }
+  &.small {
+    margin-left: 10px;
+    width: 28px;
+    height: 28px;
+    div.label {
+      font-size: 10px;
+      font-weight: normal;
+    }
   }
 }
 
+
+
 a {
   .hexagon-wrapper {
-    margin: 20px auto; 
+    margin: 20px auto;
 
     div.label {
-      color: unset; 
+      color: unset;
     }
 
     .hexagon {
-      transition: color 0.3s; 
-      background-color: #fff; 
+      transition: color 0.3s;
+      background-color: #fff;
 
       // Modality specific colors (when inside 'a')
-      &.mri { background-color: #fff; color: $mri-theme; }
-      &.eeg { background-color: #fff; color: $eeg-theme; }
-      &.pet { background-color: #fff; color: $pet-theme; }
-      &.ieeg { background-color: #fff; color: $ieeg-theme; }
-      &.meg { background-color: #fff; color: $meg-theme; }
-      &.nirs { background-color: #fff; color: $nirs-theme; } 
+      &.mri {
+        background-color: #fff;
+        color: $mri-theme;
+      }
+      &.eeg {
+        background-color: #fff;
+        color: $eeg-theme;
+      }
+      &.pet {
+        background-color: #fff;
+        color: $pet-theme;
+      }
+      &.ieeg {
+        background-color: #fff;
+        color: $ieeg-theme;
+      }
+      &.meg {
+        background-color: #fff;
+        color: $meg-theme;
+      }
+      &.nirs {
+        background-color: #fff;
+        color: $nirs-theme;
+      }
     }
 
     &:hover {
       .hexagon {
-        color: lighten($on-dark-aqua, 15%); 
-        &.mri { color: lighten($mri-theme, 10%); }
-        &.eeg { color: lighten($eeg-theme, 10%); }
-        &.pet { color: lighten($pet-theme, 10%); }
-        &.ieeg { color: lighten($ieeg-theme, 10%); }
-        &.meg { color: lighten($meg-theme, 10%); }
+        color: lighten($on-dark-aqua, 15%);
+        &.mri {
+          color: lighten($mri-theme, 10%);
+        }
+        &.eeg {
+          color: lighten($eeg-theme, 10%);
+        }
+        &.pet {
+          color: lighten($pet-theme, 10%);
+        }
+        &.ieeg {
+          color: lighten($ieeg-theme, 10%);
+        }
+        &.meg {
+          color: lighten($meg-theme, 10%);
+        }
       }
     }
   }
