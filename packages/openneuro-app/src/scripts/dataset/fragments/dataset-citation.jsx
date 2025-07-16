@@ -15,7 +15,7 @@ export const formatCitation = (snapshot, style) => {
     return `${authors} (${year}). ${snapshot.description.Name}. OpenNeuro. [Dataset] doi: ${snapshot.description.DatasetDOI}`
   } else if (style === "BibTeX") {
     return `@dataset{${snapshot.id},
-  author = {${authors}},
+  author = {${snapshot.description.Authors.join(" AND ")}},
   title = {"${snapshot.description.Name}"},
   year = {${year}},
   doi = {${snapshot.description.DatasetDOI}},
