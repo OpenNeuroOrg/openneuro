@@ -126,6 +126,28 @@ services:
           - datalad-0
           - datalad-1
 
+  taskiq:
+    build:
+      context: services/datalad
+    volumes:
+      - ${PERSISTENT_DIR}/datalad:/datalad:z
+      - ./services/datalad/datalad_service:/srv/datalad_service
+      - ./datalad-key:/datalad-key
+    env_file: ./config.env
+    init: true
+    command:
+      [
+        "taskiq",
+        "worker",
+        "datalad_service.broker:broker",
+        "datalad_service.tasks.validator"
+      ]
+    networks:
+      default:
+        aliases:
+          - datalad-0
+          - datalad-1
+
   # nginx + app
   web:
     image: docker.io/library/nginx:1.16.1
