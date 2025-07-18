@@ -6,6 +6,8 @@ import { GET_USER, UPDATE_USER } from "../queries/user"
 import styles from "./scss/useraccountview.module.scss"
 import { GitHubAuthButton } from "./github-auth-button"
 import type { UserAccountViewProps } from "../types/user-types"
+import { OrcidConsentForm } from "./components/orcid-consent-form"
+import { validateHttpHttpsUrl } from "../utils/validationUtils"
 
 export const UserAccountView: React.FC<UserAccountViewProps> = ({
   orcidUser,
@@ -30,7 +32,7 @@ export const UserAccountView: React.FC<UserAccountViewProps> = ({
         refetchQueries: [
           {
             query: GET_USER,
-            variables: { id: orcidUser?.orcid },
+            variables: { userId: orcidUser?.id },
           },
         ],
       })
@@ -51,7 +53,7 @@ export const UserAccountView: React.FC<UserAccountViewProps> = ({
         refetchQueries: [
           {
             query: GET_USER,
-            variables: { id: orcidUser?.orcid },
+            variables: { userId: orcidUser?.id },
           },
         ],
       })
@@ -72,28 +74,12 @@ export const UserAccountView: React.FC<UserAccountViewProps> = ({
         refetchQueries: [
           {
             query: GET_USER,
-            variables: { id: orcidUser?.orcid },
+            variables: { userId: orcidUser?.id },
           },
         ],
       })
     } catch (error) {
       Sentry.captureException(error)
-    }
-  }
-
-  // --- URL VALIDATION FUNCTION ---
-  const validateHttpHttpsUrl = (url: string): boolean => {
-    if (!url) {
-      return false // Empty string is not a valid URL
-    }
-    try {
-      const parsedUrl = new URL(url)
-      // Check if the protocol is either http: or https:
-      return parsedUrl.protocol === "http:" || parsedUrl.protocol === "https:"
-    } catch (error) {
-      // If new URL() throws an error, the string is not a valid URL
-      Sentry.captureException(error)
-      return false
     }
   }
 
@@ -128,24 +114,33 @@ export const UserAccountView: React.FC<UserAccountViewProps> = ({
       <EditableContent
         editableContent={userLinks}
         setRows={handleLinksChange}
-        className="custom-class"
         heading="Links"
         validation={validateHttpHttpsUrl}
         validationMessage="Invalid URL format. Please start with http:// or https://"
         data-testid="links-section"
       />
 
+      {orcidUser?.id && orcidUser?.orcid !== undefined && (
+        <div className={styles.umbOrcidConsent}>
+          <div className={styles.umbOrcidHeading}>
+            <h4>ORCID Integration</h4>
+          </div>
+          <OrcidConsentForm
+            userId={orcidUser.id}
+            initialOrcidConsent={orcidUser.orcidConsent}
+          />
+        </div>
+      )}
+
       <EditableContent
         editableContent={userLocation}
         setRows={handleLocationChange}
-        className="custom-class"
         heading="Location"
         data-testid="location-section"
       />
       <EditableContent
         editableContent={userInstitution}
         setRows={handleInstitutionChange}
-        className="custom-class"
         heading="Institution"
         data-testid="institution-section"
       />

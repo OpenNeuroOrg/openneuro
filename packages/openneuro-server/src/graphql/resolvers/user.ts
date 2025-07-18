@@ -37,6 +37,7 @@ export interface UserInfo {
   provider?: string
   providerId?: string
   blocked?: boolean
+  orcidConsent?: boolean | null
 }
 
 export interface GraphQLContext {
@@ -128,7 +129,7 @@ export const users = async (
 
   let query = User.find(filter)
   if (offset !== undefined) query = query.skip(offset)
-  if (limit !== undefined) query = query.limit(limit)
+  if (limit !== undefined) query = query = query.limit(limit)
   query = query.sort(sort)
 
   const users = await query.exec()
@@ -165,7 +166,10 @@ export const setBlocked = (obj, { id, blocked }, { userInfo }) => {
   }
 }
 
-export const updateUser = async (obj, { id, location, institution, links }) => {
+export const updateUser = async (
+  obj,
+  { id, location, institution, links, orcidConsent },
+) => {
   try {
     let user // Declare user outside the if block
 
@@ -185,6 +189,7 @@ export const updateUser = async (obj, { id, location, institution, links }) => {
     if (location !== undefined) user.location = location
     if (institution !== undefined) user.institution = institution
     if (links !== undefined) user.links = links
+    if (orcidConsent !== undefined) user.orcidConsent = orcidConsent
 
     // Save the updated user
     await user.save()
@@ -209,6 +214,7 @@ const UserResolvers = {
   location: (obj) => obj.location,
   institution: (obj) => obj.institution,
   links: (obj) => obj.links,
+  orcidConsent: (obj) => obj.orcidConsent,
   modified: (obj) => obj.updatedAt,
 }
 
