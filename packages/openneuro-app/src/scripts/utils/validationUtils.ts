@@ -24,7 +24,7 @@ export const validateHttpHttpsUrl = (url: string): boolean => {
     return parsedUrl.protocol === "http:" || parsedUrl.protocol === "https:"
   } catch (error) {
     // If new URL() throws an error, the string is not a valid URL
-    Sentry.captureException(error) // Capture the error with Sentry
+    Sentry.captureException(error)
     return false
   }
 }
