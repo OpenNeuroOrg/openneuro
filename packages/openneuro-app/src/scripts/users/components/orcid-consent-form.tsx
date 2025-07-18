@@ -79,7 +79,7 @@ export const OrcidConsentForm: React.FC<OrcidConsentFormProps> = ({
     setConsentValue(value)
   }
 
-  // The button is visible only if the current selection (string) is different from the initial value (string)
+  // The button is visible only if the current selection is different from the initial value
   const showSaveButton = consentValue !== initialConsentString
   const isSaveDisabled = updatingConsent
 
@@ -129,7 +129,6 @@ export const OrcidConsentForm: React.FC<OrcidConsentFormProps> = ({
         />
       </div>
 
-      {/* Conditional rendering: Button is only visible if showSaveButton is true */}
       {showSaveButton && (
         <Button
           size="small"
