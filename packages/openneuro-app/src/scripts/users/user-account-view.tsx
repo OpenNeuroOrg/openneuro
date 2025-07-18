@@ -32,7 +32,7 @@ export const UserAccountView: React.FC<UserAccountViewProps> = ({
         refetchQueries: [
           {
             query: GET_USER,
-            variables: { userId: orcidUser?.orcid },
+            variables: { id: orcidUser?.orcid },
           },
         ],
       })
@@ -53,7 +53,7 @@ export const UserAccountView: React.FC<UserAccountViewProps> = ({
         refetchQueries: [
           {
             query: GET_USER,
-            variables: { userId: orcidUser?.orcid },
+            variables: { id: orcidUser?.orcid },
           },
         ],
       })
@@ -74,7 +74,7 @@ export const UserAccountView: React.FC<UserAccountViewProps> = ({
         refetchQueries: [
           {
             query: GET_USER,
-            variables: { userId: orcidUser?.orcid },
+            variables: { id: orcidUser?.orcid },
           },
         ],
       })
