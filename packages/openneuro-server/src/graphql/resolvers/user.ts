@@ -129,7 +129,7 @@ export const users = async (
 
   let query = User.find(filter)
   if (offset !== undefined) query = query.skip(offset)
-  if (limit !== undefined) query = query = query.limit(limit)
+  if (limit !== undefined) query = query.limit(limit)
   query = query.sort(sort)
 
   const users = await query.exec()
