@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react"
 import * as Sentry from "@sentry/react"
-
-import { Button } from "../components/button/Button"
 import { Modal } from "../components/modal/Modal"
-import { GET_USER, UPDATE_USER, useUser } from "../queries/user"
+import { useUser } from "../queries/user"
 import { OrcidConsentForm } from "./components/orcid-consent-form"
 
-export const OrcidConsentModal: React.FC<any> = () => {
+export const OrcidConsentModal: React.FC<Record<string, never>> = () => {
   // State to control the visibility of the modal
   const [isOpen, setIsOpen] = useState(false)
 

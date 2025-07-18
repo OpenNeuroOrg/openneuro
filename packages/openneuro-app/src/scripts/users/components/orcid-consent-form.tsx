@@ -65,8 +65,6 @@ export const OrcidConsentForm: React.FC<OrcidConsentFormProps> = ({
       } catch (error) {
         Sentry.captureException(error)
       }
-    } else {
-      console.warn("Please select a consent option.")
     }
   }
 
