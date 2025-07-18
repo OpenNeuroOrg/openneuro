@@ -8,13 +8,11 @@ export const OrcidConsentModal: React.FC<Record<string, never>> = () => {
   // State to control the visibility of the modal
   const [isOpen, setIsOpen] = useState(false)
 
-  // Fetch the current user's ORCID consent status using the existing useUser hook
   const { user, loading, error } = useUser(undefined)
   const userOrcidConsent = user?.orcidConsent
   const userId = user?.id
 
   // Define the toggle function for the modal
-  // Now, the modal can always be closed by the 'X' button
   const toggle = () => {
     setIsOpen(!isOpen)
   }
