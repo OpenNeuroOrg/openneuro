@@ -95,8 +95,10 @@ services:
 
   # datalad Python backend
   datalad:
+    platform: linux/amd64
     build:
       context: services/datalad
+      platform: linux/amd64
     volumes:
       - ${PERSISTENT_DIR}/datalad:/datalad:z
       - ./services/datalad/datalad_service:/srv/datalad_service
@@ -127,8 +129,10 @@ services:
           - datalad-1
 
   taskiq:
+    platform: linux/amd64
     build:
       context: services/datalad
+      platform: linux/amd64
     volumes:
       - ${PERSISTENT_DIR}/datalad:/datalad:z
       - ./services/datalad/datalad_service:/srv/datalad_service
