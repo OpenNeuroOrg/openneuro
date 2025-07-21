@@ -3,13 +3,11 @@ import React from "react"
 import { fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { MockedProvider } from "@apollo/client/testing"
 import type { MockedResponse } from "@apollo/client/testing"
-// Component to test
 import {
   OrcidConsentForm,
   type OrcidConsentFormProps,
 } from "../components/orcid-consent-form"
-// Mocked dependencies
-import { GET_USER, UPDATE_USER } from "../../queries/user" // Import actual queries
+import { GET_USER, UPDATE_USER } from "../../queries/user"
 
 // Mock Button component
 vi.mock("../../components/button/Button", () => ({
@@ -141,8 +139,8 @@ describe("OrcidConsentForm", () => {
           id: mockUserId,
           name: "Test User",
           email: "test@example.com",
-          orcidConsent: null, // Initial null state
-          __typename: "User", // Add __typename
+          orcidConsent: null,
+          __typename: "User",
         },
       },
     },
@@ -172,8 +170,8 @@ describe("OrcidConsentForm", () => {
       mockUpdateUserMutationFalse,
       mockGetUserQueryTrue,
       mockGetUserQueryFalse,
-      mockGetUserQueryNull, // Include this for initial states
-      ...mocks, // Allow test-specific mocks to be passed
+      mockGetUserQueryNull,
+      ...mocks,
     ]
 
     return render(
@@ -196,13 +194,12 @@ describe("OrcidConsentForm", () => {
     renderComponent({ initialOrcidConsent: null })
     const radioConsent = screen.getByTestId("radio-true")
     fireEvent.click(radioConsent)
-
     await waitFor(() => {
       const saveButton = screen.getByTestId("mock-save-button")
       expect(saveButton).toBeInTheDocument()
       expect(saveButton).not.toBeDisabled()
       expect(saveButton).toHaveTextContent("Save Consent")
-      expect(screen.getByTestId("radio-true")).toBeChecked() // Verify selection
+      expect(screen.getByTestId("radio-true")).toBeChecked()
     })
   })
 
@@ -220,7 +217,6 @@ describe("OrcidConsentForm", () => {
     expect(saveButton).toBeInTheDocument()
     // Click save
     fireEvent.click(saveButton)
-    // Wait for mutation to complete and onConsentUpdated callback to be called
     await waitFor(() => {
       expect(mockOnConsentUpdated).toHaveBeenCalledWith(true)
     })
@@ -228,8 +224,8 @@ describe("OrcidConsentForm", () => {
     rerender(
       <MockedProvider mocks={[mockGetUserQueryTrue]} addTypename={false}>
         <OrcidConsentForm
-          userId={mockUserId} // Explicitly pass userId
-          initialOrcidConsent={true} // New prop value from refetch
+          userId={mockUserId}
+          initialOrcidConsent={true}
           onConsentUpdated={mockOnConsentUpdated}
         />
       </MockedProvider>,
@@ -247,13 +243,12 @@ describe("OrcidConsentForm", () => {
     rerender(
       <MockedProvider mocks={[mockGetUserQueryFalse]} addTypename={false}>
         <OrcidConsentForm
-          userId={mockUserId} // Explicitly pass userId
-          initialOrcidConsent={true} // New prop value from refetch
+          userId={mockUserId}
+          initialOrcidConsent={true}
           onConsentUpdated={mockOnConsentUpdated}
         />
       </MockedProvider>,
     )
-
     // Initial state check for second scenario
     await waitFor(() => {
       expect(screen.getByTestId("radio-true")).toBeChecked()
@@ -267,16 +262,14 @@ describe("OrcidConsentForm", () => {
     expect(saveButtonFalse).toBeInTheDocument()
     // Click save
     fireEvent.click(saveButtonFalse)
-    // Wait for mutation to complete and onConsentUpdated callback to be called
     await waitFor(() => {
       expect(mockOnConsentUpdated).toHaveBeenCalledWith(false)
     })
-    // Simulate the parent component re-rendering with the updated prop (false)
     rerender(
       <MockedProvider mocks={[mockGetUserQueryFalse]} addTypename={false}>
         <OrcidConsentForm
-          userId={mockUserId} // Explicitly pass userId
-          initialOrcidConsent={false} // New prop value from refetch
+          userId={mockUserId}
+          initialOrcidConsent={false}
           onConsentUpdated={mockOnConsentUpdated}
         />
       </MockedProvider>,
