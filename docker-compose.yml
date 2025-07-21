@@ -99,7 +99,6 @@ services:
     build:
       context: services/datalad
       platform: linux/amd64
-      no_cache: true
     volumes:
       - ${PERSISTENT_DIR}/datalad:/datalad:z
       - ./services/datalad/datalad_service:/srv/datalad_service
