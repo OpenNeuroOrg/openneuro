@@ -95,6 +95,7 @@ services:
 
   # datalad Python backend
   datalad:
+    platform: linux/amd64
     build:
       context: services/datalad
       platform: linux/amd64
