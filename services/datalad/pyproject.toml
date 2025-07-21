@@ -16,7 +16,7 @@ dependencies = [
     "pyjwt>=2.10.1",
     "requests>=2.32.3",
     "sentry-sdk[falcon]>=2.29.1",
-    "taskiq>=0.11.18",
+    "taskiq[reload]>=0.11.18",
     "taskiq-redis>=1.0.9",
     "uvicorn[standard]>=0.34.3",
 ]
