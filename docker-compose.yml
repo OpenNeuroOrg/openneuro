@@ -1,5 +1,5 @@
 # docker compose versions
-version: "2.3"
+version: '2.3'
 
 services:
   # This dummy service provides shared configuration for all Node deps
@@ -30,7 +30,7 @@ services:
       retries: 10
     ports:
       # HMR port
-      - "9992:9992"
+      - '9992:9992'
     environment:
       - NODE_ENV=development
     depends_on:
@@ -76,7 +76,7 @@ services:
   # mongodb
   mongo:
     image: docker.io/library/mongo:8
-    command: ["--replSet", "rs0", "--bind_ip_all", "--port", "27017"]
+    command: ['--replSet', 'rs0', '--bind_ip_all', '--port', '27017']
     ports:
       - 27017:27017
     healthcheck:
@@ -105,21 +105,48 @@ services:
     init: true
     command:
       [
-        "uvicorn",
-        "--host",
-        "0.0.0.0",
-        "--port",
-        "80",
-        "--reload",
-        "--factory",
-        "datalad_service.app:create_app",
-        "--workers",
-        "8",
-        "--timeout-keep-alive",
-        "30",
-        "--log-level",
-        "debug",
+        'uvicorn',
+        '--host',
+        '0.0.0.0',
+        '--port',
+        '80',
+        '--reload',
+        '--factory',
+        'datalad_service.app:create_app',
+        '--workers',
+        '8',
+        '--timeout-keep-alive',
+        '30',
+        '--log-level',
+        'debug',
       ]
+    networks:
+      default:
+        aliases:
+          - datalad-0
+          - datalad-1
+
+  taskiq:
+    build:
+      context: services/datalad
+    volumes:
+      - ${PERSISTENT_DIR}/datalad:/datalad:z
+      - ./services/datalad/datalad_service:/srv/datalad_service
+      - ./datalad-key:/datalad-key
+    env_file: ./config.env
+    init: true
+    command: [
+      'taskiq',
+      'worker',
+      'datalad_service.broker:broker',
+      '--tasks-pattern',
+      'datalad_service/tasks/*.py',
+      '--fs-discover',
+      '--reload'
+    ]
+    depends_on:
+      redis:
+        condition: service_started
     networks:
       default:
         aliases:
@@ -132,8 +159,8 @@ services:
     volumes:
       - ./nginx/nginx.dev.conf:/etc/nginx/conf.d/default.conf:ro
     ports:
-      - "8110:8110"
-      - "9876:80"
+      - '8110:8110'
+      - '9876:80'
     depends_on:
       server:
         condition: service_healthy
@@ -147,7 +174,7 @@ services:
     platform: ${ES_PLATFORM}
     environment:
       discovery.type: single-node
-      cluster.routing.allocation.disk.threshold_enabled: "true"
+      cluster.routing.allocation.disk.threshold_enabled: 'true'
       cluster.routing.allocation.disk.watermark.flood_stage: 1gb
       cluster.routing.allocation.disk.watermark.low: 10gb
       cluster.routing.allocation.disk.watermark.high: 5gb
@@ -158,10 +185,10 @@ services:
     security_opt:
       - seccomp=${SECOMP}
     healthcheck:
-      test: "curl -s -f http://localhost:9200 || exit 1"
+      test: 'curl -s -f http://localhost:9200 || exit 1'
       interval: 10s
       timeout: 5s
       retries: 3
     ports:
-      - "9200:9200"
-      - "9300:9300"
+      - '9200:9200'
+      - '9300:9300'

@@ -214,6 +214,9 @@ def mock_validate_dataset_task(monkeypatch):
     async def async_noop_validator(*args, **kwargs):
         return None
 
+    # Mock task kiq for taskiq
+    async_noop_validator.kiq = async_noop_validator
+
     monkeypatch.setattr(
         'datalad_service.tasks.files.validate_dataset', async_noop_validator
     )

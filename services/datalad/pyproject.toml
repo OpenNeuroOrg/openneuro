@@ -9,12 +9,15 @@ dependencies = [
     "bidsschematools>=1.0.10",
     "boto3>=1.38.30",
     "charset-normalizer>=3.4.2",
+    "dnspython>=2.7.0",
     "falcon>=4.0.2",
     "pygit2>=1.18.0",
     "pygithub>=2.6.1",
     "pyjwt>=2.10.1",
     "requests>=2.32.3",
     "sentry-sdk[falcon]>=2.29.1",
+    "taskiq[reload]>=0.11.18",
+    "taskiq-redis>=1.0.9",
     "uvicorn[standard]>=0.34.3",
 ]
 dynamic = ["version"]

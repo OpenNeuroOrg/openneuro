@@ -73,3 +73,21 @@ spec:
           httpGet:
             path: '/heartbeat'
             port: 80
+      - name: {{ .Release.Name }}-dataset-taskiq-worker
+        image: 'openneuro/datalad-service:v{{ .Chart.AppVersion }}'
+        command: ['taskiq', 'worker', 'datalad_service.broker:broker', '--tasks-pattern', 'datalad_service/tasks/*.py', '--fs-discover']
+        resources:
+          requests:
+            cpu: {{ .Values.workerCpuRequests }}
+            memory: {{ .Values.workerMemoryRequests }}
+        envFrom:
+        - configMapRef:
+            name: {{ .Release.Name }}-configmap
+        - secretRef:
+            name: {{ .Release.Name }}-secret
+        volumeMounts:
+        - name: datasets
+          mountPath: /datasets
+        - name: ssh-key
+          mountPath: /datalad-key
+          subPath: datalad-key

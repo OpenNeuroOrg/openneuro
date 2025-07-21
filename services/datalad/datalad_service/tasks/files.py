@@ -37,7 +37,7 @@ def commit_files(store, dataset, files, name=None, email=None, cookies=None):
     )
     ref = git_commit(repo, files, author)
     # Run the validator but don't block on the request
-    asyncio.create_task(validate_dataset(dataset, dataset_path, str(ref), cookies))
+    asyncio.create_task(validate_dataset.kiq(dataset, dataset_path, str(ref), cookies))
     return ref
 
 
