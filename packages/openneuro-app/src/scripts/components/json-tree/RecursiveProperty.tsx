@@ -9,7 +9,7 @@ interface IterableObject {
   [s: number]: number | string | boolean | IterableObject
 }
 
-interface Props {
+interface RecursivePropertyProps {
   property: number | string | boolean | IterableObject | null
   propertyName: string
   emptyPropertyLabel?: string
@@ -17,15 +17,13 @@ interface Props {
   propertyNameProcessor?: (name: string) => string
 }
 
-export const RecursiveProperty: React.FC<Props> = (props) => {
-  const {
-    property,
-    propertyName,
-    emptyPropertyLabel,
-    rootProperty,
-    propertyNameProcessor,
-  } = props
-
+export const RecursiveProperty = ({
+  property,
+  propertyName,
+  emptyPropertyLabel,
+  rootProperty,
+  propertyNameProcessor,
+}: RecursivePropertyProps) => {
   // Determine if the property is "falsy - empty" but should be visible
   const isEmptyValue = property === null ||
     property === 0 ||
@@ -56,7 +54,6 @@ export const RecursiveProperty: React.FC<Props> = (props) => {
                 {Object.getOwnPropertyNames(property).length > 0
                   ? (
                     Object.values(property).map(
-                      /* eslint-disable-next-line */
                       (propValue, index) => (
                         <RecursiveProperty
                           key={index}
