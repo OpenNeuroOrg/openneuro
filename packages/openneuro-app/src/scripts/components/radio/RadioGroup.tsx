@@ -17,6 +17,7 @@ export interface RadioGroupProps {
   name: string
   selected: string
   setSelected: (value) => void
+  additionalText?: string
 }
 
 const get = (obj, property) => (typeof obj === "object" ? obj[property] : obj)
@@ -27,6 +28,7 @@ export const RadioGroup = ({
   name,
   selected,
   setSelected,
+  additionalText,
 }: RadioGroupProps) => {
   return (
     <div className={"on-radio-wrapper" + " " + layout}>
@@ -40,6 +42,8 @@ export const RadioGroup = ({
           onChange={(e) => setSelected(e.target.value)}
         />
       ))}
+      {additionalText && <div className="additional-text">{additionalText}
+      </div>}
     </div>
   )
 }
