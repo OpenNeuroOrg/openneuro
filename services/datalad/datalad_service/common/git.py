@@ -25,7 +25,8 @@ class OpenNeuroGitError(Exception):
 def git_show(repo, committish, obj):
     """Equivalent to `git show <committish>:<obj>` on `repo` repository."""
     commit, _ = repo.resolve_refish(committish)
-    data_bytes = (commit.tree / obj).read_raw()
+    with pygit2.BlobIO(commit.tree / obj) as f:
+        data_bytes = f.read()
     result = from_bytes(data_bytes).best()
     return str(result)
 
@@ -85,7 +86,9 @@ async def git_show_content(repo, committish, filename):
 def git_show_object(repo, obj):
     git_obj = repo.get(obj)
     if git_obj:
-        return git_obj.read_raw().decode()
+        # Use the BlobIO reader to get filtered content
+        with pygit2.BlobIO(git_obj) as f:
+            return f.read().decode()
     else:
         raise KeyError('object not found in repository')
 
