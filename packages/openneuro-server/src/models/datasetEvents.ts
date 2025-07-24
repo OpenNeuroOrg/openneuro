@@ -14,6 +14,8 @@ const _datasetEventTypes = [
   "git",
   "upload",
   "note",
+  "contributorRequest",
+  "contributorResponse",
 ] as const
 
 /**
@@ -27,6 +29,8 @@ const _datasetEventTypes = [
  * git - A git event modified the dataset's repository (git history provides details)
  * upload - A non-git upload occurred (typically one file changed)
  * note - A note unrelated to another event
+ * contributorRequest - a request event is created for user access
+ * contributorResponse - response of deny or approve is granted
  */
 export type DatasetEventName = typeof _datasetEventTypes[number]
 
@@ -49,13 +53,11 @@ export type DatasetEventDeleted = DatasetEventCommon & {
 
 export type DatasetEventPublished = DatasetEventCommon & {
   type: "published"
-  // True if made public, false if made private
   public: boolean
 }
 
 export type DatasetEventPermissionChange = DatasetEventCommon & {
   type: "permissionChange"
-  // User with the permission being changed
   target: OpenNeuroUserId
   level: string
 }
@@ -72,8 +74,20 @@ export type DatasetEventUpload = DatasetEventCommon & {
 
 export type DatasetEventNote = DatasetEventCommon & {
   type: "note"
-  // Is this note visible only to site admins?
   admin: boolean
+}
+
+export type DatasetEventContributorRequest = DatasetEventCommon & {
+  type: "contributorRequest"
+  requestId?: string
+}
+
+export type DatasetEventContributorResponse = DatasetEventCommon & {
+  type: "contributorResponse"
+  requestId: string
+  targetUserId: OpenNeuroUserId
+  status: "accepted" | "denied"
+  reason?: string
 }
 
 /**
@@ -88,6 +102,8 @@ export type DatasetEventType =
   | DatasetEventGit
   | DatasetEventUpload
   | DatasetEventNote
+  | DatasetEventContributorRequest
+  | DatasetEventContributorResponse
 
 /**
  * Dataset events log changes to a dataset
@@ -117,8 +133,18 @@ const datasetEventSchema = new Schema<DatasetEventDocument>({
   timestamp: { type: Date, default: Date.now },
   userId: { type: String, required: true },
   event: {
-    type: Object,
-    required: true,
+    type: { type: String, required: true, enum: _datasetEventTypes },
+    version: { type: String },
+    public: { type: Boolean },
+    target: { type: String },
+    level: { type: String },
+    commit: { type: String },
+    reference: { type: String },
+    admin: { type: Boolean, default: false },
+    requestId: { type: String, sparse: true, index: true },
+    targetUserId: { type: String },
+    status: { type: String, enum: ["accepted", "denied"] },
+    reason: { type: String },
   },
   success: { type: Boolean, default: false },
   note: { type: String, default: "" },

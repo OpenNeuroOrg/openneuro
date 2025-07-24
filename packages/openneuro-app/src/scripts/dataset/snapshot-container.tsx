@@ -39,6 +39,7 @@ import { TabRoutesSnapshot } from "./routes/tab-routes-snapshot"
 import schemaGenerator from "../utils/json-ld.js"
 import { FollowToggles } from "./common/follow-toggles"
 import { DateDistance } from "../components/date-distance"
+import { RequestContributorButton } from "./mutations/request-contributor-status"
 
 // Helper function for getting version from URL
 const snapshotVersion = (location) => {
@@ -81,6 +82,7 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
   const modality: string = summary?.modalities[0] || ""
   const hasDerivatives = dataset?.derivatives.length > 0
   const isAnonymousReviewer = profile?.scopes?.includes("dataset:reviewer")
+  const currentUserId = profile?.sub
   return (
     <>
       <Helmet>
@@ -184,6 +186,16 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
                   : "N/A"}
                 className="dmb-inline-list"
               />
+              {profile && isDatasetAdmin && (
+                <div className="my-6">
+                  <RequestContributorButton
+                    datasetId={datasetId}
+                    datasetPermissions={dataset.permissions?.userPermissions ||
+                      []}
+                    currentUserId={currentUserId}
+                  />
+                </div>
+              )}
               <>
                 {summary && (
                   <ModalitiesMetaDataBlock

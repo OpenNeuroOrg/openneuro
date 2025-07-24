@@ -205,6 +205,16 @@ export const typeDefs = `
     saveAdminNote(id: ID, datasetId: ID!, note: String!): DatasetEvent
     # Create a git event log for dataset changes
     createGitEvent(datasetId: ID!, commit: String!, reference: String!): DatasetEvent
+    # Request contributor status for a dataset
+    createContributorRequestEvent(datasetId: ID!): DatasetEvent
+    # Save contributor request response data
+    processContributorRequest(
+      datasetId: ID!
+      targetUserId: ID!
+      requestId: ID!
+      status: String!
+      reason: String 
+    ): DatasetEvent
   }
 
   # Anonymous dataset reviewer
@@ -879,25 +889,23 @@ export const typeDefs = `
     type: String
     version: String
     public: Boolean
-    target: User
+    target: User 
     level: String
-    ref: String
-    message: String
+    ref: String 
+    message: String 
+    requestId: ID 
+    targetUserId: ID
+    status: String
+    reason: String
   }
 
   # Dataset events
   type DatasetEvent {
-    # Unique identifier for the event
     id: ID
-    # Timestamp of the event
     timestamp: DateTime
-    # User associated with the event
     user: User
-    # Event description object
     event: DatasetEventDescription
-    # True if the event succeeded
     success: Boolean
-    # Notes associated with the event
     note: String
   }
 `

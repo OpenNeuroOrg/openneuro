@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useMemo, useState } from "react"
 import { gql, useMutation, useQuery } from "@apollo/client"
 import { toast } from "react-toastify"
 import ToastContent from "../../common/partials/toast-content.jsx"
@@ -18,9 +18,14 @@ const GET_DATASET_EVENTS = gql`
         user {
           email
           name
+          orcid
+          id
         }
         event {
           type
+          requestId 
+          status    
+          targetUserId
         }
       }
     }
@@ -83,6 +88,39 @@ export const DatasetEvents = ({ datasetId }) => {
     },
   })
 
+  // Derive rawEvents here, as 'data' is always available (even if undefined initially)
+  const rawEvents = data?.dataset?.events || []
+
+  // This useMemo MUST be here, before any conditional returns
+  const processedEvents = useMemo(() => {
+    const responsesMap = new Map()
+    rawEvents.forEach((event) => {
+      if (event.event.type === "contributorResponse" && event.event.requestId) {
+        responsesMap.set(event.event.requestId, event)
+      }
+    })
+
+    const enrichedEvents = rawEvents.map((event) => {
+      if (event.event.type === "contributorRequest") {
+        const response = responsesMap.get(event.id)
+        if (response) {
+          return {
+            ...event,
+            hasBeenRespondedTo: true,
+            responseStatus: response.event.status,
+          }
+        }
+      }
+      return event
+    })
+    return enrichedEvents
+  }, [rawEvents]) // Dependency array still uses rawEvents
+
+  // This sort also depends on processedEvents, so it should be calculated here too
+  const sortedEvents = [...processedEvents].sort((a, b) =>
+    new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+  )
+
   const handleAddEvent = () => {
     if (newEvent.note) {
       saveAdminNote({
@@ -127,8 +165,6 @@ export const DatasetEvents = ({ datasetId }) => {
   if (loading) return <p>Loading events...</p>
   if (error) return <p>Error fetching events</p>
 
-  const events = data?.dataset?.events || []
-
   return (
     <div className={styles.datasetEvents}>
       <div className={styles.datasetEventHeader}>
@@ -141,7 +177,7 @@ export const DatasetEvents = ({ datasetId }) => {
         </span>
       </div>
 
-      {/* Add new admin note form */}
+      {/* admin note form */}
       {showForm && (
         <div className={styles.addEventForm}>
           <textarea
@@ -159,7 +195,7 @@ export const DatasetEvents = ({ datasetId }) => {
       )}
 
       {/* Event list */}
-      {events.length === 0 ? <p>No events found for this dataset.</p> : (
+      {sortedEvents.length === 0 ? <p>No events found for this dataset.</p> : (
         <>
           <div className="grid faux-table-header">
             <h4 className="col-lg col col-5">Note</h4>
@@ -168,15 +204,17 @@ export const DatasetEvents = ({ datasetId }) => {
             <h4 className="col-lg col col-1">Action</h4>
           </div>
           <ul>
-            {events.map((event) => (
+            {sortedEvents.map((event) => (
               <DatasetEventItem
                 key={event.id}
                 event={event}
+                datasetId={datasetId}
                 editingNoteId={editingNoteId}
                 updatedNote={updatedNote}
                 startEditingNote={startEditingNote}
                 handleUpdateNote={handleUpdateNote}
                 setUpdatedNote={setUpdatedNote}
+                refetchEvents={refetch}
               />
             ))}
           </ul>
