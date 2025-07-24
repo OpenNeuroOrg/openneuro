@@ -3,6 +3,7 @@ import sys
 from taskiq import InMemoryBroker
 from taskiq_redis import RedisAsyncResultBackend, RedisStreamBroker
 
+
 from datalad_service import config
 from datalad_service.broker.get_docker_scale import get_docker_scale
 
