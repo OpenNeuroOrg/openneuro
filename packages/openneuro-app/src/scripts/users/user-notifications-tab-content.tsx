@@ -1,85 +1,99 @@
 import React from "react"
 import { NotificationsList } from "./user-notification-list"
+import { useOutletContext } from "react-router-dom"
 
-// Dummy notifications
-const dummyNotifications = [
-  {
-    id: 1,
-    title: "New Comment on Your dataset",
-    content: "A user has commented on your dataset. View here",
-    status: "unread",
-    type: "general",
-    approval: "",
-  },
-  {
-    id: 2,
-    title: "Example No Approval State ",
-    content: "",
-    status: "unread",
-    type: "approval",
-    approval: "not provided",
-  },
-  {
-    id: 3,
-    title: "Example Denied State",
-    content: "",
-    status: "unread",
-    type: "approval",
-    approval: "denied",
-  },
-  {
-    id: 4,
-    title: "Example Approved State",
-    content: "",
-    status: "unread",
-    type: "approval",
-    approval: "approved",
-  },
-  {
-    id: 5,
-    title: "Saved Notification Example",
-    content: "This is an example of a saved notification.",
-    status: "saved",
-    type: "general",
-    approval: "",
-  },
-  {
-    id: 6,
-    title: "Archived Notification Example",
-    content: "This is an example of an archived notification.",
-    status: "archived",
-    type: "general",
-    approval: "",
-  },
-]
+import {
+  DatasetEventGraphQL,
+  MappedNotification,
+  OutletContextType,
+} from "../types/user-types"
 
-// Tab Components for Different Notifications
-export const UnreadNotifications = () => (
-  <div className="tabContentUnread">
-    <NotificationsList
-      notificationdata={dummyNotifications.filter(
-        (notification) => notification.status === "unread",
-      )}
-    />
-  </div>
-)
+const mapNotificationToAccordionProps = (
+  notification: DatasetEventGraphQL,
+): MappedNotification => {
+  const event = notification.event
+  let title = "General Notification"
+  let status: "unread" | "saved" | "archived" = "unread"
+  let type: "general" | "approval" = "general"
+  let approval: "" | "not provided" | "denied" | "approved" | "accepted" = ""
 
-export const SavedNotifications = () => (
-  <div className="tabContentSaved">
-    <NotificationsList
-      notificationdata={dummyNotifications.filter(
-        (notification) => notification.status === "saved",
-      )}
-    />
-  </div>
-)
+  switch (event?.type) {
+    case "contributorRequest":
+      title = `Contributor Request for Dataset ${
+        notification.dataset?.name || notification.dataset?.id ||
+        notification.id
+      }`
+      type = "approval"
+      approval = "not provided"
+      break
+    case "contributorResponse":
+      title = `Contributor Request ${event.status} for Dataset ${
+        notification.dataset?.name || notification.dataset?.id ||
+        notification.id
+      }`
+      type = "approval"
+      approval = event.status as ("accepted" | "denied")
+      break
+    case "note":
+      title = `Admin Note on Dataset ${
+        notification.dataset?.name || notification.dataset?.id ||
+        notification.id
+      }`
+      break
+    default:
+      title = notification.note ||
+        `Event on Dataset ${
+          notification.dataset?.name || notification.dataset?.id ||
+          notification.id
+        }`
+  }
 
-export const ArchivedNotifications = () => (
-  <div className="tabContentArchived">
-    <NotificationsList
-      notificationdata={dummyNotifications.filter(
-        (notification) => notification.status === "archived",
-      )}
-    />
-  </div>
-)
+  return {
+    id: notification.id,
+    title: title,
+    content: notification.note || "",
+    status: status,
+    type: type,
+    approval: approval,
+    originalNotification: notification,
+  }
+}
+
+export const UnreadNotifications = () => {
+  const { notifications } = useOutletContext() as OutletContextType
+
+  const unreadData = notifications
+    .map(mapNotificationToAccordionProps)
+    .filter((notification) => notification.status === "unread")
+  return (
+    <div className="tabContentUnread">
+      <NotificationsList notificationdata={unreadData} />
+    </div>
+  )
+}
+
+export const SavedNotifications = () => {
+  const { notifications } = useOutletContext() as OutletContextType
+
+  const savedData = notifications
+    .map(mapNotificationToAccordionProps)
+    .filter((notification) => notification.status === "saved")
+  return (
+    <div className="tabContentSaved">
+      <NotificationsList notificationdata={savedData} />
+    </div>
+  )
+}
+
+export const ArchivedNotifications = () => {
+  const { notifications } = useOutletContext() as OutletContextType
+
+  const archivedData = notifications
+    .map(mapNotificationToAccordionProps)
+    .filter((notification) => notification.status === "archived")
+  return (
+    <div className="tabContentArchived">
+      <NotificationsList notificationdata={archivedData} />
+    </div>
+  )
+}

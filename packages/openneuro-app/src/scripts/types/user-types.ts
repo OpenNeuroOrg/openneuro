@@ -15,6 +15,48 @@ export interface User {
   provider?: string
   modified?: string
   githubSynced?: Date
+  notifications?: DatasetEventGraphQL[]
+}
+
+export interface DatasetEventDescriptionGraphQL {
+  type?: string
+  version?: string
+  public?: boolean
+  target?: { id: string; name?: string }
+  level?: string
+  ref?: string
+  message?: string
+  requestId?: string
+  targetUserId?: string
+  status?: string
+  reason?: string
+}
+
+export interface DatasetEventGraphQL {
+  id: string
+  timestamp: string // GraphQL DateTime is a string
+  note?: string
+  success?: boolean
+  user?: { id: string; name?: string }
+  event: DatasetEventDescriptionGraphQL
+  dataset?: {
+    id: string
+    name?: string
+  }
+}
+
+export interface MappedNotification {
+  id: string
+  title: string
+  content: string
+  status: "unread" | "saved" | "archived"
+  type: "general" | "approval"
+  approval: "" | "not provided" | "denied" | "approved" | "accepted"
+  originalNotification: DatasetEventGraphQL
+}
+
+export interface OutletContextType {
+  notifications: DatasetEventGraphQL[]
 }
 
 export interface UserRoutesProps {

@@ -2,6 +2,7 @@
  * User resolvers
  */
 import User from "../../models/user"
+import DatasetEvent from "../../models/datasetEvents"
 
 function isValidOrcid(orcid: string): boolean {
   return /^[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{3}[0-9X]$/.test(orcid || "")
@@ -195,6 +196,38 @@ export const updateUser = async (obj, { id, location, institution, links }) => {
   }
 }
 
+/**
+ * Get all events associated with a specific user (for their notifications feed).
+ * This resolver will be attached as a field to the `User` type.
+ */
+export async function notifications(obj, _, { userInfo }) {
+  // `obj` here is the User object from the parent `user` query (e.g., the user whose notifications we want)
+  const userId = obj.id
+
+  // Authorization check: Only the user themselves or a site admin can view their notifications
+  if (!userInfo || (userInfo.id !== userId && !userInfo.admin)) {
+    throw new Error("Not authorized to view these notifications.")
+  }
+
+  // Define what constitutes a 'notification' for the user.
+  // This example fetches events where the user is either the actor (userId)
+  // or the target (event.targetUserId, like in contributor requests/responses).
+  const events = await DatasetEvent.find({
+    $or: [
+      { userId: userId }, // User performed the event
+      { "event.targetUserId": userId }, // User is the target of the event (e.g., contributor request/response)
+    ],
+    // You might want to add more filters here. For example:
+    // - Exclude internal-only event types: { "event.type": { $nin: ["some_internal_type"] } }
+    // - Filter by a 'read' status if you have one on DatasetEvent
+  })
+    .sort({ timestamp: -1 }) // Sort by most recent first
+    .populate("user") // Populate the user who created the event
+    .exec()
+
+  return events
+}
+
 const UserResolvers = {
   id: (obj) => obj.id,
   provider: (obj) => obj.provider,
@@ -210,6 +243,7 @@ const UserResolvers = {
   institution: (obj) => obj.institution,
   links: (obj) => obj.links,
   modified: (obj) => obj.updatedAt,
+  notifications: notifications,
 }
 
 export default UserResolvers

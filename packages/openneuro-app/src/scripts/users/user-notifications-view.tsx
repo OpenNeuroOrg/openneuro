@@ -10,12 +10,25 @@ import styles from "./scss/usernotifications.module.scss"
 import iconUnread from "../../assets/icon-unread.png"
 import iconSaved from "../../assets/icon-saved.png"
 import iconArchived from "../../assets/icon-archived.png"
+import { useUser } from "../queries/user"
+import { Loading } from "../components/loading/Loading"
+import * as Sentry from "@sentry/react"
 
-export const UserNotificationsView = ({ orcidUser }) => {
+import { OutletContextType, UserRoutesProps } from "../types/user-types"
+
+export const UserNotificationsView = ({ orcidUser }: UserRoutesProps) => {
   const tabsRef = useRef<HTMLUListElement | null>(null)
   const { tab = "unread" } = useParams()
   const navigate = useNavigate()
   const location = useLocation()
+
+  const { user, loading, error } = useUser(orcidUser.id)
+
+  // Access the notifications array
+  const notifications = user?.notifications || []
+  const unreadCount = notifications.length
+  const savedCount = 0
+  const archivedCount = 0
 
   // Explicitly define the type of indicatorStyle
   const [indicatorStyle, setIndicatorStyle] = useState<React.CSSProperties>({
@@ -56,6 +69,20 @@ export const UserNotificationsView = ({ orcidUser }) => {
     }
   }, [tab, orcidUser.orcid, navigate])
 
+  // --- Handle Loading and Error States ---
+  if (loading) {
+    return <Loading />
+  }
+
+  if (error) {
+    Sentry.captureException(error)
+    return (
+      <div>
+        Error loading notifications: {error.message}. Please try again.
+      </div>
+    )
+  }
+
   return (
     <div data-testid="user-notifications-view">
       <h3>Notifications for {orcidUser.name}</h3>
@@ -70,7 +97,8 @@ export const UserNotificationsView = ({ orcidUser }) => {
                   : styles.tabUnread}
             >
               <img className={styles.tabicon} src={iconUnread} alt="" /> Unread
-              <span className={styles.count}>121</span>
+              <span className={styles.count}>{unreadCount}</span>
+              {" "}
             </NavLink>
           </li>
           <li>
@@ -82,7 +110,8 @@ export const UserNotificationsView = ({ orcidUser }) => {
                   : styles.tabSaved}
             >
               <img className={styles.tabicon} src={iconSaved} alt="" /> Saved
-              <span className={styles.count}>121</span>
+              <span className={styles.count}>{savedCount}</span>
+              {" "}
             </NavLink>
           </li>
           <li>
@@ -95,7 +124,8 @@ export const UserNotificationsView = ({ orcidUser }) => {
             >
               <img className={styles.tabicon} src={iconArchived} alt="" />{" "}
               Archived
-              <span className={styles.count}>121</span>
+              <span className={styles.count}>{archivedCount}</span>
+              {" "}
             </NavLink>
           </li>
         </ul>
@@ -104,7 +134,8 @@ export const UserNotificationsView = ({ orcidUser }) => {
         <span style={indicatorStyle}></span>
       </div>
       <div className={styles.tabContent}>
-        <Outlet />
+        <Outlet context={{ notifications } as OutletContextType} />
+        {" "}
       </div>
     </div>
   )

@@ -356,6 +356,7 @@ export const typeDefs = `
     github: String
     githubSynced: Date
     links: [String]
+    notifications: [DatasetEvent!] 
   }
 
   type UserList {

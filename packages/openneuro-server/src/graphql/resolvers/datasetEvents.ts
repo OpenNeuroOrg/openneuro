@@ -121,8 +121,8 @@ export async function processContributorRequest(
   }
 
   const originalRequestEvent = await DatasetEvent.findOne({
-    "event.type": "contributorRequest", // Ensure it's a request
-    "event.requestId": requestId, // Use the UUID string from the request
+    "event.type": "contributorRequest",
+    "event.requestId": requestId,
   })
 
   // Check if originalRequestEvent is found and is of the correct type
@@ -153,14 +153,12 @@ export async function processContributorRequest(
       requestId: requestId,
       targetUserId: targetUserId,
       status: status,
-      reason: reason ||
-        (status === "accepted"
-          ? "Contributor access accepted."
-          : "Contributor access denied."),
+      reason: reason,
     },
     success: true,
-    note:
-      `Admin ${currentUserId} processed contributor request for user ${targetUserId} as '${status}'.`,
+    note: reason && reason.trim() !== ""
+      ? reason
+      : `Admin ${currentUserId} processed contributor request for user ${targetUserId} as '${status}'.`,
   })
 
   await responseEvent.save()

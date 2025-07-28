@@ -4,8 +4,12 @@ import { Tooltip } from "../components/tooltip/Tooltip"
 import iconUnread from "../../assets/icon-unread.png"
 import iconSaved from "../../assets/icon-saved.png"
 import iconArchived from "../../assets/icon-archived.png"
+import { MappedNotification } from "../types/user-types"
 
-export const NotificationAccordion = ({ notification, onUpdate }) => {
+export const NotificationAccordion = ({ notification, onUpdate }: {
+  notification: MappedNotification
+  onUpdate: (id: string, updates: Partial<MappedNotification>) => void
+}) => {
   const { id, title, content, status, type, approval } = notification
 
   const hasContent = content && content.trim().length > 0
@@ -13,12 +17,16 @@ export const NotificationAccordion = ({ notification, onUpdate }) => {
   const [isOpen, setIsOpen] = useState(false)
   const toggleAccordion = () => setIsOpen(!isOpen)
 
-  const handleApprovalChange = (approvalStatus) => {
-    onUpdate(id, { approval: approvalStatus })
+  const handleApprovalChange = (approvalStatus: "accepted" | "denied") => {
+    // TODO: This should trigger a GraphQL mutation to process the request on the backend.
+    // E.g., call a 'processContributorRequest' mutation.
+    onUpdate(id, { approval: approvalStatus }) // Updates local state for immediate feedback
   }
 
-  const handleStatusChange = (newStatus) => {
-    onUpdate(id, { status: newStatus })
+  const handleStatusChange = (newStatus: "unread" | "saved" | "archived") => {
+    // TODO: This should trigger a GraphQL mutation to update a 'readStatus' field
+    // on the backend DatasetEvent for persistence.
+    onUpdate(id, { status: newStatus }) // Updates local state for immediate feedback
   }
 
   return (
@@ -26,7 +34,6 @@ export const NotificationAccordion = ({ notification, onUpdate }) => {
       className={`${styles.notificationAccordion} ${isOpen ? styles.open : ""}`}
     >
       <div className={styles.header}>
-        {/* Render title as button if content exists, otherwise as plain text */}
         <h3 className={styles.accordiontitle}>{title}</h3>
 
         {hasContent && (
@@ -47,20 +54,24 @@ export const NotificationAccordion = ({ notification, onUpdate }) => {
         <div className={styles.actions}>
           {type === "approval" && (
             <>
-              {(approval === "not provided" || approval === "approved") && (
+              {(approval !== "denied") && (
                 <button
                   className={`${styles.notificationapprove} ${
-                    approval === "approved" ? styles.active : ""
+                    approval === "accepted" || approval === "approved"
+                      ? styles.active
+                      : ""
                   }`}
-                  onClick={() => handleApprovalChange("approved")}
-                  disabled={approval === "approved"}
+                  onClick={() => handleApprovalChange("accepted")}
+                  disabled={approval === "accepted" || approval === "approved"}
                 >
                   <i className="fa fa-check"></i>{" "}
-                  {approval === "approved" ? "Approved" : "Approve"}
+                  {approval === "accepted" || approval === "approved"
+                    ? "Approved"
+                    : "Approve"}
                 </button>
               )}
 
-              {(approval === "not provided" || approval === "denied") && (
+              {(approval !== "accepted" && approval !== "approved") && (
                 <button
                   className={`${styles.notificationdeny} ${
                     approval === "denied" ? styles.active : ""
@@ -74,7 +85,6 @@ export const NotificationAccordion = ({ notification, onUpdate }) => {
               )}
             </>
           )}
-          {/* Render actions based on the notification's status */}
           {status === "unread" && (
             <>
               <Tooltip tooltip="Save and mark as read">

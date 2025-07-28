@@ -22,6 +22,37 @@ export const GET_USER = gql`
       blocked
       githubSynced
       github
+      notifications {
+        id
+        timestamp
+        note
+        success
+        user { # The user who initiated the event (e.g., admin who processed a request)
+          id
+          name
+        }
+        event {
+          type
+          version
+          public
+          # target { # Uncomment if you want details of the target user if it's different from event.user
+          #   id
+          #   name
+          # }
+          level
+          ref
+          message
+          requestId
+          targetUserId
+          status
+          reason
+        }
+        # If you added dataset to your DatasetEvent type in the schema:
+        # dataset {
+        #   id
+        #   name # Or other basic dataset info
+        # }
+      }
     }
   }
 `

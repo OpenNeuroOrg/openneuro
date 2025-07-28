@@ -1,12 +1,19 @@
 import React, { useState } from "react"
 import styles from "./scss/usernotifications.module.scss"
 import { NotificationAccordion } from "./user-notification-accordion"
+import { MappedNotification } from "../types/user-types"
 
-// NotificationsList Component
-export const NotificationsList = ({ notificationdata }) => {
-  const [notifications, setNotifications] = useState(notificationdata)
+export const NotificationsList = (
+  { notificationdata }: { notificationdata: MappedNotification[] },
+) => {
+  const [notifications, setNotifications] = useState<MappedNotification[]>(
+    notificationdata,
+  )
 
-  const handleUpdateNotification = (id, updates) => {
+  const handleUpdateNotification = (
+    id: string,
+    updates: Partial<MappedNotification>,
+  ) => {
     setNotifications((prevNotifications) =>
       prevNotifications.map((notification) =>
         notification.id === id ? { ...notification, ...updates } : notification

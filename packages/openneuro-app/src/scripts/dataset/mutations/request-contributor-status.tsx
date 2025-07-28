@@ -1,6 +1,8 @@
 import React from "react"
 import { gql, useMutation } from "@apollo/client"
 import * as Sentry from "@sentry/react"
+import { toast } from "react-toastify"
+import ToastContent from "../../common/partials/toast-content.jsx"
 
 // Define the GraphQL mutation for requesting contributor access
 const CREATE_CONTRIBUTOR_REQUEST_EVENT = gql`
@@ -51,24 +53,39 @@ export const RequestContributorButton = (
       refetchQueries: [
         { query: DATASET_EVENTS_QUERY, variables: { datasetId } },
       ],
+      // Add onCompleted and onError handlers for toasts
+      onCompleted: () => {
+        toast.success(
+          <ToastContent title="Your request for contributor access has been sent successfully!" />,
+        )
+      },
+      onError: (err) => {
+        Sentry.captureException(err)
+        toast.error(
+          <ToastContent
+            title="Failed to send request"
+            body={err.message || "An unknown error occurred"}
+          />,
+        )
+      },
     },
   )
 
-  // Handle the button click event
   const handleRequest = async () => {
     try {
       await createContributorRequest()
-      alert("Your request for contributor access has been sent successfully!")
     } catch (err) {
-      Sentry.captureException(err)
-      alert(`Failed to send request: ${err.message}`)
+      console.error(
+        "Error during request creation (caught by handleRequest):",
+        err,
+      ) // Keep this for console logging errors
     }
   }
 
   // Determine if the current user already has any permissions (read, write, admin)
   // If they do, the button should not be displayed.
   const hasPermissions = datasetPermissions?.some((p) =>
-    p.userId === currentUserId &&
+    p.user.id === currentUserId &&
     (p.level === "admin" || p.level === "rw" || p.level === "read")
   )
 

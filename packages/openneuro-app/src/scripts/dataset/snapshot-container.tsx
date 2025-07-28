@@ -186,15 +186,13 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
                   : "N/A"}
                 className="dmb-inline-list"
               />
-              {profile && isDatasetAdmin && (
-                <div className="my-6">
-                  <RequestContributorButton
-                    datasetId={datasetId}
-                    datasetPermissions={dataset.permissions?.userPermissions ||
-                      []}
-                    currentUserId={currentUserId}
-                  />
-                </div>
+              {profile && (
+                <RequestContributorButton
+                  datasetId={datasetId}
+                  datasetPermissions={dataset.permissions?.userPermissions ||
+                    []}
+                  currentUserId={currentUserId}
+                />
               )}
               <>
                 {summary && (
