@@ -43,7 +43,7 @@ fsck_dataset_generator = dataset_factory()
 
 @broker.task(schedule=[{'cron': '*/15 * * * *'}])
 def gc_dataset():
-    """Run git gc and git repack on a random dataset periodically."""
+    """Run git gc on a random dataset periodically."""
     try:
         dataset_path = next(gc_dataset_generator)
     except StopIteration:
@@ -52,18 +52,11 @@ def gc_dataset():
 
     logging.info(f'Running git gc on dataset: {dataset_path}')
 
-    # If a dataset was chosen, run repack on it
-    repack = subprocess.run(
-        ['git', 'repack', '-A', '-d'], cwd=dataset_path, capture_output=True
+    gc = subprocess.run(
+        ['git', 'gc', '--cruft', '--prune=now'], cwd=dataset_path, capture_output=True
     )
-    if repack.returncode != 0:
-        logging.error(f'`git repack` failed for `{dataset_path}`')
-    gc = subprocess.run(['git', 'gc'], cwd=dataset_path, capture_output=True)
     if gc.returncode != 0:
         logging.error(f'`git gc` failed for `{dataset_path}`')
-    prune = subprocess.run(['git', 'prune'], cwd=dataset_path, capture_output=True)
-    if prune.returncode != 0:
-        logging.error(f'`git prune` failed for `{dataset_path}`')
 
 
 @broker.task(schedule=[{'cron': '7 * * * *'}])
@@ -74,6 +67,8 @@ def git_fsck_dataset():
     except StopIteration:
         logging.info('No datasets available for git fsck.')
         return
-    git_fsck = subprocess.run(['git', 'fsck'], cwd=dataset_path, capture_output=True)
+    git_fsck = subprocess.run(
+        ['git', 'fsck', '--full'], cwd=dataset_path, capture_output=True
+    )
     if git_fsck.returncode != 0:
         logging.error(f'`git fsck` failed for `{dataset_path}`')
