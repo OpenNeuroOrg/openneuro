@@ -53,7 +53,10 @@ def gc_dataset():
     logging.info(f'Running git gc on dataset: {dataset_path}')
 
     gc = subprocess.run(
-        ['git', 'gc', '--cruft', '--prune=now'], cwd=dataset_path, capture_output=True
+        ['git', 'gc', '--cruft', '--prune=1.day.ago'],
+        cwd=dataset_path,
+        capture_output=True,
+        text=True,
     )
     if gc.returncode != 0:
         logging.error(f'`git gc` failed for `{dataset_path}`')
