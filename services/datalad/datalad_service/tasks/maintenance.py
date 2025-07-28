@@ -59,7 +59,7 @@ def gc_dataset():
         text=True,
     )
     if gc.returncode != 0:
-        logging.error(f'`git gc` failed for `{dataset_path}`')
+        logging.error(f'`git gc` failed for `{dataset_path}`: {gc.stderr}')
 
 
 @broker.task(schedule=[{'cron': '7 * * * *'}])
@@ -71,7 +71,9 @@ def git_fsck_dataset():
         logging.info('No datasets available for git fsck.')
         return
     git_fsck = subprocess.run(
-        ['git', 'fsck', '--full'], cwd=dataset_path, capture_output=True
+        ['git', 'fsck', '--full'], cwd=dataset_path, capture_output=True, text=True
     )
     if git_fsck.returncode != 0:
-        logging.error(f'`git fsck` failed for `{dataset_path}`')
+        logging.error(
+            f'`git fsck --full` failed for `{dataset_path}`: {git_fsck.stderr}'
+        )
