@@ -1,6 +1,7 @@
 import os
 import logging
 import subprocess
+import re
 import random
 
 
@@ -23,7 +24,7 @@ def dataset_factory():
                     os.path.join(DATALAD_DATASET_PATH, d)
                     for d in os.listdir(DATALAD_DATASET_PATH)
                     if os.path.isdir(os.path.join(DATALAD_DATASET_PATH, d))
-                    and d.startswith('ds')
+                    and re.match(r'^ds\d{6}$', d)
                 ]
                 if not datasets:
                     logging.warning(
