@@ -6,7 +6,6 @@ import sentry_sdk
 
 import datalad_service.config
 import datalad_service.version
-from datalad_service.tasks.audit import audit_datasets
 from datalad_service.datalad import DataladStore
 from datalad_service.handlers.dataset import DatasetResource
 from datalad_service.handlers.draft import DraftResource
