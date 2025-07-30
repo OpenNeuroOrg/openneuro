@@ -76,6 +76,7 @@ export type DatasetEventUpload = DatasetEventCommon & {
 
 export type DatasetEventNote = DatasetEventCommon & {
   type: "note"
+  // only visible to dataset Admins
   admin: boolean
 }
 
