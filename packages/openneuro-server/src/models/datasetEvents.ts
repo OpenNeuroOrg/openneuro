@@ -80,6 +80,7 @@ export type DatasetEventNote = DatasetEventCommon & {
 export type DatasetEventContributorRequest = DatasetEventCommon & {
   type: "contributorRequest"
   requestId?: string
+  resolutionStatus?: "pending" | "accepted" | "denied"
 }
 
 export type DatasetEventContributorResponse = DatasetEventCommon & {
@@ -145,6 +146,12 @@ const datasetEventSchema = new Schema<DatasetEventDocument>({
     targetUserId: { type: String },
     status: { type: String, enum: ["accepted", "denied"] },
     reason: { type: String },
+    datasetId: { type: String },
+    resolutionStatus: {
+      type: String,
+      enum: ["pending", "accepted", "denied"],
+      default: "pending",
+    },
   },
   success: { type: Boolean, default: false },
   note: { type: String, default: "" },

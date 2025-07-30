@@ -898,6 +898,8 @@ export const typeDefs = `
     targetUserId: ID
     status: String
     reason: String
+    datasetId: ID
+    resolutionStatus: String
   }
 
   # Dataset events

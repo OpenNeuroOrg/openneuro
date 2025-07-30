@@ -1,36 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { gql, useMutation } from '@apollo/client'
-import { toast } from 'react-toastify'
-import ToastContent from '../../common/partials/toast-content.jsx'
-import * as Sentry from '@sentry/react'
-import styles from './scss/dataset-events.module.scss'
-
-// Define the mutation for processing contributor requests
-const PROCESS_CONTRIBUTOR_REQUEST_MUTATION = gql`
-  mutation ProcessContributorRequest(
-    $datasetId: ID!
-    $requestId: ID!
-    $targetUserId: ID!
-    $status: String!
-    $reason: String
-  ) {
-    processContributorRequest(
-      datasetId: $datasetId
-      requestId: $requestId
-      targetUserId: $targetUserId
-      status: $status
-      reason: $reason
-    ) {
-      id
-      event {
-        type
-        status
-        requestId
-      }
-      note
-    }
-  }
-`
+import React, { useEffect, useRef } from "react"
+import { gql, useMutation, useQuery } from "@apollo/client"
+import { toast } from "react-toastify"
+import ToastContent from "../../common/partials/toast-content.jsx"
+import * as Sentry from "@sentry/react"
+import styles from "./scss/dataset-events.module.scss"
+import { PROCESS_CONTRIBUTOR_REQUEST_MUTATION } from "../../queries/datasetEvents.js"
+import { Username } from "../../users/username.js"
+import { GET_USER } from "../../queries/user"
 
 interface Event {
   id: string
@@ -39,12 +15,12 @@ interface Event {
   event: {
     type: string
     targetUserId?: string
-    status?: 'accepted' | 'denied'
+    status?: "accepted" | "denied"
     requestId?: string
   }
   user?: { name?: string; email?: string; id?: string; orcid?: string }
   hasBeenRespondedTo?: boolean
-  responseStatus?: 'accepted' | 'denied'
+  responseStatus?: "accepted" | "denied"
 }
 
 interface DatasetEventItemProps {
@@ -70,6 +46,17 @@ export const DatasetEventItem: React.FC<DatasetEventItemProps> = ({
 }) => {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null)
 
+  // Fetch targetUser data if event type is 'contributorResponse' and targetUserId exists
+  const { data: targetUserData, loading: targetUserLoading } = useQuery(
+    GET_USER,
+    {
+      variables: { userId: event.event.targetUserId },
+      skip: !event.event.targetUserId ||
+        event.event.type !== "contributorResponse",
+    },
+  )
+
+  const targetUser = targetUserData?.user
   const [processContributorRequest] = useMutation(
     PROCESS_CONTRIBUTOR_REQUEST_MUTATION,
     {
@@ -80,13 +67,13 @@ export const DatasetEventItem: React.FC<DatasetEventItemProps> = ({
         refetchEvents()
 
         setTimeout(() => {
-          setUpdatedNote('')
+          setUpdatedNote("")
           if (editingNoteId === event.id) {
-            startEditingNote(null, '')
+            startEditingNote(null, "")
           }
         }, 50)
       },
-      onError: error => {
+      onError: (error) => {
         Sentry.captureException(error)
         toast.error(
           <ToastContent
@@ -100,7 +87,7 @@ export const DatasetEventItem: React.FC<DatasetEventItemProps> = ({
 
   const adjustTextareaHeight = () => {
     if (textareaRef.current) {
-      textareaRef.current.style.height = 'auto'
+      textareaRef.current.style.height = "auto"
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`
     }
   }
@@ -114,108 +101,84 @@ export const DatasetEventItem: React.FC<DatasetEventItemProps> = ({
 
   // ---renderNoteContent logic ---
   const renderNoteContent = () => {
-    // If the item is currently in edit mode AND it's the current event
     if (editingNoteId === event.id) {
       return (
         <textarea
           ref={textareaRef}
           className={styles.dse_inlineForm}
           value={updatedNote}
-          onChange={e => {
+          onChange={(e) => {
             setUpdatedNote(e.target.value)
             adjustTextareaHeight()
           }}
-          placeholder={
-            event.event.type === 'contributorRequest' &&
-            !event.hasBeenRespondedTo
-              ? 'Enter reason for approval/denial (required)'
-              : 'Enter admin note'
-          }
-          style={{ overflow: 'hidden', resize: 'none' }}
+          placeholder={event.event.type === "contributorRequest" &&
+              !event.hasBeenRespondedTo
+            ? "Enter reason for approval/denial (required)"
+            : "Enter admin note"}
+          style={{ overflow: "hidden", resize: "none" }}
         />
       )
     } else {
-      // Display content based on event type when not in edit mode
-      if (event.event.type === 'contributorResponse') {
-        const statusText =
-          event.event.status === 'accepted' ? 'Accepted' : 'Denied'
+      if (event.event.type === "contributorResponse") {
+        const statusText = event.event.status === "accepted"
+          ? "Accepted"
+          : "Denied"
         return (
-          <pre
-            style={{
-              whiteSpace: 'pre-wrap',
-              margin: 0,
-              background: 'transparent',
-              overflow: 'visible',
-              border: 0,
-            }}>
-            <strong>{statusText}: </strong>
-            {event.note} {/* request response reason */}
+          <>
+            <strong>{statusText} Contributor Request:</strong>
             <div>
               <small>
-                {event.user?.orcid ? (
-                  <a href={`/user/${event.user.orcid}`}>
-                    Admin: {event.user?.name || event.user?.email || 'Unknown'}
-                  </a>
-                ) : (
-                  // Fallback if no ORCID
-                  `Admin: ${event.user?.name || event.user?.email || 'Unknown'}`
-                )}{' '}
+                Admin: <Username user={event.user} />
+                {targetUserLoading ? <span>for ...</span> : targetUser
+                  ? (
+                    <>
+                      for User: <Username user={targetUser} />
+                    </>
+                  )
+                  : event.event.targetUserId
+                  ? <>for unknown user (ID: {event.event.targetUserId})</>
+                  : null}
               </small>
             </div>
-          </pre>
-        )
-      } else if (event.event.type === 'contributorRequest') {
-        return (
-          <pre
-            style={{
-              whiteSpace: 'pre-wrap',
-              margin: 0,
-              background: 'transparent',
-              overflow: 'visible',
-              border: 0,
-            }}>
-            {event.note} 
             <div>
               <small>
-                {event.user?.orcid ? (
-                  <a href={`/user/${event.user.orcid}`}>
-                    User: {event.user?.name || event.user?.email || 'Unknown'}
-                  </a>
-                ) : (
-                  // Fallback if no ORCID
-                  `User: ${event.user?.name || event.user?.email || 'Unknown'}`
-                )}
+                <b>Reason:</b>
+                <br />
+                {event.note}
               </small>
             </div>
-          </pre>
+          </>
         )
-      } else if (event.event.type === 'note') {
+      } else if (event.event.type === "contributorRequest") {
         return (
-          <pre
-            style={{
-              whiteSpace: 'pre-wrap',
-              margin: 0,
-              background: 'transparent',
-              overflow: 'visible',
-              border: 0,
-            }}>
+          <>
             {event.note}
-          </pre>
+            <div>
+              <small>
+                User: <Username user={event.user} />
+              </small>
+            </div>
+          </>
+        )
+      } else if (event.event.type === "note") {
+        return (
+          <>
+            {event.note}
+          </>
         )
       } else {
-        return event.event.type 
+        return event.event.type
       }
     }
   }
 
-  const handleSaveOrProcessRequest = async (status?: 'accepted' | 'denied') => {
+  const handleSaveOrProcessRequest = async (status?: "accepted" | "denied") => {
     if (status) {
       if (!event.user?.id) {
-        toast.error('Cannot process request: User ID not found.')
+        toast.error("Cannot process request: User ID not found.")
         return
       }
 
-      // Validation for reason
       if (!updatedNote.trim()) {
         toast.error(
           <ToastContent
@@ -230,14 +193,14 @@ export const DatasetEventItem: React.FC<DatasetEventItemProps> = ({
         await processContributorRequest({
           variables: {
             datasetId,
-            requestId: event.id, 
+            requestId: event.id,
             targetUserId: event.user.id,
             status,
-            reason: updatedNote.trim(), 
+            reason: updatedNote.trim(),
           },
         })
       } catch (err) {
-        console.error('Error processing contributor request:', err)
+        console.error("Error processing contributor request:", err)
       }
     } else {
       handleUpdateNote()
@@ -252,61 +215,58 @@ export const DatasetEventItem: React.FC<DatasetEventItemProps> = ({
           {new Date(event.timestamp).toLocaleString()}
         </div>
         <div className="col-lg col col-3">
-          {event.user?.orcid ? (
-            <a href={`/user/${event.user.orcid}`}>
-              {event.user?.name || event.user?.email || 'Unknown'}
-            </a>
-          ) : (
-            <>{event.user?.name || event.user?.email || 'Unknown'}</>
-          )}
+          <Username user={event.user} />
         </div>
         <div className="col-lg col col-1">
-          {event.event.type === 'note' && editingNoteId !== event.id && (
+          {event.event.type === "note" && editingNoteId !== event.id && (
             <button
-              onClick={() => startEditingNote(event.id, event.note || '')}
-              className="on-button on-button--small on-button--primary">
+              onClick={() => startEditingNote(event.id, event.note || "")}
+              className="on-button on-button--small on-button--primary"
+            >
               Edit
             </button>
           )}
 
-          {event.event.type === 'note' && editingNoteId === event.id && (
+          {event.event.type === "note" && editingNoteId === event.id && (
             <button
-              onClick={() => handleSaveOrProcessRequest()} 
-              className="on-button on-button--small on-button--primary">
+              onClick={() => handleSaveOrProcessRequest()}
+              className="on-button on-button--small on-button--primary"
+            >
               Save Note
             </button>
           )}
 
-          {event.event.type === 'contributorRequest' &&
+          {event.event.type === "contributorRequest" &&
             !event.hasBeenRespondedTo && (
-              <>
-                {editingNoteId !== event.id && ( 
-                  <button
-                    onClick={() => startEditingNote(event.id, '')} 
-                    className="on-button on-button--small on-button--primary">
-                    Process
-                  </button>
-                )}
+            <>
+              {editingNoteId !== event.id && (
+                <button
+                  onClick={() => startEditingNote(event.id, "")}
+                  className="on-button on-button--small on-button--primary"
+                >
+                  Process
+                </button>
+              )}
 
-                {editingNoteId === event.id && ( 
-                  <>
-                    <button
-                      onClick={() => handleSaveOrProcessRequest('accepted')} 
-                      className="on-button on-button--small on-button--success"
-                      style={{ marginBottom: '5px' }} 
-                    >
-                      Accept
-                    </button>
-                    <button
-                      onClick={() => handleSaveOrProcessRequest('denied')} 
-                      className="on-button on-button--small on-button--danger"
-                    >
-                      Deny
-                    </button>
-                  </>
-                )}
-              </>
-            )}
+              {editingNoteId === event.id && (
+                <>
+                  <button
+                    onClick={() => handleSaveOrProcessRequest("accepted")}
+                    className="on-button on-button--small on-button--success"
+                    style={{ marginBottom: "5px" }}
+                  >
+                    Accept
+                  </button>
+                  <button
+                    onClick={() => handleSaveOrProcessRequest("denied")}
+                    className="on-button on-button--small on-button--danger"
+                  >
+                    Deny
+                  </button>
+                </>
+              )}
+            </>
+          )}
         </div>
       </div>
     </li>

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import {
   NavLink,
   Outlet,
@@ -14,7 +14,12 @@ import { useUser } from "../queries/user"
 import { Loading } from "../components/loading/Loading"
 import * as Sentry from "@sentry/react"
 
-import { OutletContextType, UserRoutesProps } from "../types/user-types"
+import {
+  MappedNotification,
+  mapRawDatasetEventToMappedNotification,
+  OutletContextType,
+  UserRoutesProps,
+} from "../types/user-types"
 
 export const UserNotificationsView = ({ orcidUser }: UserRoutesProps) => {
   const tabsRef = useRef<HTMLUListElement | null>(null)
@@ -24,13 +29,46 @@ export const UserNotificationsView = ({ orcidUser }: UserRoutesProps) => {
 
   const { user, loading, error } = useUser(orcidUser.id)
 
-  // Access the notifications array
-  const notifications = user?.notifications || []
-  const unreadCount = notifications.length
-  const savedCount = 0
-  const archivedCount = 0
+  const [mappedNotifications, setMappedNotifications] = useState<
+    MappedNotification[]
+  >([])
 
-  // Explicitly define the type of indicatorStyle
+  useEffect(() => {
+    if (user?.notifications) {
+      const initialMapped = user.notifications.map(
+        mapRawDatasetEventToMappedNotification,
+      )
+      setMappedNotifications(initialMapped)
+    }
+  }, [user?.notifications])
+
+  const handleUpdateNotification = useCallback(
+    (id: string, updates: Partial<MappedNotification>) => {
+      setMappedNotifications((prevNotifications) =>
+        prevNotifications.map((notification) =>
+          notification.id === id
+            ? { ...notification, ...updates }
+            : notification
+        )
+      )
+    },
+    [],
+  )
+
+  // Memoize counts to prevent recalculation on every render if mappedNotifications hasn't changed
+  const unreadCount = useMemo(
+    () => mappedNotifications.filter((n) => n.status === "unread").length,
+    [mappedNotifications],
+  )
+  const savedCount = useMemo(
+    () => mappedNotifications.filter((n) => n.status === "saved").length,
+    [mappedNotifications],
+  )
+  const archivedCount = useMemo(
+    () => mappedNotifications.filter((n) => n.status === "archived").length,
+    [mappedNotifications],
+  )
+
   const [indicatorStyle, setIndicatorStyle] = useState<React.CSSProperties>({
     width: "0px",
     transform: "translateX(0px)",
@@ -41,7 +79,6 @@ export const UserNotificationsView = ({ orcidUser }: UserRoutesProps) => {
     transition: "transform 0.3s ease, width 0.3s ease",
   })
 
-  // Update the indicator position based on active tab whenever location changes
   useEffect(() => {
     const activeLink = tabsRef.current?.querySelector(`.${styles.active}`)
     if (activeLink) {
@@ -60,7 +97,6 @@ export const UserNotificationsView = ({ orcidUser }: UserRoutesProps) => {
     }
   }, [location])
 
-  // Redirect to default tab if no tab is specified
   useEffect(() => {
     if (!["unread", "saved", "archived"].includes(tab)) {
       navigate(`/user/${orcidUser.orcid}/notifications/unread`, {
@@ -69,7 +105,6 @@ export const UserNotificationsView = ({ orcidUser }: UserRoutesProps) => {
     }
   }, [tab, orcidUser.orcid, navigate])
 
-  // --- Handle Loading and Error States ---
   if (loading) {
     return <Loading />
   }
@@ -98,7 +133,6 @@ export const UserNotificationsView = ({ orcidUser }: UserRoutesProps) => {
             >
               <img className={styles.tabicon} src={iconUnread} alt="" /> Unread
               <span className={styles.count}>{unreadCount}</span>
-              {" "}
             </NavLink>
           </li>
           <li>
@@ -111,7 +145,6 @@ export const UserNotificationsView = ({ orcidUser }: UserRoutesProps) => {
             >
               <img className={styles.tabicon} src={iconSaved} alt="" /> Saved
               <span className={styles.count}>{savedCount}</span>
-              {" "}
             </NavLink>
           </li>
           <li>
@@ -125,17 +158,19 @@ export const UserNotificationsView = ({ orcidUser }: UserRoutesProps) => {
               <img className={styles.tabicon} src={iconArchived} alt="" />{" "}
               Archived
               <span className={styles.count}>{archivedCount}</span>
-              {" "}
             </NavLink>
           </li>
         </ul>
 
-        {/* This is the indicator that will follow the active tab */}
         <span style={indicatorStyle}></span>
       </div>
       <div className={styles.tabContent}>
-        <Outlet context={{ notifications } as OutletContextType} />
-        {" "}
+        <Outlet
+          context={{
+            notifications: mappedNotifications,
+            handleUpdateNotification,
+          } as OutletContextType}
+        />
       </div>
     </div>
   )

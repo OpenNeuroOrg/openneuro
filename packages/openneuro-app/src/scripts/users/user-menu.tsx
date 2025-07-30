@@ -8,9 +8,7 @@ export interface UserMenuProps {
   signOutAndRedirect: () => void
 }
 
-export const UserMenu = (
-  { signOutAndRedirect }: UserMenuProps,
-) => {
+export const UserMenu = ({ signOutAndRedirect }: UserMenuProps) => {
   //const inboxCount = 99
 
   const { user } = useUser()
@@ -71,9 +69,7 @@ export const UserMenu = (
 
               {user?.orcid && (
                 <li>
-                  <Link to={`/user/${user?.orcid}/account`}>
-                    Account Info
-                  </Link>
+                  <Link to={`/user/${user?.orcid}/account`}>Account Info</Link>
                 </li>
               )}
 

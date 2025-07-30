@@ -1,57 +1,15 @@
 import React, { useMemo, useState } from "react"
-import { gql, useMutation, useQuery } from "@apollo/client"
+import { useMutation, useQuery } from "@apollo/client"
 import { toast } from "react-toastify"
 import ToastContent from "../../common/partials/toast-content.jsx"
 import * as Sentry from "@sentry/react"
 import { DatasetEventItem } from "../components/DatasetEventItem"
 import styles from "../components/scss/dataset-events.module.scss"
-
-// Query to fetch events for the given dataset
-const GET_DATASET_EVENTS = gql`
-  query GetDatasetEvents($datasetId: ID!) {
-    dataset(id: $datasetId) {
-      events {
-        id
-        note
-        success
-        timestamp
-        user {
-          email
-          name
-          orcid
-          id
-        }
-        event {
-          type
-          requestId 
-          status    
-          targetUserId
-        }
-      }
-    }
-  }
-`
-
-const SAVE_ADMIN_NOTE_MUTATION = gql`
-  mutation SaveAdminNote($datasetId: ID!, $note: String!) {
-    saveAdminNote(datasetId: $datasetId, note: $note) {
-      note
-    }
-  }
-`
-
-const UPDATE_ADMIN_NOTE_MUTATION = gql`
-  mutation SaveAdminNote(
-    $note: String!
-    $datasetId: ID!
-    $saveAdminNoteId: ID
-  ) {
-    saveAdminNote(note: $note, datasetId: $datasetId, id: $saveAdminNoteId) {
-      id
-      note
-    }
-  }
-`
+import {
+  GET_DATASET_EVENTS,
+  SAVE_ADMIN_NOTE_MUTATION,
+  UPDATE_ADMIN_NOTE_MUTATION,
+} from "../../queries/datasetEvents.js"
 
 export const DatasetEvents = ({ datasetId }) => {
   const { data, loading, error, refetch } = useQuery(GET_DATASET_EVENTS, {
@@ -88,10 +46,8 @@ export const DatasetEvents = ({ datasetId }) => {
     },
   })
 
-  // Derive rawEvents here, as 'data' is always available (even if undefined initially)
   const rawEvents = data?.dataset?.events || []
 
-  // This useMemo MUST be here, before any conditional returns
   const processedEvents = useMemo(() => {
     const responsesMap = new Map()
     rawEvents.forEach((event) => {
@@ -114,9 +70,8 @@ export const DatasetEvents = ({ datasetId }) => {
       return event
     })
     return enrichedEvents
-  }, [rawEvents]) // Dependency array still uses rawEvents
+  }, [rawEvents])
 
-  // This sort also depends on processedEvents, so it should be calculated here too
   const sortedEvents = [...processedEvents].sort((a, b) =>
     new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
   )

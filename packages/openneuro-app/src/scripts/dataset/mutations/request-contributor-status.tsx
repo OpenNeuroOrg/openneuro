@@ -3,45 +3,10 @@ import { gql, useMutation } from "@apollo/client"
 import * as Sentry from "@sentry/react"
 import { toast } from "react-toastify"
 import ToastContent from "../../common/partials/toast-content.jsx"
-
-// Define the GraphQL mutation for requesting contributor access
-const CREATE_CONTRIBUTOR_REQUEST_EVENT = gql`
-  mutation CreateContributorRequestEvent($datasetId: ID!) {
-    createContributorRequestEvent(datasetId: $datasetId) {
-      id
-      timestamp
-      event {
-        type
-      }
-      success
-      note
-    }
-  }
-`
-
-// Define the GraphQL query to refetch dataset events.
-const DATASET_EVENTS_QUERY = gql`
-  query DatasetEvents($datasetId: ID!) {
-    dataset(id: $datasetId) {
-      id
-      events {
-        id
-        timestamp
-        user {
-          id
-          name
-        }
-        event {
-          type
-          # Include other fields relevant to event descriptions if needed
-          # e.g., version, public, target, level, commit, reference, admin, targetUserId, status, reason
-        }
-        success
-        note
-      }
-    }
-  }
-`
+import {
+  CREATE_CONTRIBUTOR_REQUEST_EVENT,
+  DATASET_EVENTS_QUERY,
+} from "../../queries/datasetEvents.js"
 
 export const RequestContributorButton = (
   { datasetId, datasetPermissions, currentUserId },
@@ -53,7 +18,6 @@ export const RequestContributorButton = (
       refetchQueries: [
         { query: DATASET_EVENTS_QUERY, variables: { datasetId } },
       ],
-      // Add onCompleted and onError handlers for toasts
       onCompleted: () => {
         toast.success(
           <ToastContent title="Your request for contributor access has been sent successfully!" />,
@@ -78,7 +42,7 @@ export const RequestContributorButton = (
       console.error(
         "Error during request creation (caught by handleRequest):",
         err,
-      ) // Keep this for console logging errors
+      )
     }
   }
 

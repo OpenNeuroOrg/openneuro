@@ -17,8 +17,8 @@ export function datasetEvents(obj, _, { userInfo }) {
     return DatasetEvent.find({
       datasetId: obj.id,
       $and: [
-        { "event.admin": { $ne: true } }, // Exclude admin notes
-        { "event.type": { $ne: "contributorRequest" } }, // Exclude contributorRequest events
+        { "event.admin": { $ne: true } },
+        { "event.type": { "event.type": { $ne: "contributorRequest" } } }, // Maybe make this event.admin === true?
       ],
     })
       .sort({ timestamp: -1 })
@@ -44,6 +44,7 @@ export async function createContributorRequestEvent(
     userId: user,
     event: {
       type: "contributorRequest",
+      datasetId: datasetId,
     },
     success: true,
     note: "User requested contributor status for this dataset.",
@@ -51,8 +52,8 @@ export async function createContributorRequestEvent(
   ;(event.event as DatasetEventContributorRequest).requestId = event.id
 
   await event.save()
-
   await event.populate("user")
+
   return event
 }
 
@@ -64,19 +65,24 @@ export async function saveAdminNote(
   { id, datasetId, note },
   { user, userInfo },
 ) {
-  // Only site admin users can create an admin note
+  // Only site admin users can create or update an admin note
   if (!userInfo?.admin) {
     throw new Error("Not authorized")
   }
+
   if (id) {
-    const event = await DatasetEvent.findOne({ id, datasetId })
-    event.note = note
-    await event.save()
-    await event.populate("user")
-    return event
+    const updatedEvent = await DatasetEvent.findOneAndUpdate(
+      { id: id, datasetId },
+      { note: note },
+      { new: true },
+    )
+    if (!updatedEvent) {
+      throw new Error(`Event with ID ${id} not found for dataset ${datasetId}.`)
+    }
+    await updatedEvent.populate("user")
+    return updatedEvent
   } else {
-    const event = new DatasetEvent({
-      id,
+    const newEvent = new DatasetEvent({
       datasetId,
       userId: user,
       event: {
@@ -86,9 +92,9 @@ export async function saveAdminNote(
       success: true,
       note,
     })
-    await event.save()
-    await event.populate("user")
-    return event
+    await newEvent.save()
+    await newEvent.populate("user")
+    return newEvent
   }
 }
 
@@ -105,26 +111,27 @@ export async function processContributorRequest(
     status: "accepted" | "denied"
     reason?: string
   },
-  context: { user: string; userInfo: { admin: boolean } },
+  { user: currentUserId, userInfo }: {
+    user: string
+    userInfo: { admin: boolean }
+  },
 ) {
-  const currentUserId = context.user
-
   if (!currentUserId) {
     throw new Error("Authentication required to process contributor requests.")
   }
 
   // --- Authorization Check ---
-  await checkDatasetAdmin(datasetId, currentUserId, context.userInfo)
+  await checkDatasetAdmin(datasetId, currentUserId, userInfo)
 
   if (status !== "accepted" && status !== "denied") {
     throw new Error("Invalid status. Must be 'accepted' or 'denied'.")
   }
 
+  // Populate original requester (TODO - perms)
   const originalRequestEvent = await DatasetEvent.findOne({
     "event.type": "contributorRequest",
     "event.requestId": requestId,
-  })
-
+  }).populate("user")
   // Check if originalRequestEvent is found and is of the correct type
   if (
     !originalRequestEvent ||
@@ -145,32 +152,32 @@ export async function processContributorRequest(
     throw new Error("This contributor request has already been processed.")
   }
 
+  originalRequestEvent.event.resolutionStatus = status
+  await originalRequestEvent.save()
+
+  // Create the response event
   const responseEvent = new DatasetEvent({
     datasetId,
-    userId: currentUserId,
+    userId: currentUserId, // Admin processed the request
     event: {
       type: "contributorResponse",
       requestId: requestId,
-      targetUserId: targetUserId,
+      targetUserId: targetUserId, // user that requested
       status: status,
       reason: reason,
+      datasetId: datasetId,
     },
     success: true,
-    note: reason && reason.trim() !== ""
-      ? reason
-      : `Admin ${currentUserId} processed contributor request for user ${targetUserId} as '${status}'.`,
+    note: reason?.trim() ||
+      `Admin ${currentUserId} processed contributor request for user ${targetUserId} as '${status}'.`,
   })
 
   await responseEvent.save()
-  await responseEvent.populate("user") // Populate the admin user who processed the request
+  await responseEvent.populate("user")
 
-  // --- TODO  ---
   if (status === "accepted") {
     // TODO: Add logic here to modify permissions if ADMIN approved
-    // likely involve calling your `updatePermissions` or
-    // `updateUsers` function check with Nell
   }
-  // --- End of the TODO  ---
 
   return responseEvent
 }
