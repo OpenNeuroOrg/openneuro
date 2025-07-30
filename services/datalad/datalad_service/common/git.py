@@ -10,6 +10,8 @@ import aiofiles
 import pygit2
 from charset_normalizer import from_bytes
 
+from datalad_service.common.onchange import on_head
+
 tag_ref = re.compile('^refs/tags/')
 
 COMMITTER_NAME = 'Git Worker'
@@ -130,7 +132,7 @@ def git_rename_master_to_main(repo):
         repo.references['HEAD'].set_target('refs/heads/main')
 
 
-def git_commit(
+async def git_commit(
     repo, file_paths, author=None, message='[OpenNeuro] Recorded changes', parents=None
 ):
     """Commit array of paths at HEAD."""
@@ -161,10 +163,10 @@ def git_commit(
         sentry_sdk.capture_exception(e)
         logger.error(f'Failed to read index after git-annex add: {e}')
         raise OpenNeuroGitError(f'Failed to read index: {e}') from e
-    return git_commit_index(repo, author, message, parents)
+    return await git_commit_index(repo, author, message, parents)
 
 
-def git_commit_index(
+async def git_commit_index(
     repo, author=None, message='[OpenNeuro] Recorded changes', parents=None
 ):
     """Commit any existing index changes."""
@@ -180,4 +182,5 @@ def git_commit_index(
         'refs/heads/main', author, committer, message, tree, parent_commits
     )
     repo.head.set_target(commit)
+    await on_head(repo.workdir)
     return commit

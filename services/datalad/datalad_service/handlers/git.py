@@ -6,6 +6,7 @@ import falcon
 
 from datalad_service.common.events import log_git_event
 from datalad_service.common.const import CHUNK_SIZE_BYTES
+from datalad_service.common.onchange import on_head
 
 
 cache_control = ['no-cache', 'max-age=0', 'must-revalidate']
@@ -137,11 +138,12 @@ class GitReceiveResource:
             resp.status = falcon.HTTP_OK
 
             # After this request finishes successfully, log it to the OpenNeuro API
-            def schedule_git_event():
+            async def schedule_git_event():
+                await on_head(dataset_path)
                 for new_commit, new_ref in refs_updated:
                     log_git_event(dataset, new_commit, new_ref, req.context['token'])
 
-            resp.schedule_sync(schedule_git_event)
+            resp.schedule(schedule_git_event)
         else:
             resp.status = falcon.HTTP_UNPROCESSABLE_ENTITY
 

@@ -53,9 +53,9 @@ class DraftResource:
                 # Add all changes to the index
                 if name and email:
                     author = pygit2.Signature(name, email)
-                    media_dict['ref'] = str(git_commit(repo, ['.'], author))
+                    media_dict['ref'] = str(await git_commit(repo, ['.'], author))
                 else:
-                    media_dict['ref'] = str(git_commit(repo, ['.']))
+                    media_dict['ref'] = str(await git_commit(repo, ['.']))
                 resp.media = media_dict
                 resp.status = falcon.HTTP_OK
             except:
