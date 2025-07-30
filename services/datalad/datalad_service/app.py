@@ -53,6 +53,9 @@ sentry_sdk.init(
     release=f'openneuro-datalad-service@{datalad_service.version.get_version()}',
     server_name=socket.gethostname(),
     before_send=before_send,
+    _experiments={
+        'enable_logs': True,
+    },
 )
 
 

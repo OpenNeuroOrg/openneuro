@@ -157,6 +157,34 @@ services:
           - datalad-0
           - datalad-1
 
+  scheduler:
+    platform: linux/amd64
+    build:
+      context: services/datalad
+      platform: linux/amd64
+    volumes:
+      - ${PERSISTENT_DIR}/datalad:/datalad:z
+      - ./services/datalad/datalad_service:/srv/datalad_service
+      - ./datalad-key:/datalad-key
+    env_file: ./config.env
+    init: true
+    command: [
+      'taskiq',
+      'scheduler',
+      'datalad_service.broker.scheduler:scheduler',
+      '--tasks-pattern',
+      'datalad_service/tasks/*.py',
+      '--fs-discover',
+    ]
+    depends_on:
+      redis:
+        condition: service_started
+    networks:
+      default:
+        aliases:
+          - datalad-0
+          - datalad-1
+
   # nginx + app
   web:
     image: docker.io/library/nginx:1.16.1
