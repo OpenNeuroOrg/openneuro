@@ -1,7 +1,6 @@
 """Test DataLad tasks."""
 
 import os
-from unittest.mock import patch
 import uuid
 
 import pytest
@@ -10,14 +9,14 @@ from datalad.api import Dataset
 
 from datalad_service.common.annex import init_annex
 from datalad_service.common.git import OpenNeuroGitError
-from datalad_service.tasks.dataset import *
+from datalad_service.tasks.dataset import create_dataset, delete_dataset
 from datalad_service.tasks.files import commit_files
 
 
-def test_create_dataset(datalad_store):
+async def test_create_dataset(datalad_store):
     ds_id = 'ds000002'
     author = pygit2.Signature('test author', 'test@example.com')
-    create_dataset(datalad_store, ds_id, author)
+    await create_dataset(datalad_store, ds_id, author)
     ds = Dataset(os.path.join(datalad_store.annex_path, ds_id))
     assert ds.repo is not None
     # Verify the dataset is created with datalad config
@@ -45,18 +44,18 @@ async def test_create_dataset_master(datalad_store):
     file_path = os.path.join(ds.path, 'LICENSE')
     with open(file_path, 'w') as fd:
         fd.write("""MIT""")
-    commit_files(datalad_store, ds_id, ['LICENSE'])
+    await commit_files(datalad_store, ds_id, ['LICENSE'])
     # Verify the branch is now set to main
     assert ds.repo.get_active_branch() == 'main'
 
 
-def test_create_dataset_unusual_default_branch(datalad_store):
+async def test_create_dataset_unusual_default_branch(datalad_store):
     ds_id = 'ds000026'
     author = pygit2.Signature('test author', 'test@example.com')
     # Create dataset will commit data and this should fail since HEAD is something 'unusual'
     # (such as the git-annex branch as a plausible example)
     with pytest.raises(OpenNeuroGitError) as e:
-        create_dataset(datalad_store, ds_id, author, 'unusual')
+        await create_dataset(datalad_store, ds_id, author, 'unusual')
 
 
 async def test_delete_dataset(datalad_store, new_dataset):
@@ -70,6 +69,6 @@ async def test_commit_file(datalad_store, new_dataset):
     file_path = os.path.join(new_dataset.path, 'LICENSE')
     with open(file_path, 'w') as fd:
         fd.write("""GPL""")
-    commit_files(datalad_store, ds_id, ['LICENSE'])
+    await commit_files(datalad_store, ds_id, ['LICENSE'])
     dataset = Dataset(os.path.join(datalad_store.annex_path, ds_id))
     assert not dataset.repo.dirty
