@@ -53,11 +53,13 @@ export type DatasetEventDeleted = DatasetEventCommon & {
 
 export type DatasetEventPublished = DatasetEventCommon & {
   type: "published"
+  // True if made public, false if made private
   public: boolean
 }
 
 export type DatasetEventPermissionChange = DatasetEventCommon & {
   type: "permissionChange"
+  // User with the permission being changed
   target: OpenNeuroUserId
   level: string
 }
