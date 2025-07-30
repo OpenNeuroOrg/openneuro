@@ -205,6 +205,13 @@ export const typeDefs = `
     saveAdminNote(id: ID, datasetId: ID!, note: String!): DatasetEvent
     # Create a git event log for dataset changes
     createGitEvent(datasetId: ID!, commit: String!, reference: String!): DatasetEvent
+    # Create or update a fileCheck document
+    updateFileCheck(
+      datasetId: String!
+      hexsha: String!
+      refs: [String!]!
+      annexFsck: [AnnexFsckInput!]
+    ): FileCheck
   }
 
   # Anonymous dataset reviewer
@@ -900,6 +907,32 @@ export const typeDefs = `
     # Notes associated with the event
     note: String
   }
+
+  type FileCheck {
+    datasetId: String!
+    hexsha: String!
+    refs: [String!]!
+    annexFsck: [AnnexFsck!]
+  }
+
+  type AnnexFsck {
+    command: String
+    errorMessages: [String]
+    file: String
+    key: String
+    note: String
+    success: Boolean
+  }
+
+  input AnnexFsckInput {
+    command: String
+    errorMessages: [String]
+    file: String
+    key: String
+    note: String
+    success: Boolean
+  }
+
 `
 
 schemaComposer.addTypeDefs(typeDefs)
