@@ -1,15 +1,18 @@
-import React, { useMemo, useState } from "react"
+import React, { useCallback, useMemo, useState } from "react"
 import { useMutation, useQuery } from "@apollo/client"
 import { toast } from "react-toastify"
 import ToastContent from "../../common/partials/toast-content.jsx"
 import * as Sentry from "@sentry/react"
-import { DatasetEventItem } from "../components/DatasetEventItem"
 import styles from "../components/scss/dataset-events.module.scss"
 import {
   GET_DATASET_EVENTS,
   SAVE_ADMIN_NOTE_MUTATION,
   UPDATE_ADMIN_NOTE_MUTATION,
 } from "../../queries/datasetEvents.js"
+
+import { DatasetEventsHeader } from "../components/dataset-event-header"
+import { AdminNoteForm } from "../components/dataset-event-admin-note"
+import { DatasetEventList } from "../components/dataset-event-list"
 
 export const DatasetEvents = ({ datasetId }) => {
   const { data, loading, error, refetch } = useQuery(GET_DATASET_EVENTS, {
@@ -29,8 +32,10 @@ export const DatasetEvents = ({ datasetId }) => {
       setShowForm(false)
       refetch()
     },
-    onError: (error) => {
-      Sentry.captureException(error)
+    onError: (mutationError) => {
+      toast.error(
+        <ToastContent title="Error adding note" body={mutationError.message} />,
+      )
     },
   })
 
@@ -41,8 +46,14 @@ export const DatasetEvents = ({ datasetId }) => {
       setUpdatedNote("")
       refetch()
     },
-    onError: (error) => {
-      Sentry.captureException(error)
+    onError: (mutationError) => {
+      Sentry.captureException(mutationError)
+      toast.error(
+        <ToastContent
+          title="Error updating note"
+          body={mutationError.message}
+        />,
+      )
     },
   })
 
@@ -72,11 +83,13 @@ export const DatasetEvents = ({ datasetId }) => {
     return enrichedEvents
   }, [rawEvents])
 
-  const sortedEvents = [...processedEvents].sort((a, b) =>
-    new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-  )
+  const sortedEvents = useMemo(() => {
+    return [...processedEvents].sort((a, b) =>
+      new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+    )
+  }, [processedEvents])
 
-  const handleAddEvent = () => {
+  const handleAddEvent = useCallback(() => {
     if (newEvent.note) {
       saveAdminNote({
         variables: {
@@ -92,9 +105,9 @@ export const DatasetEvents = ({ datasetId }) => {
         />,
       )
     }
-  }
+  }, [newEvent.note, datasetId, saveAdminNote])
 
-  const handleUpdateNote = () => {
+  const handleUpdateNote = useCallback(() => {
     if (updatedNote) {
       updateAdminNote({
         variables: {
@@ -106,75 +119,52 @@ export const DatasetEvents = ({ datasetId }) => {
     } else {
       toast.error("Please fill in the updated note")
     }
-  }
+  }, [updatedNote, datasetId, editingNoteId, updateAdminNote])
 
-  const toggleForm = () => {
+  const toggleForm = useCallback(() => {
     setShowForm((prevState) => !prevState)
-  }
+  }, [])
 
-  const startEditingNote = (eventId, note) => {
+  const startEditingNote = useCallback((eventId, note) => {
     setEditingNoteId(eventId)
     setUpdatedNote(note)
-  }
+  }, [])
+
+  // Handler for AdminNoteForm's onChange
+  const handleNewEventChange = useCallback(
+    (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      setNewEvent({ note: e.target.value })
+    },
+    [],
+  )
 
   if (loading) return <p>Loading events...</p>
-  if (error) return <p>Error fetching events</p>
+  if (error) return <p>Error fetching events: {error.message}</p>
 
   return (
     <div className={styles.datasetEvents}>
-      <div className={styles.datasetEventHeader}>
-        <h4>Dataset Events</h4>
-        <span
-          className={`${styles.addEventBtn} on-button on-button--small on-button--primary icon-text`}
-          onClick={toggleForm}
-        >
-          {showForm ? "Cancel" : "Add Admin Note"}
-        </span>
-      </div>
+      <DatasetEventsHeader showForm={showForm} toggleForm={toggleForm} />
 
       {/* admin note form */}
       {showForm && (
-        <div className={styles.addEventForm}>
-          <textarea
-            placeholder="Admin note"
-            value={newEvent.note}
-            onChange={(e) => setNewEvent({ note: e.target.value })}
-          />
-          <button
-            className="on-button on-button--small on-button--primary"
-            onClick={handleAddEvent}
-          >
-            Save Admin Note
-          </button>
-        </div>
+        <AdminNoteForm
+          newEvent={newEvent}
+          setNewEvent={handleNewEventChange}
+          handleAddEvent={handleAddEvent}
+        />
       )}
 
       {/* Event list */}
-      {sortedEvents.length === 0 ? <p>No events found for this dataset.</p> : (
-        <>
-          <div className="grid faux-table-header">
-            <h4 className="col-lg col col-5">Note</h4>
-            <h4 className="col-lg col col-3">Date</h4>
-            <h4 className="col-lg col col-3">Author</h4>
-            <h4 className="col-lg col col-1">Action</h4>
-          </div>
-          <ul>
-            {sortedEvents.map((event) => (
-              <DatasetEventItem
-                key={event.id}
-                event={event}
-                datasetId={datasetId}
-                editingNoteId={editingNoteId}
-                updatedNote={updatedNote}
-                startEditingNote={startEditingNote}
-                handleUpdateNote={handleUpdateNote}
-                setUpdatedNote={setUpdatedNote}
-                refetchEvents={refetch}
-              />
-            ))}
-          </ul>
-        </>
-      )}
+      <DatasetEventList
+        events={sortedEvents}
+        datasetId={datasetId}
+        editingNoteId={editingNoteId}
+        updatedNote={updatedNote}
+        startEditingNote={startEditingNote}
+        handleUpdateNote={handleUpdateNote}
+        setUpdatedNote={setUpdatedNote}
+        refetchEvents={refetch}
+      />
     </div>
   )
 }

@@ -14,12 +14,12 @@ import { useUser } from "../queries/user"
 import { Loading } from "../components/loading/Loading"
 import * as Sentry from "@sentry/react"
 
-import {
+import type {
   MappedNotification,
-  mapRawDatasetEventToMappedNotification,
   OutletContextType,
   UserRoutesProps,
 } from "../types/user-types"
+import { mapRawDatasetEventToMappedNotification } from "../types/user-types"
 
 export const UserNotificationsView = ({ orcidUser }: UserRoutesProps) => {
   const tabsRef = useRef<HTMLUListElement | null>(null)
@@ -55,7 +55,7 @@ export const UserNotificationsView = ({ orcidUser }: UserRoutesProps) => {
     [],
   )
 
-  // Memoize counts to prevent recalculation on every render if mappedNotifications hasn't changed
+  // Memoize counts to prevent recalculation on render
   const unreadCount = useMemo(
     () => mappedNotifications.filter((n) => n.status === "unread").length,
     [mappedNotifications],

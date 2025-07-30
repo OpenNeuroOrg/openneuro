@@ -1,57 +1,16 @@
 import React, { useCallback, useState } from "react"
+import { toast } from "react-toastify"
 import styles from "./scss/usernotifications.module.scss"
-import { Tooltip } from "../components/tooltip/Tooltip"
-import iconUnread from "../../assets/icon-unread.png"
-import iconSaved from "../../assets/icon-saved.png"
-import iconArchived from "../../assets/icon-archived.png"
-import { MappedNotification, User } from "../types/user-types"
-import { gql, useMutation, useQuery } from "@apollo/client"
-import { Username } from "./username"
-import {
-  PROCESS_CONTRIBUTOR_REQUEST_MUTATION,
-  UPDATE_NOTIFICATION_STATUS_MUTATION,
-} from "../queries/datasetEvents.js"
+import type { MappedNotification } from "../types/user-types"
+import { useMutation, useQuery } from "@apollo/client"
+import { PROCESS_CONTRIBUTOR_REQUEST_MUTATION } from "../queries/datasetEvents.js"
 import { GET_USER } from "../queries/user"
+import { NotificationHeader } from "./user-notification-accordion-header"
+import { NotificationBodyContent } from "./user-notifications-accordion-body"
+import { NotificationReasonInput } from "./user-notification-reason-input"
+import { NotificationActionButtons } from "./user-notification-accordion-actions"
 
-// helper component for status buttons
-interface StatusActionButtonProps {
-  status: "unread" | "saved" | "archived"
-  targetStatus: "unread" | "saved" | "archived"
-  iconSrc: string
-  altText: string
-  tooltipText: string
-  srText: string
-  onClick: (newStatus: "unread" | "saved" | "archived") => void
-  disabled: boolean
-  className?: string
-}
-
-const StatusActionButton: React.FC<StatusActionButtonProps> = ({
-  status,
-  targetStatus,
-  iconSrc,
-  altText,
-  tooltipText,
-  srText,
-  onClick,
-  disabled,
-  className,
-}) => (
-  <Tooltip tooltip={tooltipText}>
-    <button
-      className={`${styles[targetStatus]} ${className || ""}`}
-      onClick={() => onClick(targetStatus)}
-      disabled={disabled}
-    >
-      <img
-        className={`${styles.accordionicon} ${styles[`${targetStatus}icon`]}`}
-        src={iconSrc}
-        alt={altText}
-      />
-      <span className="sr-only">{srText}</span>
-    </button>
-  </Tooltip>
-)
+import ToastContent from "../common/partials/toast-content.jsx"
 
 export const NotificationAccordion = ({
   notification,
@@ -64,7 +23,7 @@ export const NotificationAccordion = ({
     id,
     title,
     content,
-    status,
+    // status, // Not used - TODO
     type,
     approval,
     datasetId,
@@ -84,18 +43,22 @@ export const NotificationAccordion = ({
     error: targetUserError,
   } = useQuery(GET_USER, {
     variables: { userId: targetUserId },
-    skip: !targetUserId, // Skip the query if targetUserId is null or undefined
+    skip: !targetUserId,
   })
 
   const targetUser = targetUserData?.user
   const hasContent = content && content.trim().length > 0
+
   const [isOpen, setIsOpen] = useState(false)
   const [showReasonInput, setShowReasonInput] = useState(false)
   const [reasonInput, setReasonInput] = useState("")
   const [currentApprovalAction, setCurrentApprovalAction] = useState<
     "accepted" | "denied" | null
   >(null)
-  const [error, setError] = useState<string | null>(null)
+  const [localError, setLocalError] = useState<string | null>(null)
+  const [processContributorRequest, { loading: processRequestLoading }] =
+    useMutation(PROCESS_CONTRIBUTOR_REQUEST_MUTATION)
+  const isProcessing = processRequestLoading || targetUserLoading
 
   const toggleAccordion = useCallback(() => {
     setIsOpen((prev) => !prev)
@@ -103,41 +66,41 @@ export const NotificationAccordion = ({
       setShowReasonInput(false)
       setReasonInput("")
       setCurrentApprovalAction(null)
-      setError(null)
+      setLocalError(null)
     }
   }, [isOpen])
-
-  const [
-    processContributorRequest,
-    { loading: processRequestLoading },
-  ] = useMutation(PROCESS_CONTRIBUTOR_REQUEST_MUTATION)
-
-  const [
-    updateNotificationStatus,
-    { loading: updateStatusLoading },
-  ] = useMutation(UPDATE_NOTIFICATION_STATUS_MUTATION)
-
-  const isProcessing = updateStatusLoading || processRequestLoading ||
-    targetUserLoading // Corrected isProcessing
 
   const handleProcessAction = useCallback((action: "accepted" | "denied") => {
     setIsOpen(true)
     setShowReasonInput(true)
     setReasonInput("")
     setCurrentApprovalAction(action)
-    setError(null)
+    setLocalError(null)
   }, [])
 
   const handleReasonSubmit = useCallback(async () => {
-    if (isProcessing || !currentApprovalAction) return
+    if (!reasonInput.trim()) {
+      const errorMessage = "Please provide a reason for this action."
+      toast.error(<ToastContent title="Reason Required" body={errorMessage} />)
+      setLocalError(errorMessage)
+      return
+    }
+
+    if (isProcessing || !currentApprovalAction) {
+      // ? add a toast here if this state is reached unexpectedly
+      return
+    }
 
     if (!datasetId || !requestId || !targetUserId) {
       const missingDataError =
         "Missing required data for processing contributor request."
       console.error(missingDataError, { datasetId, requestId, targetUserId })
-      setError(missingDataError)
+      toast.error(<ToastContent title="Missing Data" body={missingDataError} />)
+      setLocalError(missingDataError)
       return
     }
+
+    setLocalError(null)
 
     try {
       await processContributorRequest({
@@ -149,19 +112,29 @@ export const NotificationAccordion = ({
           reason: reasonInput,
         },
       })
+      toast.success(
+        <ToastContent
+          title="Contributor Request Processed"
+          body={`Request has been ${currentApprovalAction}.`}
+        />,
+      )
+
       onUpdate(id, { approval: currentApprovalAction, reason: reasonInput })
       setShowReasonInput(false)
       setReasonInput("")
       setCurrentApprovalAction(null)
-      setError(null)
     } catch (err: any) {
       const errorMessage = `Error processing contributor request: ${
         err.message || "Unknown error"
       }`
       console.error(errorMessage, err)
-      setError(errorMessage)
+      toast.error(
+        <ToastContent title="Processing Failed" body={errorMessage} />,
+      )
+      setLocalError(errorMessage)
     }
   }, [
+    reasonInput,
     isProcessing,
     currentApprovalAction,
     datasetId,
@@ -170,245 +143,64 @@ export const NotificationAccordion = ({
     processContributorRequest,
     onUpdate,
     id,
-    reasonInput,
   ])
 
   const handleReasonCancel = useCallback(() => {
     setShowReasonInput(false)
     setReasonInput("")
     setCurrentApprovalAction(null)
-    setError(null)
+    setLocalError(null)
   }, [])
 
-  const handleStatusChange = useCallback(async (
-    newStatus: "unread" | "saved" | "archived",
-  ) => {
-    if (isProcessing) return
+  const showReviewButton = hasContent || isContributorRequest ||
+    isContributorResponse
 
-    try {
-      const backendStatus = newStatus.toUpperCase()
-
-      await updateNotificationStatus({
-        variables: {
-          datasetEventId: id,
-          status: backendStatus,
-        },
-      })
-
-      onUpdate(id, { status: newStatus })
-      setError(null)
-    } catch (err: any) {
-      const errorMessage = `Error updating notification status: ${
-        err.message || "Unknown error"
-      }`
-      console.error(errorMessage, err)
-      setError(errorMessage)
-    }
-  }, [isProcessing, id, updateNotificationStatus, onUpdate])
-
-  let accordionBodyContent: React.ReactNode = content
-
-  if (isContributorRequest) {
-    accordionBodyContent = (
-      <p>
-        <Username user={requesterUser} />{" "}
-        requested contributor status for this dataset.
-      </p>
-    )
-    if (approval === "accepted") {
-      accordionBodyContent = (
-        <p>
-          Contributor request from <Username user={requesterUser} /> was{" "}
-          <strong>approved</strong>.
-        </p>
-      )
-    } else if (approval === "denied") {
-      accordionBodyContent = (
-        <p>
-          Contributor request from <Username user={requesterUser} /> was{" "}
-          <strong>denied</strong>.
-        </p>
-      )
-    }
-  } else if (isContributorResponse) {
-    accordionBodyContent = (
-      <p>
-        Admin: <Username user={adminUser} /> {approval} contributor request
-        {targetUserLoading ? <span>for ...</span> : (
-          <>
-            for <Username user={targetUser} />
-            {" "}
-          </>
-        )}
-        <div>
-          <small>
-            {" Reason:"}
-            <br />
-            {reason || "No reason provided."}
-          </small>
-        </div>
-      </p>
-    )
-  }
   return (
     <li
       className={`${styles.notificationAccordion} ${isOpen ? styles.open : ""}`}
     >
-      <div className={styles.header}>
-        <h3 className={styles.accordiontitle}>{title}</h3>
+      <NotificationHeader
+        title={title}
+        isOpen={isOpen}
+        toggleAccordion={toggleAccordion}
+        showReviewButton={showReviewButton}
+        isProcessing={isProcessing}
+      >
+        <NotificationActionButtons
+          notification={notification}
+          isProcessing={isProcessing}
+          onUpdate={onUpdate}
+          setError={setLocalError}
+          handleProcessAction={handleProcessAction}
+        />
+      </NotificationHeader>
 
-        {(hasContent || isContributorRequest || isContributorResponse) && (
-          <button
-            className={styles.readbutton}
-            onClick={toggleAccordion}
-            disabled={isProcessing}
-          >
-            {isOpen
-              ? (
-                <span>
-                  <i className="fa fa-times"></i> Close
-                </span>
-              )
-              : (
-                <span>
-                  <i className="fa fa-eye"></i> Review
-                </span>
-              )}
-          </button>
-        )}
-        <div className={styles.actions}>
-          {isContributorRequest && (
-            <>
-              {approval !== "denied" && (
-                <button
-                  className={`${styles.notificationapprove} ${
-                    approval === "accepted" ? styles.active : ""
-                  }`}
-                  onClick={() => handleProcessAction("accepted")}
-                  disabled={approval === "accepted" || isProcessing}
-                >
-                  <i className="fa fa-check"></i>{" "}
-                  {approval === "accepted" ? "Approved" : "Approve"}
-                </button>
-              )}
-
-              {approval !== "accepted" && (
-                <button
-                  className={`${styles.notificationdeny} ${
-                    approval === "denied" ? styles.active : ""
-                  }`}
-                  onClick={() => handleProcessAction("denied")}
-                  disabled={approval === "denied" || isProcessing}
-                >
-                  <i className="fa fa-times"></i>{" "}
-                  {approval === "denied" ? "Denied" : "Deny"}
-                </button>
-              )}
-            </>
-          )}
-          {status === "unread" && (
-            <>
-              <StatusActionButton
-                status={status}
-                targetStatus="saved"
-                iconSrc={iconUnread}
-                altText="Icon indicating unread status"
-                tooltipText="Save and mark as read"
-                srText="Save"
-                onClick={handleStatusChange}
-                disabled={isProcessing}
-                className={styles.save}
-              />
-              <StatusActionButton
-                status={status}
-                targetStatus="archived"
-                iconSrc={iconArchived}
-                altText="Icon indicating archived status"
-                tooltipText="Archive"
-                srText="Archive"
-                onClick={handleStatusChange}
-                disabled={isProcessing}
-                className={styles.archive}
-              />
-            </>
-          )}
-          {status === "saved" && (
-            <>
-              <StatusActionButton
-                status={status}
-                targetStatus="unread"
-                iconSrc={iconSaved}
-                altText="Icon indicating saved status"
-                tooltipText="Mark as Unread"
-                srText="Mark as Unread"
-                onClick={handleStatusChange}
-                disabled={isProcessing}
-                className={styles.unread}
-              />
-              <StatusActionButton
-                status={status}
-                targetStatus="archived"
-                iconSrc={iconArchived}
-                altText="Icon indicating archived status"
-                tooltipText="Archive"
-                srText="Archive"
-                onClick={handleStatusChange}
-                disabled={isProcessing}
-                className={styles.archive}
-              />
-            </>
-          )}
-          {status === "archived" && (
-            <StatusActionButton
-              status={status}
-              targetStatus="unread"
-              iconSrc={iconUnread}
-              altText="Icon indicating unread status"
-              tooltipText="Mark as Unread"
-              srText="Unarchive"
-              onClick={handleStatusChange}
-              disabled={isProcessing}
-              className={styles.unarchive}
-            />
-          )}
-          {error && (
-            <div className={styles.errorMessage}>
-              {error}
-            </div>
-          )}
-        </div>
-      </div>
       {isOpen && (
         <div className={styles.accordionbody}>
           {showReasonInput
             ? (
-              <div className={styles.reasonInputContainer}>
-                <textarea
-                  value={reasonInput}
-                  onChange={(e) => setReasonInput(e.target.value)}
-                  placeholder={`Reason for ${currentApprovalAction}... (optional)`}
-                  rows={3}
-                  className={styles.reasonTextarea}
-                />
-                <div className={styles.reasonButtons}>
-                  <button
-                    className={styles.reasonCancelButton}
-                    onClick={handleReasonCancel}
-                    disabled={isProcessing}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    className={styles.reasonSaveButton}
-                    onClick={handleReasonSubmit}
-                    disabled={isProcessing}
-                  >
-                    Save
-                  </button>
-                </div>
-              </div>
+              <NotificationReasonInput
+                reasonInput={reasonInput}
+                setReasonInput={setReasonInput}
+                currentApprovalAction={currentApprovalAction}
+                handleReasonCancel={handleReasonCancel}
+                handleReasonSubmit={handleReasonSubmit}
+                isProcessing={isProcessing}
+              />
             )
-            : accordionBodyContent}
+            : (
+              <NotificationBodyContent
+                content={content}
+                isContributorRequest={isContributorRequest}
+                isContributorResponse={isContributorResponse}
+                approval={approval}
+                requesterUser={requesterUser}
+                adminUser={adminUser}
+                targetUser={targetUser}
+                targetUserLoading={targetUserLoading}
+                reason={reason}
+              />
+            )}
         </div>
       )}
     </li>

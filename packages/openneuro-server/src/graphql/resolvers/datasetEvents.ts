@@ -1,6 +1,6 @@
 import DatasetEvent from "../../models/datasetEvents"
 import { checkDatasetAdmin } from "../permissions"
-import { DatasetEventContributorRequest } from "../../models/datasetEvents"
+import type { DatasetEventContributorRequest } from "../../models/datasetEvents"
 
 /**
  * Get all events for a dataset

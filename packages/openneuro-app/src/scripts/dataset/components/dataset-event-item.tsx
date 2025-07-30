@@ -6,7 +6,7 @@ import * as Sentry from "@sentry/react"
 import styles from "./scss/dataset-events.module.scss"
 import { PROCESS_CONTRIBUTOR_REQUEST_MUTATION } from "../../queries/datasetEvents.js"
 import { Username } from "../../users/username.js"
-import { GET_USER } from "../../queries/user"
+import { GET_USER } from "../../queries/user.js"
 
 interface Event {
   id: string
@@ -15,12 +15,22 @@ interface Event {
   event: {
     type: string
     targetUserId?: string
-    status?: "accepted" | "denied"
+    status?: string
     requestId?: string
+    message?: string
+    reason?: string
+    datasetId?: string
+    resolutionStatus?: string
+    target?: {
+      id: string
+      name?: string
+      email?: string
+      orcid?: string
+    }
   }
   user?: { name?: string; email?: string; id?: string; orcid?: string }
   hasBeenRespondedTo?: boolean
-  responseStatus?: "accepted" | "denied"
+  responseStatus?: string
 }
 
 interface DatasetEventItemProps {
@@ -46,7 +56,6 @@ export const DatasetEventItem: React.FC<DatasetEventItemProps> = ({
 }) => {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null)
 
-  // Fetch targetUser data if event type is 'contributorResponse' and targetUserId exists
   const { data: targetUserData, loading: targetUserLoading } = useQuery(
     GET_USER,
     {
@@ -210,14 +219,14 @@ export const DatasetEventItem: React.FC<DatasetEventItemProps> = ({
   return (
     <li>
       <div className="grid faux-table">
-        <div className="col-lg col col-5">{renderNoteContent()}</div>
+        <div className="col-lg col col-4">{renderNoteContent()}</div>
         <div className="col-lg col col-3">
           {new Date(event.timestamp).toLocaleString()}
         </div>
         <div className="col-lg col col-3">
           <Username user={event.user} />
         </div>
-        <div className="col-lg col col-1">
+        <div className="col-lg col col-2 text--right">
           {event.event.type === "note" && editingNoteId !== event.id && (
             <button
               onClick={() => startEditingNote(event.id, event.note || "")}
@@ -238,7 +247,7 @@ export const DatasetEventItem: React.FC<DatasetEventItemProps> = ({
 
           {event.event.type === "contributorRequest" &&
             !event.hasBeenRespondedTo && (
-            <>
+            <div className="text--right">
               {editingNoteId !== event.id && (
                 <button
                   onClick={() => startEditingNote(event.id, "")}
@@ -252,20 +261,20 @@ export const DatasetEventItem: React.FC<DatasetEventItemProps> = ({
                 <>
                   <button
                     onClick={() => handleSaveOrProcessRequest("accepted")}
-                    className="on-button on-button--small on-button--success"
+                    className={`${styles.eventActionButton} on-button on-button--small on-button--secondary`}
                     style={{ marginBottom: "5px" }}
                   >
                     Accept
                   </button>
                   <button
                     onClick={() => handleSaveOrProcessRequest("denied")}
-                    className="on-button on-button--small on-button--danger"
+                    className={`${styles.eventActionButton} on-button on-button--small`}
                   >
                     Deny
                   </button>
                 </>
               )}
-            </>
+            </div>
           )}
         </div>
       </div>

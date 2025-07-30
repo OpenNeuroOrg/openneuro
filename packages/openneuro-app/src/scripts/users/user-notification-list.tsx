@@ -1,7 +1,7 @@
 import React from "react"
 import styles from "./scss/usernotifications.module.scss"
 import { NotificationAccordion } from "./user-notification-accordion"
-import { MappedNotification } from "../types/user-types"
+import type { MappedNotification } from "../types/user-types"
 
 export const NotificationsList = (
   { notificationdata, onUpdate }: {

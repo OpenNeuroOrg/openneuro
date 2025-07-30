@@ -1,7 +1,7 @@
 import React from "react"
 import { NotificationsList } from "./user-notification-list"
 import { useOutletContext } from "react-router-dom"
-import { OutletContextType } from "../types/user-types"
+import type { OutletContextType } from "../types/user-types"
 
 export const UnreadNotifications = () => {
   const { notifications, handleUpdateNotification } =
