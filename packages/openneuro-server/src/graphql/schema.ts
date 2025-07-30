@@ -904,11 +904,17 @@ export const typeDefs = `
 
   # Dataset events
   type DatasetEvent {
+    # Unique identifier for the event
     id: ID
+    # Timestamp of the event
     timestamp: DateTime
+    # User associated with the event
     user: User
+    # Event description object
     event: DatasetEventDescription
+    # True if the event succeeded
     success: Boolean
+    # Notes associated with the event
     note: String
   }
 `
