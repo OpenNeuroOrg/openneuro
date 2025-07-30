@@ -70,10 +70,10 @@ def test_read_dataset_description(new_dataset):
     assert description['Name'] == 'Test fixture new dataset'
 
 
-def test_read_dataset_description_invalid_json(new_dataset):
+async def test_read_dataset_description_invalid_json(new_dataset):
     repo = Repository(new_dataset.path)
     open(os.path.join(new_dataset.path, 'dataset_description.json'), 'w').close()
-    git_commit(repo, ['dataset_description.json'])
+    await git_commit(repo, ['dataset_description.json'])
     description = read_dataset_description(new_dataset.path, 'HEAD')
     assert description is None
 

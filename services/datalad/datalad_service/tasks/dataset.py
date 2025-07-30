@@ -42,7 +42,7 @@ def create_datalad_config(dataset_path):
         configfile.write(config)
 
 
-def create_dataset(store, dataset, author=None, initial_head='main'):
+async def create_dataset(store, dataset, author=None, initial_head='main'):
     """Create a DataLad git-annex repo for a new dataset.
 
     initial_head is only meant for tests and is overridden by the implementation of git_commit
@@ -61,7 +61,7 @@ def create_dataset(store, dataset, author=None, initial_head='main'):
     # Set a datalad UUID
     create_datalad_config(dataset_path)
     repo.index.add('.datalad/config')
-    git_commit(
+    await git_commit(
         repo,
         ['.gitattributes', '.datalad/config'],
         author,
