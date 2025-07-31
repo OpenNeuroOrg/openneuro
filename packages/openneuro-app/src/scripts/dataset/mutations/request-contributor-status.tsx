@@ -1,5 +1,5 @@
 import React from "react"
-import { gql, useMutation } from "@apollo/client"
+import { useMutation } from "@apollo/client"
 import * as Sentry from "@sentry/react"
 import { toast } from "react-toastify"
 import ToastContent from "../../common/partials/toast-content.jsx"
@@ -11,7 +11,7 @@ import {
 export const RequestContributorButton = (
   { datasetId, datasetPermissions, currentUserId },
 ) => {
-  const [createContributorRequest, { loading, error }] = useMutation(
+  const [createContributorRequest, { loading }] = useMutation(
     CREATE_CONTRIBUTOR_REQUEST_EVENT,
     {
       variables: { datasetId },
@@ -23,12 +23,12 @@ export const RequestContributorButton = (
           <ToastContent title="Your request for contributor access has been sent successfully!" />,
         )
       },
-      onError: (err) => {
-        Sentry.captureException(err)
+      onError: (error) => {
+        Sentry.captureException(error)
         toast.error(
           <ToastContent
             title="Failed to send request"
-            body={err.message || "An unknown error occurred"}
+            body={error.message || "An unknown error occurred"}
           />,
         )
       },
@@ -38,11 +38,8 @@ export const RequestContributorButton = (
   const handleRequest = async () => {
     try {
       await createContributorRequest()
-    } catch (err) {
-      console.error(
-        "Error during request creation (caught by handleRequest):",
-        err,
-      )
+    } catch (error) {
+      Sentry.captureException(error)
     }
   }
 

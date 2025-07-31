@@ -1,4 +1,5 @@
 import React, { useCallback } from "react"
+import * as Sentry from "@sentry/react"
 import { toast } from "react-toastify"
 import { useMutation } from "@apollo/client"
 import type { MappedNotification } from "../types/user-types"
@@ -32,10 +33,6 @@ export const NotificationActionButtons: React.FC<
     status,
     type,
     approval,
-    datasetId,
-    requestId,
-    targetUserId,
-    requesterUser,
   } = notification
 
   const isContributorRequest = type === "approval"
@@ -67,12 +64,12 @@ export const NotificationActionButtons: React.FC<
           title="Notification Status Updated"
           body={`Notification marked as ${newStatus}.`}
         />,
-      ) // <-- Success Toast
-    } catch (err: any) {
+      )
+    } catch (error) {
       const errorMessage = `Error updating notification status: ${
-        err.message || "Unknown error"
+        error.message || "Unknown error"
       }`
-      console.error(errorMessage, err)
+      Sentry.captureException(error)
       setError(errorMessage)
       toast.error(
         <ToastContent title="Status Update Failed" body={errorMessage} />,

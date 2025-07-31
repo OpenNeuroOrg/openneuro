@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react"
-import { gql, useMutation, useQuery } from "@apollo/client"
+import { useMutation, useQuery } from "@apollo/client"
 import { toast } from "react-toastify"
 import ToastContent from "../../common/partials/toast-content.jsx"
 import * as Sentry from "@sentry/react"
@@ -208,8 +208,8 @@ export const DatasetEventItem: React.FC<DatasetEventItemProps> = ({
             reason: updatedNote.trim(),
           },
         })
-      } catch (err) {
-        console.error("Error processing contributor request:", err)
+      } catch (error) {
+        Sentry.captureException(error)
       }
     } else {
       handleUpdateNote()

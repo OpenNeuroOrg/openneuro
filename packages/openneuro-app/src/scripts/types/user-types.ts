@@ -84,37 +84,31 @@ export const mapRawDatasetEventToMappedNotification = (
   let mappedType: MappedNotification["type"] = "general"
   let approval: MappedNotification["approval"]
 
-  let datasetIdForMutation: string | undefined
+  const datasetId = rawNotification.dataset?.id ||
+    rawNotification.datasetId ||
+    event.datasetId ||
+    ""
+
   let requestIdForMutation: string | undefined
   let targetUserIdForMutation: string | undefined
 
   let requesterUser: User | undefined
   let adminUser: User | undefined
   let eventReason: string | undefined
-
-  const getDatasetName = () =>
-    rawNotification.dataset?.name ||
-    event.datasetId ||
-    rawNotification.dataset?.id ||
-    ""
-
   switch (event?.type) {
     case "contributorRequest":
-      title = `Contributor Request for Dataset ${getDatasetName()}`
+      title = `Contributor Request for Dataset`
       mappedType = "approval"
       approval = event.resolutionStatus ?? "pending"
-
-      datasetIdForMutation = event.datasetId
       requestIdForMutation = event.requestId
       targetUserIdForMutation = rawNotification.user?.id
       requesterUser = rawNotification.user
       break
 
     case "contributorResponse":
-      title = `Contributor ${event.status} for Dataset ${getDatasetName()}`
+      title = `Contributor ${event.status} for Dataset`
       mappedType = "response"
       approval = event.status as "accepted" | "denied"
-      datasetIdForMutation = event.datasetId
       requestIdForMutation = event.requestId
       targetUserIdForMutation = event.targetUserId
       adminUser = rawNotification.user
@@ -122,13 +116,14 @@ export const mapRawDatasetEventToMappedNotification = (
       break
 
     case "note":
-      title = `Admin Note on Dataset ${getDatasetName()}`
+      title = `Admin Note on Dataset`
       break
 
     default:
       title = rawNotification.note ||
-        getDatasetName() ||
-        `Event on Notification ID: ${rawNotification.id}`
+        `Dataset ${rawNotification.event.type || "Unknown Type"}` ||
+        `${datasetId}: ${event}` ||
+        `${rawNotification.event}`
       break
   }
 
@@ -139,11 +134,10 @@ export const mapRawDatasetEventToMappedNotification = (
     status: status,
     type: mappedType,
     approval: approval,
-    datasetId: datasetIdForMutation,
+    datasetId: datasetId,
     requestId: requestIdForMutation,
     targetUserId: targetUserIdForMutation,
     originalNotification: rawNotification,
-
     requesterUser: requesterUser,
     adminUser: adminUser,
     reason: eventReason,

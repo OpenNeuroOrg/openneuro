@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from "react"
 import { toast } from "react-toastify"
+import * as Sentry from "@sentry/react"
 import styles from "./scss/usernotifications.module.scss"
 import type { MappedNotification } from "../types/user-types"
 import { useMutation, useQuery } from "@apollo/client"
@@ -40,7 +41,6 @@ export const NotificationAccordion = ({
   const {
     data: targetUserData,
     loading: targetUserLoading,
-    error: targetUserError,
   } = useQuery(GET_USER, {
     variables: { userId: targetUserId },
     skip: !targetUserId,
@@ -55,7 +55,7 @@ export const NotificationAccordion = ({
   const [currentApprovalAction, setCurrentApprovalAction] = useState<
     "accepted" | "denied" | null
   >(null)
-  const [localError, setLocalError] = useState<string | null>(null)
+  const [_localError, setLocalError] = useState<string | null>(null)
   const [processContributorRequest, { loading: processRequestLoading }] =
     useMutation(PROCESS_CONTRIBUTOR_REQUEST_MUTATION)
   const isProcessing = processRequestLoading || targetUserLoading
@@ -94,7 +94,7 @@ export const NotificationAccordion = ({
     if (!datasetId || !requestId || !targetUserId) {
       const missingDataError =
         "Missing required data for processing contributor request."
-      console.error(missingDataError, { datasetId, requestId, targetUserId })
+      Sentry.captureException(missingDataError)
       toast.error(<ToastContent title="Missing Data" body={missingDataError} />)
       setLocalError(missingDataError)
       return
@@ -123,11 +123,11 @@ export const NotificationAccordion = ({
       setShowReasonInput(false)
       setReasonInput("")
       setCurrentApprovalAction(null)
-    } catch (err: any) {
+    } catch (error) {
       const errorMessage = `Error processing contributor request: ${
-        err.message || "Unknown error"
+        error.message || "Unknown error"
       }`
-      console.error(errorMessage, err)
+      Sentry.captureException(error)
       toast.error(
         <ToastContent title="Processing Failed" body={errorMessage} />,
       )
@@ -161,6 +161,7 @@ export const NotificationAccordion = ({
     >
       <NotificationHeader
         title={title}
+        datasetId={datasetId}
         isOpen={isOpen}
         toggleAccordion={toggleAccordion}
         showReviewButton={showReviewButton}

@@ -12,7 +12,11 @@ exports[`Comment component > renders an ORCID user comment 1`] = `
           class="row comment-header"
         >
           By 
-          Example Exampler
+          <a
+            href="/user/1234-5678-9101"
+          >
+            Example Exampler
+          </a>
            
           <a
             href="https://sandbox.orcid.org/1234-5678-9101"
@@ -86,7 +90,11 @@ exports[`Comment component > renders an ORCID user comment 1`] = `
         class="row comment-header"
       >
         By 
-        Example Exampler
+        <a
+          href="/user/1234-5678-9101"
+        >
+          Example Exampler
+        </a>
          
         <a
           href="https://sandbox.orcid.org/1234-5678-9101"

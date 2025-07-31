@@ -10,7 +10,7 @@ export const UnreadNotifications = () => {
     notification.status === "unread"
   )
   return (
-    <div className="tabContentUnread">
+    <div className="tabContentUnread" data-testid="unread-notifications">
       <NotificationsList
         notificationdata={unreadData}
         onUpdate={handleUpdateNotification}
@@ -26,7 +26,7 @@ export const SavedNotifications = () => {
     notification.status === "saved"
   )
   return (
-    <div className="tabContentSaved">
+    <div className="tabContentSaved" data-testid="saved-notifications">
       <NotificationsList
         notificationdata={savedData}
         onUpdate={handleUpdateNotification}
@@ -42,7 +42,7 @@ export const ArchivedNotifications = () => {
     notification.status === "archived"
   )
   return (
-    <div className="tabContentArchived">
+    <div className="tabContentArchived" data-testid="archived-notifications">
       <NotificationsList
         notificationdata={archivedData}
         onUpdate={handleUpdateNotification}

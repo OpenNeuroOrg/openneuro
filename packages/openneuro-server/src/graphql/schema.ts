@@ -890,11 +890,11 @@ export const typeDefs = `
     type: String
     version: String
     public: Boolean
-    target: User 
+    target: User
     level: String
-    ref: String 
-    message: String 
-    requestId: ID 
+    ref: String
+    message: String
+    requestId: ID
     targetUserId: ID
     status: String
     reason: String
@@ -916,6 +916,8 @@ export const typeDefs = `
     success: Boolean
     # Notes associated with the event
     note: String
+    # top-level datasetId field
+    datasetId: ID
   }
 `
 

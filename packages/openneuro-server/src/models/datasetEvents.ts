@@ -40,21 +40,25 @@ export type DatasetEventCommon = {
 
 export type DatasetEventCreated = DatasetEventCommon & {
   type: "created"
+  datasetId?: string
 }
 
 export type DatasetEventVersioned = DatasetEventCommon & {
   type: "versioned"
   version: string
+  datasetId?: string
 }
 
 export type DatasetEventDeleted = DatasetEventCommon & {
   type: "deleted"
+  datasetId?: string
 }
 
 export type DatasetEventPublished = DatasetEventCommon & {
   type: "published"
   // True if made public, false if made private
   public: boolean
+  datasetId?: string
 }
 
 export type DatasetEventPermissionChange = DatasetEventCommon & {
@@ -62,28 +66,33 @@ export type DatasetEventPermissionChange = DatasetEventCommon & {
   // User with the permission being changed
   target: OpenNeuroUserId
   level: string
+  datasetId?: string
 }
 
 export type DatasetEventGit = DatasetEventCommon & {
   type: "git"
   commit: string
   reference: string
+  datasetId?: string
 }
 
 export type DatasetEventUpload = DatasetEventCommon & {
   type: "upload"
+  datasetId?: string
 }
 
 export type DatasetEventNote = DatasetEventCommon & {
   type: "note"
   // only visible to dataset Admins
   admin: boolean
+  datasetId?: string
 }
 
 export type DatasetEventContributorRequest = DatasetEventCommon & {
   type: "contributorRequest"
   requestId?: string
   resolutionStatus?: "pending" | "accepted" | "denied"
+  datasetId?: string
 }
 
 export type DatasetEventContributorResponse = DatasetEventCommon & {
@@ -92,6 +101,7 @@ export type DatasetEventContributorResponse = DatasetEventCommon & {
   targetUserId: OpenNeuroUserId
   status: "accepted" | "denied"
   reason?: string
+  datasetId?: string
 }
 
 /**

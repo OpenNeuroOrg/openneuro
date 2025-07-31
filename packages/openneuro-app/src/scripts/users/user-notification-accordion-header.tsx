@@ -8,6 +8,7 @@ interface NotificationHeaderProps {
   showReviewButton: boolean
   isProcessing: boolean
   children?: React.ReactNode
+  datasetId?: string
 }
 
 export const NotificationHeader: React.FC<NotificationHeaderProps> = ({
@@ -17,28 +18,45 @@ export const NotificationHeader: React.FC<NotificationHeaderProps> = ({
   showReviewButton,
   isProcessing,
   children,
-}) => (
-  <div className={styles.header}>
-    <h3 className={styles.accordiontitle}>{title}</h3>
-    {showReviewButton && (
-      <button
-        className={styles.readbutton}
-        onClick={toggleAccordion}
-        disabled={isProcessing}
-      >
-        {isOpen
-          ? (
-            <span>
-              <i className="fa fa-times"></i> Close
-            </span>
-          )
-          : (
-            <span>
-              <i className="fa fa-eye"></i> Review
-            </span>
-          )}
-      </button>
-    )}
-    {children}
-  </div>
-)
+  datasetId,
+}) => {
+  const renderTitle = () => {
+    if (datasetId) {
+      const datasetLink = `/datasets/${datasetId}/`
+      return (
+        <span>
+          {title}{" "}
+          <a href={datasetLink} className={styles.titlelink}>
+            {datasetId}
+          </a>
+        </span>
+      )
+    }
+    return title
+  }
+  return (
+    <div className={styles.header}>
+      <h3 className={styles.accordiontitle}>{renderTitle()}</h3>
+      {showReviewButton && (
+        <button
+          className={styles.readbutton}
+          onClick={toggleAccordion}
+          disabled={isProcessing}
+        >
+          {isOpen
+            ? (
+              <span>
+                <i className="fa fa-times"></i> Close
+              </span>
+            )
+            : (
+              <span>
+                <i className="fa fa-eye"></i> Review
+              </span>
+            )}
+        </button>
+      )}
+      {children}
+    </div>
+  )
+}

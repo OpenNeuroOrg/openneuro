@@ -88,6 +88,7 @@ export async function saveAdminNote(
       event: {
         type: "note",
         admin: true,
+        datasetId: datasetId,
       },
       success: true,
       note,
@@ -103,7 +104,7 @@ export async function saveAdminNote(
  * This mutation should only be callable by users with admin privileges on the dataset.
  */
 export async function processContributorRequest(
-  obj: any,
+  obj: unknown,
   { datasetId, requestId, targetUserId, status, reason }: {
     datasetId: string
     requestId: string
