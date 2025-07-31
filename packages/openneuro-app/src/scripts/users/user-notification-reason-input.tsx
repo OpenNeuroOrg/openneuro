@@ -1,4 +1,3 @@
-// src/components/usernotifications/NotificationReasonInput.tsx
 import React from "react"
 import styles from "./scss/usernotifications.module.scss"
 

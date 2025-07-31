@@ -87,9 +87,9 @@ describe("UserQuery component - Dynamic ORCID Loading", () => {
 
     render(
       <MockedProvider mocks={mocks} addTypename={true}>
-        <MemoryRouter initialEntries={[`/users/${orcidFromUrl}`]}>
+        <MemoryRouter initialEntries={[`/user/${orcidFromUrl}`]}>
           <Routes>
-            <Route path="/users/:orcid" element={<UserQuery />} />
+            <Route path="/user/:orcid" element={<UserQuery />} />
           </Routes>
         </MemoryRouter>
       </MockedProvider>,
