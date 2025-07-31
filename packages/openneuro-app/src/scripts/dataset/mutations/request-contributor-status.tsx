@@ -9,7 +9,7 @@ import {
 } from "../../queries/datasetEvents.js"
 
 export const RequestContributorButton = (
-  { datasetId, datasetPermissions, currentUserId, className },
+  { datasetId, datasetPermissions, currentUserId },
 ) => {
   const [createContributorRequest, { loading }] = useMutation(
     CREATE_CONTRIBUTOR_REQUEST_EVENT,
