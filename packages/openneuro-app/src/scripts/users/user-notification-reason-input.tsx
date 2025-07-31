@@ -30,7 +30,7 @@ export const NotificationReasonInput: React.FC<NotificationReasonInputProps> = (
         } action`}
       </label>
       <textarea
-        id={textareaId} // Assign the ID
+        id={textareaId}
         value={reasonInput}
         onChange={(e) => setReasonInput(e.target.value)}
         placeholder={`Reason for ${currentApprovalAction}...`}
