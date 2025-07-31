@@ -169,12 +169,12 @@ services:
     env_file: ./config.env
     init: true
     command: [
-      'taskiq',
-      'scheduler',
-      'datalad_service.broker.scheduler:scheduler',
-      '--tasks-pattern',
-      'datalad_service/tasks/*.py',
-      '--fs-discover',
+      "taskiq",
+      "scheduler",
+      "datalad_service.broker.scheduler:scheduler",
+      "--tasks-pattern",
+      "datalad_service/tasks/*.py",
+      "--fs-discover",
     ]
     depends_on:
       redis:

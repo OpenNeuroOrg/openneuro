@@ -181,19 +181,24 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
               />
               <MetaDataBlock
                 heading="Authors"
-                item={description?.Authors?.length
-                  ? description.Authors.join(", ")
-                  : "N/A"}
+                item={
+                  <>
+                    {profile && (
+                      <RequestContributorButton
+                        datasetId={datasetId}
+                        datasetPermissions={dataset.permissions
+                          ?.userPermissions ||
+                          []}
+                        currentUserId={currentUserId}
+                      />
+                    )}
+                    {description?.Authors?.length
+                      ? description.Authors.join(", ")
+                      : "N/A"}
+                  </>
+                }
                 className="dmb-inline-list"
               />
-              {profile && (
-                <RequestContributorButton
-                  datasetId={datasetId}
-                  datasetPermissions={dataset.permissions?.userPermissions ||
-                    []}
-                  currentUserId={currentUserId}
-                />
-              )}
               <>
                 {summary && (
                   <ModalitiesMetaDataBlock

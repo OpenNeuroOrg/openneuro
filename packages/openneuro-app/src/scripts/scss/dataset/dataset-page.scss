@@ -172,8 +172,15 @@
     }
   }
 }
-
+.sidebar .request-contributor-button{
+    position: absolute;
+    top: 0;
+    right: 0;
+        font-size: 12px;
+    padding: 3px 10px;
+}
 .sidebar .dataset-meta-block {
+  position: relative;
   margin-bottom: 25px;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial,
     sans-serif, Apple Color Emoji, Segoe UI Emoji;

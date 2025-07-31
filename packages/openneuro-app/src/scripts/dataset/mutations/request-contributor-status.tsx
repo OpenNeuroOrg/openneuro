@@ -9,7 +9,7 @@ import {
 } from "../../queries/datasetEvents.js"
 
 export const RequestContributorButton = (
-  { datasetId, datasetPermissions, currentUserId },
+  { datasetId, datasetPermissions, currentUserId, className },
 ) => {
   const [createContributorRequest, { loading }] = useMutation(
     CREATE_CONTRIBUTOR_REQUEST_EVENT,
@@ -59,7 +59,7 @@ export const RequestContributorButton = (
     <button
       onClick={handleRequest}
       disabled={loading}
-      className="px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-150 ease-in-out shadow-md"
+      className="on-button on-button--small on-button--primary request-contributor-button"
     >
       {loading ? "Sending Request..." : "Request Contributor Access"}
     </button>
