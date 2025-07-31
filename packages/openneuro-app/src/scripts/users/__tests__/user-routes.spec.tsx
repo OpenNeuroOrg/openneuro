@@ -1,56 +1,128 @@
-import { vi } from "vitest"
 import React from "react"
 import { cleanup, render, screen } from "@testing-library/react"
-import { MemoryRouter } from "react-router-dom"
+import { vi } from "vitest"
+import { MemoryRouter, Outlet } from "react-router-dom"
 import { MockedProvider } from "@apollo/client/testing"
-
-// Component under test
 import { UserRoutes } from "../user-routes"
-
-// Types and Queries
-import type { User } from "../../types/user-types"
+import type {
+  DatasetEventGraphQL,
+  MappedNotification,
+  OutletContextType,
+  User,
+} from "../../types/user-types"
 import { ADVANCED_SEARCH_DATASETS_QUERY, GET_USER } from "../../queries/user"
+
+// A minimal test user object, replacing the need for an external "testUser" import
+const testUser = {
+  id: "1",
+  name: "John Doe",
+  location: "Unknown",
+  github: "",
+  institution: "Unknown Institution",
+  email: "john.doe@example.com",
+  avatar: "https://dummyimage.com/200x200/000/fff",
+  orcid: "0000-0000-0000-0000",
+  links: [],
+}
+
+const setupUserRoutes = (
+  orcidUser: User,
+  route: string,
+  hasEdit: boolean,
+  isUser: boolean,
+) => {
+  const mocks = [
+    {
+      request: {
+        query: ADVANCED_SEARCH_DATASETS_QUERY,
+        variables: {
+          first: 26,
+          query: {
+            bool: {
+              filter: [
+                {
+                  terms: {
+                    "permissions.userPermissions.user.id": [orcidUser.id],
+                  },
+                },
+              ],
+              must: [{ match_all: {} }],
+            },
+          },
+          sortBy: null,
+          cursor: null,
+          allDatasets: true,
+          datasetStatus: undefined,
+        },
+      },
+      result: {
+        data: {
+          datasets: {
+            edges: [],
+          },
+        },
+      },
+    },
+    {
+      request: {
+        query: GET_USER,
+        variables: { userId: orcidUser.id },
+      },
+      result: {
+        data: {
+          user: orcidUser,
+        },
+      },
+    },
+  ]
+
+  return render(
+    <MockedProvider mocks={mocks} addTypename={false}>
+      <MemoryRouter initialEntries={[route]}>
+        <UserRoutes orcidUser={orcidUser} hasEdit={hasEdit} isUser={isUser} />
+      </MemoryRouter>
+    </MockedProvider>,
+  )
+}
+
+// --- Component Mocks ---
+
+vi.mock("../../config", () => ({
+  config: {
+    url: "https://test-server.com",
+    api: "https://test-server.com/crn/",
+    graphql: {
+      api_url: "https://test-server.com/crn/graphql",
+      subscription_url: "wss://test-server.com/crn/graphql",
+    },
+  },
+}))
+
+vi.mock("../username", () => ({
+  default: vi.fn((props) => (
+    <span data-testid="mock-username">{props.children}</span>
+  )),
+}))
 
 vi.mock("./user-container", () => {
   return {
     UserAccountContainer: vi.fn((props) => (
       <div data-testid="mock-user-account-container">
-        Mocked UserAccountContainer
         {props.children}
-        <p>Container ORCID: {props.orcidUser?.orcid}</p>
-        <p>Container Has Edit: {props.hasEdit ? "true" : "false"}</p>
-        <p>Container Is User: {props.isUser ? "true" : "false"}</p>
       </div>
     )),
   }
 })
 
 vi.mock("./user-account-view", () => ({
-  UserAccountView: vi.fn((props) => (
-    <div data-testid="user-account-view">
-      Mocked UserAccountView
-      <p>View ORCID: {props.orcidUser?.orcid}</p>
-    </div>
-  )),
-}))
-
-vi.mock("./user-notifications-view", () => ({
-  UserNotificationsView: vi.fn((props) => (
-    <div data-testid="user-notifications-view">
-      Mocked UserNotificationsView
-      {props.children}
-      <p>Notifications ORCID: {props.orcidUser?.orcid}</p>
-    </div>
+  UserAccountView: vi.fn(() => (
+    <div data-testid="user-account-view">Mocked UserAccountView</div>
   )),
 }))
 
 vi.mock("./user-datasets-view", () => ({
-  UserDatasetsView: vi.fn((props) => (
-    <div data-testid="user-datasets-view">
-      Mocked UserDatasetsView
-      <p>Datasets ORCID: {props.orcidUser?.orcid}</p>
-      <p>Datasets Has Edit: {props.hasEdit ? "true" : "false"}</p>
-    </div>
+  UserDatasetsView: vi.fn(() => (
+    <div data-testid="user-datasets-view">Mocked UserDatasetsView</div>
   )),
 }))
 
@@ -70,127 +142,81 @@ vi.mock("../errors/403page", () => ({
   )),
 }))
 
+// Mock the notification tab content
 vi.mock("./user-notifications-tab-content", () => ({
   UnreadNotifications: vi.fn(() => (
-    <div data-testid="unread-notifications">Unread Notifications</div>
+    <div data-testid="unread-notifications">Unread Notifications Content</div>
   )),
   SavedNotifications: vi.fn(() => (
-    <div data-testid="saved-notifications">Saved Notifications</div>
+    <div data-testid="saved-notifications">Saved Notifications Content</div>
   )),
   ArchivedNotifications: vi.fn(() => (
-    <div data-testid="archived-notifications">Archived Notifications</div>
+    <div data-testid="archived-notifications">
+      Archived Notifications Content
+    </div>
   )),
 }))
 
-const defaultUser: User = {
-  id: "1",
-  name: "John Doe",
-  location: "Unknown",
-  github: "",
-  institution: "Unknown Institution",
-  email: "john.doe@example.com",
-  avatar: "https://dummyimage.com/200x200/000/fff",
-  orcid: "0000-0000-0000-0000", // Ensure ORCID is present for mocks
-  links: [],
-}
+// Mock the UserNotificationsView
+vi.mock("./user-notifications-view", () => {
+  const baseDatasetEvent: DatasetEventGraphQL = {
+    id: "1",
+    timestamp: "2023-01-01T12:00:00Z",
+    event: { type: "published", message: "A dataset has been published." },
+    status: "unread",
+  }
 
-const mocks = [
-  {
-    request: {
-      query: ADVANCED_SEARCH_DATASETS_QUERY,
-      variables: {
-        first: 26,
-        query: {
-          bool: {
-            filter: [
-              {
-                terms: {
-                  "permissions.userPermissions.user.id": [defaultUser.id],
-                },
-              },
-            ],
-            must: [{ match_all: {} }],
-          },
-        },
-        sortBy: null,
-        cursor: null,
-        allDatasets: true,
-        datasetStatus: undefined,
+  const mockNotifications: MappedNotification[] = [
+    {
+      id: "1",
+      title: "Dataset Published",
+      content: "Dataset 'My Awesome Dataset' has been published.",
+      status: "unread",
+      type: "general",
+      originalNotification: { ...baseDatasetEvent, id: "1" },
+    },
+    {
+      id: "2",
+      title: "Dataset Saved",
+      content: "Dataset 'Another Dataset' has been saved.",
+      status: "saved",
+      type: "general",
+      originalNotification: { ...baseDatasetEvent, id: "2", status: "saved" },
+    },
+    {
+      id: "3",
+      title: "Dataset Archived",
+      content: "Dataset 'Old Dataset' has been archived.",
+      status: "archived",
+      type: "general",
+      originalNotification: {
+        ...baseDatasetEvent,
+        id: "3",
+        status: "archived",
       },
     },
-    result: {
-      data: {
-        datasets: {
-          edges: [
-            {
-              node: {
-                id: "ds001012",
-                created: "2025-01-22T19:55:49.997Z",
-                name: "The DBS-fMRI dataset",
-                public: null,
-                analytics: {
-                  views: 9,
-                  downloads: 0,
-                },
-                stars: [],
-                followers: [
-                  {
-                    userId: "47e6a401-5edf-4022-801f-c05fffbf1d10",
-                    datasetId: "ds001012",
-                  },
-                ],
-                latestSnapshot: {
-                  id: "ds001012:1.0.0",
-                  size: 635,
-                  created: "2025-01-22T19:55:49.997Z",
-                  description: {
-                    Name: "The DBS-fMRI dataset",
-                    Authors: [
-                      "Jianxun Ren",
-                      " Changqing Jiang",
-                      "Wei Zhang",
-                      "Louisa Dahmani",
-                      "Lunhao Shen",
-                      "Feng Zhang",
-                    ],
-                  },
-                },
-              },
-            },
-          ],
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: GET_USER,
-      variables: { id: defaultUser.orcid },
-    },
-    result: {
-      data: {
-        user: defaultUser,
-      },
-    },
-  },
-]
-const renderWithRouter = (
-  orcidUser: User,
-  route: string,
-  hasEdit: boolean,
-  isUser: boolean,
-) => {
-  return render(
-    <MockedProvider mocks={mocks} addTypename={false}>
-      <MemoryRouter initialEntries={[route]}>
-        <UserRoutes orcidUser={orcidUser} hasEdit={hasEdit} isUser={isUser} />
-      </MemoryRouter>
-    </MockedProvider>,
-  )
-}
+  ]
+
+  const handleUpdateNotification = vi.fn()
+
+  return {
+    UserNotificationsView: vi.fn(() => (
+      <div data-testid="user-notifications-view">
+        <div data-testid="mock-outlet-context-provider">
+          <Outlet
+            context={{
+              notifications: mockNotifications,
+              handleUpdateNotification,
+            } as OutletContextType}
+          />
+        </div>
+      </div>
+    )),
+  }
+})
 
 describe("UserRoutes Component", () => {
-  const userToPass: User = defaultUser
+  const userToPass: User = testUser
 
   afterEach(() => {
     cleanup()
@@ -199,74 +225,76 @@ describe("UserRoutes Component", () => {
   })
 
   it("renders UserDatasetsView for the default route", async () => {
-    renderWithRouter(userToPass, "/", true, true)
-    // Expect the default to be the datasets view
+    setupUserRoutes(userToPass, "/", true, true)
     const datasetsView = await screen.findByTestId("user-datasets-view")
     expect(datasetsView).toBeInTheDocument()
-    expect(screen.getByText(userToPass.orcid)).toBeInTheDocument()
   })
 
-  it("renders FourOFourPage for an invalid route", async () => {
-    renderWithRouter(userToPass, "/nonexistent-route", true, true)
-    // Expect the mocked 404 page
-    expect(
-      screen.getByText(/404: The page you are looking for does not exist./i),
-    ).toBeInTheDocument()
+  it("renders 404 for an invalid route", async () => {
+    setupUserRoutes(userToPass, "/nonexistent-route", true, true)
+    expect(screen.getByTestId("404-page")).toBeInTheDocument()
   })
 
   it("renders UserAccountView when hasEdit is true", async () => {
-    renderWithRouter(userToPass, "/account", true, true)
-    // Expect the mocked account view
+    setupUserRoutes(userToPass, "/account", true, true)
     const accountView = await screen.findByTestId("user-account-view")
     expect(accountView).toBeInTheDocument()
   })
 
-  it("renders UserNotificationsView when hasEdit is true", async () => {
-    renderWithRouter(userToPass, "/notifications", true, true)
-    // Expect the mocked notifications view
+  it("renders UserNotificationsView for the default notifications route", async () => {
+    setupUserRoutes(userToPass, "/notifications", true, true)
     const notificationsView = await screen.findByTestId(
       "user-notifications-view",
     )
     expect(notificationsView).toBeInTheDocument()
+  })
+
+  it("renders UnreadNotifications within UserNotificationsView for the index route", async () => {
+    setupUserRoutes(userToPass, "/notifications", true, true)
+    const notificationsView = await screen.findByTestId(
+      "user-notifications-view",
+    )
+    expect(notificationsView).toBeInTheDocument()
+    const unreadNotifications = await screen.findByTestId(
+      "unread-notifications",
+    )
+    expect(unreadNotifications).toBeInTheDocument()
   })
 
   it("renders SavedNotifications within UserNotificationsView", async () => {
-    renderWithRouter(userToPass, "/notifications/saved", true, true)
+    setupUserRoutes(userToPass, "/notifications/saved", true, true)
     const notificationsView = await screen.findByTestId(
       "user-notifications-view",
     )
     expect(notificationsView).toBeInTheDocument()
-    expect(screen.getByText("Saved Notification Example")).toBeInTheDocument()
+    const savedNotifications = await screen.findByTestId("saved-notifications")
+    expect(savedNotifications).toBeInTheDocument()
   })
 
   it("renders ArchivedNotifications within UserNotificationsView", async () => {
-    renderWithRouter(userToPass, "/notifications/archived", true, true)
+    setupUserRoutes(userToPass, "/notifications/archived", true, true)
     const notificationsView = await screen.findByTestId(
       "user-notifications-view",
     )
     expect(notificationsView).toBeInTheDocument()
-    expect(screen.getByText("Archived Notification Example"))
-      .toBeInTheDocument()
+    const archivedNotifications = await screen.findByTestId(
+      "archived-notifications",
+    )
+    expect(archivedNotifications).toBeInTheDocument()
   })
 
   it("renders 404 for unknown notification sub-route", async () => {
-    renderWithRouter(userToPass, "/notifications/nonexistent", true, true)
-    expect(
-      screen.getByText(/404: The page you are looking for does not exist./i),
-    ).toBeInTheDocument()
+    setupUserRoutes(userToPass, "/notifications/nonexistent", true, true)
+    expect(await screen.findByTestId("404-page")).toBeInTheDocument()
   })
 
-  it("renders FourOThreePage when hasEdit is false for restricted routes", async () => {
-    const restrictedRoutes = ["/account", "/notifications"]
+  it("renders FourOThreePage for restricted route /account when hasEdit is false", async () => {
+    setupUserRoutes(userToPass, "/account", false, true)
+    expect(await screen.findByTestId("403-page")).toBeInTheDocument()
+  })
 
-    for (const route of restrictedRoutes) {
-      renderWithRouter(userToPass, route, false, true)
-      expect(
-        screen.getByText(
-          /403: You do not have access to this page, you may need to sign in./i,
-        ),
-      ).toBeInTheDocument()
-      cleanup()
-    }
+  it("renders FourOThreePage for restricted route /notifications when hasEdit is false", async () => {
+    setupUserRoutes(userToPass, "/notifications", false, true)
+    expect(await screen.findByTestId("403-page")).toBeInTheDocument()
   })
 })

@@ -1,85 +1,52 @@
 import React from "react"
 import { NotificationsList } from "./user-notification-list"
+import { useOutletContext } from "react-router-dom"
+import type { OutletContextType } from "../types/user-types"
 
-// Dummy notifications
-const dummyNotifications = [
-  {
-    id: 1,
-    title: "New Comment on Your dataset",
-    content: "A user has commented on your dataset. View here",
-    status: "unread",
-    type: "general",
-    approval: "",
-  },
-  {
-    id: 2,
-    title: "Example No Approval State ",
-    content: "",
-    status: "unread",
-    type: "approval",
-    approval: "not provided",
-  },
-  {
-    id: 3,
-    title: "Example Denied State",
-    content: "",
-    status: "unread",
-    type: "approval",
-    approval: "denied",
-  },
-  {
-    id: 4,
-    title: "Example Approved State",
-    content: "",
-    status: "unread",
-    type: "approval",
-    approval: "approved",
-  },
-  {
-    id: 5,
-    title: "Saved Notification Example",
-    content: "This is an example of a saved notification.",
-    status: "saved",
-    type: "general",
-    approval: "",
-  },
-  {
-    id: 6,
-    title: "Archived Notification Example",
-    content: "This is an example of an archived notification.",
-    status: "archived",
-    type: "general",
-    approval: "",
-  },
-]
+export const UnreadNotifications = () => {
+  const { notifications, handleUpdateNotification } =
+    useOutletContext() as OutletContextType
+  const unreadData = notifications.filter((notification) =>
+    notification.status === "unread"
+  )
+  return (
+    <div className="tabContentUnread" data-testid="unread-notifications">
+      <NotificationsList
+        notificationdata={unreadData}
+        onUpdate={handleUpdateNotification}
+      />
+    </div>
+  )
+}
 
-// Tab Components for Different Notifications
-export const UnreadNotifications = () => (
-  <div className="tabContentUnread">
-    <NotificationsList
-      notificationdata={dummyNotifications.filter(
-        (notification) => notification.status === "unread",
-      )}
-    />
-  </div>
-)
+export const SavedNotifications = () => {
+  const { notifications, handleUpdateNotification } =
+    useOutletContext() as OutletContextType
+  const savedData = notifications.filter((notification) =>
+    notification.status === "saved"
+  )
+  return (
+    <div className="tabContentSaved" data-testid="saved-notifications">
+      <NotificationsList
+        notificationdata={savedData}
+        onUpdate={handleUpdateNotification}
+      />
+    </div>
+  )
+}
 
-export const SavedNotifications = () => (
-  <div className="tabContentSaved">
-    <NotificationsList
-      notificationdata={dummyNotifications.filter(
-        (notification) => notification.status === "saved",
-      )}
-    />
-  </div>
-)
-
-export const ArchivedNotifications = () => (
-  <div className="tabContentArchived">
-    <NotificationsList
-      notificationdata={dummyNotifications.filter(
-        (notification) => notification.status === "archived",
-      )}
-    />
-  </div>
-)
+export const ArchivedNotifications = () => {
+  const { notifications, handleUpdateNotification } =
+    useOutletContext() as OutletContextType
+  const archivedData = notifications.filter((notification) =>
+    notification.status === "archived"
+  )
+  return (
+    <div className="tabContentArchived" data-testid="archived-notifications">
+      <NotificationsList
+        notificationdata={archivedData}
+        onUpdate={handleUpdateNotification}
+      />
+    </div>
+  )
+}

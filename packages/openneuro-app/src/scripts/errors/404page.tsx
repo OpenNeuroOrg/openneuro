@@ -33,7 +33,7 @@ const FourOFourPage: FC<FourOFourPageProps> = ({
   message = "",
 }) => {
   return (
-    <Container styleContext={theme}>
+    <Container styleContext={theme} data-testid="404-page">
       <h3>404: The page you are looking for does not exist.</h3>
       {message && <p>{message}</p>}
       <p>

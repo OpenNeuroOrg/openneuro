@@ -14,9 +14,11 @@ import {
 
 import type { UserRoutesProps } from "../types/user-types"
 
-export const UserRoutes: React.FC<UserRoutesProps> = (
-  { orcidUser, hasEdit, isUser },
-) => {
+export const UserRoutes: React.FC<UserRoutesProps> = ({
+  orcidUser,
+  hasEdit,
+  isUser,
+}) => {
   return (
     <Routes>
       <Route path="/*" element={<FourOFourPage />} />
@@ -43,7 +45,13 @@ export const UserRoutes: React.FC<UserRoutesProps> = (
         <Route
           path="notifications/*"
           element={hasEdit
-            ? <UserNotificationsView orcidUser={orcidUser} />
+            ? (
+              <UserNotificationsView
+                orcidUser={orcidUser}
+                hasEdit={hasEdit}
+                isUser={isUser}
+              />
+            )
             : <FourOThreePage />}
         >
           <Route index element={<UnreadNotifications />} />
