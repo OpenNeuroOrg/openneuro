@@ -44,6 +44,8 @@ export interface UserDocument extends Document {
   avatar: string
   // githubSynced populated from Github OAuth use
   githubSynced: Date
+  // Defaults to NULL populated from ORCID Consent Form Mutation
+  orcidConsent?: boolean | null
 }
 
 const userSchema = new Schema({
@@ -66,6 +68,10 @@ const userSchema = new Schema({
   github: { type: String, default: "" },
   githubSynced: { type: Date },
   links: { type: [String], default: [] },
+  orcidConsent: {
+    type: Boolean,
+    default: null,
+  },
 }, { timestamps: { createdAt: false, updatedAt: true } })
 
 userSchema.index({ id: 1, provider: 1 }, { unique: true })
