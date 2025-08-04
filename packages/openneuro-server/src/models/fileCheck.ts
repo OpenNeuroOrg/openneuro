@@ -32,6 +32,6 @@ const fileCheckSchema = new Schema({
   }],
 })
 
-const FileCheck = model<FileCheckDocument>("File", fileCheckSchema)
+const FileCheck = model<FileCheckDocument>("FileCheck", fileCheckSchema)
 
 export default FileCheck
