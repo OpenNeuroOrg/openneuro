@@ -207,10 +207,10 @@ export const typeDefs = `
     createGitEvent(datasetId: ID!, commit: String!, reference: String!): DatasetEvent
     # Create or update a fileCheck document
     updateFileCheck(
-      datasetId: String!
+      datasetId: ID!
       hexsha: String!
       refs: [String!]!
-      annexFsck: [AnnexFsckInput!]
+      annexFsck: [AnnexFsckInput!]!
     ): FileCheck
   }
 
