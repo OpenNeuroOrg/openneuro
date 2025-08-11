@@ -74,13 +74,10 @@ export const DatasetEventItem: React.FC<DatasetEventItemProps> = ({
           <ToastContent title="Contributor request processed successfully" />,
         )
         refetchEvents()
-
-        setTimeout(() => {
-          setUpdatedNote("")
-          if (editingNoteId === event.id) {
-            startEditingNote(null, "")
-          }
-        }, 50)
+        setUpdatedNote("")
+        if (editingNoteId === event.id) {
+          startEditingNote(null, "")
+        }
       },
       onError: (error) => {
         Sentry.captureException(error)
@@ -141,7 +138,7 @@ export const DatasetEventItem: React.FC<DatasetEventItemProps> = ({
                 {targetUserLoading ? <span>for ...</span> : targetUser
                   ? (
                     <>
-                      for User: <Username user={targetUser} />
+                      {" "}for User: <Username user={targetUser} />
                     </>
                   )
                   : event.event.targetUserId
@@ -219,11 +216,11 @@ export const DatasetEventItem: React.FC<DatasetEventItemProps> = ({
   return (
     <li>
       <div className="grid faux-table">
-        <div className="col-lg col col-4">{renderNoteContent()}</div>
+        <div className="col-lg col col-5">{renderNoteContent()}</div>
         <div className="col-lg col col-3">
           {new Date(event.timestamp).toLocaleString()}
         </div>
-        <div className="col-lg col col-3">
+        <div className="col-lg col col-2">
           <Username user={event.user} />
         </div>
         <div className="col-lg col col-2 text--right">

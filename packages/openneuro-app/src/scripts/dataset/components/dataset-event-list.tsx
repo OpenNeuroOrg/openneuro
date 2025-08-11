@@ -49,9 +49,9 @@ export const DatasetEventList: React.FC<DatasetEventListProps> = ({
   return (
     <>
       <div className="grid faux-table-header">
-        <h4 className="col-lg col col-4">Note</h4>
+        <h4 className="col-lg col col-5">Note</h4>
         <h4 className="col-lg col col-3">Date</h4>
-        <h4 className="col-lg col col-3">Author</h4>
+        <h4 className="col-lg col col-2">Author</h4>
         <h4 className="col-lg col col-2 text--right">Action</h4>
       </div>
       <ul>
