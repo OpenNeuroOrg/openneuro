@@ -120,6 +120,14 @@ export const setupPassportAuth = () => {
       (jwt, done) => {
         if (jwt.scopes?.includes("dataset:indexing")) {
           done(null, { admin: false, blocked: false, indexer: true })
+        } else if (jwt.scopes?.includes("dataset:worker")) {
+          done(null, {
+            id: jwt.sub,
+            admin: false,
+            blocked: false,
+            worker: true,
+            dataset: jwt.dataset,
+          })
         } else if (jwt.scopes?.includes("dataset:reviewer")) {
           done(null, {
             admin: false,
