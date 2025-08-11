@@ -15,6 +15,7 @@ function ErrorRoute() {
         <Routes>
           <Route path="github" element={<FourOThreePage />} />
           <Route path="orcid" element={<OrcidGeneral />} />
+          <Route path="orcid/unknown" element={<OrcidGeneral />} />
           <Route path="email-warning" element={<OrcidEmailWarning />} />
           <Route path="*" element={<FourOFourPage />} />
         </Routes>
