@@ -27,6 +27,11 @@ export async function createEvent(
     },
   }
   Sentry.addBreadcrumb(breadcrumb)
+
+  if (!event.datasetId) {
+    event.datasetId = datasetId
+  }
+
   const created = new DatasetEvent({
     datasetId,
     userId: user,
