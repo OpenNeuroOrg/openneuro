@@ -21,6 +21,8 @@ export const GET_DATASET_EVENTS = gql`
           targetUserId
           resolutionStatus
         }
+        hasBeenRespondedTo
+        responseStatus
       }
     }
   }
@@ -82,7 +84,6 @@ export const UPDATE_NOTIFICATION_STATUS_MUTATION = gql`
   }
 `
 
-//  mutation for requesting contributor access
 export const CREATE_CONTRIBUTOR_REQUEST_EVENT = gql`
   mutation CreateContributorRequestEvent($datasetId: ID!) {
     createContributorRequestEvent(datasetId: $datasetId) {
@@ -97,7 +98,6 @@ export const CREATE_CONTRIBUTOR_REQUEST_EVENT = gql`
   }
 `
 
-// query to refetch dataset events.
 export const DATASET_EVENTS_QUERY = gql`
   query DatasetEvents($datasetId: ID!) {
     dataset(id: $datasetId) {
@@ -111,8 +111,6 @@ export const DATASET_EVENTS_QUERY = gql`
         }
         event {
           type
-          # Include other fields relevant to event descriptions if needed
-          # e.g., version, public, target, level, commit, reference, admin, targetUserId, status, reason
         }
         success
         note

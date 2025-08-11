@@ -4,12 +4,8 @@ import { vi } from "vitest"
 import { MemoryRouter, Outlet } from "react-router-dom"
 import { MockedProvider } from "@apollo/client/testing"
 import { UserRoutes } from "../user-routes"
-import type { Event } from "../../types/event-types"
-import type {
-  MappedNotification,
-  OutletContextType,
-  User,
-} from "../../types/user-types"
+import type { Event, MappedNotification } from "../../types/event-types"
+import type { OutletContextType, User } from "../../types/user-types"
 import { ADVANCED_SEARCH_DATASETS_QUERY, GET_USER } from "../../queries/user"
 
 // A minimal test user object, replacing the need for an external "testUser" import

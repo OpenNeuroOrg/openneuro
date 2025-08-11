@@ -60,35 +60,11 @@ export const DatasetEvents = ({ datasetId }) => {
 
   const rawEvents = data?.dataset?.events || []
 
-  const processedEvents = useMemo(() => {
-    const responsesMap = new Map()
-    rawEvents.forEach((event) => {
-      if (event.event.type === "contributorResponse" && event.event.requestId) {
-        responsesMap.set(event.event.requestId, event)
-      }
-    })
-
-    const enrichedEvents = rawEvents.map((event) => {
-      if (event.event.type === "contributorRequest") {
-        const response = responsesMap.get(event.id)
-        if (response) {
-          return {
-            ...event,
-            hasBeenRespondedTo: true,
-            responseStatus: response.event.status,
-          }
-        }
-      }
-      return event
-    })
-    return enrichedEvents
-  }, [rawEvents])
-
   const sortedEvents = useMemo(() => {
-    return [...processedEvents].sort((a, b) =>
+    return [...rawEvents].sort((a, b) =>
       new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
     )
-  }, [processedEvents])
+  }, [rawEvents])
 
   const handleAddEvent = useCallback(() => {
     if (newEvent.note) {
@@ -133,7 +109,7 @@ export const DatasetEvents = ({ datasetId }) => {
 
   // Handler for AdminNoteForm's onChange
   const handleNewEventChange = useCallback(
-    (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    (e) => {
       setNewEvent({ note: e.target.value })
     },
     [],

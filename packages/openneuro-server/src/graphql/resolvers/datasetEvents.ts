@@ -1,30 +1,70 @@
-import DatasetEvent from "../../models/datasetEvents"
+import DatasetEvent, { DatasetEventDocument } from "../../models/datasetEvents"
 import { checkDatasetAdmin } from "../permissions"
 import type { DatasetEventContributorRequest } from "../../models/datasetEvents"
+import type { DatasetEventContributorResponse } from "../../models/datasetEvents"
+
+type EnrichedDatasetEvent = DatasetEventDocument & {
+  hasBeenRespondedTo?: boolean
+  responseStatus?: "accepted" | "denied"
+}
 
 /**
  * Get all events for a dataset
  */
-export function datasetEvents(obj, _, { userInfo }) {
+
+export async function datasetEvents(obj, _, { userInfo }) {
+  const allEvents: DatasetEventDocument[] = await DatasetEvent.find({
+    datasetId: obj.id,
+  })
+    .sort({ timestamp: -1 })
+    .populate("user")
+    .exec()
+
+  const responsesMap = new Map<string, DatasetEventDocument>()
+  allEvents.forEach((event) => {
+    if (
+      event.event.type === "contributorResponse" && "requestId" in event.event
+    ) {
+      responsesMap.set(event.event.requestId, event)
+    }
+  })
+
+  const enrichedEvents: EnrichedDatasetEvent[] = allEvents.map((event) => {
+    if (isContributorRequest(event)) {
+      const response = responsesMap.get(event.id)
+      if (response && isContributorResponse(response)) {
+        return {
+          ...event.toObject(),
+          hasBeenRespondedTo: true,
+          responseStatus: response.event.status,
+        } as EnrichedDatasetEvent
+      }
+    }
+    return event as EnrichedDatasetEvent
+  })
+
   if (userInfo.admin) {
-    // Site admins can see all events
-    return DatasetEvent.find({ datasetId: obj.id })
-      .sort({ timestamp: -1 })
-      .populate("user")
-      .exec()
+    return enrichedEvents
   } else {
-    // Non-admin users can only see notes without the admin flag
-    return DatasetEvent.find({
-      datasetId: obj.id,
-      $and: [
-        { "event.admin": { $ne: true } },
-        { "event.type": { "event.type": { $ne: "contributorRequest" } } }, // Maybe make this event.admin === true?
-      ],
+    return enrichedEvents.filter((event) => {
+      const hasAdminFlag = "admin" in event.event && event.event.admin
+      const isRespondedToRequest = event.event.type === "contributorRequest" &&
+        event.hasBeenRespondedTo
+      return !hasAdminFlag || isRespondedToRequest
     })
-      .sort({ timestamp: -1 })
-      .populate("user")
-      .exec()
   }
+}
+
+function isContributorRequest(
+  event: DatasetEventDocument,
+): event is DatasetEventDocument & { event: DatasetEventContributorRequest } {
+  return event.event.type === "contributorRequest"
+}
+
+function isContributorResponse(
+  event: DatasetEventDocument,
+): event is DatasetEventDocument & { event: DatasetEventContributorResponse } {
+  return event.event.type === "contributorResponse"
 }
 
 /**

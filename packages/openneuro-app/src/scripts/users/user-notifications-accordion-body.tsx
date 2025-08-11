@@ -55,7 +55,7 @@ export const NotificationBodyContent: React.FC<NotificationBodyContentProps> = (
         Admin: <Username user={adminUser} /> {approval} contributor request
         {targetUserLoading ? <span>for ...</span> : (
           <>
-            for <Username user={targetUser} />
+            {" "}for <Username user={targetUser} />
             {" "}
           </>
         )}
