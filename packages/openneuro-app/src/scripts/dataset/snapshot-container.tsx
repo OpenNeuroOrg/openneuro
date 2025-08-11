@@ -185,10 +185,7 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
                   <>
                     {profile && (
                       <RequestContributorButton
-                        datasetId={datasetId}
-                        datasetPermissions={dataset.permissions
-                          ?.userPermissions ||
-                          []}
+                        dataset={dataset}
                         currentUserId={currentUserId}
                       />
                     )}

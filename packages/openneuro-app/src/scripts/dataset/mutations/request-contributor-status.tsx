@@ -9,14 +9,14 @@ import {
 } from "../../queries/datasetEvents.js"
 
 export const RequestContributorButton = (
-  { datasetId, datasetPermissions, currentUserId },
+  { dataset, currentUserId },
 ) => {
   const [createContributorRequest, { loading }] = useMutation(
     CREATE_CONTRIBUTOR_REQUEST_EVENT,
     {
-      variables: { datasetId },
+      variables: { datasetId: dataset.id },
       refetchQueries: [
-        { query: DATASET_EVENTS_QUERY, variables: { datasetId } },
+        { query: DATASET_EVENTS_QUERY, variables: { datasetId: dataset.id } },
       ],
       onCompleted: () => {
         toast.success(
@@ -43,14 +43,15 @@ export const RequestContributorButton = (
     }
   }
 
-  // Determine if the current user already has any permissions (read, write, admin)
-  // If they do, the button should not be displayed.
-  const hasPermissions = datasetPermissions?.some((p) =>
-    p.user.id === currentUserId &&
-    (p.level === "admin" || p.level === "rw" || p.level === "read")
+  // TODO
+  // Check if the current user's ORCID is present in the
+  // dataset.contributors array. TODO as contributors doesn't
+  // exist on Datasets yet
+  const isContributor = dataset?.contributors?.some((contributor) =>
+    contributor.orcid === currentUserId
   )
 
-  if (hasPermissions) {
+  if (isContributor) {
     return null
   }
 
