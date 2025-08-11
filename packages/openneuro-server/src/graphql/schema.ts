@@ -211,6 +211,7 @@ export const typeDefs = `
       hexsha: String!
       refs: [String!]!
       annexFsck: [AnnexFsckInput!]!
+      remote: String
     ): FileCheck
   }
 
@@ -913,6 +914,7 @@ export const typeDefs = `
     hexsha: String!
     refs: [String!]!
     annexFsck: [AnnexFsck!]
+    remote: String
   }
 
   type AnnexFsck {
