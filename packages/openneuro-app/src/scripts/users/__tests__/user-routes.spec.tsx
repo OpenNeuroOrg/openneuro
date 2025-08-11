@@ -4,8 +4,8 @@ import { vi } from "vitest"
 import { MemoryRouter, Outlet } from "react-router-dom"
 import { MockedProvider } from "@apollo/client/testing"
 import { UserRoutes } from "../user-routes"
+import type { Event } from "../../types/event-types"
 import type {
-  DatasetEventGraphQL,
   MappedNotification,
   OutletContextType,
   User,
@@ -159,7 +159,7 @@ vi.mock("./user-notifications-tab-content", () => ({
 
 // Mock the UserNotificationsView
 vi.mock("./user-notifications-view", () => {
-  const baseDatasetEvent: DatasetEventGraphQL = {
+  const baseDatasetEvent: Event = {
     id: "1",
     timestamp: "2023-01-01T12:00:00Z",
     event: { type: "published", message: "A dataset has been published." },

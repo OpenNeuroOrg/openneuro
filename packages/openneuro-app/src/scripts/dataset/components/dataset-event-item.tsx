@@ -3,35 +3,11 @@ import { useMutation, useQuery } from "@apollo/client"
 import { toast } from "react-toastify"
 import ToastContent from "../../common/partials/toast-content.jsx"
 import * as Sentry from "@sentry/react"
+import { Event } from "../../types/event-types"
 import styles from "./scss/dataset-events.module.scss"
 import { PROCESS_CONTRIBUTOR_REQUEST_MUTATION } from "../../queries/datasetEvents.js"
 import { Username } from "../../users/username.js"
 import { GET_USER } from "../../queries/user.js"
-
-interface Event {
-  id: string
-  timestamp: string
-  note?: string
-  event: {
-    type: string
-    targetUserId?: string
-    status?: string
-    requestId?: string
-    message?: string
-    reason?: string
-    datasetId?: string
-    resolutionStatus?: string
-    target?: {
-      id: string
-      name?: string
-      email?: string
-      orcid?: string
-    }
-  }
-  user?: { name?: string; email?: string; id?: string; orcid?: string }
-  hasBeenRespondedTo?: boolean
-  responseStatus?: string
-}
 
 interface DatasetEventItemProps {
   event: Event

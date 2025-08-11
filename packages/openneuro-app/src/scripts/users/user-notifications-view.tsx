@@ -14,12 +14,11 @@ import { useUser } from "../queries/user"
 import { Loading } from "../components/loading/Loading"
 import * as Sentry from "@sentry/react"
 
-import type {
+import type { OutletContextType, UserRoutesProps } from "../types/user-types"
+import {
   MappedNotification,
-  OutletContextType,
-  UserRoutesProps,
-} from "../types/user-types"
-import { mapRawDatasetEventToMappedNotification } from "../types/user-types"
+  mapRawEventToMappedNotification,
+} from "../types/event-types"
 
 export const UserNotificationsView = ({ orcidUser }: UserRoutesProps) => {
   const tabsRef = useRef<HTMLUListElement | null>(null)
@@ -36,7 +35,7 @@ export const UserNotificationsView = ({ orcidUser }: UserRoutesProps) => {
   useEffect(() => {
     if (user?.notifications) {
       const initialMapped = user.notifications.map(
-        mapRawDatasetEventToMappedNotification,
+        mapRawEventToMappedNotification,
       )
       setMappedNotifications(initialMapped)
     }

@@ -1,3 +1,5 @@
+import { Event, MappedNotification } from "./event-types"
+
 export interface User {
   id: string
   name: string
@@ -15,146 +17,7 @@ export interface User {
   provider?: string
   modified?: string
   githubSynced?: Date
-  notifications?: DatasetEventGraphQL[]
-}
-
-export interface DatasetEventDescriptionGraphQL {
-  type?: string
-  version?: string
-  public?: boolean
-  level?: string
-  ref?: string
-  message?: string
-  requestId?: string
-  targetUserId?: string
-  status?: string
-  reason?: string
-  datasetId?: string
-  resolutionStatus?: "pending" | "accepted" | "denied"
-}
-
-export interface DatasetEventGraphQL {
-  id: string
-  timestamp: string // GraphQL DateTime is a string
-  note?: string
-  success?: boolean
-  user?: User
-  event: DatasetEventDescriptionGraphQL
-  dataset?: {
-    id: string
-    name?: string
-  }
-  datasetId?: string
-  status?: "unread" | "saved" | "archived"
-}
-
-export type OutletContextType = {
-  notifications: MappedNotification[]
-  handleUpdateNotification: (
-    id: string,
-    updates: Partial<MappedNotification>,
-  ) => void
-}
-
-export interface MappedNotification {
-  id: string
-  title: string
-  content: string
-  status: "unread" | "saved" | "archived"
-  type: "general" | "approval" | "response"
-  approval?: "pending" | "accepted" | "denied"
-  originalNotification: DatasetEventGraphQL
-  datasetId?: string
-  requestId?: string
-  targetUserId?: string
-  requesterUser?: User
-  adminUser?: User
-  reason?: string
-}
-
-export const mapRawDatasetEventToMappedNotification = (
-  rawNotification: DatasetEventGraphQL,
-): MappedNotification => {
-  const event = rawNotification.event
-  let title = "General Notification"
-
-  const status: MappedNotification["status"] = rawNotification.status ??
-    "unread"
-
-  let mappedType: MappedNotification["type"] = "general"
-  let approval: MappedNotification["approval"]
-
-  const datasetId = rawNotification.dataset?.id ||
-    rawNotification.datasetId ||
-    event.datasetId ||
-    ""
-
-  let requestIdForMutation: string | undefined
-  let targetUserIdForMutation: string | undefined
-
-  let requesterUser: User | undefined
-  let adminUser: User | undefined
-  let eventReason: string | undefined
-  switch (event?.type) {
-    case "contributorRequest":
-      title = `Contributor Request for Dataset`
-      mappedType = "approval"
-      approval = event.resolutionStatus ?? "pending"
-      requestIdForMutation = event.requestId
-      targetUserIdForMutation = rawNotification.user?.id
-      requesterUser = rawNotification.user
-      break
-
-    case "contributorResponse":
-      title = `Contributor ${event.status} for Dataset`
-      mappedType = "response"
-      approval = event.status as "accepted" | "denied"
-      requestIdForMutation = event.requestId
-      targetUserIdForMutation = event.targetUserId
-      adminUser = rawNotification.user
-      eventReason = event.reason
-      break
-
-    case "note":
-      title = `Admin Note on Dataset`
-      break
-
-    default:
-      title = rawNotification.note ||
-        `Dataset ${rawNotification.event.type || "Unknown Type"}` ||
-        `${datasetId}: ${event}` ||
-        `${rawNotification.event}`
-      break
-  }
-
-  return {
-    id: rawNotification.id,
-    title: title,
-    content: rawNotification.note || "",
-    status: status,
-    type: mappedType,
-    approval: approval,
-    datasetId: datasetId,
-    requestId: requestIdForMutation,
-    targetUserId: targetUserIdForMutation,
-    originalNotification: rawNotification,
-    requesterUser: requesterUser,
-    adminUser: adminUser,
-    reason: eventReason,
-  }
-}
-
-export interface UserRoutesProps {
-  orcidUser: User
-  hasEdit: boolean
-  isUser: boolean
-}
-export interface UserCardProps {
-  orcidUser: User
-}
-
-export interface UserAccountViewProps {
-  orcidUser: User
+  notifications?: Event[]
 }
 
 export interface Dataset {
@@ -188,6 +51,19 @@ export interface Dataset {
   }
 }
 
+export interface UserRoutesProps {
+  orcidUser: User
+  hasEdit: boolean
+  isUser: boolean
+}
+export interface UserCardProps {
+  orcidUser: User
+}
+
+export interface UserAccountViewProps {
+  orcidUser: User
+}
+
 export interface DatasetCardProps {
   dataset: Dataset
   hasEdit: boolean
@@ -202,4 +78,12 @@ export interface AccountContainerProps {
   orcidUser: User
   hasEdit: boolean
   isUser: boolean
+}
+
+export type OutletContextType = {
+  notifications: MappedNotification[]
+  handleUpdateNotification: (
+    id: string,
+    updates: Partial<MappedNotification>,
+  ) => void
 }

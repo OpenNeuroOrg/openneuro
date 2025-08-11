@@ -1,28 +1,9 @@
 import React from "react"
+import { Event } from "../../types/event-types"
 import { DatasetEventItem } from "./dataset-event-item"
 
-interface ProcessedDatasetEvent {
-  id: string
-  note: string
-  timestamp: string
-  user: {
-    id: string
-    name: string
-    email: string
-    orcid: string
-  }
-  event: {
-    type: string
-    requestId?: string
-    status?: string
-  }
-  success: boolean
-  hasBeenRespondedTo?: boolean
-  responseStatus?: string
-}
-
 interface DatasetEventListProps {
-  events: ProcessedDatasetEvent[]
+  events: Event[]
   datasetId: string
   editingNoteId: string | null
   updatedNote: string
