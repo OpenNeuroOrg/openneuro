@@ -33,6 +33,7 @@ export const DatasetEvents = ({ datasetId }) => {
       refetch()
     },
     onError: (mutationError) => {
+      Sentry.captureException(error)
       toast.error(
         <ToastContent title="Error adding note" body={mutationError.message} />,
       )
