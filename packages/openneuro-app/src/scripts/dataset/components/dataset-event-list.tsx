@@ -1,5 +1,5 @@
 import React from "react"
-import { Event } from "../../types/event-types"
+import type { Event } from "../../types/event-types"
 import { DatasetEventItem } from "./dataset-event-item"
 
 interface DatasetEventListProps {

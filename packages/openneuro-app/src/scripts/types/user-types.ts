@@ -1,4 +1,4 @@
-import { Event, MappedNotification } from "./event-types"
+import type { Event, MappedNotification } from "./event-types"
 
 export interface User {
   id: string

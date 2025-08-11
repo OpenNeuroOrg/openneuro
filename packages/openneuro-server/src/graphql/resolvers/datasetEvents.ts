@@ -1,6 +1,9 @@
-import DatasetEvent, { DatasetEventDocument } from "../../models/datasetEvents"
+import DatasetEvent from "../../models/datasetEvents"
 import { checkDatasetAdmin } from "../permissions"
-import type { DatasetEventContributorRequest } from "../../models/datasetEvents"
+import type {
+  DatasetEventContributorRequest,
+  DatasetEventDocument,
+} from "../../models/datasetEvents"
 import type { DatasetEventContributorResponse } from "../../models/datasetEvents"
 
 type EnrichedDatasetEvent = DatasetEventDocument & {

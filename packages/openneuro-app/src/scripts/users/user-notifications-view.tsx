@@ -15,10 +15,8 @@ import { Loading } from "../components/loading/Loading"
 import * as Sentry from "@sentry/react"
 
 import type { OutletContextType, UserRoutesProps } from "../types/user-types"
-import {
-  MappedNotification,
-  mapRawEventToMappedNotification,
-} from "../types/event-types"
+import type { MappedNotification } from "../types/event-types"
+import { mapRawEventToMappedNotification } from "../types/event-types"
 
 export const UserNotificationsView = ({ orcidUser }: UserRoutesProps) => {
   const tabsRef = useRef<HTMLUListElement | null>(null)
