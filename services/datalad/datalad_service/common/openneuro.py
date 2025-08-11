@@ -2,13 +2,24 @@ import requests
 from pathlib import Path
 import jwt
 import logging
+from datetime import datetime, timedelta, timezone
 
 from datalad_service.config import GRAPHQL_ENDPOINT, JWT_SECRET
 
 
-def generate_service_token():
+def generate_service_token(dataset_id):
+    utc_now = datetime.now(timezone.utc)
+    one_day_ahead = utc_now + timedelta(hours=24)
     return jwt.encode(
-        {'sub': 'dataset-worker', 'admin': True}, JWT_SECRET, algorithm='HS256'
+        {
+            'sub': 'dataset-worker',
+            'iat': int(utc_now.timestamp()),
+            'exp': int(one_day_ahead.timestamp()),
+            'scopes': ['dataset:worker'],
+            'dataset': dataset_id,
+        },
+        JWT_SECRET,
+        algorithm='HS256',
     )
 
 
@@ -34,20 +45,21 @@ def update_file_check(dataset_path, commit, references, bad_files, remote=None):
     dataset_id = Path(dataset_path).name
     try:
         post_body = {
-            'query': 'mutation ($datasetId: ID!, $hexsha: String!, $refs: [String!]!, $annexFsck: [AnnexFsckInput!]!) { updateFileCheck(datasetId: $datasetId, hexsha: $hexsha, refs: $refs, annexFsck: $annexFsck) { datasetId, hexsha } }',
+            'query': 'mutation updateFileCheck($datasetId: ID!, $hexsha: String!, $refs: [String!]!, $annexFsck: [AnnexFsckInput!]!) { updateFileCheck(datasetId: $datasetId, hexsha: $hexsha, refs: $refs, annexFsck: $annexFsck) { datasetId, hexsha } }',
             'variables': {
                 'datasetId': dataset_id,
                 'hexsha': str(commit.id),
                 'refs': references,
                 'annexFsck': bad_files,
             },
+            'operationName': 'updateFileCheck',
         }
         if remote:
             post_body['variables']['remote'] = remote
         req = requests.post(
             url=GRAPHQL_ENDPOINT,
             json=post_body,
-            headers={'Authorization': f'Bearer {generate_service_token()}'},
+            headers={'authorization': f'Bearer {generate_service_token(dataset_id)}'},
         )
         req.raise_for_status()
     except requests.exceptions.HTTPError as e:
