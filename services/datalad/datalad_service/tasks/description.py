@@ -32,7 +32,7 @@ async def update_description(store, dataset, description_fields, name=None, emai
             path, description, json.dumps(updated, indent=4, ensure_ascii=False)
         )
         # Commit new content, run validator
-        commit_files(store, dataset, ['dataset_description.json'])
+        await commit_files(store, dataset, ['dataset_description.json'])
         return updated
     else:
         return description_json
