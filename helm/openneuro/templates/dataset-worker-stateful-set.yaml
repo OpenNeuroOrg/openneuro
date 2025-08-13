@@ -75,7 +75,7 @@ spec:
             port: 80
       - name: {{ .Release.Name }}-dataset-taskiq-worker
         image: 'openneuro/datalad-service:v{{ .Chart.AppVersion }}'
-        command: ['taskiq', 'worker', 'datalad_service.broker:broker', '--tasks-pattern', 'datalad_service/tasks/*.py', '--fs-discover']
+        command: ['/srv/.venv/bin/taskiq', 'worker', 'datalad_service.broker:broker', '--tasks-pattern', 'datalad_service/tasks/*.py', '--fs-discover']
         resources:
           requests:
             cpu: {{ .Values.workerCpuRequests }}

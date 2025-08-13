@@ -23,7 +23,7 @@ spec:
       containers:
         - name: {{ .Release.Name }}-scheduler
           image: 'openneuro/datalad-service:v{{ .Chart.AppVersion }}'
-          command: 
+          command: ['/srv/.venv/bin/taskiq', 'scheduler', 'datalad_service.broker.scheduler:scheduler', '--tasks-pattern', 'datalad_service/tasks/*.py', '--fs-discover']
           resources:
             requests:
               cpu: {{ .Values.workerCpuRequests }}
