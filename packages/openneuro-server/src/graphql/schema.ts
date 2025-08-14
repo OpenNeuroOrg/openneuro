@@ -548,6 +548,8 @@ export const typeDefs = `
     size: BigInt
     # Creators list from datacite.yml || Authors list from dataset_description.json
     creators: [Creator] 
+    # NEW: Contributors list from datacite.yml
+    contributors: [Contributor]
   }
 
   # Tagged snapshot of a draft
@@ -589,6 +591,8 @@ export const typeDefs = `
     downloadFiles: [DatasetFile]
     # Authors list from datacite.yml || dataset_description.json
     creators: [Creator] 
+    # NEW: Contributors list from datacite.yml
+    contributors: [Contributor]
   }
 
   # RelatedObject nature of relationship
@@ -666,6 +670,14 @@ export const typeDefs = `
     orcid: String 
   }
 
+  # NEW: Defines the Contributor type in contributors.ts
+  type Contributor {
+    name: String!
+    givenName: String
+    familyName: String
+    orcid: String
+    contributorType: String!
+  }
 
 
   # User permissions on a dataset
