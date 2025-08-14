@@ -22,14 +22,18 @@ def get_docker_scale():
     else:
         # docker-compose
         ip_addr = socket.gethostbyname(hostname)
-        answer = dns.resolver.resolve(dns.reversename.from_address(ip_addr), 'PTR')
+        try:
+            answer = dns.resolver.resolve(dns.reversename.from_address(ip_addr), 'PTR')
+        except dns.resolver.NXDOMAIN:
+            # Kubernetes but not a stateful set
+            return hostname
         subdomain = str(answer[0]).split('.')[0]
         try:
             # Subtract 1 to make this zero indexed (matching k8s)
             docker_compose_offset = int(subdomain.split('_')[-1]) - 1
             # Not docker compose, return a string name
         except ValueError:
-            return subdomain
+            return hostname
         # Printed so this can be referenced as a script
         return docker_compose_offset
 
