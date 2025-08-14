@@ -14,8 +14,9 @@ export const MetaDataBlock = ({
   renderEditor,
 }: MetaDataBlockProps) => {
   const fieldContent = renderEditor ? renderEditor() : item
+  const effectiveBlockClass = className || ""
   return (
-    <div className={"dataset-meta-block " + className}>
+    <div className={`dataset-meta-block ${effectiveBlockClass}`}>
       <h2 className="dmb-heading">{heading}</h2>
       <>{fieldContent}</>
     </div>

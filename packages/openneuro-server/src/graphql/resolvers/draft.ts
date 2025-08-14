@@ -8,6 +8,7 @@ import { checkDatasetWrite } from "../permissions.js"
 import { getFiles } from "../../datalad/files"
 import { filterRemovedAnnexObjects } from "../utils/file.js"
 import { validation } from "./validation"
+import { creators } from "../../datalad/creators"
 
 // A draft must have a dataset parent
 export const draftFiles = async (dataset, args, { userInfo }) => {
@@ -43,6 +44,7 @@ const draft = {
   description,
   readme,
   head: (obj) => obj.revision,
+  creators: (parent) => creators(parent),
 }
 
 export default draft
