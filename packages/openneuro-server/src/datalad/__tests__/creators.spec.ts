@@ -31,7 +31,6 @@ vi.mock("../libs/redis", () => ({
   redis: vi.fn(),
 }))
 
-// Cast mocks to their Vi.Mocked versions for type safety and easier access
 const mockYamlLoad = vi.mocked(yaml.load)
 const mockSentryCaptureMessage = vi.mocked(Sentry.captureMessage)
 const mockSentryCaptureException = vi.mocked(Sentry.captureException)
@@ -39,11 +38,9 @@ const mockFileUrl = vi.mocked(fileUrl)
 const mockDatasetOrSnapshot = vi.mocked(datasetOrSnapshot)
 const mockDescription = vi.mocked(description)
 
-// Mock the global fetch API
 const mockFetch = vi.fn()
 global.fetch = mockFetch
 
-// Helper to mock CacheItem's .get() method
 const mockCacheItemGet = vi.fn()
 vi.mocked(CacheItem).mockImplementation((_redis, _type, _key) => {
   return {
@@ -58,7 +55,6 @@ describe("creators (core functionality)", () => {
   beforeEach(() => {
     vi.clearAllMocks()
 
-    // This mock ensures that when creators calls datasetOrSnapshot
     mockDatasetOrSnapshot.mockReturnValue({
       datasetId: MOCK_DATASET_ID,
       revision: MOCK_REVISION,
@@ -68,11 +64,9 @@ describe("creators (core functionality)", () => {
         `http://example.com/${datasetId}/${revision}/${filename}`,
     )
 
-    // Ensure mockCacheItemGet always calls its fetcher by default
     mockCacheItemGet.mockImplementation((fetcher) => fetcher())
   })
 
-  // --- Test Scenarios for `creators` export function ---
   it("should fall back to dataset_description.json if datacite file is 404", async () => {
     const datasetDescriptionJson = {
       Authors: ["Author One", "Author Two"],
@@ -84,8 +78,6 @@ describe("creators (core functionality)", () => {
       text: () => Promise.resolve("Not Found"),
     })
 
-    // This mock implementation ensures the datacite file fetch is handled,
-    // and returns null for the cache, simulating the 404.
     mockCacheItemGet.mockImplementationOnce((fetcher) =>
       fetcher().then(() => null)
     )
@@ -129,7 +121,6 @@ describe("creators (core functionality)", () => {
     expect(result).toEqual([{ name: "BIDS Author A" }])
     expect(mockDescription).toHaveBeenCalled()
     expect(mockSentryCaptureException).toHaveBeenCalledWith(expect.any(Error))
-    // The specific error message for parsing failure is now generic, check for partial string match
     expect(mockSentryCaptureException).toHaveBeenCalledWith(
       expect.objectContaining({
         message: expect.stringContaining(
