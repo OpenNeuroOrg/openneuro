@@ -47,6 +47,12 @@ export const DRAFT_FRAGMENT = gql`
           version
         }
       }
+      creators {
+        name
+        givenName 
+        familyName 
+        orcid 
+      }
     }
   }
 `
@@ -223,6 +229,12 @@ export const SNAPSHOT_FIELDS = gql`
     }
     ...SnapshotIssues
     hexsha
+    creators {
+      name
+      givenName 
+      familyName 
+      orcid 
+    }
   }
   ${SNAPSHOT_ISSUES}
 `
