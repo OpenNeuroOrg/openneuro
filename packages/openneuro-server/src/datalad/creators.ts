@@ -1,8 +1,6 @@
-import yaml from "js-yaml"
 import * as Sentry from "@sentry/node"
 import CacheItem, { CacheType } from "../cache/item"
 import { redis } from "../libs/redis"
-import { fileUrl } from "./files"
 import {
   type DatasetOrSnapshot,
   datasetOrSnapshot,
@@ -11,11 +9,10 @@ import { getDataciteYml } from "../utils/datacite-utils"
 import { description } from "./description"
 import { validateOrcid } from "../utils/orcid-utils"
 
-import {
+import type {
   Creator,
   NameIdentifier,
   RawDataciteCreator,
-  RawDataciteYml,
 } from "../types/datacite"
 
 /**

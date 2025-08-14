@@ -1,7 +1,7 @@
 import yaml from "js-yaml"
 import * as Sentry from "@sentry/node"
 import { fileUrl } from "../datalad/files"
-import { RawDataciteYml } from "../types/datacite"
+import type { RawDataciteYml } from "../types/datacite"
 
 /**
  * Attempts to read and parse the datacite metadata file from the remote source.
