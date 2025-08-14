@@ -18,6 +18,11 @@
     transition: transform 0.3s;
     overflow: scroll;
     max-height: 90vh;
+  
+
+  }
+  &.modal-lg .modal {
+    width: 800px;
   }
 
   .modal-close-x {
