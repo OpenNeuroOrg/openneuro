@@ -9,7 +9,7 @@ import dns.reversename
 
 def get_docker_scale():
     """
-    Return container offset or a unique identifier
+    Return container offset
     If running under Kubernetes in a statefulset - return the offset
     If running under docker-compose - return the container id -1 (0 indexed like k8s)
     Otherwise return None.
