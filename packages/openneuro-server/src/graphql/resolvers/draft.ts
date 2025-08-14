@@ -10,6 +10,7 @@ import { filterRemovedAnnexObjects } from "../utils/file.js"
 import { validation } from "./validation"
 import { creators } from "../../datalad/creators"
 import FileCheck from "../../models/fileCheck"
+import { contributors } from "../../datalad/contributors"
 
 // A draft must have a dataset parent
 export const draftFiles = async (dataset, args, { userInfo }) => {
@@ -61,6 +62,7 @@ const draft = {
   head: (obj) => obj.revision,
   creators: (parent) => creators(parent),
   fileCheck,
+  contributors: (parent) => contributors(parent),
 }
 
 export default draft
