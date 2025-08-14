@@ -53,6 +53,12 @@ export const DRAFT_FRAGMENT = gql`
         familyName 
         orcid 
       }
+      contributors {
+        name
+        givenName 
+        familyName 
+        orcid 
+      }
     }
   }
 `
@@ -230,6 +236,12 @@ export const SNAPSHOT_FIELDS = gql`
     ...SnapshotIssues
     hexsha
     creators {
+      name
+      givenName 
+      familyName 
+      orcid 
+    }
+    contributors {
       name
       givenName 
       familyName 

@@ -8,6 +8,7 @@ import type { SearchResultItemProps } from "./SearchResultItem"
 import { ModalityLabel } from "../../components/formatting/modality-label"
 import { MetaListItemList } from "./MetaListItemList"
 import { CreatorListDisplay } from "../../users/creators-list"
+import { ContributorsListDisplay } from "../../users/contributors-list"
 import "../scss/search-result-details.scss"
 
 interface SearchResultDetailsProps {
@@ -134,6 +135,14 @@ export const SearchResultDetails: FC<SearchResultDetailsProps> = (
       separator=", "
     />,
   )
+
+  const contributors = renderMetaItem(
+    "Authors",
+    <ContributorsListDisplay
+      contributors={itemData.latestSnapshot?.contributors}
+      separator=", "
+    />,
+  )
   const uploaderDisplay = renderMetaItem(
     "Uploader by",
     <div>
@@ -155,6 +164,7 @@ export const SearchResultDetails: FC<SearchResultDetailsProps> = (
         </button>
         {moreDetailsHeader}
         {authors}
+        {contributors}
         {modalityList}
         {taskList}
         {accessionNumberDisplay}

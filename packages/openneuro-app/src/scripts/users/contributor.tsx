@@ -2,26 +2,26 @@ import React from "react"
 import type { FC } from "react"
 import { Link } from "react-router-dom"
 import { useUser } from "../queries/user"
-import type { Creator } from "../types/datacite"
+import type { Contributor } from "../types/datacite"
 import ORCIDiDLogo from "../../assets/ORCIDiD_iconvector.svg"
 
-interface SingleCreatorDisplayProps {
-  creator: Creator
+interface SingleContributorDisplayProps {
+  contributor: Contributor
   isLast: boolean
   separator: React.ReactNode
 }
 
 /**
- * Displays a single creator's name and ORCID link.
+ * Displays a single contributor's name and ORCID link.
  * Conditionally links the name to a user profile if a user with the ORCID exists.
  */
-export const SingleCreatorDisplay: FC<SingleCreatorDisplayProps> = ({
-  creator,
+export const SingleContributorDisplay: FC<SingleContributorDisplayProps> = ({
+  contributor,
   isLast,
   separator,
 }) => {
-  const { user, loading } = useUser(creator.orcid || undefined)
-  const displayName = creator.name || "Unknown Creator"
+  const { user, loading } = useUser(contributor.orcid || undefined)
+  const displayName = contributor.name || "Unknown Contributor"
   const orcidBaseURL = "https://orcid.org/"
 
   if (loading) {
@@ -38,19 +38,19 @@ export const SingleCreatorDisplay: FC<SingleCreatorDisplayProps> = ({
 
   return (
     <>
-      {creator.orcid && userExists
+      {contributor.orcid && userExists
         ? (
-          <Link to={`/user/${creator.orcid}`}>
+          <Link to={`/user/${contributor.orcid}`}>
             {displayName}
           </Link>
         )
         : displayName}
 
-      {creator.orcid && (
+      {contributor.orcid && (
         <>
           {" "}
           <a
-            href={`${orcidBaseURL}${creator.orcid}`}
+            href={`${orcidBaseURL}${contributor.orcid}`}
             target="_blank"
             rel="noopener noreferrer"
             aria-label={`ORCID profile for ${displayName}`}

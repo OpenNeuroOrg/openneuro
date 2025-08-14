@@ -35,6 +35,7 @@ import { TabRoutesDraft } from "./routes/tab-routes-draft"
 import { FollowToggles } from "./common/follow-toggles"
 import { DateDistance } from "../components/date-distance"
 import { CreatorListDisplay } from "../users/creators-list"
+import { ContributorsListDisplay } from "../users/contributors-list"
 
 export interface DraftContainerProps {
   dataset
@@ -181,6 +182,14 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
                 item={
                   <CreatorListDisplay
                     creators={dataset.draft.creators}
+                  />
+                }
+              />
+              <MetaDataBlock
+                heading="Contributors"
+                item={
+                  <ContributorsListDisplay
+                    contributors={dataset.draft.contributors}
                   />
                 }
               />
