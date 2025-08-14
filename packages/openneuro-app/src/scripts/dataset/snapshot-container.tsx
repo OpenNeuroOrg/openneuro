@@ -196,13 +196,6 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
                 }
               />
 
-              <MetaDataBlock
-                heading="Authors"
-                item={description?.Authors?.length
-                  ? description.Authors.join(", ")
-                  : "N/A"}
-                className="dmb-inline-list"
-              />
               <>
                 {summary && (
                   <ModalitiesMetaDataBlock
