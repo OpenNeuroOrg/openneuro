@@ -128,8 +128,8 @@ export const SearchResultDetails: FC<SearchResultDetailsProps> = (
       {itemData?.id}
     </Link>,
   )
-  const authors = renderMetaItem(
-    "Authors",
+  const creators = renderMetaItem(
+    "Creators",
     <CreatorListDisplay
       creators={itemData.latestSnapshot?.creators}
       separator=", "
@@ -137,7 +137,7 @@ export const SearchResultDetails: FC<SearchResultDetailsProps> = (
   )
 
   const contributors = renderMetaItem(
-    "Authors",
+    "Contributors",
     <ContributorsListDisplay
       contributors={itemData.latestSnapshot?.contributors}
       separator=", "
@@ -163,7 +163,7 @@ export const SearchResultDetails: FC<SearchResultDetailsProps> = (
           &times;
         </button>
         {moreDetailsHeader}
-        {authors}
+        {creators}
         {contributors}
         {modalityList}
         {taskList}
