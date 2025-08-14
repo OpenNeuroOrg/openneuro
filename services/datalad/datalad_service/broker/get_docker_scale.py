@@ -12,7 +12,7 @@ def get_docker_scale():
     Return container offset or a unique identifier
     If running under Kubernetes in a statefulset - return the offset
     If running under docker-compose - return the container id -1 (0 indexed like k8s)
-    Otherwise return a unique string (hostname)
+    Otherwise return None.
     """
     hostname = socket.gethostname()
     matches = re.match('.*?-([0-9]+)$', hostname)
@@ -26,14 +26,14 @@ def get_docker_scale():
             answer = dns.resolver.resolve(dns.reversename.from_address(ip_addr), 'PTR')
         except dns.resolver.NXDOMAIN:
             # Kubernetes but not a stateful set
-            return hostname
+            return None
         subdomain = str(answer[0]).split('.')[0]
         try:
             # Subtract 1 to make this zero indexed (matching k8s)
             docker_compose_offset = int(subdomain.split('_')[-1]) - 1
             # Not docker compose, return a string name
         except ValueError:
-            return hostname
+            return None
         # Printed so this can be referenced as a script
         return docker_compose_offset
 
