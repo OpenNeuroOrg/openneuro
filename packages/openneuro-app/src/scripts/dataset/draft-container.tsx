@@ -194,7 +194,9 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
                 }
               />
 
-              <EditDescriptionList
+              {
+                /* do we need to account for inline editing on the author list
+               <EditDescriptionList
                 className="dmb-inline-list"
                 datasetId={datasetId}
                 field="Authors"
@@ -203,7 +205,8 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
                 editMode={hasEdit}
               >
                 {description?.Authors?.length ? description.Authors : ["N/A"]}
-              </EditDescriptionList>
+              </EditDescriptionList> */
+              }
               {summary && (
                 <ModalitiesMetaDataBlock
                   items={summary.modalities}
