@@ -4,10 +4,9 @@ import logging
 import subprocess
 
 import pygit2
-import requests
 
 from datalad_service.broker import broker
-from datalad_service.config import GRAPHQL_ENDPOINT
+from datalad_service.common.openneuro import update_file_check
 
 
 def get_head_commit_and_references(repo):
@@ -53,27 +52,15 @@ def git_annex_fsck_local(dataset_path):
             bad_files.append(annexed_file)
     if len(bad_files) > 0:
         logging.error(f'missing or corrupt annexed objects found in {dataset_path}')
-    # Send any bad files to updateFileCheck
-    requests.post(
-        url=GRAPHQL_ENDPOINT,
-        json={
-            'query': 'mutation ($datasetId: ID!, $hexsha: String!, $refs: [String], $annexFsck: [AnnexFsck]) { updateFileChecks(datasetId: $datasetId, hexsha: $hexsha, refs: $refs, annexFsck: $annexFsck) { datasetId, hexsha } }',
-            'variables': {
-                'datasetId': dataset_path.split('/')[-1],
-                'hexsha': str(commit.id),
-                'refs': references,
-                'annexFsck': bad_files,
-            },
-        },
-    )
+    update_file_check(dataset_path, commit, references, bad_files)
 
 
 @broker.task
 def git_annex_fsck_remote(dataset_path, branch=None, remote='s3-PUBLIC'):
     """Run incremental fsck for one branch (tag) and remote."""
     try:
-        # Basic sanity check opening the repo before running git-annex
         repo = pygit2.Repository(dataset_path)
+        commit, references = get_head_commit_and_references(repo)
     except pygit2.GitError:
         logging.error(f'Could not open git repository for {dataset_path}')
         return
@@ -115,3 +102,4 @@ def git_annex_fsck_remote(dataset_path, branch=None, remote='s3-PUBLIC'):
         logging.error(
             f'{dataset_path} remote {remote} has missing or corrupt annexed objects'
         )
+    update_file_check(dataset_path, commit, references, bad_files, remote)
