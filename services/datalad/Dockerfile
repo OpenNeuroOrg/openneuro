@@ -24,7 +24,6 @@ COPY . /srv
 RUN ln -s /srv/hooks /hooks \
   && mv /srv/ssh_config /root/.ssh/config \
   && chmod 600 /root/.ssh/config \
-  && ln -s /srv/get_docker_scale.py /get_docker_scale.py \
   && echo "$LERNA_JSON" > /srv/lerna.json
 
 RUN uv sync --locked
