@@ -57,9 +57,7 @@ export const contributors = async (
   const { datasetId, revision } = datasetOrSnapshot(obj)
   const revisionShort = revision.substring(0, 7)
 
-  // Default fallback for authors if neither file provides them
-  const defaultContributors: Contributor[] = []
-  let parsedContributors: Contributor[] | null = null
+  let parsedContributors: Contributor[] = []
 
   // 1. Try to get contributors from datacite
   const dataciteCache = new CacheItem(redis, CacheType.dataciteYml, [
@@ -101,5 +99,5 @@ export const contributors = async (
   }
 
   // Return the parsed contributors or the default empty array
-  return parsedContributors || defaultContributors
+  return parsedContributors
 }
