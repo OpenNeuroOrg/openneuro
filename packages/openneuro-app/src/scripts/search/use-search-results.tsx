@@ -98,6 +98,19 @@ const searchQuery = gql`
               Authors
               DatasetDOI
             }
+            creators {
+              name
+              givenName 
+              familyName 
+              orcid 
+            }
+            contributors {
+              name
+              givenName 
+              familyName 
+              orcid 
+              contributorType
+            }
           }
           analytics {
             views
@@ -168,7 +181,9 @@ export const useSearchResults = () => {
         "id^20",
         "latestSnapshot.readme",
         "latestSnapshot.description.Name^6",
-        "latestSnapshot.description.Authors^3",
+        "latestSnapshot.description.Authors^3", // TODO: Nell - do we need this still?
+        "latestSnapshot.creators.name^3",
+        "latestSnapshot.contributors.name^2",
       ]),
     )
   }
@@ -263,14 +278,24 @@ export const useSearchResults = () => {
       ]),
     )
   }
-  if (authors.length) {
+  if (authors.length) { // TODO - NELL - this was switched to creators - is that correct?
+    const authorQuery = matchQuery(
+      "latestSnapshot.creators.name",
+      joinWithOR(authors),
+      "2",
+    )
+    const contributorQuery = matchQuery(
+      "latestSnapshot.contributors.name",
+      joinWithOR(authors),
+      "2",
+    )
     boolQuery.addClause(
       "must",
-      matchQuery(
-        "latestSnapshot.description.Authors",
-        joinWithOR(authors),
-        "2",
-      ),
+      {
+        bool: {
+          should: [authorQuery, contributorQuery],
+        },
+      },
     )
   }
   if (sex_selected !== "All") {

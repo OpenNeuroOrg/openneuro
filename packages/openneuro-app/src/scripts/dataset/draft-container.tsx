@@ -34,6 +34,8 @@ import { DOILink } from "./fragments/doi-link"
 import { TabRoutesDraft } from "./routes/tab-routes-draft"
 import { FollowToggles } from "./common/follow-toggles"
 import { DateDistance } from "../components/date-distance"
+import { CreatorListDisplay } from "../users/creators-list"
+import { ContributorsListDisplay } from "../users/contributors-list"
 
 export interface DraftContainerProps {
   dataset
@@ -48,7 +50,6 @@ const snapshotVersion = (location) => {
 const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
   const location = useLocation()
   const activeDataset = snapshotVersion(location) || "draft"
-
   const [selectedVersion, setSelectedVersion] = React.useState(activeDataset)
   const summary = dataset.draft.summary
   const description = dataset.draft.description
@@ -175,7 +176,27 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
                 heading="OpenNeuro Accession Number"
                 item={datasetId}
               />
-              <EditDescriptionList
+
+              <MetaDataBlock
+                heading="Creators"
+                item={
+                  <CreatorListDisplay
+                    creators={dataset.draft.creators}
+                  />
+                }
+              />
+              <MetaDataBlock
+                heading="Contributors"
+                item={
+                  <ContributorsListDisplay
+                    contributors={dataset.draft.contributors}
+                  />
+                }
+              />
+
+              {
+                /* do we need to account for inline editing on the author list
+               <EditDescriptionList
                 className="dmb-inline-list"
                 datasetId={datasetId}
                 field="Authors"
@@ -184,7 +205,8 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
                 editMode={hasEdit}
               >
                 {description?.Authors?.length ? description.Authors : ["N/A"]}
-              </EditDescriptionList>
+              </EditDescriptionList> */
+              }
               {summary && (
                 <ModalitiesMetaDataBlock
                   items={summary.modalities}
