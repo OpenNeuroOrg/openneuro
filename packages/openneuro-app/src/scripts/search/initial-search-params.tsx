@@ -8,6 +8,7 @@ const datasetType_available = [
 ]
 
 const datasetStatus_available = [
+  { label: "All", value: "All" },
   { label: "Public", value: "Public" },
   { label: "Shared with Me", value: "Shared with Me" },
   { label: "Invalid", value: "Invalid" },
@@ -172,7 +173,7 @@ const initialSearchParams: SearchParams = {
   datasetType_available,
   datasetType_selected: "All Public",
   datasetStatus_available,
-  datasetStatus_selected: null,
+  datasetStatus_selected: "All",
   modality_available,
   modality_selected: null,
   ageRange: [null, null],

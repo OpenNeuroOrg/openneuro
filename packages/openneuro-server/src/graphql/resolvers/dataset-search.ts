@@ -164,29 +164,31 @@ const parseQuery = async (query, datasetType, datasetStatus, userId) => {
       },
     }
     addClause(query, "filter", termsClause)
-
-    if (datasetStatus === "Public") {
-      addClause(query, "filter", {
-        term: {
-          public: {
-            value: true,
+    // Add logic to explicitly check for the "All" status
+    if (datasetStatus && datasetStatus !== "All") {
+      if (datasetStatus === "Public") {
+        addClause(query, "filter", {
+          term: {
+            public: {
+              value: true,
+            },
           },
-        },
-      })
-    } else if (datasetStatus === "Shared with Me") {
-      addClause(query, "filter", {
-        terms: {
-          ["permissions.userPermissions.level"]: ["ro", "rw"],
-        },
-      })
-    } else if (datasetStatus === "Invalid") {
-      addClause(query, "filter", {
-        range: {
-          "latestSnapshot.validation.errors": {
-            gt: 0,
+        })
+      } else if (datasetStatus === "Shared with Me") {
+        addClause(query, "filter", {
+          terms: {
+            ["permissions.userPermissions.level"]: ["ro", "rw"],
           },
-        },
-      })
+        })
+      } else if (datasetStatus === "Invalid") {
+        addClause(query, "filter", {
+          range: {
+            "latestSnapshot.validation.errors": {
+              gt: 0,
+            },
+          },
+        })
+      }
     }
   }
   return query
