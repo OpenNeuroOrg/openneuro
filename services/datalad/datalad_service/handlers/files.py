@@ -6,7 +6,6 @@ import falcon
 import pygit2
 
 from datalad_service.common.git import (
-    git_show,
     git_show_content,
     git_tree,
     OpenNeuroGitError,
@@ -125,7 +124,7 @@ class FilesResource:
                     media_dict['email'] = email
                 try:
                     if len(dirs_to_delete) > 0:
-                        remove_files(
+                        await remove_files(
                             self.store,
                             dataset,
                             dirs_to_delete,
@@ -135,7 +134,7 @@ class FilesResource:
                         )
                         resp.status = falcon.HTTP_INTERNAL_SERVER_ERROR
                     if len(files_to_delete) > 0:
-                        remove_files(
+                        await remove_files(
                             self.store,
                             dataset,
                             files_to_delete,

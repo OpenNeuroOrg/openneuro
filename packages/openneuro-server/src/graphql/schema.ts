@@ -215,6 +215,14 @@ export const typeDefs = `
       status: String!
       reason: String 
     ): DatasetEvent
+    # Create or update a fileCheck document
+    updateFileCheck(
+      datasetId: ID!
+      hexsha: String!
+      refs: [String!]!
+      annexFsck: [AnnexFsckInput!]!
+      remote: String
+    ): FileCheck
   }
 
   # Anonymous dataset reviewer
@@ -919,6 +927,33 @@ export const typeDefs = `
     # top-level datasetId field
     datasetId: ID
   }
+
+  type FileCheck {
+    datasetId: String!
+    hexsha: String!
+    refs: [String!]!
+    annexFsck: [AnnexFsck!]
+    remote: String
+  }
+
+  type AnnexFsck {
+    command: String
+    errorMessages: [String]
+    file: String
+    key: String
+    note: String
+    success: Boolean
+  }
+
+  input AnnexFsckInput {
+    command: String
+    errorMessages: [String]
+    file: String
+    key: String
+    note: String
+    success: Boolean
+  }
+
 `
 
 schemaComposer.addTypeDefs(typeDefs)

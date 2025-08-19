@@ -838,9 +838,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@bids/validator@npm:@jsr/bids__validator@^2.0.7":
-  version: 2.0.7
-  resolution: "@jsr/bids__validator@npm:2.0.7::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__validator%2F2.0.7.tgz"
+"@bids/validator@npm:@jsr/bids__validator@^2.0.8":
+  version: 2.0.8
+  resolution: "@jsr/bids__validator@npm:2.0.8::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__validator%2F2.0.8.tgz"
   dependencies:
     "@bids/nifti-reader-js": "npm:0.6.9"
     "@jsr/bids__schema": "npm:1.0.4"
@@ -855,7 +855,7 @@ __metadata:
     ajv: "npm:8.17.1"
     hed-validator: "npm:4.0.1"
     ignore: "npm:7.0.3"
-  checksum: 10/4e4eb470e5c4daad5fa2c4a80519acc5be25154c1da2dbe05d4fc5f35736dd5df4b372a0abcffc0c86917670b07d3a71e0f6096909158d5857c5a3a325771322
+  checksum: 10/5e45246ccc41b25c2b271e710884b40849448c753cba27cea7a63002e01f6c203b5b10754f3ad26230a15ce1671d9b1e0b75056dc35a946c104c4f64f4924c84
   languageName: node
   linkType: hard
 
@@ -3133,7 +3133,7 @@ __metadata:
   dependencies:
     "@apollo/client": "npm:3.13.8"
     "@artsy/fresnel": "npm:^1.3.1"
-    "@bids/validator": "npm:@jsr/bids__validator@^2.0.7"
+    "@bids/validator": "npm:@jsr/bids__validator@^2.0.8"
     "@emotion/react": "npm:11.11.1"
     "@emotion/styled": "npm:11.11.0"
     "@niivue/niivue": "npm:0.57.0"
@@ -3235,7 +3235,7 @@ __metadata:
     "@apollo/client": "npm:3.13.8"
     "@elastic/elasticsearch": "npm:8.13.1"
     "@openneuro/client": "npm:^4.30.2"
-    "@openneuro/search": "npm:^4.37.0"
+    "@openneuro/search": "npm:^4.38.0-alpha.0"
     "@types/jsonwebtoken": "npm:^8"
     "@types/node": "npm:20.12.7"
     "@types/tsc-watch": "npm:^4"
@@ -3249,7 +3249,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/search@npm:^4.37.0, @openneuro/search@workspace:packages/openneuro-search":
+"@openneuro/search@npm:^4.38.0-alpha.0, @openneuro/search@workspace:packages/openneuro-search":
   version: 0.0.0-use.local
   resolution: "@openneuro/search@workspace:packages/openneuro-search"
   dependencies:
@@ -3274,7 +3274,7 @@ __metadata:
     "@elastic/elasticsearch": "npm:8.13.1"
     "@graphql-tools/schema": "npm:^10.0.0"
     "@keyv/redis": "npm:^4.5.0"
-    "@openneuro/search": "npm:^4.37.0"
+    "@openneuro/search": "npm:^4.38.0-alpha.0"
     "@sentry/node": "npm:^8.25.0"
     "@sentry/profiling-node": "npm:^8.25.0"
     "@types/cors": "npm:^2"

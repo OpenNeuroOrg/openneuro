@@ -9,6 +9,7 @@ from datalad_service.common.git import git_show, git_show_content, git_tag
 from datalad_service.tasks.dataset import create_datalad_config
 from datalad_service.tasks.description import update_description
 from datalad_service.tasks.files import commit_files
+from datalad_service.common.onchange import on_tag
 
 
 class SnapshotExistsException(Exception):
@@ -119,7 +120,7 @@ async def update_changes(store, dataset, tag, new_changes):
         current_date = datetime.today().strftime('%Y-%m-%d')
         updated = await write_new_changes(dataset_path, tag, new_changes, current_date)
         # Commit new content, run validator
-        commit_files(store, dataset, ['CHANGES'])
+        await commit_files(store, dataset, ['CHANGES'])
         return updated
     else:
         return await get_head_changes(dataset_path)
@@ -133,7 +134,7 @@ def validate_snapshot_name(store, dataset, snapshot):
         raise SnapshotExistsException(f'Tag "{snapshot}" already exists, name conflict')
 
 
-def validate_datalad_config(store, dataset):
+async def validate_datalad_config(store, dataset):
     """Add a .datalad/config file if one does not exist."""
     dataset_path = store.get_dataset_path(dataset)
     repo = store.get_dataset_repo(dataset)
@@ -141,12 +142,14 @@ def validate_datalad_config(store, dataset):
         git_show(repo, 'HEAD', '.datalad/config')
     except KeyError:
         create_datalad_config(dataset_path)
-        commit_files(store, dataset, ['.datalad/config'])
+        await commit_files(store, dataset, ['.datalad/config'])
 
 
-def save_snapshot(store, dataset, snapshot):
-    repo = pygit2.Repository(store.get_dataset_path(dataset))
+async def save_snapshot(store, dataset, snapshot):
+    ds_path = store.get_dataset_path(dataset)
+    repo = pygit2.Repository(ds_path)
     repo.references.create(f'refs/tags/{snapshot}', str(repo.head.target))
+    await on_tag(ds_path, snapshot)
 
 
 async def create_snapshot(
@@ -158,8 +161,8 @@ async def create_snapshot(
     Raises an exception if the tag already exists.
     """
     validate_snapshot_name(store, dataset, snapshot)
-    validate_datalad_config(store, dataset)
+    await validate_datalad_config(store, dataset)
     await update_description(store, dataset, description_fields)
     await update_changes(store, dataset, snapshot, snapshot_changes)
-    save_snapshot(store, dataset, snapshot)
+    await save_snapshot(store, dataset, snapshot)
     return get_snapshot(store, dataset, snapshot)
