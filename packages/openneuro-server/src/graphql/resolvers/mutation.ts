@@ -47,6 +47,7 @@ import {
   createContributorRequestEvent,
   processContributorRequest,
   saveAdminNote,
+  updateEventStatus,
 } from "./datasetEvents"
 import { createGitEvent } from "./gitEvents"
 import { updateFileCheck } from "./fileCheck"
@@ -101,6 +102,7 @@ const Mutation = {
   processContributorRequest,
   createGitEvent,
   updateFileCheck,
+  updateEventStatus,
 }
 
 export default Mutation

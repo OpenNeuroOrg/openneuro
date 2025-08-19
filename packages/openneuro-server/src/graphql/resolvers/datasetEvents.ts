@@ -5,6 +5,7 @@ import type {
   DatasetEventDocument,
 } from "../../models/datasetEvents"
 import type { DatasetEventContributorResponse } from "../../models/datasetEvents"
+import { UserNotificationStatus } from "../../models/userNotificationStatus"
 
 type EnrichedDatasetEvent = DatasetEventDocument & {
   hasBeenRespondedTo?: boolean
@@ -14,13 +15,16 @@ type EnrichedDatasetEvent = DatasetEventDocument & {
 /**
  * Get all events for a dataset
  */
-
-export async function datasetEvents(obj, _, { userInfo }) {
+export async function datasetEvents(obj, _, { userInfo, user }) { // ADD 'user' to the context destructuring
   const allEvents: DatasetEventDocument[] = await DatasetEvent.find({
     datasetId: obj.id,
   })
     .sort({ timestamp: -1 })
     .populate("user")
+    .populate({ // ADD THIS POPULATE CALL
+      path: "notificationStatus",
+      match: { userId: user }, // Match the status to the current authenticated user
+    })
     .exec()
 
   const responsesMap = new Map<string, DatasetEventDocument>()
@@ -32,7 +36,14 @@ export async function datasetEvents(obj, _, { userInfo }) {
     }
   })
 
+  // manage null for non-matching virtual
   const enrichedEvents: EnrichedDatasetEvent[] = allEvents.map((event) => {
+    // Add the notification status to the event object.
+    // If the status is not found, default it to UNREAD.
+    const notificationStatus = event.notificationStatus
+      ? event.notificationStatus.status
+      : "UNREAD"
+
     if (isContributorRequest(event)) {
       const response = responsesMap.get(event.id)
       if (response && isContributorResponse(response)) {
@@ -40,10 +51,14 @@ export async function datasetEvents(obj, _, { userInfo }) {
           ...event.toObject(),
           hasBeenRespondedTo: true,
           responseStatus: response.event.status,
+          notificationStatus,
         } as EnrichedDatasetEvent
       }
     }
-    return event as EnrichedDatasetEvent
+    return {
+      ...event.toObject(),
+      notificationStatus,
+    } as EnrichedDatasetEvent
   })
 
   if (userInfo.admin) {
@@ -224,4 +239,25 @@ export async function processContributorRequest(
   }
 
   return responseEvent
+}
+
+/**
+ * Update a user's notification status for a specific event
+ */
+export async function updateEventStatus(
+  obj,
+  { eventId, status },
+  { user },
+) {
+  if (!user) {
+    throw new Error("Authentication required.")
+  }
+
+  const updatedStatus = await UserNotificationStatus.findOneAndUpdate(
+    { userId: user, datasetEventId: eventId },
+    { status: status },
+    { new: true, upsert: true },
+  )
+
+  return updatedStatus
 }

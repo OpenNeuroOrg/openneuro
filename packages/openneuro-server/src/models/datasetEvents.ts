@@ -3,6 +3,7 @@ import type { Document } from "mongoose"
 import type { OpenNeuroUserId } from "../types/user"
 import { v4 as uuidv4 } from "uuid"
 import type { UserDocument } from "./user"
+import type { UserNotificationStatusDocument } from "./userNotificationStatus"
 const { Schema, model } = mongoose
 
 const _datasetEventTypes = [
@@ -139,6 +140,8 @@ export interface DatasetEventDocument extends Document {
   success: boolean
   // Admin notes
   note: string
+  // virtual status field
+  notificationStatus?: UserNotificationStatusDocument | null
 }
 
 const datasetEventSchema = new Schema<DatasetEventDocument>({
@@ -170,10 +173,19 @@ const datasetEventSchema = new Schema<DatasetEventDocument>({
   note: { type: String, default: "" },
 })
 
+// Virtual for Notification Status - User
 datasetEventSchema.virtual("user", {
   ref: "User",
   localField: "userId",
   foreignField: "id",
+  justOne: true,
+})
+
+// Virtual for Notification Status - Status
+datasetEventSchema.virtual("notificationStatus", {
+  ref: "UserNotificationStatus",
+  localField: "id",
+  foreignField: "datasetEventId",
   justOne: true,
 })
 

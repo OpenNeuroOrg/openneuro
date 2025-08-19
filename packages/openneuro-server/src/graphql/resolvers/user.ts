@@ -220,9 +220,23 @@ export async function notifications(obj, _, { userInfo }) {
   const events = await DatasetEvent.find({ $or: queryConditions })
     .sort({ timestamp: -1 }) // Sort by most recent first
     .populate("user")
+    .populate({
+      path: "notificationStatus",
+      match: { userId: userId }, // Match the status to the user whose notifications are being fetched
+    })
     .exec()
 
-  return events
+  // Add notification status
+  return events.map((event) => {
+    const notificationStatus = event.notificationStatus
+      ? event.notificationStatus.status
+      : "UNREAD"
+
+    return {
+      ...event.toObject(),
+      notificationStatus,
+    }
+  })
 }
 
 const UserResolvers = {
