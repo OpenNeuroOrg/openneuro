@@ -21,7 +21,7 @@ export async function datasetEvents(obj, _, { userInfo, user }) { // ADD 'user' 
   })
     .sort({ timestamp: -1 })
     .populate("user")
-    .populate({ // ADD THIS POPULATE CALL
+    .populate({
       path: "notificationStatus",
       match: { userId: user }, // Match the status to the current authenticated user
     })
