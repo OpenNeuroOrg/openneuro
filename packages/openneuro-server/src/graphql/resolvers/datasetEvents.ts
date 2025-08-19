@@ -15,7 +15,7 @@ type EnrichedDatasetEvent = DatasetEventDocument & {
 /**
  * Get all events for a dataset
  */
-export async function datasetEvents(obj, _, { userInfo, user }) { // ADD 'user' to the context destructuring
+export async function datasetEvents(obj, _, { userInfo, user }) {
   const allEvents: DatasetEventDocument[] = await DatasetEvent.find({
     datasetId: obj.id,
   })

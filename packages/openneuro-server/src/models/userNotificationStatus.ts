@@ -14,8 +14,6 @@ export interface UserNotificationStatusDocument extends Document {
   updatedAt: Date
 }
 
-// --- Schema Definition ---
-
 const userNotificationStatusSchema = new Schema({
   userId: {
     type: Schema.Types.ObjectId,

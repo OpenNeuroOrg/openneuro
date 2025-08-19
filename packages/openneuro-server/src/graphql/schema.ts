@@ -940,7 +940,7 @@ export const typeDefs = `
     note: String
     # top-level datasetId field
     datasetId: ID
-    # ADD THIS NEW FIELD
+    # User's notification status event
     notificationStatus: UserNotificationStatus
   }
 
