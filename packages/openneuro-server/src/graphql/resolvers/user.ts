@@ -69,6 +69,7 @@ type MongoFilterValue =
 interface MongoQueryCondition {
   [key: string]: MongoFilterValue
 }
+
 export const users = async (
   obj: unknown,
   { isAdmin, isBlocked, search, limit = 100, offset = 0, orderBy }: {
@@ -218,19 +219,24 @@ export async function notifications(obj, _, { userInfo }) {
   }
 
   const events = await DatasetEvent.find({ $or: queryConditions })
-    .sort({ timestamp: -1 }) // Sort by most recent first
+    .sort({ timestamp: -1 })
     .populate("user")
     .populate({
       path: "notificationStatus",
-      match: { userId: userId }, // Match the status to the user whose notifications are being fetched
+      match: { userId: userId },
     })
     .exec()
 
-  // Add notification status
+  console.log("Fetched events with populated notificationStatus:", events) // Add this log
+
   return events.map((event) => {
+    // Correctly return a full object for the notificationStatus virtual
     const notificationStatus = event.notificationStatus
-      ? event.notificationStatus.status
-      : "UNREAD"
+      ? event.notificationStatus
+      : { status: "UNREAD" }
+
+    console.log("Mapping event:", event.toObject()) // Add this log
+    console.log("Calculated notificationStatus:", notificationStatus) // Add this log
 
     return {
       ...event.toObject(),

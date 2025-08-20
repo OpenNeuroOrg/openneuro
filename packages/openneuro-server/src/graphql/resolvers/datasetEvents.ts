@@ -2,14 +2,20 @@ import DatasetEvent from "../../models/datasetEvents"
 import { checkDatasetAdmin } from "../permissions"
 import type {
   DatasetEventContributorRequest,
+  DatasetEventContributorResponse,
   DatasetEventDocument,
 } from "../../models/datasetEvents"
-import type { DatasetEventContributorResponse } from "../../models/datasetEvents"
 import { UserNotificationStatus } from "../../models/userNotificationStatus"
+import type { UserNotificationStatusDocument } from "../../models/userNotificationStatus"
 
-type EnrichedDatasetEvent = DatasetEventDocument & {
+type EnrichedDatasetEvent = Omit<DatasetEventDocument, "notificationStatus"> & {
   hasBeenRespondedTo?: boolean
   responseStatus?: "accepted" | "denied"
+  notificationStatus?:
+    | "UNREAD"
+    | "SAVED"
+    | "ARCHIVED"
+    | UserNotificationStatusDocument
 }
 
 /**
@@ -23,7 +29,7 @@ export async function datasetEvents(obj, _, { userInfo, user }) {
     .populate("user")
     .populate({
       path: "notificationStatus",
-      match: { userId: user }, // Match the status to the current authenticated user
+      match: { userId: user },
     })
     .exec()
 
@@ -36,29 +42,34 @@ export async function datasetEvents(obj, _, { userInfo, user }) {
     }
   })
 
-  // manage null for non-matching virtual
+  // Manage null for non-matching virtuals
   const enrichedEvents: EnrichedDatasetEvent[] = allEvents.map((event) => {
-    // Add the notification status to the event object.
-    // If the status is not found, default it to UNREAD.
-    const notificationStatus = event.notificationStatus
-      ? event.notificationStatus.status
-      : "UNREAD"
+    const enrichedEvent = event.toObject() as EnrichedDatasetEvent
+
+    // Only default UNREAD if no status exists for this user
+    if (!enrichedEvent.notificationStatus) {
+      enrichedEvent.notificationStatus = {
+        status: "UNREAD",
+      } as UserNotificationStatusDocument
+    } else if (typeof enrichedEvent.notificationStatus === "string") {
+      // If somehow a string got in, wrap it in an object for consistency
+      enrichedEvent.notificationStatus = {
+        status: enrichedEvent.notificationStatus as
+          | "UNREAD"
+          | "SAVED"
+          | "ARCHIVED",
+      } as UserNotificationStatusDocument
+    }
 
     if (isContributorRequest(event)) {
       const response = responsesMap.get(event.id)
       if (response && isContributorResponse(response)) {
-        return {
-          ...event.toObject(),
-          hasBeenRespondedTo: true,
-          responseStatus: response.event.status,
-          notificationStatus,
-        } as EnrichedDatasetEvent
+        enrichedEvent.hasBeenRespondedTo = true
+        enrichedEvent.responseStatus = response.event.status
       }
     }
-    return {
-      ...event.toObject(),
-      notificationStatus,
-    } as EnrichedDatasetEvent
+
+    return enrichedEvent
   })
 
   if (userInfo.admin) {
@@ -100,10 +111,7 @@ export async function createContributorRequestEvent(
   const event = new DatasetEvent({
     datasetId,
     userId: user,
-    event: {
-      type: "contributorRequest",
-      datasetId: datasetId,
-    },
+    event: { type: "contributorRequest", datasetId },
     success: true,
     note: "User requested contributor status for this dataset.",
   })
@@ -111,7 +119,6 @@ export async function createContributorRequestEvent(
 
   await event.save()
   await event.populate("user")
-
   return event
 }
 
@@ -123,15 +130,13 @@ export async function saveAdminNote(
   { id, datasetId, note },
   { user, userInfo },
 ) {
-  // Only site admin users can create or update an admin note
-  if (!userInfo?.admin) {
-    throw new Error("Not authorized")
-  }
+  // Only site admin users can create or update a note
+  if (!userInfo?.admin) throw new Error("Not authorized")
 
   if (id) {
     const updatedEvent = await DatasetEvent.findOneAndUpdate(
-      { id: id, datasetId },
-      { note: note },
+      { id, datasetId },
+      { note },
       { new: true },
     )
     if (!updatedEvent) {
@@ -143,11 +148,7 @@ export async function saveAdminNote(
     const newEvent = new DatasetEvent({
       datasetId,
       userId: user,
-      event: {
-        type: "note",
-        admin: true,
-        datasetId: datasetId,
-      },
+      event: { type: "note", admin: true, datasetId },
       success: true,
       note,
     })
@@ -206,7 +207,6 @@ export async function processContributorRequest(
     "event.type": "contributorResponse",
     "event.requestId": requestId,
   })
-
   if (existingResponse) {
     throw new Error("This contributor request has already been processed.")
   }
@@ -220,11 +220,11 @@ export async function processContributorRequest(
     userId: currentUserId, // Admin processed the request
     event: {
       type: "contributorResponse",
-      requestId: requestId,
-      targetUserId: targetUserId, // user that requested
-      status: status,
-      reason: reason,
-      datasetId: datasetId,
+      requestId,
+      targetUserId,
+      status,
+      reason,
+      datasetId,
     },
     success: true,
     note: reason?.trim() ||
@@ -249,13 +249,11 @@ export async function updateEventStatus(
   { eventId, status },
   { user },
 ) {
-  if (!user) {
-    throw new Error("Authentication required.")
-  }
+  if (!user) throw new Error("Authentication required.")
 
   const updatedStatus = await UserNotificationStatus.findOneAndUpdate(
     { userId: user, datasetEventId: eventId },
-    { status: status },
+    { status },
     { new: true, upsert: true },
   )
 
