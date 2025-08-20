@@ -57,14 +57,12 @@ export type DatasetEventDeleted = DatasetEventCommon & {
 
 export type DatasetEventPublished = DatasetEventCommon & {
   type: "published"
-  // True if made public, false if made private
   public: boolean
   datasetId?: string
 }
 
 export type DatasetEventPermissionChange = DatasetEventCommon & {
   type: "permissionChange"
-  // User with the permission being changed
   target: OpenNeuroUserId
   level: string
   datasetId?: string
@@ -84,7 +82,6 @@ export type DatasetEventUpload = DatasetEventCommon & {
 
 export type DatasetEventNote = DatasetEventCommon & {
   type: "note"
-  // only visible to dataset Admins
   admin: boolean
   datasetId?: string
 }
@@ -124,56 +121,53 @@ export type DatasetEventType =
  * Dataset events log changes to a dataset
  */
 export interface DatasetEventDocument extends Document {
-  // Unique id for the event
   id: string
-  // Affected dataset
   datasetId: string
-  // Timestamp of the event
   timestamp: Date
-  // User id that triggered the event
   userId: string
-  // User that triggered the event
   user: UserDocument
-  // A description of the event, optional but recommended to provide context
   event: DatasetEventType
-  // Did the action logged succeed?
   success: boolean
-  // Admin notes
   note: string
-  // virtual status field
   notificationStatus?: UserNotificationStatusDocument | null
 }
 
-const datasetEventSchema = new Schema<DatasetEventDocument>({
-  id: { type: String, required: true, default: uuidv4 },
-  datasetId: { type: String, required: true },
-  timestamp: { type: Date, default: Date.now },
-  userId: { type: String, required: true },
-  event: {
-    type: { type: String, required: true, enum: _datasetEventTypes },
-    version: { type: String },
-    public: { type: Boolean },
-    target: { type: String },
-    level: { type: String },
-    commit: { type: String },
-    reference: { type: String },
-    admin: { type: Boolean, default: false },
-    requestId: { type: String, sparse: true, index: true },
-    targetUserId: { type: String },
-    status: { type: String, enum: ["accepted", "denied"] },
-    reason: { type: String },
-    datasetId: { type: String },
-    resolutionStatus: {
-      type: String,
-      enum: ["pending", "accepted", "denied"],
-      default: "pending",
+const datasetEventSchema = new Schema<DatasetEventDocument>(
+  {
+    id: { type: String, required: true, default: uuidv4 },
+    datasetId: { type: String, required: true },
+    timestamp: { type: Date, default: Date.now },
+    userId: { type: String, required: true },
+    event: {
+      type: { type: String, required: true, enum: _datasetEventTypes },
+      version: { type: String },
+      public: { type: Boolean },
+      target: { type: String },
+      level: { type: String },
+      commit: { type: String },
+      reference: { type: String },
+      admin: { type: Boolean, default: false },
+      requestId: { type: String, sparse: true, index: true },
+      targetUserId: { type: String },
+      status: { type: String, enum: ["accepted", "denied"] },
+      reason: { type: String },
+      datasetId: { type: String },
+      resolutionStatus: {
+        type: String,
+        enum: ["pending", "accepted", "denied"],
+        default: "pending",
+      },
     },
+    success: { type: Boolean, default: false },
+    note: { type: String, default: "" },
   },
-  success: { type: Boolean, default: false },
-  note: { type: String, default: "" },
-})
+  {
+    toObject: { virtuals: true },
+    toJSON: { virtuals: true },
+  },
+)
 
-// Virtual for Notification Status - User
+// Virtual for the user who triggered the event
 datasetEventSchema.virtual("user", {
   ref: "User",
   localField: "userId",
@@ -181,7 +175,7 @@ datasetEventSchema.virtual("user", {
   justOne: true,
 })
 
-// Virtual for Notification Status - Status
+// Virtual for the notification status associated with this event
 datasetEventSchema.virtual("notificationStatus", {
   ref: "UserNotificationStatus",
   localField: "id",
