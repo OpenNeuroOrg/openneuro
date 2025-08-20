@@ -32,7 +32,9 @@ export interface Event {
     name?: string
   }
   datasetId?: string
-  status?: "unread" | "saved" | "archived"
+  notificationStatus?: {
+    status: "UNREAD" | "SAVED" | "ARCHIVED"
+  }
 }
 
 export interface MappedNotification {
@@ -51,10 +53,6 @@ export interface MappedNotification {
   reason?: string
 }
 
-/**
- * @param rawNotification The raw Event object.
- * @returns A MappedNotification object with properties populated from the raw data.
- */
 export const mapRawEventToMappedNotification = (
   rawNotification: Event,
 ): MappedNotification => {
@@ -98,19 +96,25 @@ export const mapRawEventToMappedNotification = (
 
   const datasetId = dataset?.id || rawDatasetId || event.datasetId || ""
 
+  const notificationStatus =
+    (rawNotification.notificationStatus?.status?.toLowerCase() as
+      | "unread"
+      | "saved"
+      | "archived") ?? "unread"
+
   return {
     id: rawNotification.id,
     title,
     content: note || "",
-    status: rawNotification.status ?? "unread",
+    status: notificationStatus,
     type: mappedType,
     approval,
     datasetId,
-    requestId: requestId,
+    requestId,
     targetUserId: targetUserId || user?.id,
     originalNotification: rawNotification,
     requesterUser,
     adminUser,
-    reason: reason,
+    reason,
   }
 }

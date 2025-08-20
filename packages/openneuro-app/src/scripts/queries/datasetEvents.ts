@@ -76,9 +76,8 @@ export const PROCESS_CONTRIBUTOR_REQUEST_MUTATION = gql`
 `
 
 export const UPDATE_NOTIFICATION_STATUS_MUTATION = gql`
-  mutation UpdateNotificationStatus($datasetEventId: ID!, $status: String!) {
-    updateNotificationStatus(datasetEventId: $datasetEventId, status: $status) {
-      id
+  mutation UpdateEventStatus($eventId: ID!, $status: NotificationStatusType!) {
+    updateEventStatus(eventId: $eventId, status: $status) {
       status
     }
   }

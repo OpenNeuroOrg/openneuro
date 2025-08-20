@@ -1,52 +1,49 @@
 import React from "react"
 import { NotificationsList } from "./user-notification-list"
-import { useOutletContext } from "react-router-dom"
-import type { OutletContextType } from "../types/user-types"
+import { useNotifications } from "./user-notifications-context"
 
-export const UnreadNotifications = () => {
-  const { notifications, handleUpdateNotification } =
-    useOutletContext() as OutletContextType
-  const unreadData = notifications.filter((notification) =>
-    notification.status === "unread"
-  )
+interface NotificationTabProps {
+  status: "unread" | "saved" | "archived"
+  testId: string
+  className: string
+}
+
+const NotificationTab: React.FC<NotificationTabProps> = (
+  { status, testId, className },
+) => {
+  const { notifications, handleUpdateNotification } = useNotifications()
+  const filteredNotifications = notifications.filter((n) => n.status === status)
+
   return (
-    <div className="tabContentUnread" data-testid="unread-notifications">
+    <div className={className} data-testid={testId}>
       <NotificationsList
-        notificationdata={unreadData}
+        notificationdata={filteredNotifications}
         onUpdate={handleUpdateNotification}
       />
     </div>
   )
 }
 
-export const SavedNotifications = () => {
-  const { notifications, handleUpdateNotification } =
-    useOutletContext() as OutletContextType
-  const savedData = notifications.filter((notification) =>
-    notification.status === "saved"
-  )
-  return (
-    <div className="tabContentSaved" data-testid="saved-notifications">
-      <NotificationsList
-        notificationdata={savedData}
-        onUpdate={handleUpdateNotification}
-      />
-    </div>
-  )
-}
+export const UnreadNotifications = () => (
+  <NotificationTab
+    status="unread"
+    testId="unread-notifications"
+    className="tabContentUnread"
+  />
+)
 
-export const ArchivedNotifications = () => {
-  const { notifications, handleUpdateNotification } =
-    useOutletContext() as OutletContextType
-  const archivedData = notifications.filter((notification) =>
-    notification.status === "archived"
-  )
-  return (
-    <div className="tabContentArchived" data-testid="archived-notifications">
-      <NotificationsList
-        notificationdata={archivedData}
-        onUpdate={handleUpdateNotification}
-      />
-    </div>
-  )
-}
+export const SavedNotifications = () => (
+  <NotificationTab
+    status="saved"
+    testId="saved-notifications"
+    className="tabContentSaved"
+  />
+)
+
+export const ArchivedNotifications = () => (
+  <NotificationTab
+    status="archived"
+    testId="archived-notifications"
+    className="tabContentArchived"
+  />
+)
