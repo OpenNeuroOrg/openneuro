@@ -9,7 +9,7 @@ export interface FileCheckDocument extends Document {
   remote: string
   annexFsck: {
     command: string
-    "error-messages": string[]
+    errorMessages: string[]
     file: string
     key: string
     note: string
@@ -24,7 +24,7 @@ const fileCheckSchema = new Schema({
   remote: { type: String, default: "local", required: true },
   annexFsck: [{
     command: String,
-    "error-messages": [String],
+    errorMessages: [String],
     file: String,
     key: String,
     note: String,

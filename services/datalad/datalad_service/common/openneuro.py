@@ -62,6 +62,12 @@ def update_file_check(dataset_path, commit, references, bad_files, remote=None):
             headers={'authorization': f'Bearer {generate_service_token(dataset_id)}'},
         )
         req.raise_for_status()
+        try:
+            json_response = req.json()
+            if 'errors' in json_response:
+                logging.error(json_response['errors'])
+        except requests.exceptions.JSONDecodeError:
+            logging.error(req.text)
     except requests.exceptions.HTTPError as e:
         logging.error(e)
         logging.error(req.text)

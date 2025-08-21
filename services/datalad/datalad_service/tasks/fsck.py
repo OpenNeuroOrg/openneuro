@@ -39,8 +39,6 @@ def git_annex_fsck_local(dataset_path):
         'fsck',
         '--json',
         '--json-error-messages',
-        '--incremental-schedule',
-        '7d',
     )
     annex_process = subprocess.Popen(
         annex_command, cwd=dataset_path, stdout=subprocess.PIPE
@@ -49,6 +47,8 @@ def git_annex_fsck_local(dataset_path):
     for annexed_file_json in io.TextIOWrapper(annex_process.stdout, encoding='utf-8'):
         annexed_file = json.loads(annexed_file_json)
         if not annexed_file['success']:
+            # Rename for GraphQL consistency
+            annexed_file['errorMessages'] = annexed_file.pop('error-messages')
             bad_files.append(annexed_file)
     if len(bad_files) > 0:
         logging.error(f'missing or corrupt annexed objects found in {dataset_path}')
