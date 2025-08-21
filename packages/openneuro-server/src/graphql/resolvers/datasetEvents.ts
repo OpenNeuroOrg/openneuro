@@ -159,6 +159,20 @@ export async function saveAdminNote(
 }
 
 /**
+ * Field-level resolvers for DatasetEvent
+ * These expose the computed/enriched fields to GraphQL
+ */
+export const DatasetEventResolvers = {
+  hasBeenRespondedTo: (event: EnrichedDatasetEvent) =>
+    event.hasBeenRespondedTo ?? false,
+  responseStatus: (event: EnrichedDatasetEvent) => event.responseStatus ?? null,
+  notificationStatus: (event: EnrichedDatasetEvent) =>
+    typeof event.notificationStatus === "object"
+      ? event.notificationStatus
+      : { status: event.notificationStatus ?? "UNREAD" },
+}
+
+/**
  * Process a contributor request (accept or deny) and log an event.
  * This mutation should only be callable by users with admin privileges on the dataset.
  */

@@ -942,6 +942,8 @@ export const typeDefs = `
     datasetId: ID
     # User's notification status event
     notificationStatus: UserNotificationStatus
+    responseStatus: String
+    hasBeenRespondedTo: Boolean
   }
 
   type FileCheck {
