@@ -227,16 +227,11 @@ export async function notifications(obj, _, { userInfo }) {
     })
     .exec()
 
-  console.log("Fetched events with populated notificationStatus:", events) // Add this log
-
   return events.map((event) => {
     // Correctly return a full object for the notificationStatus virtual
     const notificationStatus = event.notificationStatus
       ? event.notificationStatus
       : { status: "UNREAD" }
-
-    console.log("Mapping event:", event.toObject()) // Add this log
-    console.log("Calculated notificationStatus:", notificationStatus) // Add this log
 
     return {
       ...event.toObject(),
