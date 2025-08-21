@@ -546,6 +546,8 @@ export const typeDefs = `
     head: String
     # Total size in bytes of this draft
     size: BigInt
+    # File issues
+    fileCheck: FileCheck
   }
 
   # Tagged snapshot of a draft
