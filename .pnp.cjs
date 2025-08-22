@@ -4115,6 +4115,7 @@ const RAW_RUNTIME_STATE =
           ["@types/express-serve-static-core", "npm:4.17.35"],\
           ["@types/ioredis", "npm:4.27.4"],\
           ["@types/ioredis-mock", "npm:8.2.2"],\
+          ["@types/js-yaml", "npm:4.0.9"],\
           ["@types/node-mailjet", "npm:3.3.8"],\
           ["@types/semver", "npm:5.5.0"],\
           ["base64url", "npm:3.0.1"],\
@@ -4133,6 +4134,7 @@ const RAW_RUNTIME_STATE =
           ["immutable", "npm:3.8.2"],\
           ["ioredis", "npm:5.6.1"],\
           ["ioredis-mock", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:8.8.1"],\
+          ["js-yaml", "npm:4.1.0"],\
           ["jsdom", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:24.0.0"],\
           ["jsonwebtoken", "npm:9.0.0"],\
           ["keyv", "npm:5.3.4"],\
@@ -6741,6 +6743,15 @@ const RAW_RUNTIME_STATE =
           ["@types/jest", "npm:29.2.3"],\
           ["expect", "npm:29.3.1"],\
           ["pretty-format", "npm:29.3.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@types/js-yaml", [\
+      ["npm:4.0.9", {\
+        "packageLocation": "./.yarn/cache/@types-js-yaml-npm-4.0.9-6a16d01bd2-a0ce595db8.zip/node_modules/@types/js-yaml/",\
+        "packageDependencies": [\
+          ["@types/js-yaml", "npm:4.0.9"]\
         ],\
         "linkType": "HARD"\
       }]\
