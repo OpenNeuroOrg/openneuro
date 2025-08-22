@@ -25,3 +25,10 @@ GRAPHQL_ENDPOINT = os.getenv('GRAPHQL_ENDPOINT', 'http://server:8111/crn/graphql
 
 # Site URL
 CRN_SERVER_URL = os.getenv('CRN_SERVER_URL')
+
+# Request secret for API calls
+JWT_SECRET = os.getenv('JWT_SECRET')
+
+# Redit connection for task queue
+REDIS_HOST = os.getenv('REDIS_HOST')
+REDIS_PORT = os.getenv('REDIS_PORT')

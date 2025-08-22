@@ -10,6 +10,8 @@ import aiofiles
 import pygit2
 from charset_normalizer import from_bytes
 
+from datalad_service.common.onchange import on_head
+
 tag_ref = re.compile('^refs/tags/')
 
 COMMITTER_NAME = 'Git Worker'
@@ -25,7 +27,8 @@ class OpenNeuroGitError(Exception):
 def git_show(repo, committish, obj):
     """Equivalent to `git show <committish>:<obj>` on `repo` repository."""
     commit, _ = repo.resolve_refish(committish)
-    data_bytes = (commit.tree / obj).read_raw()
+    with pygit2.BlobIO(commit.tree / obj) as f:
+        data_bytes = f.read()
     result = from_bytes(data_bytes).best()
     return str(result)
 
@@ -85,7 +88,9 @@ async def git_show_content(repo, committish, filename):
 def git_show_object(repo, obj):
     git_obj = repo.get(obj)
     if git_obj:
-        return git_obj.read_raw().decode()
+        # Use the BlobIO reader to get filtered content
+        with pygit2.BlobIO(git_obj) as f:
+            return f.read().decode()
     else:
         raise KeyError('object not found in repository')
 
@@ -127,7 +132,7 @@ def git_rename_master_to_main(repo):
         repo.references['HEAD'].set_target('refs/heads/main')
 
 
-def git_commit(
+async def git_commit(
     repo, file_paths, author=None, message='[OpenNeuro] Recorded changes', parents=None
 ):
     """Commit array of paths at HEAD."""
@@ -158,10 +163,10 @@ def git_commit(
         sentry_sdk.capture_exception(e)
         logger.error(f'Failed to read index after git-annex add: {e}')
         raise OpenNeuroGitError(f'Failed to read index: {e}') from e
-    return git_commit_index(repo, author, message, parents)
+    return await git_commit_index(repo, author, message, parents)
 
 
-def git_commit_index(
+async def git_commit_index(
     repo, author=None, message='[OpenNeuro] Recorded changes', parents=None
 ):
     """Commit any existing index changes."""
@@ -177,4 +182,5 @@ def git_commit_index(
         'refs/heads/main', author, committer, message, tree, parent_commits
     )
     repo.head.set_target(commit)
+    await on_head(repo.workdir)
     return commit

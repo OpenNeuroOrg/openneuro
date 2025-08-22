@@ -138,13 +138,18 @@ export const checkDatasetWrite = async (
     // Quick path for anonymous writes
     throw new Error(state.errorMessage)
   }
-  if (userId && !(userInfo.email)) {
-    throw new Error("Connect an email to make contributions to OpenNeuro.")
-  }
   if (userId && userInfo.admin) {
     // Always allow site admins
     return true
   }
+  // Allow worker scoped tokens to make admin actions on specific datasets
+  if (userId && userInfo?.worker && datasetId === userInfo?.dataset) {
+    return true
+  }
+  if (userId && !(userInfo.email)) {
+    throw new Error("Connect an email to make contributions to OpenNeuro.")
+  }
+  // Finally check the permissions model if other checks have not returned
   const permission = await Permission.findOne({ datasetId, userId }).exec()
   if (checkPermissionLevel(permission, state)) {
     return true

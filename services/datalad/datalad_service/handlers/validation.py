@@ -1,4 +1,5 @@
 import asyncio
+import logging
 
 import falcon
 
@@ -18,13 +19,14 @@ class ValidationResource:
             try:
                 dataset_path = self.store.get_dataset_path(dataset)
                 # Run the validator but don't block on the request
-                asyncio.create_task(
-                    validate_dataset(
-                        dataset, dataset_path, hexsha, req.cookies, user=name
-                    )
+                await validate_dataset.kiq(
+                    dataset, dataset_path, hexsha, req.cookies, user=name
                 )
                 resp.status = falcon.HTTP_OK
-            except:
+            except Exception:
+                logging.exception(
+                    'Validation task enqueue failed for dataset %s', dataset
+                )
                 resp.status = falcon.HTTP_INTERNAL_SERVER_ERROR
         else:
             resp.media = {'error': 'Missing or malformed dataset parameter in request.'}

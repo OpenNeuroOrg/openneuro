@@ -209,7 +209,7 @@ mutation {
 
 ### Deleting Files/Folders
 
-You can remove files or folders from the currend draft with the `deleteFiles` mutation. Multiple
+You can remove files or folders from the current draft with the `deleteFiles` mutation. Multiple
 arguments can be provided in the changes array for batch deletion of paths. Paths provided in
 argument are relative to the dataset root, omitting a filename a with `""` will delete the folder
 provided via the path argument. For examples see below:

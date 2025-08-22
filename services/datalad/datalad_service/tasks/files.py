@@ -21,7 +21,7 @@ from datalad_service.config import AWS_SECRET_ACCESS_KEY
 from datalad_service.config import AWS_S3_PUBLIC_BUCKET
 
 
-def commit_files(store, dataset, files, name=None, email=None, cookies=None):
+async def commit_files(store, dataset, files, name=None, email=None, cookies=None):
     """
     Commit a list of files with the email and name provided.
 
@@ -35,9 +35,9 @@ def commit_files(store, dataset, files, name=None, email=None, cookies=None):
         and pygit2.Signature(name, email)
         or pygit2.Signature(COMMITTER_NAME, COMMITTER_EMAIL)
     )
-    ref = git_commit(repo, files, author)
+    ref = await git_commit(repo, files, author)
     # Run the validator but don't block on the request
-    asyncio.create_task(validate_dataset(dataset, dataset_path, str(ref), cookies))
+    await validate_dataset.kiq(dataset, dataset_path, str(ref), cookies)
     return ref
 
 
@@ -47,7 +47,7 @@ def get_tree(store, dataset, tree):
     return get_repo_files(dataset, dataset_path, tree)
 
 
-def remove_files(store, dataset, paths, name=None, email=None, cookies=None):
+async def remove_files(store, dataset, paths, name=None, email=None, cookies=None):
     dataset_path = store.get_dataset_path(dataset)
     repo = pygit2.Repository(dataset_path)
     if name and email:
@@ -57,7 +57,9 @@ def remove_files(store, dataset, paths, name=None, email=None, cookies=None):
     repo.index.remove_all(paths)
     repo.index.write()
     repo.checkout_index()
-    hexsha = str(git_commit_index(repo, author, message='[OpenNeuro] Files removed'))
+    hexsha = str(
+        await git_commit_index(repo, author, message='[OpenNeuro] Files removed')
+    )
 
 
 def parse_s3_annex_url(url, bucket_name=AWS_S3_PUBLIC_BUCKET):

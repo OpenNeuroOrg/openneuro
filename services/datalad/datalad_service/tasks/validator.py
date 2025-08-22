@@ -7,10 +7,11 @@ import re
 import requests
 
 from datalad_service.config import GRAPHQL_ENDPOINT
+from datalad_service.broker import broker
 
 logger = logging.getLogger('datalad_service.' + __name__)
 
-DENO_VALIDATOR_VERSION = '2.0.7'
+DENO_VALIDATOR_VERSION = '2.0.8'
 
 DENO_METADATA = {'validator': 'schema', 'version': DENO_VALIDATOR_VERSION}
 
@@ -106,6 +107,7 @@ def issues_mutation(dataset_id, ref, issues, validator_metadata):
     }
 
 
+@broker.task
 async def validate_dataset(dataset_id, dataset_path, ref, cookies=None, user=''):
     # New schema validator second in case of issues
     validator_output_deno = await validate_dataset_deno_call(dataset_path, ref)

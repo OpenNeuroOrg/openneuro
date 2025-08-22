@@ -22,27 +22,32 @@ export const GET_USER = gql`
       blocked
       githubSynced
       github
+      orcidConsent 
     }
   }
 `
 
+// GraphQL mutation to update user data
 export const UPDATE_USER = gql`
   mutation updateUser(
     $id: ID!
     $location: String
     $links: [String]
     $institution: String
+    $orcidConsent: Boolean 
   ) {
     updateUser(
       id: $id
       location: $location
       links: $links
       institution: $institution
+      orcidConsent: $orcidConsent 
     ) {
       id
       location
       links
       institution
+      orcidConsent
     }
   }
 `

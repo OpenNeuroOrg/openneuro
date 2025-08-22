@@ -110,6 +110,7 @@ export const typeDefs = `
     ): [FlaggedFile]
     # All public dataset metadata
     publicMetadata: [Metadata] @cacheControl(maxAge: 86400, scope: PUBLIC)
+    orcidConsent: Boolean
   }
 
   type Mutation {
@@ -146,7 +147,7 @@ export const typeDefs = `
     # Sets a users admin status
     setBlocked(id: ID!, blocked: Boolean!): User
     # Mutation for updating user data
-    updateUser(id: ID!, location: String, institution: String, links: [String]): User
+    updateUser(id: ID!, location: String, institution: String, links: [String], orcidConsent: Boolean): User
     # Tracks a view or download for a dataset
     trackAnalytics(datasetId: ID!, tag: String, type: AnalyticTypes): Boolean
     # Follow dataset
@@ -205,6 +206,14 @@ export const typeDefs = `
     saveAdminNote(id: ID, datasetId: ID!, note: String!): DatasetEvent
     # Create a git event log for dataset changes
     createGitEvent(datasetId: ID!, commit: String!, reference: String!): DatasetEvent
+    # Create or update a fileCheck document
+    updateFileCheck(
+      datasetId: ID!
+      hexsha: String!
+      refs: [String!]!
+      annexFsck: [AnnexFsckInput!]!
+      remote: String
+    ): FileCheck
   }
 
   # Anonymous dataset reviewer
@@ -346,6 +355,7 @@ export const typeDefs = `
     github: String
     githubSynced: Date
     links: [String]
+    orcidConsent: Boolean
   }
 
   type UserList {
@@ -540,6 +550,8 @@ export const typeDefs = `
     size: BigInt
     # Creators list from datacite.yml || Authors list from dataset_description.json
     creators: [Creator] 
+    # File issues
+    fileCheck: FileCheck
   }
 
   # Tagged snapshot of a draft
@@ -914,6 +926,37 @@ export const typeDefs = `
     # Notes associated with the event
     note: String
   }
+
+  type FileCheck {
+    datasetId: String!
+    hexsha: String!
+    refs: [String!]!
+    annexFsck: [AnnexFsck!]
+    remote: String
+  }
+
+  type AnnexFsck {
+    command: String
+    errorMessages: [String]
+    file: String
+    key: String
+    note: String
+    success: Boolean
+  }
+
+  input AnnexFsckInput {
+    command: String
+    errorMessages: [String]
+    file: String
+    key: String
+    note: String
+    success: Boolean
+    dead: [String]
+    missing: [String]
+    untrusted: [String]
+    input: [String]
+  }
+
 `
 
 schemaComposer.addTypeDefs(typeDefs)
