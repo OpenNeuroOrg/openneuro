@@ -110,6 +110,7 @@ export const typeDefs = `
     ): [FlaggedFile]
     # All public dataset metadata
     publicMetadata: [Metadata] @cacheControl(maxAge: 86400, scope: PUBLIC)
+    orcidConsent: Boolean
   }
 
   type Mutation {
@@ -146,7 +147,7 @@ export const typeDefs = `
     # Sets a users admin status
     setBlocked(id: ID!, blocked: Boolean!): User
     # Mutation for updating user data
-    updateUser(id: ID!, location: String, institution: String, links: [String]): User
+    updateUser(id: ID!, location: String, institution: String, links: [String], orcidConsent: Boolean): User
     # Tracks a view or download for a dataset
     trackAnalytics(datasetId: ID!, tag: String, type: AnalyticTypes): Boolean
     # Follow dataset
@@ -354,6 +355,7 @@ export const typeDefs = `
     github: String
     githubSynced: Date
     links: [String]
+    orcidConsent: Boolean
   }
 
   type UserList {

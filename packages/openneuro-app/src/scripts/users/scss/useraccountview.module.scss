@@ -2,6 +2,7 @@
     h3{
         margin-top: 0;
         font-size: 22px;
+
     }
     .accountDetail{
         list-style: none;
@@ -14,6 +15,18 @@
         span{
             font-weight: 700;
             margin: 0 10px;
+        }
+    }
+    .umbOrcidConsent{
+        margin-top: 30px;
+        .umbOrcidHeading{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e0e0e0;
+            h4{
+                margin: 14px 0;
+            }
         }
     }
 }
