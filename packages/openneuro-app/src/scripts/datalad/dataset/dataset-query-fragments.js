@@ -9,6 +9,18 @@ export const DRAFT_FRAGMENT = gql`
       readme
       head
       size
+      fileCheck {
+        datasetId
+        hexsha
+        refs
+        remote
+        annexFsck {
+          errorMessages
+          file
+          key
+          success
+        }
+      }
       description {
         Name
         Authors

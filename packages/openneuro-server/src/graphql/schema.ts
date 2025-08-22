@@ -935,6 +935,10 @@ export const typeDefs = `
     key: String
     note: String
     success: Boolean
+    dead: [String]
+    missing: [String]
+    untrusted: [String]
+    input: [String]
   }
 
 `

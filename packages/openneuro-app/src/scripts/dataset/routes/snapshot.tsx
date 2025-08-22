@@ -9,29 +9,41 @@ import { HeaderRow4 } from "./styles/header-row"
 import FileView from "../files/file-view"
 import styled from "@emotion/styled"
 import { apiPath } from "../files/file"
+import { FileCheckList } from "../fragments/file-check-list"
 
 const FormRow = styled.div`
   margin-top: 0;
   margin-bottom: 1.3em;
 `
 
-export const NoErrors = ({ validation, authors, children }) => {
+export const NoErrors = ({ validation, authors, fileCheck, children }) => {
   const noErrors = validation?.errors === 0
   // zero authors will cause DOI minting to fail
   const hasAuthor = authors?.length > 0
-  if (noErrors && hasAuthor) {
+  const fileCheckFinish = fileCheck !== null
+  const noBadFiles = fileCheck?.annexFsck?.length === 0
+  if (noBadFiles && noErrors && hasAuthor) {
     return children
   } else {
     const correctErrorsMessage =
       "BIDS validation must be complete and all errors corrected"
     const noAuthorMessage =
       '"Authors" must include at least one entry in dataset_description.json'
+    const fileChecksPendingMessage =
+      "file integrity checks are pending and may take a few minutes to complete. Please wait a few minutes"
+    const badFilesMessage =
+      "one or more files in the most recent draft are missing or do not match checksums. Please reupload any files listed below"
     const includedMessages = []
     if (!noErrors) includedMessages.push(correctErrorsMessage)
     if (!hasAuthor) includedMessages.push(noAuthorMessage)
+    if (!fileCheckFinish) includedMessages.push(fileChecksPendingMessage)
+    if (fileCheckFinish && !noBadFiles) includedMessages.push(badFilesMessage)
     return (
       <span className="text-danger">
         {`${includedMessages.join(" and ")} to create a version`}
+        {fileCheckFinish && !noBadFiles && (
+          <FileCheckList fileCheck={fileCheck} />
+        )}
       </span>
     )
   }
@@ -42,6 +54,7 @@ const SnapshotRoute = ({
   snapshots,
   validation,
   description,
+  fileCheck,
 }): React.ReactElement => {
   const [changes, setChanges] = useState([])
   const [semanticLevel, setSemanticLevel] = useState("patch")
@@ -122,7 +135,11 @@ const SnapshotRoute = ({
             setElements={setChanges}
           />
         </div>
-        <NoErrors validation={validation} authors={description.Authors}>
+        <NoErrors
+          validation={validation}
+          authors={description.Authors}
+          fileCheck={fileCheck}
+        >
           {changes.length ? null : (
             <small className="text-danger">
               You must add at least one change message to create a new version
