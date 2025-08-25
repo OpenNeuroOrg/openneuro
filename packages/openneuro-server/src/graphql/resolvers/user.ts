@@ -213,18 +213,6 @@ export async function notifications(obj, _, { userInfo }) {
 
   const pipeline: PipelineStage[] = [
     {
-      $match: {
-        $or: [
-          // Match events created by the user, but exclude contributor requests
-          { userId: userId, "event.type": { $ne: "contributorRequest" } },
-          // Match events targeted at the user
-          { "event.targetUserId": userId },
-          // If a site admin, also include all contributor requests
-          ...(userInfo.admin ? [{ "event.type": "contributorRequest" }] : []),
-        ],
-      },
-    },
-    {
       $lookup: {
         from: "datasets",
         localField: "datasetId",
@@ -233,11 +221,22 @@ export async function notifications(obj, _, { userInfo }) {
       },
     },
     {
+      $unwind: { path: "$datasetInfo", preserveNullAndEmptyArrays: true },
+    },
+    {
       $match: {
         $or: [
+          // Condition 1: All events for a user where they are the creator
           { userId: userId },
+          // Condition 2: All events for a user where they are the target
           { "event.targetUserId": userId },
-          { "datasetInfo.permissions.admin": userId },
+          // Condition 3: All contributor requests for a site admin
+          ...(userInfo.admin ? [{ "event.type": "contributorRequest" }] : []),
+          // Condition 4: All contributor requests for a dataset admin
+          {
+            "event.type": "contributorRequest",
+            "datasetInfo.permissions.admin": userId,
+          },
         ],
       },
     },
@@ -256,7 +255,6 @@ export async function notifications(obj, _, { userInfo }) {
       $unwind: { path: "$user", preserveNullAndEmptyArrays: true },
     },
     {
-      // This is the updated stage to correctly apply the user ID filter
       $lookup: {
         from: "usernotificationstatuses",
         let: { eventId: "$id" },
@@ -286,7 +284,6 @@ export async function notifications(obj, _, { userInfo }) {
   const events = await DatasetEvent.aggregate(pipeline).exec()
 
   return events.map((event) => {
-    // Correctly return a full object for the notificationStatus virtual
     const notificationStatus = event.notificationStatus
       ? event.notificationStatus
       : ({ status: "UNREAD" } as UserNotificationStatusDocument)
