@@ -224,6 +224,28 @@ export async function notifications(obj, _, { userInfo }) {
       $unwind: { path: "$datasetInfo", preserveNullAndEmptyArrays: true },
     },
     {
+      $lookup: {
+        from: "permissions",
+        let: { datasetId: "$datasetId" },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $and: [
+                  { $eq: ["$datasetId", "$$datasetId"] },
+                  { $eq: ["$userId", userId] },
+                ],
+              },
+            },
+          },
+        ],
+        as: "permissions",
+      },
+    },
+    {
+      $unwind: { path: "$permissions", preserveNullAndEmptyArrays: true },
+    },
+    {
       $match: {
         $or: [
           // Condition 1: All events for a user where they are the creator
@@ -235,7 +257,7 @@ export async function notifications(obj, _, { userInfo }) {
           // Condition 4: All contributor requests for a dataset admin
           {
             "event.type": "contributorRequest",
-            "datasetInfo.permissions.admin": userId,
+            "permissions.level": "admin",
           },
         ],
       },
