@@ -18,7 +18,7 @@ export async function resetWorktree(context: GitWorkerContext, branch: string) {
   const allFiles = await git.statusMatrix(context.config())
   // Get all files which have been modified or staged - does not include new untracked files or deleted files
   const modifiedFiles = allFiles
-    .filter((row) => row[WORKDIR] > UNCHANGED && row[STAGE] > UNCHANGED)
+    .filter((row) => row[WORKDIR] > UNCHANGED || row[STAGE] > UNCHANGED)
     .map((row) => row[FILEPATH])
 
   // Delete modified/staged files
@@ -28,5 +28,5 @@ export async function resetWorktree(context: GitWorkerContext, branch: string) {
     ),
   )
 
-  await git.checkout({ ...context.config(), ref: branch, force: true })
+  await git.checkout({ ...context.config(), ref: branch })
 }
