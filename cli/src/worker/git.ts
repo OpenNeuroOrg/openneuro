@@ -362,9 +362,6 @@ async function commit() {
     })
     await commitAnnexBranch(annexKeys)
     logger.info(`Committed as "${commitHash}"`)
-  } else {
-    console.log("No changes found, not uploading.")
-    workQueue.enqueue(done)
   }
 }
 
@@ -419,19 +416,73 @@ async function push() {
       }
     }
   }
-  console.log("Pushing changes...")
-  // Git push
-  await git.push(
-    context.config(),
-  )
-  // Git push git-annex
-  await git.push(
-    { ...context.config(), ref: "git-annex" },
-  )
-  const url = new URL(context.repoEndpoint)
-  console.log(
-    `Upload complete, visit your dataset at ${url.protocol}//${url.host}/datasets/${context.datasetId}`,
-  )
+
+  // Update git-annex branch first
+  const localAnnexOid = await git.resolveRef({
+    ...context.config(),
+    ref: "git-annex",
+  })
+  let remoteAnnexOid
+  try {
+    remoteAnnexOid = await git.resolveRef({
+      ...context.config(),
+      ref: "refs/remotes/origin/git-annex",
+    })
+  } catch (err) {
+    if (err instanceof Error && err.name === "NotFoundError") {
+      logger.info("Remote git-annex branch not found, pushing")
+      remoteAnnexOid = null
+    } else {
+      throw err
+    }
+  }
+
+  if (localAnnexOid === remoteAnnexOid) {
+    logger.info("Git-annex branch is up to date.")
+  } else {
+    logger.info("Pushing git-annex branch...")
+    // Git push git-annex
+    await git.push(
+      { ...context.config(), ref: "git-annex" },
+    )
+  }
+
+  // Check if remote HEAD matches local HEAD
+  const remoteRef = `refs/remotes/origin/${await getDefault(context)}`
+  const localHeadOid = await git.resolveRef({
+    ...context.config(),
+    ref: "HEAD",
+  })
+  let remoteHeadOid
+  try {
+    remoteHeadOid = await git.resolveRef({
+      ...context.config(),
+      ref: remoteRef,
+    })
+  } catch (err) {
+    // If the remote ref doesn't exist, it means the remote is empty or
+    // the branch hasn't been pushed yet, so we should push.
+    if (err instanceof Error && err.name === "NotFoundError") {
+      logger.info("Remote branch not found, pushing")
+      remoteHeadOid = null
+    } else {
+      throw err
+    }
+  }
+
+  if (localHeadOid === remoteHeadOid) {
+    console.log("No changes found for upload.")
+  } else {
+    console.log("Pushing changes...")
+    // Git push
+    await git.push(
+      context.config(),
+    )
+    const url = new URL(context.repoEndpoint)
+    console.log(
+      `Upload complete, visit your dataset at ${url.protocol}//${url.host}/datasets/${context.datasetId}`,
+    )
+  }
 }
 
 // Queue of tasks to perform in order
