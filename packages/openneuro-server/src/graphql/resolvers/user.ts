@@ -1,8 +1,11 @@
 /**
  * User resolvers
  */
+import { PipelineStage } from "mongoose"
 import User from "../../models/user"
+import Dataset from "../../models/dataset"
 import DatasetEvent from "../../models/datasetEvents"
+import { UserNotificationStatusDocument } from "../../models/userNotificationStatus"
 
 function isValidOrcid(orcid: string): boolean {
   return /^[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{3}[0-9X]$/.test(orcid || "")
@@ -198,6 +201,7 @@ export const updateUser = async (obj, { id, location, institution, links }) => {
 
 /**
  * Get all events associated with a specific user (for their notifications feed).
+ * Uses a single aggregation pipeline for improved performance.
  */
 export async function notifications(obj, _, { userInfo }) {
   const userId = obj.id
@@ -207,39 +211,88 @@ export async function notifications(obj, _, { userInfo }) {
     throw new Error("Not authorized to view these notifications.")
   }
 
-  const queryConditions: MongoQueryCondition[] = [
-    { userId: userId },
-    { "event.targetUserId": userId },
+  const pipeline: PipelineStage[] = [
+    {
+      $match: {
+        $or: [
+          { userId: userId },
+          { "event.targetUserId": userId },
+          ...(userInfo.admin ? [{ "event.type": "contributorRequest" }] : []),
+        ],
+      },
+    },
+    {
+      $lookup: {
+        from: "datasets",
+        localField: "datasetId",
+        foreignField: "id",
+        as: "datasetInfo",
+      },
+    },
+    {
+      $match: {
+        $or: [
+          { userId: userId },
+          { "event.targetUserId": userId },
+          { "datasetInfo.permissions.admin": userId },
+        ],
+      },
+    },
+    {
+      $sort: { timestamp: -1 },
+    },
+    {
+      $lookup: {
+        from: "users",
+        localField: "userId",
+        foreignField: "id",
+        as: "user",
+      },
+    },
+    {
+      $unwind: { path: "$user", preserveNullAndEmptyArrays: true },
+    },
+    {
+      // This is the updated stage to correctly apply the user ID filter
+      $lookup: {
+        from: "usernotificationstatuses",
+        let: { eventId: "$id" },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $and: [
+                  { $eq: ["$datasetEventId", "$$eventId"] },
+                  { $eq: ["$userId", userId] },
+                ],
+              },
+            },
+          },
+        ],
+        as: "notificationStatus",
+      },
+    },
+    {
+      $unwind: {
+        path: "$notificationStatus",
+        preserveNullAndEmptyArrays: true,
+      },
+    },
   ]
 
-  // If the user whose notifications are being fetched (obj) is a site admin,
-  // they should also see all 'contributorRequest' events.
-  if (obj.admin) {
-    queryConditions.push({ "event.type": "contributorRequest" })
-  }
-
-  const events = await DatasetEvent.find({ $or: queryConditions })
-    .sort({ timestamp: -1 })
-    .populate("user")
-    .populate({
-      path: "notificationStatus",
-      match: { userId: userId },
-    })
-    .exec()
+  const events = await DatasetEvent.aggregate(pipeline).exec()
 
   return events.map((event) => {
-    // Correctly return a full object for the notificationStatus virtual
     const notificationStatus = event.notificationStatus
       ? event.notificationStatus
-      : { status: "UNREAD" }
+      : ({ status: "UNREAD" } as UserNotificationStatusDocument)
 
     return {
-      ...event.toObject(),
+      ...event,
       notificationStatus,
     }
   })
 }
-
 const UserResolvers = {
   id: (obj) => obj.id,
   provider: (obj) => obj.provider,
