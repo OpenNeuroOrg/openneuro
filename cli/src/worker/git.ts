@@ -43,8 +43,27 @@ async function update() {
     )
     // Reset first to be sure that an interrupted run didn't create untracked files
     await resetWorktree(context, await getDefault(context))
+    logger.info("Fetching all branches.")
     // Now fetch and checkout the default branch
     await git.fetch(context.config())
+    logger.info("Merging git-annex branch.")
+    // Merge remote git-annex changes
+    await git.merge(
+      {
+        ...context.config(),
+        author: context.author,
+        ours: "git-annex",
+        theirs: "origin/git-annex",
+      },
+    )
+    logger.info("Checkout latest HEAD.")
+    // Make sure the default branch checkout is updated
+    const defaultBranch = await getDefault(context)
+    await git.checkout({
+      ...context.config(),
+      ref: defaultBranch, // Checkout main
+      noUpdateHead: false, // Make sure we update the local branch HEAD
+    })
   } catch (_err) {
     logger.info(
       `Cloning ${context.datasetId} draft from "${context.repoEndpoint}"`,
