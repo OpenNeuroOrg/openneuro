@@ -52,7 +52,7 @@ export const NotificationBodyContent: React.FC<NotificationBodyContentProps> = (
   } else if (isContributorResponse) {
     return (
       <>
-        Admin: <Username user={adminUser} /> {approval} contributor request
+        <Username user={adminUser} /> {approval} contributor request
         {targetUserLoading ? <span>for ...</span> : (
           <>
             {" "}for <Username user={targetUser} />

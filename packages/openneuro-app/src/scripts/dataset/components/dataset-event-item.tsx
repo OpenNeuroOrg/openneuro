@@ -110,7 +110,7 @@ export const DatasetEventItem: React.FC<DatasetEventItemProps> = ({
             <strong>{statusText} Contributor Request:</strong>
             <div>
               <small>
-                Admin: <Username user={event.user} />
+                <Username user={event.user} />
                 {targetUserLoading ? <span>for ...</span> : targetUser
                   ? (
                     <>
