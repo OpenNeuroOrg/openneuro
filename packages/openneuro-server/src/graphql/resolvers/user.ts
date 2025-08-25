@@ -215,8 +215,11 @@ export async function notifications(obj, _, { userInfo }) {
     {
       $match: {
         $or: [
-          { userId: userId },
+          // Match events created by the user, but exclude contributor requests
+          { userId: userId, "event.type": { $ne: "contributorRequest" } },
+          // Match events targeted at the user
           { "event.targetUserId": userId },
+          // If a site admin, also include all contributor requests
           ...(userInfo.admin ? [{ "event.type": "contributorRequest" }] : []),
         ],
       },
@@ -283,6 +286,7 @@ export async function notifications(obj, _, { userInfo }) {
   const events = await DatasetEvent.aggregate(pipeline).exec()
 
   return events.map((event) => {
+    // Correctly return a full object for the notificationStatus virtual
     const notificationStatus = event.notificationStatus
       ? event.notificationStatus
       : ({ status: "UNREAD" } as UserNotificationStatusDocument)
@@ -293,6 +297,7 @@ export async function notifications(obj, _, { userInfo }) {
     }
   })
 }
+
 const UserResolvers = {
   id: (obj) => obj.id,
   provider: (obj) => obj.provider,
