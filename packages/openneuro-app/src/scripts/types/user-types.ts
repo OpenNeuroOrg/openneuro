@@ -15,6 +15,7 @@ export interface User {
   provider?: string
   modified?: string
   githubSynced?: Date
+  orcidConsent?: boolean | null
 }
 
 export interface UserRoutesProps {

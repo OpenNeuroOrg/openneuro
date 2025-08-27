@@ -110,6 +110,7 @@ export const typeDefs = `
     ): [FlaggedFile]
     # All public dataset metadata
     publicMetadata: [Metadata] @cacheControl(maxAge: 86400, scope: PUBLIC)
+    orcidConsent: Boolean
   }
 
   type Mutation {
@@ -146,7 +147,7 @@ export const typeDefs = `
     # Sets a users admin status
     setBlocked(id: ID!, blocked: Boolean!): User
     # Mutation for updating user data
-    updateUser(id: ID!, location: String, institution: String, links: [String]): User
+    updateUser(id: ID!, location: String, institution: String, links: [String], orcidConsent: Boolean): User
     # Tracks a view or download for a dataset
     trackAnalytics(datasetId: ID!, tag: String, type: AnalyticTypes): Boolean
     # Follow dataset
@@ -354,6 +355,7 @@ export const typeDefs = `
     github: String
     githubSynced: Date
     links: [String]
+    orcidConsent: Boolean
   }
 
   type UserList {
@@ -546,6 +548,8 @@ export const typeDefs = `
     head: String
     # Total size in bytes of this draft
     size: BigInt
+    # Creators list from datacite.yml || Authors list from dataset_description.json
+    creators: [Creator] 
     # File issues
     fileCheck: FileCheck
   }
@@ -587,6 +591,8 @@ export const typeDefs = `
     size: BigInt
     # Single list of files to download this snapshot (only available on snapshots)
     downloadFiles: [DatasetFile]
+    # Authors list from datacite.yml || dataset_description.json
+    creators: [Creator] 
   }
 
   # RelatedObject nature of relationship
@@ -655,6 +661,16 @@ export const typeDefs = `
     # List of ethics committee approvals of the research protocols and/or protocol identifiers.
     EthicsApprovals: [String]
   }
+
+  # Defines the Creator type in creators.ts
+  type Creator {
+    name: String! 
+    givenName: String 
+    familyName: String 
+    orcid: String 
+  }
+
+
 
   # User permissions on a dataset
   type Permission {
