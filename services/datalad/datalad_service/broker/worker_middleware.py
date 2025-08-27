@@ -1,4 +1,8 @@
+import random
+
 from taskiq import TaskiqMessage, TaskiqMiddleware
+
+from datalad_service import config
 
 
 class WorkerMiddleware(TaskiqMiddleware):
@@ -11,5 +15,10 @@ class WorkerMiddleware(TaskiqMiddleware):
 
     async def pre_send(self, message: TaskiqMessage) -> TaskiqMessage:
         if self.worker_id:
-            message.labels['worker'] = self.worker_id
+            message.labels['queue_name'] = f'worker-{self.worker_id}'
+        else:
+            # Pick a random worker since this task was not assigned to one
+            message.labels['queue_name'] = (
+                f'worker-{random.randint(0, config.DATALAD_WORKERS - 1)}'
+            )
         return message

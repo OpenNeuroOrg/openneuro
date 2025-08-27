@@ -8,6 +8,7 @@ import DraftContainer from "../draft-container"
 import type { DraftContainerProps } from "../draft-container"
 import { UserModalOpenProvider } from "../../utils/user-login-modal-ctx"
 import { Cookies, CookiesProvider } from "react-cookie"
+import type * as UserQueriesModule from "../../queries/user"
 
 vi.mock("../../config.ts")
 
@@ -25,7 +26,6 @@ const mockDataset = {
     modified: "2023-01-01T00:00:00.000Z",
     description: {
       Name: "Test Dataset Name",
-      Authors: ["Author One", "Author Two"],
     },
     summary: {
       totalFiles: 10,
@@ -36,6 +36,15 @@ const mockDataset = {
       subjects: [],
     },
     readme: "This is a test dataset readme.",
+    creators: [
+      {
+        name: "Author One",
+        firstname: "Author",
+        lastname: "One",
+        orcid: "0000-0001-2345-6789",
+      },
+      { name: "Author Two", firstname: "Author", lastname: "Two", id: null },
+    ],
   },
   snapshots: [],
   derivatives: [],
@@ -79,12 +88,54 @@ const renderComponent = (
 
 describe("DraftContainer", () => {
   it("renders dataset name and authors", async () => {
+    vi.mock("../../queries/user", async (importOriginal) => {
+      const actual = await importOriginal<typeof UserQueriesModule>()
+      return {
+        ...actual,
+        useUser: vi.fn((userId) => {
+          if (userId === "0000-0001-2345-6789") {
+            return {
+              user: { id: userId, name: "Author One", orcid: userId },
+              loading: false,
+              error: undefined,
+            }
+          }
+          return { user: null, loading: false, error: undefined }
+        }),
+      }
+    })
+
     renderComponent({ dataset: mockDataset })
     expect(await screen.findByRole("heading", { level: 1 })).toHaveTextContent(
       /Test Dataset Name/,
     )
     expect(await screen.findByText(/Author One/)).toBeInTheDocument()
     expect(await screen.findByText(/Author Two/)).toBeInTheDocument()
+
+    const authorOneProfileLink = screen.getByRole("link", {
+      name: "Author One",
+    })
+    expect(authorOneProfileLink).toBeInTheDocument()
+    expect(authorOneProfileLink).toHaveAttribute(
+      "href",
+      "/user/0000-0001-2345-6789",
+    )
+
+    const orcidExternalLink = screen.getByLabelText(
+      /ORCID profile for Author One/i,
+    )
+    expect(orcidExternalLink).toBeInTheDocument()
+    expect(orcidExternalLink).toHaveAttribute(
+      "href",
+      expect.stringContaining("orcid.org/0000-0001-2345-6789"),
+    )
+    expect(orcidExternalLink).toHaveAttribute("target", "_blank")
+    expect(orcidExternalLink).toHaveAttribute("rel", "noopener noreferrer")
+
+    const authorTwoProfileLink = screen.queryByRole("link", {
+      name: /Author Two/i,
+    })
+    expect(authorTwoProfileLink).not.toBeInTheDocument()
   })
 
   describe("dataset name field", () => {
