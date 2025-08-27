@@ -1,0 +1,79 @@
+$error: #B04E4B;
+$offWhite: #e0e0e0;
+$midGray_A: #f7f7f768;
+$errorBG_A: #ffdfde5e;
+
+.fileCheck-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  font-family: Arial, sans-serif;
+  margin-top: 20px;
+}
+
+.fileCheck-card {
+  background-color: #ffffff;
+  border: 1px solid $offWhite;
+  overflow: hidden;
+  transition: transform 0.2s;
+  &:hover {
+   background-color: #faf3f3;
+  }
+
+}
+
+.fileCheck-header {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  background-color: $midGray_A;
+  border-bottom: 1px solid $offWhite;
+  
+  .fileCheck-fileIcon {
+    margin-right: 8px;
+    font-size: 1.2rem;
+  }
+  
+  .fileCheck-fileName {
+    font-weight: bold;
+    color: #333;
+  }
+}
+
+.fileCheck-body {
+  padding: 0;
+  .fileCheck-key{
+    padding: 16px;
+  }
+  .fileCheck-label {
+    font-weight: bold;
+    color: #555;
+    margin-right: 5px;
+  }
+  
+  .fileCheck-value {
+    word-break: break-all;
+    color: #777;
+  }
+}
+
+.fileCheck-errors {
+  margin-top: 0;
+  padding: 12px;
+  background-color: $errorBG_A;
+  border-left: 4px solid $error;
+  
+  .fileCheck-errorIcon {
+    color: $error;
+    margin-right: 8px;
+  }
+  
+  .fileCheck-errorList {
+    margin: 0;
+    padding-left: 20px;
+    color: $error;
+    list-style-type: disc;
+  }
+}
+
+

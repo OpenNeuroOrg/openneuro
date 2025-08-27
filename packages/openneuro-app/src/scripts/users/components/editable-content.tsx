@@ -9,7 +9,7 @@ import "../scss/editable-content.scss"
 interface EditableContentProps {
   editableContent: string[] | string
   setRows: React.Dispatch<React.SetStateAction<string[] | string>>
-  className: string
+  className?: string
   heading: string
   validation?: RegExp | ((value: string) => boolean)
   validationMessage?: string

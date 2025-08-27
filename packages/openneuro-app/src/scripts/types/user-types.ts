@@ -19,6 +19,20 @@ export interface User {
   modified?: string
   githubSynced?: Date
   notifications?: Event[]
+  orcidConsent?: boolean | null
+}
+
+export interface UserRoutesProps {
+  orcidUser: User
+  hasEdit: boolean
+  isUser: boolean
+}
+export interface UserCardProps {
+  orcidUser: User
+}
+
+export interface UserAccountViewProps {
+  orcidUser: User
 }
 
 /** ------------------ Dataset ------------------ */

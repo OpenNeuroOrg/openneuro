@@ -9,6 +9,18 @@ export const DRAFT_FRAGMENT = gql`
       readme
       head
       size
+      fileCheck {
+        datasetId
+        hexsha
+        refs
+        remote
+        annexFsck {
+          errorMessages
+          file
+          key
+          success
+        }
+      }
       description {
         Name
         Authors
@@ -46,6 +58,12 @@ export const DRAFT_FRAGMENT = gql`
           validator
           version
         }
+      }
+      creators {
+        name
+        givenName 
+        familyName 
+        orcid 
       }
     }
   }
@@ -223,6 +241,12 @@ export const SNAPSHOT_FIELDS = gql`
     }
     ...SnapshotIssues
     hexsha
+    creators {
+      name
+      givenName 
+      familyName 
+      orcid 
+    }
   }
   ${SNAPSHOT_ISSUES}
 `
