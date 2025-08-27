@@ -4,8 +4,7 @@ import * as Sentry from "@sentry/node"
 import CacheItem from "../../cache/item"
 import { fileUrl } from "../files"
 import { datasetOrSnapshot } from "../../utils/datasetOrSnapshot"
-import { description } from "../description"
-import { creators } from "../creators"
+import { contributors } from "../contributors"
 
 vi.mock("../../libs/authentication/jwt", () => ({
   sign: vi.fn(() => "mock_jwt_token"),
@@ -26,7 +25,6 @@ vi.mock("@sentry/node", () => ({
 vi.mock("../../cache/item")
 vi.mock("../files")
 vi.mock("../../utils/datasetOrSnapshot")
-vi.mock("../description")
 vi.mock("../libs/redis", () => ({
   redis: vi.fn(),
 }))
@@ -36,7 +34,6 @@ const mockSentryCaptureMessage = vi.mocked(Sentry.captureMessage)
 const mockSentryCaptureException = vi.mocked(Sentry.captureException)
 const mockFileUrl = vi.mocked(fileUrl)
 const mockDatasetOrSnapshot = vi.mocked(datasetOrSnapshot)
-const mockDescription = vi.mocked(description)
 
 const mockFetch = vi.fn()
 global.fetch = mockFetch
@@ -48,7 +45,7 @@ vi.mocked(CacheItem).mockImplementation((_redis, _type, _key) => {
   } as unknown as CacheItem
 })
 
-describe("creators (core functionality)", () => {
+describe("contributors (core functionality)", () => {
   const MOCK_DATASET_ID = "ds000001"
   const MOCK_REVISION = "dce4b7b6653bcde9bdb7226a7c2b9499e77f2724"
 
@@ -67,72 +64,6 @@ describe("creators (core functionality)", () => {
     mockCacheItemGet.mockImplementation((fetcher) => fetcher())
   })
 
-  it("should fall back to dataset_description.json if datacite file is 404", async () => {
-    const datasetDescriptionJson = {
-      Authors: ["Author One", "Author Two"],
-    }
-
-    mockFetch.mockResolvedValueOnce({
-      status: 404,
-      headers: new Headers(),
-      text: () => Promise.resolve("Not Found"),
-    })
-
-    mockCacheItemGet.mockImplementationOnce((fetcher) =>
-      fetcher().then(() => null)
-    )
-    mockDescription.mockResolvedValueOnce(datasetDescriptionJson)
-    const result = await creators({
-      id: MOCK_DATASET_ID,
-      revision: MOCK_REVISION,
-    })
-    expect(result).toEqual([{ name: "Author One" }, { name: "Author Two" }])
-    expect(mockDescription).toHaveBeenCalledWith({
-      id: MOCK_DATASET_ID,
-      revision: MOCK_REVISION,
-    })
-    expect(mockSentryCaptureMessage).toHaveBeenCalledWith(
-      `Loaded creators from dataset_description.json via description resolver for ${MOCK_DATASET_ID}:${MOCK_REVISION}`,
-    )
-  })
-
-  it("should fall back to dataset_description.json if datacite file parsing fails", async () => {
-    const dataciteYamlContent = `invalid: - yaml`
-    const datasetDescriptionJson = {
-      Authors: ["BIDS Author A"],
-    }
-
-    mockFetch.mockResolvedValueOnce({
-      status: 200,
-      headers: new Headers({ "Content-Type": "application/yaml" }),
-      text: () => Promise.resolve(dataciteYamlContent),
-    })
-    mockYamlLoad.mockImplementationOnce(() => {
-      throw new Error("YAML parsing error")
-    })
-    mockCacheItemGet.mockImplementationOnce((fetcher) =>
-      fetcher().catch(() => null)
-    )
-    mockDescription.mockResolvedValueOnce(datasetDescriptionJson)
-    const result = await creators({
-      id: MOCK_DATASET_ID,
-      revision: MOCK_REVISION,
-    })
-    expect(result).toEqual([{ name: "BIDS Author A" }])
-    expect(mockDescription).toHaveBeenCalled()
-    expect(mockSentryCaptureException).toHaveBeenCalledWith(expect.any(Error))
-    expect(mockSentryCaptureException).toHaveBeenCalledWith(
-      expect.objectContaining({
-        message: expect.stringContaining(
-          `Found datacite file for dataset ${MOCK_DATASET_ID}`,
-        ),
-      }),
-    )
-    expect(mockSentryCaptureMessage).toHaveBeenCalledWith(
-      `Loaded creators from dataset_description.json via description resolver for ${MOCK_DATASET_ID}:${MOCK_REVISION}`,
-    )
-  })
-
   it("should return empty array if both datacite file and dataset_description.json fail", async () => {
     mockFetch.mockResolvedValueOnce({
       status: 500,
@@ -142,25 +73,22 @@ describe("creators (core functionality)", () => {
     mockCacheItemGet.mockImplementationOnce((fetcher) =>
       fetcher().catch(() => null)
     )
-    mockDescription.mockRejectedValueOnce(
-      new Error("Description fetch failed"),
-    )
-    const result = await creators({
+    const result = await contributors({
       id: MOCK_DATASET_ID,
       revision: MOCK_REVISION,
     })
     expect(result).toEqual([])
-    expect(mockSentryCaptureException).toHaveBeenCalledTimes(2)
+    expect(mockSentryCaptureException).toHaveBeenCalledTimes(1)
   })
 
-  it("should return default empty array if no creators array in datacite file or dataset_description.json (or wrong resourceTypeGeneral in datacite file)", async () => {
+  it("should return default empty array if no contributors array in datacite file or dataset_description.json (or wrong resourceTypeGeneral in datacite file)", async () => {
     const dataciteYamlContent =
-      `data:\n  attributes:\n    types:\n      resourceTypeGeneral: Software\n    creators: []`
+      `data:\n  attributes:\n    types:\n      resourceTypeGeneral: Software\n    contributors: []`
     const parsedDatacite = {
       data: {
         attributes: {
           types: { resourceTypeGeneral: "Software" },
-          creators: [],
+          contributors: [],
         },
       },
     }
@@ -171,8 +99,7 @@ describe("creators (core functionality)", () => {
       text: () => Promise.resolve(dataciteYamlContent),
     })
     mockYamlLoad.mockReturnValueOnce(parsedDatacite)
-    mockDescription.mockResolvedValueOnce(null)
-    const result = await creators({
+    const result = await contributors({
       id: MOCK_DATASET_ID,
       revision: MOCK_REVISION,
     })
@@ -180,18 +107,17 @@ describe("creators (core functionality)", () => {
     expect(mockSentryCaptureMessage).toHaveBeenCalledWith(
       `Datacite file for ${MOCK_DATASET_ID}:${MOCK_REVISION} found but resourceTypeGeneral is 'Software', not 'Dataset'.`,
     )
-    expect(mockDescription).toHaveBeenCalled()
     expect(mockSentryCaptureException).not.toHaveBeenCalled()
   })
 
-  it("should return default empty array if datacite file is Dataset type but provides no creators", async () => {
+  it("should return default empty array if datacite file is Dataset type but provides no contributors", async () => {
     const dataciteYamlContent =
-      `data:\n  attributes:\n    types:\n      resourceTypeGeneral: Dataset\n    creators: []`
+      `data:\n  attributes:\n    types:\n      resourceTypeGeneral: Dataset\n    contributors: []`
     const parsedDatacite = {
       data: {
         attributes: {
           types: { resourceTypeGeneral: "Dataset" },
-          creators: [],
+          contributors: [],
         },
       },
     }
@@ -202,34 +128,28 @@ describe("creators (core functionality)", () => {
       text: () => Promise.resolve(dataciteYamlContent),
     })
     mockYamlLoad.mockReturnValueOnce(parsedDatacite)
-    mockDescription.mockResolvedValueOnce(null)
-
-    const result = await creators({
+    const result = await contributors({
       id: MOCK_DATASET_ID,
       revision: MOCK_REVISION,
     })
 
     expect(result).toEqual([])
     expect(mockSentryCaptureMessage).toHaveBeenCalledWith(
-      `Datacite file for ${MOCK_DATASET_ID}:${MOCK_REVISION} is Dataset type but provided no creators.`,
+      `Datacite file for ${MOCK_DATASET_ID}:${MOCK_REVISION} is Dataset type but provided no contributors.`,
     )
-    expect(mockDescription).toHaveBeenCalled()
     expect(mockSentryCaptureException).not.toHaveBeenCalled()
   })
 
   it("should capture message if datacite file has unexpected content type but still parses", async () => {
     const dataciteYamlContent =
-      `data:\n  attributes:\n    types:\n      resourceTypeGeneral: Dataset\n    creators: []`
+      `data:\n  attributes:\n    types:\n      resourceTypeGeneral: Dataset\n    contributors: []`
     const parsedDatacite = {
       data: {
         attributes: {
           types: { resourceTypeGeneral: "Dataset" },
-          creators: [],
+          contributors: [],
         },
       },
-    }
-    const datasetDescriptionJson = {
-      Authors: ["Fallback Author"],
     }
 
     mockFetch.mockResolvedValueOnce({
@@ -238,8 +158,7 @@ describe("creators (core functionality)", () => {
       text: () => Promise.resolve(dataciteYamlContent),
     })
     mockYamlLoad.mockReturnValueOnce(parsedDatacite)
-    mockDescription.mockResolvedValueOnce(datasetDescriptionJson)
-    const result = await creators({
+    const result = await contributors({
       id: MOCK_DATASET_ID,
       revision: MOCK_REVISION,
     })
@@ -250,11 +169,8 @@ describe("creators (core functionality)", () => {
     )
     expect(mockSentryCaptureException).not.toHaveBeenCalled()
     expect(mockSentryCaptureMessage).toHaveBeenCalledWith(
-      `Datacite file for ${MOCK_DATASET_ID}:${MOCK_REVISION} is Dataset type but provided no creators.`,
+      `Datacite file for ${MOCK_DATASET_ID}:${MOCK_REVISION} is Dataset type but provided no contributors.`,
     )
-    expect(mockSentryCaptureMessage).toHaveBeenCalledWith(
-      `Loaded creators from dataset_description.json via description resolver for ${MOCK_DATASET_ID}:${MOCK_REVISION}`,
-    )
-    expect(result).toEqual([{ name: "Fallback Author" }])
+    expect(result).toEqual([])
   })
 })

@@ -1,105 +1,19 @@
-import yaml from "js-yaml"
 import * as Sentry from "@sentry/node"
 import CacheItem, { CacheType } from "../cache/item"
 import { redis } from "../libs/redis"
-import { fileUrl } from "./files"
 import {
   type DatasetOrSnapshot,
   datasetOrSnapshot,
 } from "../utils/datasetOrSnapshot"
+import { getDataciteYml } from "../utils/datacite-utils"
 import { description } from "./description"
 import { validateOrcid } from "../utils/orcid-utils"
 
-export interface Creator {
-  name: string
-  givenName?: string
-  familyName?: string
-  orcid?: string
-}
-
-interface NameIdentifier {
-  nameIdentifier: string
-  nameIdentifierScheme: string
-  schemeUri?: string
-}
-
-interface Affiliation {
-  name: string
-  schemeUri?: string
-  affiliationIdentifier?: string
-  affiliationIdentifierScheme?: string
-}
-
-interface RawDataciteCreator {
-  name: string
-  nameType: "Personal" | "Organizational"
-  givenName?: string
-  familyName?: string
-  nameIdentifiers?: NameIdentifier[]
-  affiliation?: Affiliation[]
-}
-
-interface RawDataciteTypes {
-  resourceType?: string
-  resourceTypeGeneral: string
-}
-
-interface RawDataciteAttributes {
-  creators?: RawDataciteCreator[]
-  types: RawDataciteTypes
-}
-
-interface RawDataciteYml {
-  data: {
-    attributes: RawDataciteAttributes
-  }
-}
-
-/**
- * Attempts to read and parse the datacite metadata file.
- */
-const getDataciteYml = async (
-  datasetId: string,
-  revision: string,
-): Promise<RawDataciteYml | null> => {
-  const dataciteFileUrl = fileUrl(datasetId, "", "datacite", revision)
-  try {
-    const res = await fetch(dataciteFileUrl)
-    const contentType = res.headers.get("content-type")
-
-    if (res.status === 200) {
-      if (
-        !contentType?.includes("application/yaml") &&
-        !contentType?.includes("text/yaml")
-      ) {
-        Sentry.captureMessage(
-          `Datacite file for ${datasetId}:${revision} served with unexpected Content-Type: ${contentType}. Attempting YAML parse anyway.`,
-        )
-      }
-
-      const text = await res.text()
-      try {
-        const parsedYaml: RawDataciteYml = yaml.load(text) as RawDataciteYml
-        return parsedYaml
-      } catch (parseErr) {
-        throw new Error(
-          `Found datacite file for dataset ${datasetId} (revision: ${revision}), but failed to parse it as YAML:`,
-          { cause: parseErr },
-        )
-      }
-    } else if (res.status === 404) {
-      // common for datacite file to not exist
-      return null
-    } else {
-      throw new Error(
-        `Attempted to read datacite file for dataset ${datasetId} (revision: ${revision}) and received status ${res.status}.`,
-      )
-    }
-  } catch (fetchErr) {
-    Sentry.captureException(fetchErr)
-    return null
-  }
-}
+import type {
+  Creator,
+  NameIdentifier,
+  RawDataciteCreator,
+} from "../types/datacite"
 
 /**
  * Normalizes datacite creators to the Creator interface, extracting ORCID IDs.
