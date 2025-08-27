@@ -188,7 +188,7 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
                 }
               />
               <MetaDataBlock
-                heading="Contributors"
+                heading="Authors"
                 item={
                   <ContributorsListDisplay
                     contributors={snapshot.contributors}

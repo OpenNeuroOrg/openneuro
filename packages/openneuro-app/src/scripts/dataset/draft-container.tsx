@@ -186,7 +186,7 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
                 }
               />
               <MetaDataBlock
-                heading="Contributors"
+                heading="Authors"
                 item={
                   <ContributorsListDisplay
                     contributors={dataset.draft.contributors}
