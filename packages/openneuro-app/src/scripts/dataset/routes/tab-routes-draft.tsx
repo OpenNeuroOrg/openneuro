@@ -48,6 +48,7 @@ export const TabRoutesDraft = ({ dataset, hasEdit }) => {
             snapshots={dataset.snapshots}
             validation={dataset.draft.validation}
             description={dataset.draft.description}
+            fileCheck={dataset.draft.fileCheck}
           />
         }
       />

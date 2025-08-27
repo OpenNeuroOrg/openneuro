@@ -8,6 +8,9 @@ import { checkDatasetWrite } from "../permissions.js"
 import { getFiles } from "../../datalad/files"
 import { filterRemovedAnnexObjects } from "../utils/file.js"
 import { validation } from "./validation"
+import { creators } from "../../datalad/creators"
+import FileCheck from "../../models/fileCheck"
+import { contributors } from "../../datalad/contributors"
 
 // A draft must have a dataset parent
 export const draftFiles = async (dataset, args, { userInfo }) => {
@@ -31,6 +34,20 @@ export const revalidate = async (obj, { datasetId }, { user, userInfo }) => {
   await checkDatasetWrite(datasetId, user, userInfo)
 }
 
+/**
+ * Resolve any issues with files recorded for the current commit
+ */
+export const fileCheck = async (dataset) => {
+  const hexsha = await getDraftRevision(dataset.id)
+  // For drafts, obtain the local check results
+  const checks = await FileCheck.findOne({
+    datasetId: dataset.id,
+    hexsha,
+    remote: "local",
+  }).exec()
+  return checks
+}
+
 const draft = {
   id: (obj) => obj.id,
   files: draftFiles,
@@ -43,6 +60,9 @@ const draft = {
   description,
   readme,
   head: (obj) => obj.revision,
+  creators: (parent) => creators(parent),
+  fileCheck,
+  contributors: (parent) => contributors(parent),
 }
 
 export default draft

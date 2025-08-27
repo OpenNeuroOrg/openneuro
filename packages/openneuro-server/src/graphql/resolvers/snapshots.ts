@@ -18,6 +18,8 @@ import { getDraftHead } from "../../datalad/dataset"
 import { downloadFiles } from "../../datalad/snapshots"
 import { snapshotValidation } from "./validation"
 import { advancedDatasetSearchConnection } from "./dataset-search"
+import { creators } from "../../datalad/creators"
+import { contributors } from "../../datalad/contributors"
 
 export const snapshots = (obj) => {
   return datalad.getSnapshots(obj.id)
@@ -310,6 +312,8 @@ const Snapshot = {
   issues: (snapshot) => snapshotIssues(snapshot),
   issuesStatus: (snapshot) => issuesSnapshotStatus(snapshot),
   validation: (snapshot) => snapshotValidation(snapshot),
+  creators: (parent) => creators(parent),
+  contributors: (parent) => contributors(parent),
 }
 
 export default Snapshot

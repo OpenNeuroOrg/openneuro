@@ -7,6 +7,7 @@ import { Link } from "react-router-dom"
 import type { SearchResultItemProps } from "./SearchResultItem"
 import { ModalityLabel } from "../../components/formatting/modality-label"
 import { MetaListItemList } from "./MetaListItemList"
+import { CreatorListDisplay } from "../../users/creators-list"
 import "../scss/search-result-details.scss"
 
 interface SearchResultDetailsProps {
@@ -128,7 +129,10 @@ export const SearchResultDetails: FC<SearchResultDetailsProps> = (
   )
   const authors = renderMetaItem(
     "Authors",
-    <div>{itemData.latestSnapshot?.description?.Authors}</div>,
+    <CreatorListDisplay
+      creators={itemData.latestSnapshot?.creators}
+      separator=", "
+    />,
   )
   const uploaderDisplay = renderMetaItem(
     "Uploader by",
