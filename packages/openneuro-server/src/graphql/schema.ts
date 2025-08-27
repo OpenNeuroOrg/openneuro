@@ -206,6 +206,16 @@ export const typeDefs = `
     saveAdminNote(id: ID, datasetId: ID!, note: String!): DatasetEvent
     # Create a git event log for dataset changes
     createGitEvent(datasetId: ID!, commit: String!, reference: String!): DatasetEvent
+    # Request contributor status for a dataset
+    createContributorRequestEvent(datasetId: ID!): DatasetEvent
+    # Save contributor request response data
+    processContributorRequest(
+      datasetId: ID!
+      targetUserId: ID!
+      requestId: ID!
+      status: String!
+      reason: String 
+    ): DatasetEvent
     # Create or update a fileCheck document
     updateFileCheck(
       datasetId: ID!
@@ -355,6 +365,7 @@ export const typeDefs = `
     github: String
     githubSynced: Date
     links: [String]
+    notifications: [DatasetEvent!] 
     orcidConsent: Boolean
   }
 
@@ -921,6 +932,12 @@ export const typeDefs = `
     level: String
     ref: String
     message: String
+    requestId: ID
+    targetUserId: ID
+    status: String
+    reason: String
+    datasetId: ID
+    resolutionStatus: String
   }
 
   # Dataset events
@@ -937,6 +954,8 @@ export const typeDefs = `
     success: Boolean
     # Notes associated with the event
     note: String
+    # top-level datasetId field
+    datasetId: ID
   }
 
   type FileCheck {

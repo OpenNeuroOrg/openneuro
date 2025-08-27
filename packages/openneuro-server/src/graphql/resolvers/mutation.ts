@@ -43,7 +43,11 @@ import {
   finishImportRemoteDataset,
   importRemoteDataset,
 } from "./importRemoteDataset"
-import { saveAdminNote } from "./datasetEvents"
+import {
+  createContributorRequestEvent,
+  processContributorRequest,
+  saveAdminNote,
+} from "./datasetEvents"
 import { createGitEvent } from "./gitEvents"
 import { updateFileCheck } from "./fileCheck"
 
@@ -93,6 +97,8 @@ const Mutation = {
   finishImportRemoteDataset,
   updateUser,
   saveAdminNote,
+  createContributorRequestEvent,
+  processContributorRequest,
   createGitEvent,
   updateFileCheck,
 }

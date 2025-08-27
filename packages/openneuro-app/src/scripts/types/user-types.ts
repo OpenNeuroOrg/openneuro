@@ -1,3 +1,5 @@
+import type { Event, MappedNotification } from "./event-types"
+
 export interface User {
   id: string
   name: string
@@ -15,6 +17,7 @@ export interface User {
   provider?: string
   modified?: string
   githubSynced?: Date
+  notifications?: Event[]
   orcidConsent?: boolean | null
 }
 
@@ -62,6 +65,19 @@ export interface Dataset {
   }
 }
 
+export interface UserRoutesProps {
+  orcidUser: User
+  hasEdit: boolean
+  isUser: boolean
+}
+export interface UserCardProps {
+  orcidUser: User
+}
+
+export interface UserAccountViewProps {
+  orcidUser: User
+}
+
 export interface DatasetCardProps {
   dataset: Dataset
   hasEdit: boolean
@@ -76,4 +92,12 @@ export interface AccountContainerProps {
   orcidUser: User
   hasEdit: boolean
   isUser: boolean
+}
+
+export type OutletContextType = {
+  notifications: MappedNotification[]
+  handleUpdateNotification: (
+    id: string,
+    updates: Partial<MappedNotification>,
+  ) => void
 }
