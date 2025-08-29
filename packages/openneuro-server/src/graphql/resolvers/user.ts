@@ -1,6 +1,5 @@
 import { PipelineStage } from "mongoose"
 import User from "../../models/user"
-import Dataset from "../../models/dataset"
 import DatasetEvent from "../../models/datasetEvents"
 import Permission from "../../models/permission"
 import { UserNotificationStatusDocument } from "../../models/userNotificationStatus"
@@ -215,17 +214,7 @@ export async function notifications(obj, _, { userInfo }) {
   }
 
   const pipeline: PipelineStage[] = [
-    {
-      $lookup: {
-        from: "datasets",
-        localField: "datasetId",
-        foreignField: "id",
-        as: "datasetInfo",
-      },
-    },
-    {
-      $unwind: { path: "$datasetInfo", preserveNullAndEmptyArrays: true },
-    },
+    // Lookup permissions for dataset admin checks
     {
       $lookup: {
         from: "permissions",
@@ -248,6 +237,7 @@ export async function notifications(obj, _, { userInfo }) {
     {
       $unwind: { path: "$permissions", preserveNullAndEmptyArrays: true },
     },
+    // Match relevant events
     {
       $match: {
         $or: [
