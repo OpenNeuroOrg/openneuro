@@ -2,7 +2,7 @@ import React from "react"
 import type { FC } from "react"
 
 import { SingleCreatorDisplay } from "./creator"
-import type { Creator } from "../types/creators"
+import type { Creator } from "../types/datacite"
 
 interface CreatorListDisplayProps {
   creators: Creator[] | null | undefined

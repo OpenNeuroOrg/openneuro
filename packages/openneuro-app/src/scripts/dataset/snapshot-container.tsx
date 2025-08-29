@@ -40,6 +40,7 @@ import schemaGenerator from "../utils/json-ld.js"
 import { FollowToggles } from "./common/follow-toggles"
 import { DateDistance } from "../components/date-distance"
 import { CreatorListDisplay } from "../users/creators-list"
+import { ContributorsListDisplay } from "../users/contributors-list"
 
 // Helper function for getting version from URL
 const snapshotVersion = (location) => {
@@ -186,14 +187,15 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
                   />
                 }
               />
-
               <MetaDataBlock
                 heading="Authors"
-                item={description?.Authors?.length
-                  ? description.Authors.join(", ")
-                  : "N/A"}
-                className="dmb-inline-list"
+                item={
+                  <ContributorsListDisplay
+                    contributors={snapshot.contributors}
+                  />
+                }
               />
+
               <>
                 {summary && (
                   <ModalitiesMetaDataBlock
