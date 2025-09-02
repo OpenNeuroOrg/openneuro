@@ -35,6 +35,7 @@ import { TabRoutesDraft } from "./routes/tab-routes-draft"
 import { FollowToggles } from "./common/follow-toggles"
 import { DateDistance } from "../components/date-distance"
 import { CreatorListDisplay } from "../users/creators-list"
+import { ContributorsListDisplay } from "../users/contributors-list"
 
 export interface DraftContainerProps {
   dataset
@@ -184,8 +185,18 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
                   />
                 }
               />
+              <MetaDataBlock
+                heading="Authors"
+                item={
+                  <ContributorsListDisplay
+                    contributors={dataset.draft.contributors}
+                  />
+                }
+              />
 
-              <EditDescriptionList
+              {
+                /* do we need to account for inline editing on the author list
+               <EditDescriptionList
                 className="dmb-inline-list"
                 datasetId={datasetId}
                 field="Authors"
@@ -194,7 +205,8 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
                 editMode={hasEdit}
               >
                 {description?.Authors?.length ? description.Authors : ["N/A"]}
-              </EditDescriptionList>
+              </EditDescriptionList> */
+              }
               {summary && (
                 <ModalitiesMetaDataBlock
                   items={summary.modalities}
