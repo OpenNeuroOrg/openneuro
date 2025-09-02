@@ -1,17 +1,20 @@
 import React, { useCallback, useState } from "react"
-import { toast } from "react-toastify"
 import * as Sentry from "@sentry/react"
-import styles from "./scss/usernotifications.module.scss"
-import type { MappedNotification } from "../types/event-types"
+import { toast } from "react-toastify"
 import { useMutation, useQuery } from "@apollo/client"
-import { PROCESS_CONTRIBUTOR_REQUEST_MUTATION } from "../queries/datasetEvents.js"
-import { GET_USER } from "../queries/user"
+import {
+  PROCESS_CONTRIBUTOR_REQUEST_MUTATION,
+  UPDATE_NOTIFICATION_STATUS_MUTATION,
+} from "../queries/datasetEvents"
+import { GET_USER, useUser } from "../queries/user"
 import { NotificationHeader } from "./user-notification-accordion-header"
 import { NotificationBodyContent } from "./user-notifications-accordion-body"
 import { NotificationReasonInput } from "./user-notification-reason-input"
 import { NotificationActionButtons } from "./user-notification-accordion-actions"
+import ToastContent from "../common/partials/toast-content"
+import styles from "./scss/usernotifications.module.scss"
 
-import ToastContent from "../common/partials/toast-content.jsx"
+import type { MappedNotification } from "../types/event-types"
 
 export const NotificationAccordion = ({
   notification,
@@ -20,11 +23,11 @@ export const NotificationAccordion = ({
   notification: MappedNotification
   onUpdate: (id: string, updates: Partial<MappedNotification>) => void
 }) => {
+  const { user } = useUser()
   const {
     id,
     title,
     content,
-    // status, // Not used - TODO
     type,
     approval,
     datasetId,
@@ -38,13 +41,13 @@ export const NotificationAccordion = ({
   const isContributorRequest = type === "approval"
   const isContributorResponse = type === "response"
 
-  const {
-    data: targetUserData,
-    loading: targetUserLoading,
-  } = useQuery(GET_USER, {
-    variables: { userId: targetUserId },
-    skip: !targetUserId,
-  })
+  const { data: targetUserData, loading: targetUserLoading } = useQuery(
+    GET_USER,
+    {
+      variables: { userId: targetUserId },
+      skip: !targetUserId,
+    },
+  )
 
   const targetUser = targetUserData?.user
   const hasContent = content && content.trim().length > 0
@@ -55,10 +58,14 @@ export const NotificationAccordion = ({
   const [currentApprovalAction, setCurrentApprovalAction] = useState<
     "accepted" | "denied" | null
   >(null)
-  const [_localError, setLocalError] = useState<string | null>(null)
+  const [localError, setLocalError] = useState<string | null>(null)
   const [processContributorRequest, { loading: processRequestLoading }] =
     useMutation(PROCESS_CONTRIBUTOR_REQUEST_MUTATION)
   const isProcessing = processRequestLoading || targetUserLoading
+
+  const [updateNotificationStatus] = useMutation(
+    UPDATE_NOTIFICATION_STATUS_MUTATION,
+  )
 
   const toggleAccordion = useCallback(() => {
     setIsOpen((prev) => !prev)
@@ -86,10 +93,7 @@ export const NotificationAccordion = ({
       return
     }
 
-    if (isProcessing || !currentApprovalAction) {
-      // ? add a toast here if this state is reached unexpectedly
-      return
-    }
+    if (isProcessing || !currentApprovalAction) return
 
     if (!datasetId || !requestId || !targetUserId) {
       const missingDataError =
@@ -119,11 +123,10 @@ export const NotificationAccordion = ({
         />,
       )
 
-      onUpdate(id, { approval: currentApprovalAction, reason: reasonInput })
       setShowReasonInput(false)
       setReasonInput("")
       setCurrentApprovalAction(null)
-    } catch (error) {
+    } catch (error: any) {
       const errorMessage = `Error processing contributor request: ${
         error.message || "Unknown error"
       }`
@@ -141,8 +144,6 @@ export const NotificationAccordion = ({
     requestId,
     targetUserId,
     processContributorRequest,
-    onUpdate,
-    id,
   ])
 
   const handleReasonCancel = useCallback(() => {
@@ -151,6 +152,37 @@ export const NotificationAccordion = ({
     setCurrentApprovalAction(null)
     setLocalError(null)
   }, [])
+
+  const handleStatusChange = useCallback(
+    async (newStatus: "unread" | "saved" | "archived") => {
+      onUpdate(id, { status: newStatus })
+
+      try {
+        const backendStatus = newStatus.toUpperCase()
+
+        await updateNotificationStatus({
+          variables: { eventId: id, status: backendStatus },
+          refetchQueries: [{ query: GET_USER, variables: { userId: user.id } }],
+        })
+
+        toast.success(
+          <ToastContent
+            title="Update Successful"
+            body={`Notification status changed to ${newStatus}.`}
+          />,
+        )
+      } catch (error) {
+        Sentry.captureException(error)
+        toast.error(
+          <ToastContent
+            title="Update Failed"
+            body="Failed to update notification status. Please try again."
+          />,
+        )
+      }
+    },
+    [id, updateNotificationStatus, user, onUpdate],
+  )
 
   const showReviewButton = hasContent || isContributorRequest ||
     isContributorResponse
@@ -170,9 +202,10 @@ export const NotificationAccordion = ({
         <NotificationActionButtons
           notification={notification}
           isProcessing={isProcessing}
-          onUpdate={onUpdate}
           setError={setLocalError}
+          onUpdate={onUpdate}
           handleProcessAction={handleProcessAction}
+          handleStatusChange={handleStatusChange}
         />
       </NotificationHeader>
 

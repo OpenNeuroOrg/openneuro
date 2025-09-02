@@ -1,9 +1,7 @@
-/**
- * User resolvers
- */
 import { PipelineStage } from "mongoose"
 import User from "../../models/user"
 import DatasetEvent from "../../models/datasetEvents"
+import Permission from "../../models/permission"
 import { UserNotificationStatusDocument } from "../../models/userNotificationStatus"
 
 function isValidOrcid(orcid: string): boolean {
@@ -249,7 +247,7 @@ export async function notifications(obj, _, { userInfo }) {
           { "event.targetUserId": userId },
           // Condition 3: All contributor requests for a site admin
           ...(userInfo.admin ? [{ "event.type": "contributorRequest" }] : []),
-          // Condition 4: All contributor requests for a dataset admin
+          // Condition 4: All contributor requests for a dataset admin (using the Permission model)
           {
             "event.type": "contributorRequest",
             "permissions.level": "admin",
