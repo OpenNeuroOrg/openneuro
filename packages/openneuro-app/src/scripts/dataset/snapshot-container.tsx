@@ -41,6 +41,7 @@ import { FollowToggles } from "./common/follow-toggles"
 import { DateDistance } from "../components/date-distance"
 import { RequestContributorButton } from "./mutations/request-contributor-status"
 import { CreatorListDisplay } from "../users/creators-list"
+import { ContributorsListDisplay } from "../users/contributors-list"
 
 // Helper function for getting version from URL
 const snapshotVersion = (location) => {
@@ -199,13 +200,14 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
                         currentUserId={currentUserId}
                       />
                     )}
-                    {description?.Authors?.length
-                      ? description.Authors.join(", ")
-                      : "N/A"}
+                    <ContributorsListDisplay
+                      contributors={snapshot.contributors}
+                    />
                   </>
                 }
                 className="dmb-inline-list"
               />
+
               <>
                 {summary && (
                   <ModalitiesMetaDataBlock
