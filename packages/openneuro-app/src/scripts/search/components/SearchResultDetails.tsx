@@ -8,6 +8,7 @@ import type { SearchResultItemProps } from "./SearchResultItem"
 import { ModalityLabel } from "../../components/formatting/modality-label"
 import { MetaListItemList } from "./MetaListItemList"
 import { CreatorListDisplay } from "../../users/creators-list"
+import { ContributorsListDisplay } from "../../users/contributors-list"
 import "../scss/search-result-details.scss"
 
 interface SearchResultDetailsProps {
@@ -127,10 +128,18 @@ export const SearchResultDetails: FC<SearchResultDetailsProps> = (
       {itemData?.id}
     </Link>,
   )
-  const authors = renderMetaItem(
-    "Authors",
+  const creators = renderMetaItem(
+    "Creators",
     <CreatorListDisplay
       creators={itemData.latestSnapshot?.creators}
+      separator=", "
+    />,
+  )
+
+  const contributors = renderMetaItem(
+    "Contributors",
+    <ContributorsListDisplay
+      contributors={itemData.latestSnapshot?.contributors}
       separator=", "
     />,
   )
@@ -154,7 +163,8 @@ export const SearchResultDetails: FC<SearchResultDetailsProps> = (
           &times;
         </button>
         {moreDetailsHeader}
-        {authors}
+        {creators}
+        {contributors}
         {modalityList}
         {taskList}
         {accessionNumberDisplay}
