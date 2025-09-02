@@ -2,6 +2,7 @@
  * User resolvers
  */
 import User from "../../models/user"
+import DatasetEvent from "../../models/datasetEvents"
 
 function isValidOrcid(orcid: string): boolean {
   return /^[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{3}[0-9X]$/.test(orcid || "")
@@ -171,7 +172,7 @@ export const updateUser = async (
   { id, location, institution, links, orcidConsent },
 ) => {
   try {
-    let user // Declare user outside the if block
+    let user
 
     if (isValidOrcid(id)) {
       user = await User.findOne({
@@ -191,13 +192,42 @@ export const updateUser = async (
     if (links !== undefined) user.links = links
     if (orcidConsent !== undefined) user.orcidConsent = orcidConsent
 
-    // Save the updated user
     await user.save()
 
-    return user // Return the updated user object
+    return user
   } catch (err) {
     throw new Error("Failed to update user: " + err.message)
   }
+}
+
+/**
+ * Get all events associated with a specific user (for their notifications feed).
+ */
+export async function notifications(obj, _, { userInfo }) {
+  const userId = obj.id
+
+  // Authorization check: Only the user themselves or a site admin can view their notifications
+  if (!userInfo || (userInfo.id !== userId && !userInfo.admin)) {
+    throw new Error("Not authorized to view these notifications.")
+  }
+
+  const queryConditions: MongoQueryCondition[] = [
+    { userId: userId },
+    { "event.targetUserId": userId },
+  ]
+
+  // If the user whose notifications are being fetched (obj) is a site admin,
+  // they should also see all 'contributorRequest' events.
+  if (obj.admin) {
+    queryConditions.push({ "event.type": "contributorRequest" })
+  }
+
+  const events = await DatasetEvent.find({ $or: queryConditions })
+    .sort({ timestamp: -1 }) // Sort by most recent first
+    .populate("user")
+    .exec()
+
+  return events
 }
 
 const UserResolvers = {
@@ -216,6 +246,7 @@ const UserResolvers = {
   links: (obj) => obj.links,
   orcidConsent: (obj) => obj.orcidConsent,
   modified: (obj) => obj.updatedAt,
+  notifications: notifications,
 }
 
 export default UserResolvers

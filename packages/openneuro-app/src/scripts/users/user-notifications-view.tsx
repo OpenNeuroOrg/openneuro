@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import {
   NavLink,
   Outlet,
@@ -10,14 +10,62 @@ import styles from "./scss/usernotifications.module.scss"
 import iconUnread from "../../assets/icon-unread.png"
 import iconSaved from "../../assets/icon-saved.png"
 import iconArchived from "../../assets/icon-archived.png"
+import { useUser } from "../queries/user"
+import { Loading } from "../components/loading/Loading"
+import * as Sentry from "@sentry/react"
 
-export const UserNotificationsView = ({ orcidUser }) => {
+import type { OutletContextType, UserRoutesProps } from "../types/user-types"
+import type { MappedNotification } from "../types/event-types"
+import { mapRawEventToMappedNotification } from "../types/event-types"
+
+export const UserNotificationsView = ({ orcidUser }: UserRoutesProps) => {
   const tabsRef = useRef<HTMLUListElement | null>(null)
   const { tab = "unread" } = useParams()
   const navigate = useNavigate()
   const location = useLocation()
 
-  // Explicitly define the type of indicatorStyle
+  const { user, loading, error } = useUser(orcidUser.id)
+
+  const [mappedNotifications, setMappedNotifications] = useState<
+    MappedNotification[]
+  >([])
+
+  useEffect(() => {
+    if (user?.notifications) {
+      const initialMapped = user.notifications.map(
+        mapRawEventToMappedNotification,
+      )
+      setMappedNotifications(initialMapped)
+    }
+  }, [user?.notifications])
+
+  const handleUpdateNotification = useCallback(
+    (id: string, updates: Partial<MappedNotification>) => {
+      setMappedNotifications((prevNotifications) =>
+        prevNotifications.map((notification) =>
+          notification.id === id
+            ? { ...notification, ...updates }
+            : notification
+        )
+      )
+    },
+    [],
+  )
+
+  // Memoize counts to prevent recalculation on render
+  const unreadCount = useMemo(
+    () => mappedNotifications.filter((n) => n.status === "unread").length,
+    [mappedNotifications],
+  )
+  const savedCount = useMemo(
+    () => mappedNotifications.filter((n) => n.status === "saved").length,
+    [mappedNotifications],
+  )
+  const archivedCount = useMemo(
+    () => mappedNotifications.filter((n) => n.status === "archived").length,
+    [mappedNotifications],
+  )
+
   const [indicatorStyle, setIndicatorStyle] = useState<React.CSSProperties>({
     width: "0px",
     transform: "translateX(0px)",
@@ -28,7 +76,6 @@ export const UserNotificationsView = ({ orcidUser }) => {
     transition: "transform 0.3s ease, width 0.3s ease",
   })
 
-  // Update the indicator position based on active tab whenever location changes
   useEffect(() => {
     const activeLink = tabsRef.current?.querySelector(`.${styles.active}`)
     if (activeLink) {
@@ -47,7 +94,6 @@ export const UserNotificationsView = ({ orcidUser }) => {
     }
   }, [location])
 
-  // Redirect to default tab if no tab is specified
   useEffect(() => {
     if (!["unread", "saved", "archived"].includes(tab)) {
       navigate(`/user/${orcidUser.orcid}/notifications/unread`, {
@@ -55,6 +101,19 @@ export const UserNotificationsView = ({ orcidUser }) => {
       })
     }
   }, [tab, orcidUser.orcid, navigate])
+
+  if (loading) {
+    return <Loading />
+  }
+
+  if (error) {
+    Sentry.captureException(error)
+    return (
+      <div>
+        Error loading notifications: {error.message}. Please try again.
+      </div>
+    )
+  }
 
   return (
     <div data-testid="user-notifications-view">
@@ -70,7 +129,7 @@ export const UserNotificationsView = ({ orcidUser }) => {
                   : styles.tabUnread}
             >
               <img className={styles.tabicon} src={iconUnread} alt="" /> Unread
-              <span className={styles.count}>121</span>
+              <span className={styles.count}>{unreadCount}</span>
             </NavLink>
           </li>
           <li>
@@ -82,7 +141,7 @@ export const UserNotificationsView = ({ orcidUser }) => {
                   : styles.tabSaved}
             >
               <img className={styles.tabicon} src={iconSaved} alt="" /> Saved
-              <span className={styles.count}>121</span>
+              <span className={styles.count}>{savedCount}</span>
             </NavLink>
           </li>
           <li>
@@ -95,16 +154,20 @@ export const UserNotificationsView = ({ orcidUser }) => {
             >
               <img className={styles.tabicon} src={iconArchived} alt="" />{" "}
               Archived
-              <span className={styles.count}>121</span>
+              <span className={styles.count}>{archivedCount}</span>
             </NavLink>
           </li>
         </ul>
 
-        {/* This is the indicator that will follow the active tab */}
         <span style={indicatorStyle}></span>
       </div>
       <div className={styles.tabContent}>
-        <Outlet />
+        <Outlet
+          context={{
+            notifications: mappedNotifications,
+            handleUpdateNotification,
+          } as OutletContextType}
+        />
       </div>
     </div>
   )

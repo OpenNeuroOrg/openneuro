@@ -39,6 +39,7 @@ import { TabRoutesSnapshot } from "./routes/tab-routes-snapshot"
 import schemaGenerator from "../utils/json-ld.js"
 import { FollowToggles } from "./common/follow-toggles"
 import { DateDistance } from "../components/date-distance"
+import { RequestContributorButton } from "./mutations/request-contributor-status"
 import { CreatorListDisplay } from "../users/creators-list"
 import { ContributorsListDisplay } from "../users/contributors-list"
 
@@ -83,6 +84,7 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
   const modality: string = summary?.modalities[0] || ""
   const hasDerivatives = dataset?.derivatives.length > 0
   const isAnonymousReviewer = profile?.scopes?.includes("dataset:reviewer")
+  const currentUserId = profile?.sub
   return (
     <>
       <Helmet>
@@ -187,13 +189,23 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
                   />
                 }
               />
+
               <MetaDataBlock
                 heading="Authors"
                 item={
-                  <ContributorsListDisplay
-                    contributors={snapshot.contributors}
-                  />
+                  <>
+                    {profile && (
+                      <RequestContributorButton
+                        dataset={dataset}
+                        currentUserId={currentUserId}
+                      />
+                    )}
+                    <ContributorsListDisplay
+                      contributors={snapshot.contributors}
+                    />
+                  </>
                 }
+                className="dmb-inline-list"
               />
 
               <>
