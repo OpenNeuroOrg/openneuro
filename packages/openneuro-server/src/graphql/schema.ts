@@ -224,6 +224,8 @@ export const typeDefs = `
       annexFsck: [AnnexFsckInput!]!
       remote: String
     ): FileCheck
+    # Profile Event Status updates
+    updateEventStatus(eventId: ID!, status: NotificationStatusType!): UserNotificationStatus
   }
 
   # Anonymous dataset reviewer
@@ -940,6 +942,18 @@ export const typeDefs = `
     resolutionStatus: String
   }
 
+ # Possible statuses for user notification/events
+  enum NotificationStatusType {
+    UNREAD
+    SAVED
+    ARCHIVED
+  }
+
+  # User's notification status
+  type UserNotificationStatus {
+    status: NotificationStatusType!
+  }
+
   # Dataset events
   type DatasetEvent {
     # Unique identifier for the event
@@ -956,6 +970,10 @@ export const typeDefs = `
     note: String
     # top-level datasetId field
     datasetId: ID
+    # User's notification status event
+    notificationStatus: UserNotificationStatus
+    responseStatus: String
+    hasBeenRespondedTo: Boolean
   }
 
   type FileCheck {
