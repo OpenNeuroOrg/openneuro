@@ -213,6 +213,19 @@ export const typeDefs = `
       annexFsck: [AnnexFsckInput!]!
       remote: String
     ): FileCheck
+    # Update worker task queue status
+    updateWorkerTask(
+      id: ID!,
+      args: JSON,
+      kwargs: JSON,
+      taskName: String,
+      worker: String,
+      queuedAt: DateTime,
+      startedAt: DateTime,
+      finishedAt: DateTime,
+      error: String,
+      executionTime: Int,
+    ): WorkerTask
   }
 
   # Anonymous dataset reviewer
@@ -941,6 +954,18 @@ export const typeDefs = `
     input: [String]
   }
 
+  type WorkerTask {
+    id: ID!
+    args: JSON
+    kwargs: JSON
+    taskName: String
+    worker: String
+    queuedAt: DateTime
+    startedAt: DateTime
+    finishedAt: DateTime
+    error: String
+    executionTime: Int
+  }
 `
 
 schemaComposer.addTypeDefs(typeDefs)
