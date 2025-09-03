@@ -196,7 +196,7 @@ export async function getAnnexKeys(
           // Check that annexKey conforms to the git-annex key format
           // Other symlinks are allowed but may be rejected on push if they point outside of the repo
           if (
-            annexKey.match(/^[A-Z0-9]+-s\d+--[0-9a-fA-F]+(\.[a-zA-Z0-9]+)?$/)
+            annexKey.match(/^[A-Z0-9]+-s\d+--[0-9a-fA-F]+(\.[a-zA-Z0-9.]*)?$/)
           ) {
             logger.info(`Found key "${annexKey}" in HEAD.`)
             annexKeys[annexKey] = filepath
