@@ -1,12 +1,21 @@
 import type { GitWorkerContext } from "./types/git-context.ts"
+import type { Logger } from "@std/log"
 import { basename, dirname, join, relative } from "@std/path"
-import { default as git } from "isomorphic-git"
+import { default as git, TREE } from "isomorphic-git"
 
 /**
  * Why are we using hash wasm over web crypto?
  * Web crypto cannot do streaming hashes of the common git-annex functions yet.
  */
 import { createMD5, createSHA256 } from "hash-wasm"
+
+/**
+ * Mapping from annex key to relative paths
+ */
+export type AnnexKeyPaths = Record<string, string>
+
+// Initialize a utf-8 text decoder for reuse
+const textDecoder = new TextDecoder("utf-8")
 
 /**
  * Reusable hash factories
@@ -65,7 +74,6 @@ export function annexRelativePath(path: string) {
  * @param context GitWorkerContext objects
  */
 export async function annexAdd(
-  annexKeys: Record<string, string>,
   hash: string,
   path: string,
   relativePath: string,
@@ -119,8 +127,6 @@ export async function annexAdd(
 
   // Key has changed if the existing link points to another object
   if (forceAdd || link !== symlinkTarget) {
-    // Upload this key after the git commit
-    annexKeys[annexKey] = path
     // This object has a new annex hash, update the symlink and add it
     const symlinkTarget = join(
       annexRelativePath(relativePath),
@@ -157,5 +163,60 @@ export async function readAnnexPath(
     oid: annexBranchOid,
     filepath: logPath,
   })
-  return new TextDecoder().decode(blob)
+  return textDecoder.decode(blob)
+}
+
+/**
+ * Walk the git tree belonging to `ref` and return a mapping from annex keys to relative path
+ * @param ref Git reference to scan for annex objects
+ * @param logger Logger to use, reports what keys are found at INFO level
+ * @param context GitWorkerContext configured for a repo
+ */
+export async function getAnnexKeys(
+  ref: string,
+  logger: Logger,
+  context: GitWorkerContext,
+): Promise<AnnexKeyPaths> {
+  const annexKeys = {} as AnnexKeyPaths
+  const annexedGitObjects: { path: string; oid: string }[] = []
+  // Walk HEAD and find all annex symlinks
+  await git.walk({
+    ...context.config(),
+    trees: [TREE({ ref })],
+    map: async function (filepath, [entry]) {
+      if (
+        entry && await entry.type() === "blob" &&
+        await entry.mode() === 0o120000
+      ) {
+        annexedGitObjects.push({ path: filepath, oid: await entry.oid() })
+        const content = await entry.content()
+        if (content) {
+          const symlinkTarget = textDecoder.decode(content)
+          const annexKey = basename(symlinkTarget)
+          // Check that annexKey conforms to the git-annex key format
+          // Other symlinks are allowed but may be rejected on push if they point outside of the repo
+          if (
+            annexKey.match(/^[A-Z0-9]+-s\d+--[0-9a-fA-F]+(\.[a-zA-Z0-9.]*)?$/)
+          ) {
+            logger.info(`Found key "${annexKey}" in HEAD.`)
+            annexKeys[annexKey] = filepath
+          } else {
+            logger.warn(
+              `Skipping invalid annex key format: "${annexKey}" for file "${filepath}"`,
+            )
+          }
+        }
+      }
+    },
+  })
+
+  if (annexedGitObjects.length > 0) {
+    logger.info("Annexed objects in HEAD:")
+    for (const obj of annexedGitObjects) {
+      logger.info(`- ${obj.path} (OID: ${obj.oid})`)
+    }
+  } else {
+    logger.info("No annexed objects found in HEAD.")
+  }
+  return annexKeys
 }

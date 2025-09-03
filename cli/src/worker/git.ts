@@ -7,21 +7,14 @@ import { logger, setupLogging } from "../logger.ts"
 import { PromiseQueue } from "./queue.ts"
 import { checkKey, storeKey } from "./transferKey.ts"
 import ProgressBar from "@deno-library/progress"
-import { annexAdd, hashDirLower, readAnnexPath } from "./annex.ts"
+import type { AnnexKeyPaths } from "./annex.ts"
+import { annexAdd, getAnnexKeys, hashDirLower, readAnnexPath } from "./annex.ts"
 import { GitWorkerContext } from "./types/git-context.ts"
 import { resetWorktree } from "./resetWorktree.ts"
 import { getDefault } from "./getDefault.ts"
 
 let context: GitWorkerContext
 let attributesCache: GitAnnexAttributes
-
-/**
- * Paths to upload to the remote annex
- *
- * Keys are the annex key
- * Values are repo relative path
- */
-const annexKeys: Record<string, string> = {}
 
 async function done() {
   logger.info("Git worker shutdown.")
@@ -163,7 +156,6 @@ async function add(event: GitWorkerEventAdd) {
   } else {
     if (
       await annexAdd(
-        annexKeys,
         annexed,
         event.data.path,
         event.data.relativePath,
@@ -214,14 +206,13 @@ async function createAnnexBranch() {
  * Generate a commit for remote.log updates if needed
  */
 async function remoteSetup() {
-  const noAnnexKeys: Record<string, string> = {}
-  await commitAnnexBranch(noAnnexKeys)
+  await commitAnnexBranch()
 }
 
 /**
  * Generate one commit for all pending git-annex branch changes
  */
-async function commitAnnexBranch(annexKeys: Record<string, string>) {
+async function commitAnnexBranch() {
   // Find the UUID of this repository if it exists already
   const expectedRemote = "OpenNeuro" // TODO - This could be more flexible?
   let uuid
@@ -280,6 +271,7 @@ async function commitAnnexBranch(annexKeys: Record<string, string>) {
         }
       }
       // Add logs for each annexed file
+      const annexKeys = await getAnnexKeys("HEAD", logger, context)
       for (const [key, _path] of Object.entries(annexKeys)) {
         const hashDir = join(...await hashDirLower(key))
         const annexBranchPath = join(hashDir, `${key}.log`)
@@ -379,7 +371,7 @@ async function commit() {
       author: context.author,
       message: "[OpenNeuro] Added local files",
     })
-    await commitAnnexBranch(annexKeys)
+    await commitAnnexBranch()
     logger.info(`Committed as "${commitHash}"`)
   }
 }
@@ -389,6 +381,7 @@ async function commit() {
  */
 async function push() {
   let completed = 0
+  const annexKeys: AnnexKeyPaths = await getAnnexKeys("HEAD", logger, context)
   const annexedObjects = Object.keys(annexKeys).length
   const progress = new ProgressBar({
     title: `Transferring annexed files`,
@@ -398,13 +391,15 @@ async function push() {
     await progress.render(completed)
   }
   // Git-annex copy --to=openneuro
-  for (const [key, path] of Object.entries(annexKeys)) {
+  for (const [key, relativePath] of Object.entries(annexKeys)) {
     const checkKeyResult = await checkKey({
       url: context.repoEndpoint,
       token: context.authorization,
     }, key)
     if (checkKeyResult) {
       logger.info(`Skipping key "${key}" present on remote`)
+      completed += 1
+      await progress.render(completed)
     } else {
       let storeKeyResult = -1
       let retries = 3
@@ -416,7 +411,7 @@ async function push() {
             token: context.authorization,
           },
           key,
-          path,
+          join(context.sourcePath, relativePath),
         )
         if (storeKeyResult === -1 && retries > 0) {
           logger.warn(`Failed to transfer annex object "${key}" - retrying`)
@@ -430,7 +425,7 @@ async function push() {
         completed += 1
         await progress.render(completed)
         logger.info(
-          `Stored ${storeKeyResult} bytes for key "${key}" from path "${path}"`,
+          `Stored ${storeKeyResult} bytes for key "${key}" from path "${relativePath}"`,
         )
       }
     }
