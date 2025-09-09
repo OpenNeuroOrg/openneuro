@@ -1,4 +1,3 @@
-import asyncio
 import os
 import logging
 
@@ -13,7 +12,10 @@ from datalad_service.tasks.snapshots import (
     SnapshotExistsException,
 )
 from datalad_service.tasks.files import get_tree
-from datalad_service.tasks.publish import export_dataset, monitor_remote_configs
+from datalad_service.tasks.publish import (
+    export_dataset,
+    monitor_remote_configs,
+)
 
 
 class SnapshotResource:
@@ -65,9 +67,7 @@ class SnapshotResource:
             if not skip_publishing:
                 monitor_remote_configs(ds_path)
                 # Publish after response
-                asyncio.get_event_loop().run_in_executor(
-                    None, export_dataset, ds_path, req.cookies
-                )
+                await export_dataset.kiq(ds_path)
         except SnapshotExistsException as err:
             resp.media = {'error': repr(err)}
             resp.status = falcon.HTTP_CONFLICT
