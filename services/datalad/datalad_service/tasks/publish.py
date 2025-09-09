@@ -52,14 +52,14 @@ def s3_sibling(dataset_path):
 
 
 @broker.task
-def create_remotes_and_export(dataset_path, cookies=None):
+def create_remotes_and_export(dataset_path):
     """
     Create public S3 and GitHub remotes and export to them.
 
     Called by publish handler to make a dataset public initially.
     """
     create_remotes(dataset_path)
-    export_dataset(dataset_path, cookies)
+    export_dataset(dataset_path)
 
 
 def create_remotes(dataset_path):
@@ -68,9 +68,9 @@ def create_remotes(dataset_path):
     github_sibling(dataset_path, dataset)
 
 
+@broker.task
 def export_dataset(
     dataset_path,
-    cookies=None,
     s3_export=s3_export,
     github_export=github_export,
     update_s3_sibling=update_s3_sibling,
@@ -95,7 +95,7 @@ def export_dataset(
                 # Perform all GitHub export steps
                 github_export(dataset_id, dataset_path, tags[-1].name)
         # Drop cache once all exports are complete
-        clear_dataset_cache(dataset_id, tags[-1].name, cookies)
+        clear_dataset_cache(dataset_id, tags[-1].name)
 
 
 def check_remote_has_version(dataset_path, remote, tag):

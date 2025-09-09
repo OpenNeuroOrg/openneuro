@@ -11,6 +11,6 @@ class PublishResource:
 
     async def on_post(self, req, resp, dataset):
         dataset_path = self.store.get_dataset_path(dataset)
-        await create_remotes_and_export.kiq(dataset_path, cookies=req.cookies)
+        await create_remotes_and_export.kiq(dataset_path)
         resp.media = {}
         resp.status = falcon.HTTP_OK

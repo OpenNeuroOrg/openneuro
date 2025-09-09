@@ -62,7 +62,7 @@ def generate_worker_token():
             'exp': int(one_day_ahead.timestamp()),
             'scopes': ['dataset:worker'],
         },
-        config.JWT_SECRET,
+        config.get_jwt_secret(),
         algorithm='HS256',
     )
 
