@@ -25,6 +25,7 @@ from datalad_service.common.s3 import (
     get_s3_bucket,
     update_s3_sibling,
 )
+from datalad_service.broker import broker
 
 logger = logging.getLogger('datalad_service.' + __name__)
 
@@ -50,6 +51,7 @@ def s3_sibling(dataset_path):
         datalad_service.common.s3.setup_s3_sibling(dataset_path)
 
 
+@broker.task
 def create_remotes_and_export(dataset_path, cookies=None):
     """
     Create public S3 and GitHub remotes and export to them.
