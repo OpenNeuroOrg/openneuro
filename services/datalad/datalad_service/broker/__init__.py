@@ -14,7 +14,10 @@ if 'pytest' in sys.modules:
 else:
     redis_url = f'redis://{config.REDIS_HOST}:{config.REDIS_PORT}/8'
     worker_id = get_docker_scale()
-    worker_name = f'worker-{worker_id}'
+    if worker_id is None:
+        queue_name = 'taskiq'
+    else:
+        queue_name = f'worker-{worker_id}'
     result_backend = RedisAsyncResultBackend(
         redis_url=redis_url,
         result_ex_time=5000,
@@ -22,7 +25,7 @@ else:
     broker = (
         RedisStreamBroker(
             url=redis_url,
-            queue_name=worker_name,
+            queue_name=queue_name,
         )
         .with_result_backend(result_backend)
         .with_middlewares(
