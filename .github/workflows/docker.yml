@@ -7,7 +7,7 @@ jobs:
     name: Server
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: build the docker image
         id: build-docker-image
         run: |
@@ -17,7 +17,7 @@ jobs:
     name: App
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: build the docker image
         id: build-docker-image
         run: |
@@ -27,7 +27,7 @@ jobs:
     name: Indexer
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: build the docker image
         id: build-docker-image
         run: |
@@ -37,7 +37,7 @@ jobs:
     name: Datalad Service
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: build the docker image
         id: build-docker-image
         run: |
