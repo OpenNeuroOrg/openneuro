@@ -5,14 +5,14 @@ import json
 import jwt
 
 
-def test_add_commit_info(client):
+def test_add_commit_info(client, monkeypatch):
     ds_id = 'ds000001'
     file_data = 'Test annotating requests with user info'
     name = 'Test User'
     email = 'user@example.com'
     user = {'name': name, 'email': email, 'sub': '123456', 'admin': False}
     jwt_secret = 'shhhhh'
-    os.environ['JWT_SECRET'] = jwt_secret
+    monkeypatch.setenv('JWT_SECRET', jwt_secret)
     access_token = jwt.encode(user, jwt_secret)
     cookie = f'accessToken={access_token}'
     headers = {'Cookie': cookie}
