@@ -454,6 +454,19 @@ async function push() {
   if (localAnnexOid === remoteAnnexOid) {
     logger.info("Git-annex branch is up to date.")
   } else {
+    // Fetch any new changes to the remote git-annex branch
+    logger.info("Fetching git-annex branch updates.")
+    await git.fetch({ ...context.config(), ref: "git-annex" })
+    logger.info("Merging git-annex branch.")
+    // Merge remote git-annex changes
+    await git.merge(
+      {
+        ...context.config(),
+        author: context.author,
+        ours: "git-annex",
+        theirs: "origin/git-annex",
+      },
+    )
     logger.info("Pushing git-annex branch...")
     // Git push git-annex
     await git.push(
