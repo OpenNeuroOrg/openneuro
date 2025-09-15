@@ -68,5 +68,5 @@
     "react-router-dom": "6.3.0",
     "rollup": "4.22.0"
   },
-  "packageManager": "yarn@4.5.1"
+  "packageManager": "yarn@4.9.4"
 }
