@@ -1,5 +1,5 @@
-import React from "react"
-import type { FC } from "react"
+// components/SingleContributorDisplay.tsx
+import React, { FC } from "react"
 import { Link } from "react-router-dom"
 import { useUser } from "../queries/user"
 import type { Contributor } from "../types/datacite"
@@ -11,10 +11,6 @@ interface SingleContributorDisplayProps {
   separator: React.ReactNode
 }
 
-/**
- * Displays a single contributor's name and ORCID link.
- * Conditionally links the name to a user profile if a user with the ORCID exists.
- */
 export const SingleContributorDisplay: FC<SingleContributorDisplayProps> = ({
   contributor,
   isLast,
@@ -33,20 +29,15 @@ export const SingleContributorDisplay: FC<SingleContributorDisplayProps> = ({
     )
   }
 
-  // Check if a user was successfully found for this ORCID
   const userExists = !!user?.id
-
+  // TODO add event to allow user to approve attribution and if userApproved response allow linking to profile
+  const userApproved = false
   return (
     <>
-      {contributor.orcid && userExists
-        ? (
-          <Link to={`/user/${contributor.orcid}`}>
-            {displayName}
-          </Link>
-        )
+      {contributor.orcid && userExists && userApproved
+        ? <Link to={`/user/${contributor.orcid}`}>{displayName}</Link>
         : displayName}
-
-      {contributor.orcid && (
+      {contributor.orcid && userApproved && (
         <>
           {" "}
           <a

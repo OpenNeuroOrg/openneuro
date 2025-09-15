@@ -87,7 +87,6 @@ export interface SearchResultItemProps {
         Name: string
         DatasetDOI: string
       }
-      creators: Creator[]
       contributors: Contributor[]
     }
     analytics: {

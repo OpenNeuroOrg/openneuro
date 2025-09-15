@@ -7,7 +7,7 @@ export interface SelectGroupProps {
     value: string
   }[]
   value: string
-  setValue: (string) => void
+  setValue: (value: string) => void
   label?: string
   id: string
   layout: "inline" | "stacked"
@@ -19,6 +19,7 @@ export const SelectGroup = ({
   label,
   id,
   layout,
+  value,
 }: SelectGroupProps) => {
   return (
     <span
@@ -29,11 +30,14 @@ export const SelectGroup = ({
       {label && <label htmlFor={id}>{label}</label>}
       <select
         className="on-select"
-        onChange={(e) => setValue(e.target.value)}
         id={id}
+        value={value} // ✅ Keep the select controlled
+        onChange={(e) => setValue(e.target.value)}
       >
         {options.map((item, index) => (
-          <option key={index} label={item.label} value={item.value} />
+          <option key={index} value={item.value}>
+            {item.label}
+          </option>
         ))}
       </select>
     </span>
