@@ -46,23 +46,20 @@ export async function datasetEvents(obj, _, { userInfo, user }) {
   const enrichedEvents: EnrichedDatasetEvent[] = allEvents.map((event) => {
     const enrichedEvent = event.toObject() as EnrichedDatasetEvent
 
-    // Only default UNREAD if no status exists for this user
+    // Default UNREAD if no status exists for this user
     if (!enrichedEvent.notificationStatus) {
       enrichedEvent.notificationStatus = {
         status: "UNREAD",
       } as UserNotificationStatusDocument
     } else if (typeof enrichedEvent.notificationStatus === "string") {
-      // If somehow a string got in, wrap it in an object for consistency
       enrichedEvent.notificationStatus = {
-        status: enrichedEvent.notificationStatus as
-          | "UNREAD"
-          | "SAVED"
-          | "ARCHIVED",
+        status: enrichedEvent.notificationStatus,
       } as UserNotificationStatusDocument
     }
 
     if (isContributorRequest(event)) {
-      const response = responsesMap.get(event.id)
+      const requestId = event.event.requestId
+      const response = responsesMap.get(requestId) // <-- key by requestId, not event.id
       if (response && isContributorResponse(response)) {
         enrichedEvent.hasBeenRespondedTo = true
         enrichedEvent.responseStatus = response.event.status

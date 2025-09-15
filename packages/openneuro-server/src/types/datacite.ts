@@ -4,7 +4,7 @@
  */
 
 /**
- * unique identifier for a person or organization.
+ * Unique identifier for a person or organization.
  */
 export interface NameIdentifier {
   nameIdentifier: string
@@ -23,7 +23,7 @@ export interface Affiliation {
 }
 
 /**
- * Contributor object.
+ * Contributor object (normalized form used internally in app).
  */
 export interface Contributor {
   name: string
@@ -34,38 +34,29 @@ export interface Contributor {
 }
 
 /**
- * Creator object.
+ * Base interface shared by both creators and contributors in datacite.yml
  */
-export interface Creator {
-  name: string
-  givenName?: string
-  familyName?: string
-  orcid?: string
-}
-
-/**
- * raw Contributor object as it appears in datacite.yml.
- */
-export interface RawDataciteContributor {
+export interface RawDataciteBaseContributor {
   name: string
   nameType: "Personal" | "Organizational"
   givenName?: string
   familyName?: string
   nameIdentifiers?: NameIdentifier[]
   affiliation?: Affiliation[]
+}
+
+/**
+ * Raw Creator object as it appears in datacite.yml creators array.
+ * Does NOT have contributorType.
+ */
+export type RawDataciteCreator = RawDataciteBaseContributor
+
+/**
+ * Raw Contributor object as it appears in datacite.yml contributors array.
+ * Adds contributorType, which is required.
+ */
+export interface RawDataciteContributor extends RawDataciteBaseContributor {
   contributorType: string
-}
-
-/**
- * raw Creator object as it appears in datacite.yml.
- */
-export interface RawDataciteCreator {
-  name: string
-  nameType: "Personal" | "Organizational"
-  givenName?: string
-  familyName?: string
-  nameIdentifiers?: NameIdentifier[]
-  affiliation?: Affiliation[]
 }
 
 /**
@@ -77,11 +68,11 @@ export interface RawDataciteTypes {
 }
 
 /**
- * the main attributes section of the datacite.yml file.
+ * The main attributes section of the datacite.yml file.
  */
 export interface RawDataciteAttributes {
-  creators?: RawDataciteCreator[]
   contributors?: RawDataciteContributor[]
+  creators?: RawDataciteCreator[]
   types: RawDataciteTypes
 }
 
