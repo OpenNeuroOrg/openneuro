@@ -1,12 +1,13 @@
-import React, { FC, useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { gql, useMutation } from "@apollo/client"
+import * as Sentry from "@sentry/react"
 import type { Contributor } from "../types/datacite"
 import { SingleContributorDisplay } from "./contributor"
 import { Loading } from "../components/loading/Loading"
 import { ContributorFormRow } from "./contributor-form-row"
 import { cloneContributor } from "./contributor-utils"
 
-interface Props {
+interface ContributorsListDisplayProps {
   contributors: Contributor[] | null | undefined
   separator?: React.ReactNode
   datasetId?: string
@@ -30,12 +31,14 @@ const UPDATE_CONTRIBUTORS = gql`
   }
 `
 
-export const ContributorsListDisplay: FC<Props> = ({
-  contributors,
-  separator = <br />,
-  datasetId,
-  editable,
-}) => {
+export const ContributorsListDisplay: React.FC<ContributorsListDisplayProps> = (
+  {
+    contributors,
+    separator = <br />,
+    datasetId,
+    editable,
+  },
+) => {
   const [isEditing, setIsEditing] = useState(false)
   const [editingContributors, setEditingContributors] = useState<Contributor[]>(
     contributors?.map((c) => ({ ...c, order: c.order ?? 0 })) || [],
@@ -81,7 +84,7 @@ export const ContributorsListDisplay: FC<Props> = ({
         setErrors({})
       },
       onError(err) {
-        console.error("Failed to save contributors", err)
+        Sentry.captureException(err)
       },
     },
   )

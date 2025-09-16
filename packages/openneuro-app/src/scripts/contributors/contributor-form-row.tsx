@@ -1,9 +1,9 @@
-import React, { FC } from "react"
+import React from "react"
 import type { Contributor } from "../types/datacite"
 import { SelectGroup } from "../components/select/SelectGroup"
-import { cloneContributor, CONTRIBUTOR_TYPES } from "./contributor-utils"
+import { CONTRIBUTOR_TYPES } from "./contributor-utils"
 
-interface Props {
+interface ContributorFormRowProps {
   contributor: Contributor
   index: number
   errors: Record<number, string>
@@ -14,7 +14,7 @@ interface Props {
   isLast: boolean
 }
 
-export const ContributorFormRow: FC<Props> = ({
+export const ContributorFormRow: React.FC<ContributorFormRowProps> = ({
   contributor,
   index,
   errors,
