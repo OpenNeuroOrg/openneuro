@@ -33,19 +33,15 @@ export const getDataciteYml = async (
   revision?: string,
 ): Promise<RawDataciteYml | null> => {
   const dataciteFileUrl = fileUrl(datasetId, "", "datacite", revision)
-  console.log("Fetching datacite file at URL:", dataciteFileUrl)
 
   try {
     const res = await fetch(dataciteFileUrl)
     if (res.status === 200) {
       const text = await res.text()
       const parsed: RawDataciteYml = yaml.load(text) as RawDataciteYml
-      console.log(
-        `Successfully parsed datacite.yml for ${datasetId}:${revision}`,
-      )
+
       return parsed
     } else if (res.status === 404) {
-      console.warn(`No datacite.yml found at ${dataciteFileUrl}`)
       return null
     } else {
       throw new Error(
@@ -53,7 +49,6 @@ export const getDataciteYml = async (
       )
     }
   } catch (err) {
-    console.error("Error fetching datacite.yml:", err)
     Sentry.captureException(err)
     return null
   }
@@ -64,8 +59,8 @@ export const getDataciteYml = async (
  */
 export const saveDataciteYmlToRepo = async (
   datasetId: string,
-  user: any,
-  dataciteData: any,
+  userId: string,
+  dataciteData: RawDataciteYml,
 ) => {
   const url = `http://datalad-0/datasets/${datasetId}/files/datacite.yml`
 
@@ -73,21 +68,16 @@ export const saveDataciteYmlToRepo = async (
     // Directly PUT the file with cookie-based JWT auth
     await superagent
       .post(url)
-      .set("Cookie", generateDataladCookie(config)(user))
+      .set("Cookie", generateDataladCookie(config)(userId))
       .set("Accept", "application/json")
       .set("Content-Type", "text/yaml")
       .send(yaml.dump(dataciteData))
 
-    console.log(
-      `[saveDataciteYmlToRepo] Uploaded datacite.yml for dataset ${datasetId}`,
-    )
-
     // Commit the draft after upload
-    const gitRef = await commitFiles(datasetId, user)
+    const gitRef = await commitFiles(datasetId, userId)
     return { id: gitRef }
   } catch (err) {
     Sentry.captureException(err)
-    console.error(`[saveDataciteYmlToRepo] Failed to upload datacite.yml:`, err)
     throw err
   }
 }
@@ -135,22 +125,11 @@ export const updateContributors = async (
   newContributors: Contributor[],
   user: string,
 ): Promise<boolean> => {
-  console.log("updateContributors() called with:", {
-    datasetId,
-    revision,
-    newContributors,
-    user,
-  })
-
   try {
     let dataciteData = await getDataciteYml(datasetId, revision)
-    console.log("Fetched datacite.yml:", dataciteData)
 
     // If no datacite.yml, create a new one
     if (!dataciteData) {
-      console.warn(
-        `No datacite.yml found for ${datasetId}. Creating a new one.`,
-      )
       dataciteData = emptyDataciteYml()
     }
 
@@ -171,14 +150,10 @@ export const updateContributors = async (
     dataciteData.data.attributes.contributors = rawContributors
     dataciteData.data.attributes.creators = rawContributors
 
-    console.log("Saving updated datacite.yml:", dataciteData)
-
     await saveDataciteYmlToRepo(datasetId, user, dataciteData)
-    console.log("Save completed for dataset:", datasetId)
 
     return true
   } catch (err) {
-    console.error("updateContributors() failed:", err)
     Sentry.captureException(err)
     return false // <-- prevent returning null
   }
@@ -215,7 +190,7 @@ export const updateContributorsUtil = async (
 
   dataciteData.data.attributes.contributors = contributorsCopy
   dataciteData.data.attributes.creators = contributorsCopy.map((
-    { contributorType, ...rest },
+    { contributorType: _, ...rest },
   ) => rest)
 
   await saveDataciteYmlToRepo(datasetId, userId, dataciteData)
