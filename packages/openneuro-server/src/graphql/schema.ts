@@ -687,6 +687,7 @@ export const typeDefs = `
     familyName: String
     orcid: String
     contributorType: String!
+    order: Int
   }
 
   # ContributorInput input type
@@ -696,11 +697,12 @@ export const typeDefs = `
     familyName: String
     orcid: String
     contributorType: String
+    order: Int
   }
 
   type UpdateContributorsPayload {
     success: Boolean!
-    contributors: [Contributor!]!
+    dataset: Dataset
   }
 
 

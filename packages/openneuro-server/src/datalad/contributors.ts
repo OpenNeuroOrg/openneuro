@@ -10,6 +10,7 @@ import {
   getDataciteYml,
   normalizeRawContributors,
   saveDataciteYmlToRepo,
+  updateContributorsUtil,
 } from "../utils/datacite-utils"
 import type {
   Contributor,
@@ -61,26 +62,36 @@ export const contributors = async (
       const normalized = await normalizeRawContributors(
         dataciteData.data.attributes.contributors,
       )
+
+      // 🔹 Ensure all contributors have an order, sort by order
+      const orderedContributors = normalized
+        .map((c, index) => ({
+          ...c,
+          order: c.order ?? index + 1,
+        }))
+        .sort((a, b) => a.order - b.order)
+
       console.log(
-        "[contributors] normalized contributors from datacite.yml:",
-        normalized,
+        "[contributors] normalized contributors with order:",
+        orderedContributors,
       )
-      return normalized
+      return orderedContributors
     }
 
-    // Fallback: use dataset_description.json authors if datacite.yml is missing or empty
+    // ---- Fallback: dataset_description.json authors ----
     const datasetDescription = await description(obj)
     if (datasetDescription?.Authors?.length) {
-      const fallbackContributors = datasetDescription.Authors.map((
-        author: string,
-      ) => ({
-        name: author.trim(),
-        givenName: undefined,
-        familyName: undefined,
-        orcid: undefined,
-        contributorType: "Contributor",
-        userId: undefined,
-      }))
+      const fallbackContributors = datasetDescription.Authors.map(
+        (author: string, index: number) => ({
+          name: author.trim(),
+          givenName: undefined,
+          familyName: undefined,
+          orcid: undefined,
+          contributorType: "Contributor",
+          order: index + 1, // assign sequential order
+          userId: undefined,
+        }),
+      )
       console.log(
         "[contributors] fallback contributors from dataset_description.json:",
         fallbackContributors,
@@ -88,7 +99,7 @@ export const contributors = async (
       return fallbackContributors
     }
 
-    // If neither source has contributors, return empty array
+    // No contributors found
     return []
   } catch (err) {
     console.error(
@@ -104,64 +115,6 @@ export const contributors = async (
 }
 
 /**
- * Utility function to update contributors in datacite.yml
- */
-export const updateContributorsUtil = async (
-  datasetId: string,
-  newContributors: Contributor[],
-  userId: string,
-) => {
-  if (!datasetId) throw new Error("datasetId is required")
-  if (!newContributors?.length) {
-    throw new Error("newContributors cannot be empty")
-  }
-
-  // Fetch current datacite.yml as JS object
-  let dataciteData = await getDataciteYml(datasetId)
-  if (!dataciteData) {
-    dataciteData = emptyDataciteYml()
-  }
-
-  // Deep copy helper
-  const deepCopy = <T>(obj: T): T => JSON.parse(JSON.stringify(obj))
-
-  // ---- STEP 1: Build Contributors Array ----
-  const contributorsCopy: RawDataciteContributor[] = deepCopy(
-    newContributors.map((c) => ({
-      name: c.name,
-      givenName: c.givenName || "",
-      familyName: c.familyName || "",
-      // Default to "Personal" unless explicitly specified otherwise
-      nameType: "Personal" as const,
-      nameIdentifiers: c.orcid
-        ? [
-          {
-            nameIdentifier: `https://orcid.org/${c.orcid}`,
-            nameIdentifierScheme: "ORCID",
-            schemeUri: "https://orcid.org",
-          },
-        ]
-        : [],
-      contributorType: c.contributorType || "Researcher", // Default to "Researcher"
-    })),
-  )
-
-  // ---- STEP 2: Build Creators Array Without contributorType ----
-  const creatorsCopy: RawDataciteCreator[] = deepCopy(
-    contributorsCopy.map(({ contributorType, ...rest }) => rest),
-  )
-
-  // ---- STEP 3: Assign to dataciteData ----
-  dataciteData.data.attributes.creators = creatorsCopy
-  dataciteData.data.attributes.contributors = contributorsCopy
-
-  // ---- STEP 4: Save ----
-  await saveDataciteYmlToRepo(datasetId, userId, dataciteData)
-
-  return true
-}
-
-/**
  * GraphQL mutation resolver (named export)
  */
 export const updateContributors = async (
@@ -169,44 +122,42 @@ export const updateContributors = async (
   args: { datasetId: string; newContributors: Contributor[] },
   context: any,
 ) => {
-  console.log("[updateContributors] args:", JSON.stringify(args, null, 2))
-  console.log("[updateContributors] context:", JSON.stringify(context, null, 2))
-
-  // Extract user ID from context (handles ORCID or Mongo _id)
   const userId = context?.userInfo?.id || context?.userInfo?._id
   if (!userId) {
-    console.warn("[updateContributors] userId missing in context")
-    return { success: false, contributors: [] }
+    console.warn("[updateContributors] Missing userId in context")
+    return { success: false, dataset: null }
   }
 
   try {
-    // Prepare contributors payload
-    const contributorsToSave = args.newContributors.map((c) => ({
+    const contributorsToSave = args.newContributors.map((c, index) => ({
       ...c,
       contributorType: c.contributorType || "Researcher",
+      order: c.order ?? index + 1,
     }))
 
-    console.log(
-      "[updateContributors] contributorsToSave:",
-      JSON.stringify(contributorsToSave, null, 2),
-    )
-    console.log("[updateContributors] using userId:", userId)
-
-    // Call utility function to update datacite.yml
     const result = await updateContributorsUtil(
       args.datasetId,
       contributorsToSave,
       userId,
     )
-    console.log("[updateContributors] updateContributorsUtil result:", result)
 
     return {
       success: true,
-      contributors: contributorsToSave,
+      dataset: {
+        id: args.datasetId,
+        draft: {
+          id: args.datasetId,
+          contributors: contributorsToSave.sort((a, b) =>
+            (a.order ?? 0) - (b.order ?? 0)
+          ),
+          files: result.draft.files || [], // optional
+          modified: new Date().toISOString(),
+        },
+      },
     }
   } catch (err) {
     console.error("[updateContributors] Error:", err)
     Sentry.captureException(err)
-    return { success: false, contributors: [] }
+    return { success: false, dataset: null }
   }
 }
