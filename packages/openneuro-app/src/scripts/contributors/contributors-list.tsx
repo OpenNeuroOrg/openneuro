@@ -3,9 +3,10 @@ import { gql, useMutation } from "@apollo/client"
 import type { Contributor } from "../types/datacite"
 import { SingleContributorDisplay } from "./contributor"
 import { Loading } from "../components/loading/Loading"
-import { SelectGroup } from "../components/select/SelectGroup"
+import { ContributorFormRow } from "./contributor-form-row"
+import { cloneContributor } from "./contributor-utils"
 
-interface ContributorsListDisplayProps {
+interface Props {
   contributors: Contributor[] | null | undefined
   separator?: React.ReactNode
   datasetId?: string
@@ -29,31 +30,7 @@ const UPDATE_CONTRIBUTORS = gql`
   }
 `
 
-const CONTRIBUTOR_TYPES = [
-  "ContactPerson",
-  "DataCollector",
-  "DataCurator",
-  "DataManager",
-  "Distributor",
-  "Editor",
-  "HostingInstitution",
-  "Producer",
-  "ProjectLeader",
-  "ProjectManager",
-  "ProjectMember",
-  "RegistrationAgency",
-  "RegistrationAuthority",
-  "RelatedPerson",
-  "Researcher",
-  "ResearchGroup",
-  "RightsHolder",
-  "Sponsor",
-  "Supervisor",
-  "WorkPackageLeader",
-  "Other",
-]
-
-export const ContributorsListDisplay: FC<ContributorsListDisplayProps> = ({
+export const ContributorsListDisplay: FC<Props> = ({
   contributors,
   separator = <br />,
   datasetId,
@@ -88,11 +65,7 @@ export const ContributorsListDisplay: FC<ContributorsListDisplayProps> = ({
 
         cache.modify({
           id: datasetCacheId,
-          fields: {
-            draft() {
-              return { ...updatedDraft }
-            },
-          },
+          fields: { draft: () => ({ ...updatedDraft }) },
         })
       },
       onCompleted(data) {
@@ -121,24 +94,21 @@ export const ContributorsListDisplay: FC<ContributorsListDisplayProps> = ({
     setEditingContributors((prev) =>
       prev.map((c, i) =>
         i === index
-          ? { ...structuredClone(c), [field]: value }
-          : structuredClone(c)
+          ? { ...cloneContributor(c), [field]: value }
+          : cloneContributor(c)
       )
     )
-
     if (field === "name") {
-      setErrors((prev) => {
-        const newErrors = { ...prev }
-        if (!value.trim()) newErrors[index] = "Required"
-        else delete newErrors[index]
-        return newErrors
-      })
+      setErrors((prev) => ({
+        ...prev,
+        ...(value.trim() ? {} : { [index]: "Required" }),
+      }))
     }
   }
 
-  const handleAdd = () => {
+  const handleAdd = () =>
     setEditingContributors((prev) => [
-      ...prev.map((c) => structuredClone(c)),
+      ...prev.map(cloneContributor),
       {
         name: "",
         givenName: "",
@@ -148,54 +118,34 @@ export const ContributorsListDisplay: FC<ContributorsListDisplayProps> = ({
         order: prev.length + 1,
       },
     ])
-  }
 
-  const handleRemove = (index: number) => {
+  const handleRemove = (index: number) =>
     setEditingContributors((prev) =>
-      prev
-        .filter((_, i) => i !== index)
-        .map((c, idx) => ({ ...structuredClone(c), order: idx + 1 }))
+      prev.filter((_, i) => i !== index).map((c, idx) => ({
+        ...cloneContributor(c),
+        order: idx + 1,
+      }))
     )
-    setErrors((prev) => {
-      const newErrors = { ...prev }
-      delete newErrors[index]
-      return newErrors
-    })
-  }
 
-  const handleMove = (index: number, direction: "up" | "down") => {
+  const handleMove = (index: number, direction: "up" | "down") =>
     setEditingContributors((prev) => {
       const newIndex = direction === "up" ? index - 1 : index + 1
       if (newIndex < 0 || newIndex >= prev.length) {
-        return prev.map((c) => structuredClone(c))
+        return prev.map(cloneContributor)
       }
-
-      const updated = prev.map((c) => structuredClone(c))
+      const updated = prev.map(cloneContributor)
       const [movedItem] = updated.splice(index, 1)
       updated.splice(newIndex, 0, movedItem)
-
       return updated.map((c, idx) => ({ ...c, order: idx + 1 }))
     })
-  }
 
   const handleSave = () => {
     if (!datasetId) return
-
     const newErrors: Record<number, string> = {}
     editingContributors.forEach((c, idx) => {
       if (!c.name.trim()) newErrors[idx] = "Required"
     })
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors)
-      return
-    }
-
-    for (const c of editingContributors) {
-      if (!c.contributorType) {
-        alert("All contributors must have a contributor type selected.")
-        return
-      }
-    }
+    if (Object.keys(newErrors).length > 0) return setErrors(newErrors)
 
     const cleanContributors = editingContributors.map((c) => ({
       name: c.name.trim(),
@@ -205,7 +155,6 @@ export const ContributorsListDisplay: FC<ContributorsListDisplayProps> = ({
       contributorType: c.contributorType,
       order: c.order,
     }))
-
     updateContributorsMutation({
       variables: { datasetId, newContributors: cleanContributors },
     })
@@ -219,83 +168,22 @@ export const ContributorsListDisplay: FC<ContributorsListDisplayProps> = ({
         {loading ? <Loading /> : (
           <>
             {editingContributors.map((c, i) => (
-              <div
+              <ContributorFormRow
                 key={i}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  marginBottom: "8px",
-                  gap: "8px",
-                  flexWrap: "wrap",
-                }}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "4px",
-                  }}
-                >
-                  <button
-                    type="button"
-                    onClick={() => handleMove(i, "up")}
-                    disabled={i === 0}
-                  >
-                    ↑
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleMove(i, "down")}
-                    disabled={i === editingContributors.length - 1}
-                  >
-                    ↓
-                  </button>
-                </div>
-
-                <div style={{ display: "flex", flexDirection: "column" }}>
-                  <input
-                    type="text"
-                    placeholder="Name"
-                    value={c.name || ""}
-                    onChange={(e) => handleChange(i, "name", e.target.value)}
-                    style={{
-                      borderColor: errors[i] ? "red" : undefined,
-                      borderWidth: errors[i] ? 2 : undefined,
-                    }}
-                    required
-                  />
-                  {errors[i] && (
-                    <span style={{ color: "red", fontSize: "0.8em" }}>
-                      {errors[i]}
-                    </span>
-                  )}
-                </div>
-
-                <SelectGroup
-                  id={`contributor-type-${i}`}
-                  layout="inline"
-                  options={CONTRIBUTOR_TYPES.map((t) => ({
-                    label: t,
-                    value: t,
-                  }))}
-                  value={c.contributorType?.trim() ?? ""}
-                  setValue={(v) => handleChange(i, "contributorType", v)}
-                />
-
-                <button
-                  type="button"
-                  onClick={() => handleRemove(i)}
-                  style={{ color: "#C82429", border: 0, background: "none" }}
-                >
-                  <i className="fa fa-trash"></i>
-                </button>
-              </div>
+                contributor={c}
+                index={i}
+                errors={errors}
+                onChange={handleChange}
+                onMove={handleMove}
+                onRemove={handleRemove}
+                isFirst={i === 0}
+                isLast={i === editingContributors.length - 1}
+              />
             ))}
-
             <button
               onClick={handleAdd}
               className="on-button on-button--small on-button--primary"
-              style={{ marginRight: "8px", padding: "3px" }}
+              style={{ marginRight: 8, padding: 3 }}
             >
               Add Contributor
             </button>
@@ -303,7 +191,7 @@ export const ContributorsListDisplay: FC<ContributorsListDisplayProps> = ({
               onClick={handleSave}
               disabled={loading}
               className="on-button on-button--small on-button--primary"
-              style={{ position: "absolute", padding: "3px" }}
+              style={{ padding: 3 }}
             >
               {loading ? "Saving..." : "Save"}
             </button>
@@ -321,11 +209,11 @@ export const ContributorsListDisplay: FC<ContributorsListDisplayProps> = ({
             className="on-button on-button--small on-button--primary"
             onClick={() => setIsEditing(true)}
             style={{
-              width: "60px",
-              top: "-5px",
+              width: 60,
+              top: -5,
               position: "absolute",
               right: 0,
-              padding: "3px",
+              padding: 3,
               zIndex: 10,
             }}
           >

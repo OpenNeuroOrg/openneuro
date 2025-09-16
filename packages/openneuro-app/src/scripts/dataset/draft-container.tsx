@@ -34,7 +34,7 @@ import { DOILink } from "./fragments/doi-link"
 import { TabRoutesDraft } from "./routes/tab-routes-draft"
 import { FollowToggles } from "./common/follow-toggles"
 import { DateDistance } from "../components/date-distance"
-import { ContributorsListDisplay } from "../users/contributors-list"
+import { ContributorsListDisplay } from "../contributors/contributors-list"
 
 export interface DraftContainerProps {
   dataset

@@ -7,7 +7,7 @@ import { Link } from "react-router-dom"
 import type { SearchResultItemProps } from "./SearchResultItem"
 import { ModalityLabel } from "../../components/formatting/modality-label"
 import { MetaListItemList } from "./MetaListItemList"
-import { ContributorsListDisplay } from "../../users/contributors-list"
+import { ContributorsListDisplay } from "../../contributors/contributors-list"
 import "../scss/search-result-details.scss"
 
 interface SearchResultDetailsProps {
