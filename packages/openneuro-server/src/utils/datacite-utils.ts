@@ -100,7 +100,6 @@ export const normalizeRawContributors = async (
 ): Promise<Contributor[]> => {
   if (!Array.isArray(raw)) return []
 
-  // Extract all ORCIDs to batch query the user DB
   const orcids = raw
     .map((c) => validateOrcid(c.nameIdentifiers?.[0]?.nameIdentifier))
     .filter(Boolean) as string[]
@@ -108,7 +107,7 @@ export const normalizeRawContributors = async (
   const users = await User.find({ orcid: { $in: orcids } }).exec()
   const orcidToUserId = new Map(users.map((u) => [u.orcid, u.id]))
 
-  return raw.map((c) => {
+  return raw.map((c, index) => {
     const contributorOrcid = validateOrcid(
       c.nameIdentifiers?.[0]?.nameIdentifier,
     )
@@ -123,10 +122,10 @@ export const normalizeRawContributors = async (
       userId: contributorOrcid
         ? orcidToUserId.get(contributorOrcid)
         : undefined,
+      order: index + 1,
     }
   })
 }
-
 /**
  * Update contributors in datacite.yml
  */
@@ -182,5 +181,51 @@ export const updateContributors = async (
     console.error("updateContributors() failed:", err)
     Sentry.captureException(err)
     return false // <-- prevent returning null
+  }
+}
+
+/**
+ * Utility function to update contributors in datacite.yml
+ */
+export const updateContributorsUtil = async (
+  datasetId: string,
+  newContributors: Contributor[],
+  userId: string,
+) => {
+  let dataciteData = await getDataciteYml(datasetId)
+  if (!dataciteData) dataciteData = emptyDataciteYml()
+
+  const contributorsCopy: RawDataciteContributor[] = newContributors.map(
+    (c) => ({
+      name: c.name,
+      givenName: c.givenName || "",
+      familyName: c.familyName || "",
+      order: c.order ?? null,
+      nameType: "Personal" as const,
+      nameIdentifiers: c.orcid
+        ? [{
+          nameIdentifier: `https://orcid.org/${c.orcid}`,
+          nameIdentifierScheme: "ORCID",
+          schemeUri: "https://orcid.org",
+        }]
+        : [],
+      contributorType: c.contributorType || "Researcher",
+    }),
+  )
+
+  dataciteData.data.attributes.contributors = contributorsCopy
+  dataciteData.data.attributes.creators = contributorsCopy.map((
+    { contributorType, ...rest },
+  ) => rest)
+
+  await saveDataciteYmlToRepo(datasetId, userId, dataciteData)
+
+  return {
+    draft: {
+      id: datasetId,
+      contributors: contributorsCopy,
+      files: [],
+      modified: new Date().toISOString(),
+    },
   }
 }
