@@ -40,19 +40,44 @@ export const contributors = async (
       getDataciteYml(datasetId, revision)
     )
 
-    if (dataciteData?.data?.attributes?.contributors?.length) {
-      const normalized = await normalizeRawContributors(
-        dataciteData.data.attributes.contributors,
-      )
+    // Check if datacite file exists
+    if (dataciteData) {
+      if (
+        "contentType" in dataciteData &&
+        dataciteData.contentType !== "application/yaml"
+      ) {
+        Sentry.captureMessage(
+          `Datacite file for ${datasetId}:${revisionShort} served with unexpected Content-Type: ${dataciteData.contentType}. Attempting YAML parse anyway.`,
+        )
+      }
 
-      // sort by order
-      const orderedContributors = normalized
-        .map((c, index) => ({
-          ...c,
-          order: c.order ?? index + 1,
-        }))
-        .sort((a, b) => a.order - b.order)
-      return orderedContributors
+      const resourceTypeGeneral = dataciteData.data?.attributes?.types
+        ?.resourceTypeGeneral
+      if (resourceTypeGeneral && resourceTypeGeneral !== "Dataset") {
+        Sentry.captureMessage(
+          `Datacite file for ${datasetId}:${revisionShort} found but resourceTypeGeneral is '${resourceTypeGeneral}', not 'Dataset'.`,
+        )
+        return []
+      }
+
+      if (dataciteData.data?.attributes?.contributors?.length) {
+        const normalized = await normalizeRawContributors(
+          dataciteData.data.attributes.contributors,
+        )
+
+        // sort by order
+        const orderedContributors = normalized
+          .map((c, index) => ({
+            ...c,
+            order: c.order ?? index + 1,
+          }))
+          .sort((a, b) => a.order - b.order)
+        return orderedContributors
+      } else if (resourceTypeGeneral === "Dataset") {
+        Sentry.captureMessage(
+          `Datacite file for ${datasetId}:${revisionShort} is Dataset type but provided no contributors.`,
+        )
+      }
     }
 
     // ---- Fallback: dataset_description.json authors ----
@@ -71,6 +96,7 @@ export const contributors = async (
       )
       return fallbackContributors
     }
+
     // No contributors found
     return []
   } catch (err) {
@@ -82,7 +108,6 @@ export const contributors = async (
 /**
  * GraphQL mutation resolver
  */
-
 export interface UserInfo {
   id?: string
   _id?: string
