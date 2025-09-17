@@ -141,7 +141,7 @@ export const updateContributors = async (
       givenName: c.givenName,
       familyName: c.familyName,
       contributorType: c.contributorType || "Contributor",
-      nameType: "Personal" as const, // <-- FIXED TYPE ERROR
+      nameType: "Personal" as const,
       nameIdentifiers: c.orcid
         ? [{ nameIdentifier: c.orcid, nameIdentifierScheme: "ORCID" }]
         : [],
@@ -155,7 +155,7 @@ export const updateContributors = async (
     return true
   } catch (err) {
     Sentry.captureException(err)
-    return false // <-- prevent returning null
+    return false
   }
 }
 
