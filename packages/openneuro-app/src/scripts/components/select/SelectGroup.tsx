@@ -31,7 +31,7 @@ export const SelectGroup = ({
       <select
         className="on-select"
         id={id}
-        value={value} // ✅ Keep the select controlled
+        value={value}
         onChange={(e) => setValue(e.target.value)}
       >
         {options.map((item, index) => (
