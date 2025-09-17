@@ -8,17 +8,17 @@ export interface UserMenuProps {
   signOutAndRedirect: () => void
 }
 
-export const UserMenu = (
-  { signOutAndRedirect }: UserMenuProps,
-) => {
-  //const inboxCount = 99
-
+export const UserMenu = ({ signOutAndRedirect }: UserMenuProps) => {
   const { user } = useUser()
 
+  // Calculate inboxCount from the fetched notifications
+  // TODO NEEDS FILTER ON 'status' field
+  const inboxCount = user?.notifications?.filter(
+    (notification) => notification,
+  ).length || 0
   return (
     <span className="user-menu-wrap">
-      {
-        /* {user?.orcid && (
+      {user?.orcid && (
         <span className="notifications-link">
           <Link to={`/user/${user?.orcid}/notifications/unread`}>
             <i className="fa fa-inbox">
@@ -37,8 +37,7 @@ export const UserMenu = (
             <span className="sr-only">Account Info</span>
           </Link>
         </span>
-      )} */
-      }
+      )}
       <Dropdown
         className={"user-menu-dropdown"}
         label={user?.avatar
@@ -71,9 +70,7 @@ export const UserMenu = (
 
               {user?.orcid && (
                 <li>
-                  <Link to={`/user/${user?.orcid}/account`}>
-                    Account Info
-                  </Link>
+                  <Link to={`/user/${user?.orcid}/account`}>Account Info</Link>
                 </li>
               )}
 

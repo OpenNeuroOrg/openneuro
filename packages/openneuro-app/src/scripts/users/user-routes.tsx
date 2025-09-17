@@ -15,9 +15,11 @@ import {
 import type { UserRoutesProps } from "../types/user-types"
 import { OrcidConsentModal } from "./user-orcid-consent-modal"
 
-export const UserRoutes: React.FC<UserRoutesProps> = (
-  { orcidUser, hasEdit, isUser },
-) => {
+export const UserRoutes: React.FC<UserRoutesProps> = ({
+  orcidUser,
+  hasEdit,
+  isUser,
+}) => {
   return (
     <>
       {
@@ -57,7 +59,13 @@ export const UserRoutes: React.FC<UserRoutesProps> = (
           <Route
             path="notifications/*"
             element={hasEdit
-              ? <UserNotificationsView orcidUser={orcidUser} />
+              ? (
+                <UserNotificationsView
+                  orcidUser={orcidUser}
+                  hasEdit={hasEdit}
+                  isUser={isUser}
+                />
+              )
               : <FourOThreePage />}
           >
             <Route index element={<UnreadNotifications />} />

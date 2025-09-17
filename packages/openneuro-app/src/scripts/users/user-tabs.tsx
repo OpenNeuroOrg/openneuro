@@ -50,8 +50,7 @@ export const UserAccountTabs: React.FC<UserAccountTabsProps> = (
             {isUser ? "My" : "User"} Datasets
           </NavLink>
         </li>
-        {
-          /* <li>
+        <li>
           <NavLink
             data-testid="user-notifications-tab"
             to="notifications"
@@ -60,8 +59,8 @@ export const UserAccountTabs: React.FC<UserAccountTabsProps> = (
           >
             Notifications
           </NavLink>
-        </li> */
-        }
+        </li>
+
         <li>
           <NavLink
             to="account"

@@ -22,6 +22,38 @@ export const GET_USER = gql`
       blocked
       githubSynced
       github
+      notifications {
+        id
+        timestamp
+        note
+        success
+        user { # The user who initiated the event
+          id
+          name
+          email
+          orcid
+        }
+        event {
+          type
+          version
+          public
+          level
+          ref
+          message
+          requestId
+          targetUserId
+          status
+          reason
+          datasetId
+          resolutionStatus
+          target { 
+            id
+            name
+            email
+            orcid
+          }
+        }
+      }
       orcidConsent 
     }
   }
@@ -175,13 +207,14 @@ export const useUser = (userId?: string) => {
 
   const finalUserId = userId || profileSub
 
-  const { data: userData, loading: userLoading, error: userError } = useQuery(
-    GET_USER,
-    {
-      variables: { userId: finalUserId },
-      skip: !finalUserId,
-    },
-  )
+  const {
+    data: userData,
+    loading: userLoading,
+    error: userError,
+  } = useQuery(GET_USER, {
+    variables: { userId: finalUserId },
+    skip: !finalUserId,
+  })
 
   if (userError) {
     Sentry.captureException(userError)
