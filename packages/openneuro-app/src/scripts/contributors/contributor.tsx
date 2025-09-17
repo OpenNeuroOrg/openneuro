@@ -31,7 +31,7 @@ export const SingleContributorDisplay: React.FC<SingleContributorDisplayProps> =
 
     const userExists = !!user?.id
     // TODO add event to allow user to approve attribution and if userApproved response allow linking to profile
-    const userApproved = false
+    const userApproved = true
     return (
       <>
         {contributor.orcid && userExists && userApproved
