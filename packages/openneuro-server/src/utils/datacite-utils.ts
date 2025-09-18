@@ -4,8 +4,7 @@ import superagent from "superagent"
 import User from "../models/user"
 import { fileUrl } from "../datalad/files"
 import { commitFiles } from "../datalad/dataset"
-import { generateDataladCookie } from "../libs/authentication/jwt"
-import config from "../config"
+import { getDatasetWorker } from "../libs/datalad-service"
 import type {
   Contributor,
   RawDataciteContributor,
@@ -59,22 +58,24 @@ export const getDataciteYml = async (
  */
 export const saveDataciteYmlToRepo = async (
   datasetId: string,
-  userId: string,
+  cookies: string,
   dataciteData: RawDataciteYml,
 ) => {
-  const url = `http://datalad-0/datasets/${datasetId}/files/datacite.yml`
+  const url = `${
+    getDatasetWorker(datasetId)
+  }/datasets/${datasetId}/files/datacite.yml`
 
   try {
-    // Directly PUT the file with cookie-based JWT auth
+    // Directly PUT the file using the user's request cookies
     await superagent
       .post(url)
-      .set("Cookie", generateDataladCookie(config)(userId))
+      .set("Cookie", cookies)
       .set("Accept", "application/json")
       .set("Content-Type", "text/yaml")
       .send(yaml.dump(dataciteData))
 
     // Commit the draft after upload
-    const gitRef = await commitFiles(datasetId, userId)
+    const gitRef = await commitFiles(datasetId, cookies)
     return { id: gitRef }
   } catch (err) {
     Sentry.captureException(err)
@@ -103,12 +104,12 @@ export const normalizeRawContributors = async (
     )
     return {
       name: c.name ||
-        [c.givenName, c.familyName].filter(Boolean).join(" ") ||
+        [c.familyName, c.givenName].filter(Boolean).join(", ") ||
         "Unknown Contributor",
       givenName: c.givenName,
       familyName: c.familyName,
       orcid: contributorOrcid,
-      contributorType: c.contributorType || "Contributor",
+      contributorType: c.contributorType || "Researcher",
       userId: contributorOrcid
         ? orcidToUserId.get(contributorOrcid)
         : undefined,
@@ -140,8 +141,8 @@ export const updateContributors = async (
       name: c.name,
       givenName: c.givenName,
       familyName: c.familyName,
-      contributorType: c.contributorType || "Contributor",
-      nameType: "Personal" as const, // <-- FIXED TYPE ERROR
+      contributorType: c.contributorType || "Researcher",
+      nameType: "Personal" as const,
       nameIdentifiers: c.orcid
         ? [{ nameIdentifier: c.orcid, nameIdentifierScheme: "ORCID" }]
         : [],
@@ -155,7 +156,7 @@ export const updateContributors = async (
     return true
   } catch (err) {
     Sentry.captureException(err)
-    return false // <-- prevent returning null
+    return false
   }
 }
 
