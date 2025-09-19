@@ -224,6 +224,12 @@ export const typeDefs = `
       annexFsck: [AnnexFsckInput!]!
       remote: String
     ): FileCheck
+    # Profile Event Status updates
+    updateEventStatus(eventId: ID!, status: NotificationStatusType!): UserNotificationStatus
+    updateContributors(
+      datasetId: String!
+      newContributors: [ContributorInput!]!
+    ): UpdateContributorsPayload!
   }
 
   # Anonymous dataset reviewer
@@ -559,11 +565,9 @@ export const typeDefs = `
     head: String
     # Total size in bytes of this draft
     size: BigInt
-    # Creators list from datacite.yml || Authors list from dataset_description.json
-    creators: [Creator] 
     # File issues
     fileCheck: FileCheck
-    # NEW: Contributors list from datacite.yml
+    # Contributors list from datacite.yml
     contributors: [Contributor]
   }
 
@@ -604,9 +608,7 @@ export const typeDefs = `
     size: BigInt
     # Single list of files to download this snapshot (only available on snapshots)
     downloadFiles: [DatasetFile]
-    # Authors list from datacite.yml || dataset_description.json
-    creators: [Creator] 
-    # NEW: Contributors list from datacite.yml
+    # Contributors list from datacite.yml
     contributors: [Contributor]
   }
 
@@ -677,21 +679,30 @@ export const typeDefs = `
     EthicsApprovals: [String]
   }
 
-  # Defines the Creator type in creators.ts
-  type Creator {
-    name: String! 
-    givenName: String 
-    familyName: String 
-    orcid: String 
-  }
 
-  # NEW: Defines the Contributor type in contributors.ts
+  # Defines the Contributor type in contributors.ts
   type Contributor {
     name: String!
     givenName: String
     familyName: String
     orcid: String
     contributorType: String!
+    order: Int
+  }
+
+  # ContributorInput input type
+  input ContributorInput {
+    name: String
+    givenName: String
+    familyName: String
+    orcid: String
+    contributorType: String
+    order: Int
+  }
+
+  type UpdateContributorsPayload {
+    success: Boolean!
+    dataset: Dataset
   }
 
 
@@ -940,6 +951,18 @@ export const typeDefs = `
     resolutionStatus: String
   }
 
+ # Possible statuses for user notification/events
+  enum NotificationStatusType {
+    UNREAD
+    SAVED
+    ARCHIVED
+  }
+
+  # User's notification status
+  type UserNotificationStatus {
+    status: NotificationStatusType!
+  }
+
   # Dataset events
   type DatasetEvent {
     # Unique identifier for the event
@@ -956,6 +979,10 @@ export const typeDefs = `
     note: String
     # top-level datasetId field
     datasetId: ID
+    # User's notification status event
+    notificationStatus: UserNotificationStatus
+    responseStatus: String
+    hasBeenRespondedTo: Boolean
   }
 
   type FileCheck {

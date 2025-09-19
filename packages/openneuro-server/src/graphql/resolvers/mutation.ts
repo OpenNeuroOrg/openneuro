@@ -47,9 +47,11 @@ import {
   createContributorRequestEvent,
   processContributorRequest,
   saveAdminNote,
+  updateEventStatus,
 } from "./datasetEvents"
 import { createGitEvent } from "./gitEvents"
 import { updateFileCheck } from "./fileCheck"
+import { updateContributors } from "../../datalad/contributors"
 
 const Mutation = {
   createDataset,
@@ -101,6 +103,8 @@ const Mutation = {
   processContributorRequest,
   createGitEvent,
   updateFileCheck,
+  updateEventStatus,
+  updateContributors,
 }
 
 export default Mutation

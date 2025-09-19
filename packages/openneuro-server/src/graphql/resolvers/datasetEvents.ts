@@ -2,25 +2,35 @@ import DatasetEvent from "../../models/datasetEvents"
 import { checkDatasetAdmin } from "../permissions"
 import type {
   DatasetEventContributorRequest,
+  DatasetEventContributorResponse,
   DatasetEventDocument,
 } from "../../models/datasetEvents"
-import type { DatasetEventContributorResponse } from "../../models/datasetEvents"
+import { UserNotificationStatus } from "../../models/userNotificationStatus"
+import type { UserNotificationStatusDocument } from "../../models/userNotificationStatus"
 
-type EnrichedDatasetEvent = DatasetEventDocument & {
+type EnrichedDatasetEvent = Omit<DatasetEventDocument, "notificationStatus"> & {
   hasBeenRespondedTo?: boolean
   responseStatus?: "accepted" | "denied"
+  notificationStatus?:
+    | "UNREAD"
+    | "SAVED"
+    | "ARCHIVED"
+    | UserNotificationStatusDocument
 }
 
 /**
  * Get all events for a dataset
  */
-
-export async function datasetEvents(obj, _, { userInfo }) {
+export async function datasetEvents(obj, _, { userInfo, user }) {
   const allEvents: DatasetEventDocument[] = await DatasetEvent.find({
     datasetId: obj.id,
   })
     .sort({ timestamp: -1 })
     .populate("user")
+    .populate({
+      path: "notificationStatus",
+      match: { userId: user },
+    })
     .exec()
 
   const responsesMap = new Map<string, DatasetEventDocument>()
@@ -32,18 +42,31 @@ export async function datasetEvents(obj, _, { userInfo }) {
     }
   })
 
+  // Manage null for non-matching virtuals
   const enrichedEvents: EnrichedDatasetEvent[] = allEvents.map((event) => {
+    const enrichedEvent = event.toObject() as EnrichedDatasetEvent
+
+    // Default UNREAD if no status exists for this user
+    if (!enrichedEvent.notificationStatus) {
+      enrichedEvent.notificationStatus = {
+        status: "UNREAD",
+      } as UserNotificationStatusDocument
+    } else if (typeof enrichedEvent.notificationStatus === "string") {
+      enrichedEvent.notificationStatus = {
+        status: enrichedEvent.notificationStatus,
+      } as UserNotificationStatusDocument
+    }
+
     if (isContributorRequest(event)) {
-      const response = responsesMap.get(event.id)
+      const requestId = event.event.requestId
+      const response = responsesMap.get(requestId) // <-- key by requestId, not event.id
       if (response && isContributorResponse(response)) {
-        return {
-          ...event.toObject(),
-          hasBeenRespondedTo: true,
-          responseStatus: response.event.status,
-        } as EnrichedDatasetEvent
+        enrichedEvent.hasBeenRespondedTo = true
+        enrichedEvent.responseStatus = response.event.status
       }
     }
-    return event as EnrichedDatasetEvent
+
+    return enrichedEvent
   })
 
   if (userInfo.admin) {
@@ -85,10 +108,7 @@ export async function createContributorRequestEvent(
   const event = new DatasetEvent({
     datasetId,
     userId: user,
-    event: {
-      type: "contributorRequest",
-      datasetId: datasetId,
-    },
+    event: { type: "contributorRequest", datasetId },
     success: true,
     note: "User requested contributor status for this dataset.",
   })
@@ -96,7 +116,6 @@ export async function createContributorRequestEvent(
 
   await event.save()
   await event.populate("user")
-
   return event
 }
 
@@ -108,15 +127,13 @@ export async function saveAdminNote(
   { id, datasetId, note },
   { user, userInfo },
 ) {
-  // Only site admin users can create or update an admin note
-  if (!userInfo?.admin) {
-    throw new Error("Not authorized")
-  }
+  // Only site admin users can create or update a note
+  if (!userInfo?.admin) throw new Error("Not authorized")
 
   if (id) {
     const updatedEvent = await DatasetEvent.findOneAndUpdate(
-      { id: id, datasetId },
-      { note: note },
+      { id, datasetId },
+      { note },
       { new: true },
     )
     if (!updatedEvent) {
@@ -128,11 +145,7 @@ export async function saveAdminNote(
     const newEvent = new DatasetEvent({
       datasetId,
       userId: user,
-      event: {
-        type: "note",
-        admin: true,
-        datasetId: datasetId,
-      },
+      event: { type: "note", admin: true, datasetId },
       success: true,
       note,
     })
@@ -140,6 +153,20 @@ export async function saveAdminNote(
     await newEvent.populate("user")
     return newEvent
   }
+}
+
+/**
+ * Field-level resolvers for DatasetEvent
+ * These expose the computed/enriched fields to GraphQL
+ */
+export const DatasetEventResolvers = {
+  hasBeenRespondedTo: (event: EnrichedDatasetEvent) =>
+    event.hasBeenRespondedTo ?? false,
+  responseStatus: (event: EnrichedDatasetEvent) => event.responseStatus ?? null,
+  notificationStatus: (event: EnrichedDatasetEvent) =>
+    typeof event.notificationStatus === "object"
+      ? event.notificationStatus
+      : { status: event.notificationStatus ?? "UNREAD" },
 }
 
 /**
@@ -191,7 +218,6 @@ export async function processContributorRequest(
     "event.type": "contributorResponse",
     "event.requestId": requestId,
   })
-
   if (existingResponse) {
     throw new Error("This contributor request has already been processed.")
   }
@@ -205,11 +231,11 @@ export async function processContributorRequest(
     userId: currentUserId, // Admin processed the request
     event: {
       type: "contributorResponse",
-      requestId: requestId,
-      targetUserId: targetUserId, // user that requested
-      status: status,
-      reason: reason,
-      datasetId: datasetId,
+      requestId,
+      targetUserId,
+      status,
+      reason,
+      datasetId,
     },
     success: true,
     note: reason?.trim() ||
@@ -224,4 +250,23 @@ export async function processContributorRequest(
   }
 
   return responseEvent
+}
+
+/**
+ * Update a user's notification status for a specific event
+ */
+export async function updateEventStatus(
+  obj,
+  { eventId, status },
+  { user },
+) {
+  if (!user) throw new Error("Authentication required.")
+
+  const updatedStatus = await UserNotificationStatus.findOneAndUpdate(
+    { userId: user, datasetEventId: eventId },
+    { status },
+    { new: true, upsert: true },
+  )
+
+  return updatedStatus
 }

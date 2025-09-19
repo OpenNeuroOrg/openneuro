@@ -1,15 +1,10 @@
-import React, { useCallback } from "react"
-import * as Sentry from "@sentry/react"
-import { toast } from "react-toastify"
-import { useMutation } from "@apollo/client"
+import React from "react"
 import type { MappedNotification } from "../types/event-types"
-import { UPDATE_NOTIFICATION_STATUS_MUTATION } from "../queries/datasetEvents"
 import { StatusActionButton } from "./components/status-action-buttons"
 import iconUnread from "../../assets/icon-unread.png"
 import iconSaved from "../../assets/icon-saved.png"
 import iconArchived from "../../assets/icon-archived.png"
 import styles from "./scss/usernotifications.module.scss"
-import ToastContent from "../common/partials/toast-content.jsx"
 
 interface NotificationActionButtonsProps {
   notification: MappedNotification
@@ -17,6 +12,9 @@ interface NotificationActionButtonsProps {
   onUpdate: (id: string, updates: Partial<MappedNotification>) => void
   setError: (error: string | null) => void
   handleProcessAction: (action: "accepted" | "denied") => void
+  handleStatusChange: (
+    newStatus: "unread" | "saved" | "archived",
+  ) => Promise<void>
 }
 
 export const NotificationActionButtons: React.FC<
@@ -24,58 +22,11 @@ export const NotificationActionButtons: React.FC<
 > = ({
   notification,
   isProcessing,
-  onUpdate,
-  setError,
   handleProcessAction,
+  handleStatusChange,
 }) => {
-  const {
-    id,
-    status,
-    type,
-    approval,
-  } = notification
-
+  const { status, type, approval } = notification
   const isContributorRequest = type === "approval"
-
-  const [updateNotificationStatus] = useMutation(
-    UPDATE_NOTIFICATION_STATUS_MUTATION,
-  )
-
-  // TODO just show errors for now
-  const handleStatusChange = useCallback(async (
-    newStatus: "unread" | "saved" | "archived",
-  ) => {
-    if (isProcessing) return
-
-    try {
-      const backendStatus = newStatus.toUpperCase()
-
-      await updateNotificationStatus({
-        variables: {
-          datasetEventId: id,
-          status: backendStatus,
-        },
-      })
-
-      onUpdate(id, { status: newStatus })
-      setError(null)
-      toast.success(
-        <ToastContent
-          title="Notification Status Updated"
-          body={`Notification marked as ${newStatus}.`}
-        />,
-      )
-    } catch (error) {
-      const errorMessage = `Error updating notification status: ${
-        error.message || "Unknown error"
-      }`
-      Sentry.captureException(error)
-      setError(errorMessage)
-      toast.error(
-        <ToastContent title="Status Update Failed" body={errorMessage} />,
-      )
-    }
-  }, [isProcessing, id, updateNotificationStatus, onUpdate, setError])
 
   return (
     <div className={styles.actions}>
@@ -89,7 +40,7 @@ export const NotificationActionButtons: React.FC<
               onClick={() => handleProcessAction("accepted")}
               disabled={approval === "accepted" || isProcessing}
             >
-              <i className="fa fa-check"></i>{" "}
+              <i className="fa fa-check" />{" "}
               {approval === "accepted" ? "Approved" : "Approve"}
             </button>
           )}
@@ -102,13 +53,13 @@ export const NotificationActionButtons: React.FC<
               onClick={() => handleProcessAction("denied")}
               disabled={approval === "denied" || isProcessing}
             >
-              <i className="fa fa-times"></i>{" "}
+              <i className="fa fa-times" />{" "}
               {approval === "denied" ? "Denied" : "Deny"}
             </button>
           )}
         </>
       )}
-      {/* TODO Actually store status */}
+
       {status === "unread" && (
         <>
           <StatusActionButton
@@ -135,6 +86,7 @@ export const NotificationActionButtons: React.FC<
           />
         </>
       )}
+
       {status === "saved" && (
         <>
           <StatusActionButton
@@ -161,6 +113,7 @@ export const NotificationActionButtons: React.FC<
           />
         </>
       )}
+
       {status === "archived" && (
         <StatusActionButton
           status={status}
