@@ -70,4 +70,23 @@ describe("ContributorsListDisplay", () => {
 
     expect(await screen.findAllByPlaceholderText("Name")).toHaveLength(3)
   })
+
+  it("shows an error when trying to submit with empty name", async () => {
+    renderComponent()
+
+    const editButton = await screen.findByText("Edit")
+    fireEvent.click(editButton)
+
+    const addButton = await screen.findByText("Add Contributor")
+    fireEvent.click(addButton)
+
+    const saveButton = await screen.findByText("Save")
+    fireEvent.click(saveButton)
+
+    // Check that the new field has the browser validation pseudo-state
+    const nameInputs = await screen.findAllByPlaceholderText("Name")
+
+    expect(nameInputs[2]).toBeInvalid()
+    expect(nameInputs[2]).toBeRequired()
+  })
 })
