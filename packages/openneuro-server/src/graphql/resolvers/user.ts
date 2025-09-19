@@ -16,12 +16,17 @@ export async function user(
   let user
   if (isValidOrcid(id)) {
     user = await User.findOne({
-      $or: [{ "provider": "orcid", "providerId": id }],
+      $or: [{ provider: "orcid", providerId: id }],
     }).exec()
   } else {
-    // If it's not a valid ORCID, fall back to querying by user id
-    user = await User.findOne({ "id": id }).exec()
+    user = await User.findOne({ id }).exec()
   }
+
+  if (!user) {
+    console.warn(`User not found for id: ${id}`)
+    return null // Fail silently
+  }
+
   if (userInfo?.admin || user.id === userInfo?.id) {
     return user.toObject()
   } else {
