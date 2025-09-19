@@ -9,7 +9,7 @@ import "../scss/search-result.scss"
 import activityPulseIcon from "../../../assets/activity-icon.png"
 import { hasEditPermissions } from "../../authentication/profile"
 import { ModalityHexagon } from "../../components/modality-cube/ModalityHexagon"
-import type { Contributor, Creator } from "../../types/datacite"
+import type { Contributor } from "../../types/datacite"
 import { SearchResultsCitation } from "../../components/citation/search-results-citation"
 
 export const formatDate = (dateObject) =>
@@ -87,7 +87,6 @@ export interface SearchResultItemProps {
         Name: string
         DatasetDOI: string
       }
-      creators: Creator[]
       contributors: Contributor[]
     }
     analytics: {

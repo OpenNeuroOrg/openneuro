@@ -11,4 +11,5 @@ export interface Contributor {
   familyName?: string
   orcid?: string
   contributorType?: string
+  order?: number
 }

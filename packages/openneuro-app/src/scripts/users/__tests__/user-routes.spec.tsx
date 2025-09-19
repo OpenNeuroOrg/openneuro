@@ -19,6 +19,7 @@ const testUser = {
   avatar: "https://dummyimage.com/200x200/000/fff",
   orcid: "0000-0000-0000-0000",
   links: [],
+  notifications: [],
 }
 
 const setupUserRoutes = (

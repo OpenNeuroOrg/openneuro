@@ -56,22 +56,28 @@ describe("SingleContributorDisplay - Basic Loading", () => {
   it("renders the component and displays the contributor name", async () => {
     const contributor = { name: "Jane Doe", orcid: null }
     renderComponent({ contributor })
-    expect(screen.getByText("Jane Doe")).toBeInTheDocument()
+
+    // wait for async rendering
+    expect(await screen.findByText("Jane Doe")).toBeInTheDocument()
   })
 
   it("renders 'Unknown Contributor' if the contributor name is missing", async () => {
     const contributor = { name: undefined, orcid: null }
     renderComponent({ contributor })
-    expect(screen.getByText("Unknown Contributor")).toBeInTheDocument()
+
+    expect(await screen.findByText("Unknown Contributor")).toBeInTheDocument()
   })
 
-  it("renders the component and displays the ORCID link if an ID is provided", async () => {
+  it("renders the ORCID link if an ID is provided", async () => {
     const testOrcid = "0000-0000-0000-0000"
     const contributor = { name: "Author With ORCID", orcid: testOrcid }
     renderComponent({ contributor })
-    const orcidLink = screen.getByLabelText(
-      `ORCID profile for ${contributor.name}`,
-    )
+
+    // check link by role
+    const orcidLink = await screen.findByRole("link", {
+      name: /ORCID profile for Author With ORCID/,
+    })
+
     expect(orcidLink).toBeInTheDocument()
     expect(orcidLink).toHaveAttribute(
       "href",
