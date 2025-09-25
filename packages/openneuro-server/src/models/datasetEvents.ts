@@ -17,6 +17,7 @@ const _datasetEventTypes = [
   "note",
   "contributorRequest",
   "contributorResponse",
+  "contributorCitation",
 ] as const
 
 /**
@@ -91,6 +92,13 @@ export type DatasetEventContributorRequest = DatasetEventCommon & {
   requestId?: string
   resolutionStatus?: "pending" | "accepted" | "denied"
   datasetId?: string
+  contributorType: string
+  contributorData: {
+    orcid?: string
+    name?: string
+    email?: string
+    userId?: string
+  }
 }
 
 export type DatasetEventContributorResponse = DatasetEventCommon & {
@@ -100,6 +108,21 @@ export type DatasetEventContributorResponse = DatasetEventCommon & {
   status: "accepted" | "denied"
   reason?: string
   datasetId?: string
+}
+
+export type DatasetEventContributorCitation = DatasetEventCommon & {
+  type: "contributorCitation"
+  datasetId: string
+  addedBy: OpenNeuroUserId
+  targetUserId: OpenNeuroUserId
+  contributorType: string
+  contributorData: {
+    orcid?: string
+    name?: string
+    email?: string
+    userId?: string
+  }
+  resolutionStatus: "pending" | "approved" | "denied"
 }
 
 /**
@@ -116,6 +139,7 @@ export type DatasetEventType =
   | DatasetEventNote
   | DatasetEventContributorRequest
   | DatasetEventContributorResponse
+  | DatasetEventContributorCitation
 
 /**
  * Dataset events log changes to a dataset
@@ -154,8 +178,13 @@ const datasetEventSchema = new Schema<DatasetEventDocument>(
       datasetId: { type: String },
       resolutionStatus: {
         type: String,
-        enum: ["pending", "accepted", "denied"],
+        enum: ["pending", "approved", "denied"],
         default: "pending",
+      },
+      contributorType: { type: String }, // e.g., "Researcher", "Data Curator"
+      contributorData: {
+        type: Object,
+        default: {},
       },
     },
     success: { type: Boolean, default: false },

@@ -230,6 +230,12 @@ export const typeDefs = `
       datasetId: String!
       newContributors: [ContributorInput!]!
     ): UpdateContributorsPayload!
+    createContributorCitationEvent(
+      datasetId: ID!
+      targetUserId: ID!
+      contributorType: String!
+      contributorData: ContributorInput!
+    ): DatasetEvent
   }
 
   # Anonymous dataset reviewer
@@ -949,6 +955,8 @@ export const typeDefs = `
     reason: String
     datasetId: ID
     resolutionStatus: String
+    contributorType: String
+    contributorData: Contributor
   }
 
  # Possible statuses for user notification/events
