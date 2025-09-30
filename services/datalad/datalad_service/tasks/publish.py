@@ -95,7 +95,7 @@ def export_dataset(
                 # Perform all GitHub export steps
                 github_export(dataset_id, dataset_path, tags[-1].name)
         # Drop cache once all exports are complete
-        clear_dataset_cache(dataset_id, tags[-1].name)
+        clear_dataset_cache(dataset_id)
 
 
 def check_remote_has_version(dataset_path, remote, tag):
