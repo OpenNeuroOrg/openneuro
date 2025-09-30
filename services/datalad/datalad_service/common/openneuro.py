@@ -23,19 +23,19 @@ def generate_service_token(dataset_id):
     )
 
 
-def cache_clear_mutation(dataset_id, tag):
+def cache_clear_mutation(dataset_id):
     """Update the draft HEAD reference to an new git commit id (hexsha)."""
     return {
-        'query': 'mutation ($datasetId: ID!) { cacheClear(datasetId: $datasetId, tag: $tag) }',
-        'variables': {'datasetId': dataset_id, 'tag': tag},
+        'query': 'mutation ($datasetId: ID!) { cacheClear(datasetId: $datasetId) }',
+        'variables': {'datasetId': dataset_id},
     }
 
 
-def clear_dataset_cache(dataset_id, tag):
+def clear_dataset_cache(dataset_id):
     """Post a cacheClear event to OpenNeuro to allow the API to query new data after changes"""
     r = requests.post(
         url=GRAPHQL_ENDPOINT,
-        json=cache_clear_mutation(dataset_id, tag),
+        json=cache_clear_mutation(dataset_id),
         headers={'authorization': f'Bearer {generate_service_token(dataset_id)}'},
     )
     if r.status_code != 200:
