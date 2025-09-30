@@ -1,7 +1,6 @@
 import { PipelineStage } from "mongoose"
 import User from "../../models/user"
 import DatasetEvent from "../../models/datasetEvents"
-import Permission from "../../models/permission"
 import { UserNotificationStatusDocument } from "../../models/userNotificationStatus"
 
 function isValidOrcid(orcid: string): boolean {
