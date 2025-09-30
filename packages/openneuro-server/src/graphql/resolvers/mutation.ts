@@ -46,6 +46,7 @@ import {
 import {
   createContributorCitationEvent,
   createContributorRequestEvent,
+  processContributorCitation,
   processContributorRequest,
   saveAdminNote,
   updateEventStatus,
@@ -103,6 +104,7 @@ const Mutation = {
   createContributorRequestEvent,
   createContributorCitationEvent,
   processContributorRequest,
+  processContributorCitation,
   createGitEvent,
   updateFileCheck,
   updateEventStatus,

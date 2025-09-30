@@ -1,6 +1,8 @@
 import DatasetEvent from "../../models/datasetEvents"
+import User, { UserDocument } from "../../models/user"
 import { checkDatasetAdmin } from "../permissions"
 import type {
+  DatasetEventContributorCitation,
   DatasetEventContributorRequest,
   DatasetEventContributorResponse,
   DatasetEventDocument,
@@ -12,85 +14,8 @@ import {
   updateContributorsUtil,
 } from "../../utils/datacite-utils"
 import type { Contributor } from "../../types/datacite"
-type EnrichedDatasetEvent = Omit<DatasetEventDocument, "notificationStatus"> & {
-  hasBeenRespondedTo?: boolean
-  responseStatus?: "accepted" | "denied" // for contributorRequest
-  citationStatus?: "pending" | "approved" | "denied" // for contributorCitation
-  notificationStatus?:
-    | "UNREAD"
-    | "SAVED"
-    | "ARCHIVED"
-    | UserNotificationStatusDocument
-}
 
-/**
- * Get all events for a dataset
- */
-export async function datasetEvents(obj, _, { userInfo, user }) {
-  const allEvents: DatasetEventDocument[] = await DatasetEvent.find({
-    datasetId: obj.id,
-  })
-    .sort({ timestamp: -1 })
-    .populate("user")
-    .populate({
-      path: "notificationStatus",
-      match: { userId: user },
-    })
-    .exec()
-
-  // Map contributor responses by requestId
-  const responsesMap = new Map<string, DatasetEventDocument>()
-  allEvents.forEach((event) => {
-    if (
-      event.event.type === "contributorResponse" && "requestId" in event.event
-    ) {
-      responsesMap.set(event.event.requestId, event)
-    }
-  })
-
-  const enrichedEvents: EnrichedDatasetEvent[] = allEvents.map((event) => {
-    const enrichedEvent = event.toObject() as EnrichedDatasetEvent
-
-    // Default UNREAD if no notification exists for this user
-    if (!enrichedEvent.notificationStatus) {
-      enrichedEvent.notificationStatus = {
-        status: "UNREAD",
-      } as UserNotificationStatusDocument
-    } else if (typeof enrichedEvent.notificationStatus === "string") {
-      enrichedEvent.notificationStatus = {
-        status: enrichedEvent.notificationStatus,
-      } as UserNotificationStatusDocument
-    }
-
-    if (isContributorRequest(event)) {
-      const requestId = event.event.requestId
-      const response = responsesMap.get(requestId)
-      if (response && isContributorResponse(response)) {
-        enrichedEvent.hasBeenRespondedTo = true
-        enrichedEvent.responseStatus = response.event.status
-      }
-    } else if (event.event.type === "contributorCitation") {
-      enrichedEvent.hasBeenRespondedTo =
-        event.event.resolutionStatus !== "pending"
-      enrichedEvent.citationStatus = event.event.resolutionStatus
-    }
-
-    return enrichedEvent
-  })
-
-  if (userInfo.admin) {
-    return enrichedEvents
-  } else {
-    return enrichedEvents.filter((event) => {
-      const hasAdminFlag = "admin" in event.event && event.event.admin
-      const isRespondedToRequest = (event.event.type === "contributorRequest" &&
-        event.hasBeenRespondedTo) ||
-        (event.event.type === "contributorCitation" && event.hasBeenRespondedTo)
-      return !hasAdminFlag || isRespondedToRequest
-    })
-  }
-}
-
+/** Helper type guards */
 function isContributorRequest(
   event: DatasetEventDocument,
 ): event is DatasetEventDocument & { event: DatasetEventContributorRequest } {
@@ -101,6 +26,116 @@ function isContributorResponse(
   event: DatasetEventDocument,
 ): event is DatasetEventDocument & { event: DatasetEventContributorResponse } {
   return event.event.type === "contributorResponse"
+}
+
+function isContributorCitation(
+  event: DatasetEventDocument,
+): event is DatasetEventDocument & { event: DatasetEventContributorCitation } {
+  return event.event.type === "contributorCitation"
+}
+
+/** Enriched type for GraphQL */
+export type EnrichedDatasetEvent =
+  & Omit<
+    DatasetEventDocument,
+    "notificationStatus"
+  >
+  & {
+    hasBeenRespondedTo?: boolean
+    responseStatus?: "accepted" | "denied"
+    citationStatus?: "pending" | "approved" | "denied"
+    notificationStatus?: UserNotificationStatusDocument
+  }
+
+/**
+ * Get all events for a dataset
+ */
+
+/** Unified datasetEvents query */
+// --- Query: all dataset events ---
+export async function datasetEvents(
+  obj,
+  _,
+  { userInfo, user },
+): Promise<EnrichedDatasetEvent[]> {
+  const allEvents: DatasetEventDocument[] = await DatasetEvent.find({
+    datasetId: obj.id,
+  })
+    .sort({ timestamp: -1 })
+    .populate("user")
+    .populate({ path: "notificationStatus", match: { userId: user } })
+
+  const responsesMap = new Map<string, DatasetEventDocument>()
+  allEvents.forEach((e) => {
+    if (e.event.type === "contributorResponse" && "requestId" in e.event) {
+      responsesMap.set(e.event.requestId, e)
+    }
+  })
+
+  const enriched: EnrichedDatasetEvent[] = allEvents
+    .filter((e) => {
+      // Only include contributorCitation if it's approved or denied
+      if (isContributorCitation(e)) {
+        return e.event.resolutionStatus !== "pending"
+      }
+      return true
+    })
+    .map((e) => {
+      const ev = e.toObject() as EnrichedDatasetEvent
+
+      if (!ev.notificationStatus || typeof ev.notificationStatus === "string") {
+        ev.notificationStatus = new UserNotificationStatus({
+          userId: user,
+          datasetEventId: e.id,
+          status: "UNREAD",
+        }) as UserNotificationStatusDocument
+      }
+
+      if (isContributorRequest(e)) {
+        const response = responsesMap.get(e.event.requestId)
+        if (response && isContributorResponse(response)) {
+          ev.hasBeenRespondedTo = true
+          ev.responseStatus = response.event.status
+        }
+      } else if (isContributorCitation(e)) {
+        ev.hasBeenRespondedTo = true
+        ev.citationStatus = e.event.resolutionStatus
+      }
+
+      return ev
+    })
+
+  return userInfo?.admin ? enriched : enriched.filter(
+    (ev) =>
+      !(ev.event.type === "note" && ev.event.admin) &&
+      ev.event.type !== "permissionChange",
+  )
+}
+
+// --- Field-level resolvers ---
+export const DatasetEventResolvers = {
+  hasBeenRespondedTo: (ev: EnrichedDatasetEvent) =>
+    ev.hasBeenRespondedTo ?? false,
+  responseStatus: (ev: EnrichedDatasetEvent) => ev.responseStatus ?? null,
+  citationStatus: (ev: EnrichedDatasetEvent) => ev.citationStatus ?? null,
+  notificationStatus: (ev: EnrichedDatasetEvent) =>
+    ev.notificationStatus?.status ?? "UNREAD",
+  requestId: (ev: EnrichedDatasetEvent) =>
+    isContributorRequest(ev) || isContributorResponse(ev)
+      ? ev.event.requestId
+      : null,
+  target: async (ev: EnrichedDatasetEvent): Promise<UserDocument | null> => {
+    let targetUserId: string | undefined
+
+    if (isContributorResponse(ev) || isContributorCitation(ev)) {
+      targetUserId = ev.event.targetUserId
+    }
+
+    if (!targetUserId) return null
+    return User.findById(targetUserId)
+  },
+  user: async (ev: EnrichedDatasetEvent): Promise<UserDocument | null> =>
+    ev.userId ? User.findById(ev.userId) : null,
 }
 
 /**
@@ -166,33 +201,28 @@ export async function saveAdminNote(
 }
 
 /**
- * Field-level resolvers for DatasetEvent
- * These expose the computed/enriched fields to GraphQL
- */
-export const DatasetEventResolvers = {
-  hasBeenRespondedTo: (event: EnrichedDatasetEvent) =>
-    event.hasBeenRespondedTo ?? false,
-  responseStatus: (event: EnrichedDatasetEvent) => event.responseStatus ?? null,
-  notificationStatus: (event: EnrichedDatasetEvent) =>
-    typeof event.notificationStatus === "object"
-      ? event.notificationStatus
-      : { status: event.notificationStatus ?? "UNREAD" },
-}
-
-/**
  * Process a contributor request (accept or deny) and log an event.
  * This mutation should only be callable by users with admin privileges on the dataset.
  */
 export async function processContributorRequest(
   obj: unknown,
-  { datasetId, requestId, targetUserId, status, reason }: {
+  {
+    datasetId,
+    requestId,
+    targetUserId,
+    status,
+    reason,
+  }: {
     datasetId: string
     requestId: string
     targetUserId: string
     status: "accepted" | "denied"
     reason?: string
   },
-  { user: currentUserId, userInfo }: {
+  {
+    user: currentUserId,
+    userInfo,
+  }: {
     user: string
     userInfo: { admin: boolean }
   },
@@ -265,11 +295,7 @@ export async function processContributorRequest(
 /**
  * Update a user's notification status for a specific event
  */
-export async function updateEventStatus(
-  obj,
-  { eventId, status },
-  { user },
-) {
+export async function updateEventStatus(obj, { eventId, status }, { user }) {
   if (!user) throw new Error("Authentication required.")
 
   const updatedStatus = await UserNotificationStatus.findOneAndUpdate(
@@ -313,6 +339,7 @@ export async function createContributorCitationEvent(
     userId: user,
     event: {
       type: "contributorCitation",
+      note: "Contributorship request",
       datasetId,
       addedBy: user,
       targetUserId,
@@ -328,10 +355,13 @@ export async function createContributorCitationEvent(
   await event.populate("user")
   return event
 }
-
 /**
  * Process a contributor citation (approve or deny)
- * This mutation should only be callable by the target user
+ * Only the target user can approve/deny
+ */
+/**
+ * Process a contributor citation (approve or deny)
+ * Only the target user or an admin can approve/deny
  */
 export async function processContributorCitation(
   obj,
@@ -342,75 +372,106 @@ export async function processContributorCitation(
     eventId: string
     status: "approved" | "denied"
   },
-  { user }: { user: string },
+  { user, userInfo }: { user: string; userInfo: { admin?: boolean } },
 ) {
   if (!user) {
     throw new Error("Authentication required to process contributor citation.")
   }
 
-  // Find the citation event
-  const citationEvent = await DatasetEvent.findById(eventId)
+  console.log("processContributorCitation called", { eventId, status, user })
+
+  // Fetch the citation event
+  const citationEvent = await DatasetEvent.findOne({ id: eventId })
+  console.log("Fetched citationEvent:", citationEvent?.toObject())
+
   if (!citationEvent || citationEvent.event.type !== "contributorCitation") {
     throw new Error("Contributor citation event not found.")
   }
 
-  // Only the target user can approve/deny
-  if (citationEvent.event.targetUserId !== user) {
+  // Fetch current user
+  const currentUser = await User.findOne({ id: user })
+
+  // Authorization: target user OR admin
+  const isTargetUser = citationEvent.event.targetUserId === user ||
+    citationEvent.event.targetUserId === currentUser?.orcid
+  const isAdmin = userInfo?.admin === true
+
+  if (!isTargetUser && !isAdmin) {
+    console.log("Authorization failed:", {
+      targetUserId: citationEvent.event.targetUserId,
+      user,
+      userOrcid: currentUser?.orcid,
+      isAdmin,
+    })
     throw new Error("Not authorized to respond to this contributor citation.")
   }
+
+  console.log("Authorization passed. Creating response event...")
 
   // Must still be pending
   if (citationEvent.event.resolutionStatus !== "pending") {
     throw new Error("This contributor citation has already been responded to.")
   }
 
-  // Update status
-  citationEvent.event.resolutionStatus = status
-  await citationEvent.save()
-  await citationEvent.populate("user")
+  // --- Create a new DatasetEvent for the approval/denial ---
+  const responseEvent = new DatasetEvent({
+    datasetId: citationEvent.datasetId,
+    userId: user,
+    event: {
+      type: "contributorCitation",
+      note: status + " contributor request",
+      datasetId: citationEvent.datasetId,
+      addedBy: citationEvent.event.addedBy,
+      targetUserId: citationEvent.event.targetUserId,
+      contributorType: citationEvent.event.contributorType,
+      contributorData: citationEvent.event.contributorData,
+      resolutionStatus: status,
+    },
+    success: true,
+    note:
+      `User ${user} ${status} contributor citation for ${citationEvent.event.targetUserId}.`,
+  })
 
+  await responseEvent.save()
+  await responseEvent.populate("user")
+
+  // If approved, update contributors in Datacite YAML
   if (status === "approved") {
     const { contributorData } = citationEvent.event
     if (!contributorData) {
       throw new Error("Contributor data missing in citation event.")
     }
 
-    // Fetch existing contributors from Datacite YAML
     const existingDatacite = await getDataciteYml(citationEvent.datasetId)
     const existingContributors =
       existingDatacite?.data.attributes.contributors || []
 
-    // Map existing contributors
-    const mappedExisting: Contributor[] = existingContributors.map((
-      c,
-      index,
-    ) => ({
-      name: c.name || "Unknown Contributor",
-      givenName: "",
-      familyName: "",
-      orcid: c.nameIdentifiers?.[0]?.nameIdentifier,
-      contributorType: c.contributorType || "Researcher",
-      order: index + 1,
-    }))
+    const mappedExisting: Contributor[] = existingContributors.map(
+      (c, index) => ({
+        name: c.name || "Unknown Contributor",
+        givenName: c.givenName || "",
+        familyName: c.familyName || "",
+        orcid: c.nameIdentifiers?.[0]?.nameIdentifier,
+        contributorType: c.contributorType || "Researcher",
+        order: index + 1,
+      }),
+    )
 
-    // Add the new contributor
     const newContributor: Contributor = {
       name: contributorData.name || "Unknown Contributor",
-      givenName: "",
-      familyName: "",
+      givenName: "", //contributorData.givenName || '',
+      familyName: "", //contributorData.familyName || '',
       orcid: contributorData.orcid,
-      contributorType: "Researcher",
+      contributorType: "Researcher", //contributorData.contributorType || 'Researcher',
       order: mappedExisting.length + 1,
     }
 
-    const updatedContributors = [...mappedExisting, newContributor]
-
     await updateContributorsUtil(
       citationEvent.datasetId,
-      updatedContributors,
+      [...mappedExisting, newContributor],
       user,
     )
   }
 
-  return citationEvent
+  return responseEvent
 }
