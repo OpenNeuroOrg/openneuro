@@ -48,6 +48,7 @@ vi.mocked(CacheItem).mockImplementation((_redis, _type, _key) => {
 describe("contributors (core functionality)", () => {
   const MOCK_DATASET_ID = "ds000001"
   const MOCK_REVISION = "dce4b7b6653bcde9bdb7226a7c2b9499e77f2724"
+  const MOCK_REV_SHORT = MOCK_REVISION.substring(0, 7)
 
   beforeEach(() => {
     vi.clearAllMocks()
@@ -105,7 +106,7 @@ describe("contributors (core functionality)", () => {
     })
     expect(result).toEqual([])
     expect(mockSentryCaptureMessage).toHaveBeenCalledWith(
-      `Datacite file for ${MOCK_DATASET_ID}:${MOCK_REVISION} found but resourceTypeGeneral is 'Software', not 'Dataset'.`,
+      `Datacite file for ${MOCK_DATASET_ID}:${MOCK_REV_SHORT} found but resourceTypeGeneral is 'Software', not 'Dataset'.`,
     )
     expect(mockSentryCaptureException).not.toHaveBeenCalled()
   })
@@ -135,7 +136,7 @@ describe("contributors (core functionality)", () => {
 
     expect(result).toEqual([])
     expect(mockSentryCaptureMessage).toHaveBeenCalledWith(
-      `Datacite file for ${MOCK_DATASET_ID}:${MOCK_REVISION} is Dataset type but provided no contributors.`,
+      `Datacite file for ${MOCK_DATASET_ID}:${MOCK_REV_SHORT} is Dataset type but provided no contributors.`,
     )
     expect(mockSentryCaptureException).not.toHaveBeenCalled()
   })
@@ -150,6 +151,7 @@ describe("contributors (core functionality)", () => {
           contributors: [],
         },
       },
+      contentType: "text/plain", // simulate unexpected content type
     }
 
     mockFetch.mockResolvedValueOnce({
@@ -162,15 +164,14 @@ describe("contributors (core functionality)", () => {
       id: MOCK_DATASET_ID,
       revision: MOCK_REVISION,
     })
+
     expect(mockSentryCaptureMessage).toHaveBeenCalledWith(
-      expect.stringContaining(
-        `Datacite file for ${MOCK_DATASET_ID}:${MOCK_REVISION} served with unexpected Content-Type: text/plain. Attempting YAML parse anyway.`,
-      ),
+      `Datacite file for ${MOCK_DATASET_ID}:${MOCK_REV_SHORT} served with unexpected Content-Type: text/plain. Attempting YAML parse anyway.`,
+    )
+    expect(mockSentryCaptureMessage).toHaveBeenCalledWith(
+      `Datacite file for ${MOCK_DATASET_ID}:${MOCK_REV_SHORT} is Dataset type but provided no contributors.`,
     )
     expect(mockSentryCaptureException).not.toHaveBeenCalled()
-    expect(mockSentryCaptureMessage).toHaveBeenCalledWith(
-      `Datacite file for ${MOCK_DATASET_ID}:${MOCK_REVISION} is Dataset type but provided no contributors.`,
-    )
     expect(result).toEqual([])
   })
 })

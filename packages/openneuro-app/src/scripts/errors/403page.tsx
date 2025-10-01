@@ -31,7 +31,7 @@ const FourOThreePage: FC<FourOThreePageProps> = ({
   theme = "topLevel",
 }) => {
   return (
-    <Container styleContext={theme}>
+    <Container styleContext={theme} data-testid="403-page">
       <h3>
         403: You do not have access to this page, you may need to sign in.
       </h3>

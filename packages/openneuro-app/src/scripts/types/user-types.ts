@@ -1,3 +1,6 @@
+import type { Event, MappedNotification } from "./event-types"
+
+/** ------------------ User ------------------ */
 export interface User {
   id: string
   name: string
@@ -15,6 +18,7 @@ export interface User {
   provider?: string
   modified?: string
   githubSynced?: Date
+  notifications?: Event[]
   orcidConsent?: boolean | null
 }
 
@@ -31,6 +35,7 @@ export interface UserAccountViewProps {
   orcidUser: User
 }
 
+/** ------------------ Dataset ------------------ */
 export interface Dataset {
   id: string
   created: string
@@ -40,26 +45,50 @@ export interface Dataset {
     views: number
     downloads: number
   }
-  stars?: { userId: string; datasetId: string }[]
-  followers?: { userId: string; datasetId: string }[]
-  latestSnapshot?: {
-    id: string
-    size: number
-    issues: { severity: string }[]
-    created?: string
-    description?: {
-      Authors: string[]
-      DatasetDOI?: string | null
-      Name: string
-    }
-    summary?: {
-      primaryModality?: string
-    }
+  stars?: DatasetUserRelation[]
+  followers?: DatasetUserRelation[]
+  latestSnapshot?: DatasetSnapshot
+  draft?: DatasetDraft
+}
+
+export interface DatasetUserRelation {
+  userId: string
+  datasetId: string
+}
+
+export interface DatasetSnapshot {
+  id: string
+  size: number
+  issues: { severity: string }[]
+  created?: string
+  description?: {
+    Authors: string[]
+    DatasetDOI?: string | null
+    Name: string
   }
-  draft?: {
-    size?: number
-    created?: string
+  summary?: {
+    primaryModality?: string
   }
+}
+
+export interface DatasetDraft {
+  size?: number
+  created?: string
+}
+
+/** ------------------ User Routes / Pages ------------------ */
+export interface UserRoutesProps {
+  orcidUser: User
+  hasEdit: boolean
+  isUser: boolean
+}
+
+export interface UserCardProps {
+  orcidUser: User
+}
+
+export interface UserAccountViewProps {
+  orcidUser: User
 }
 
 export interface DatasetCardProps {
@@ -72,8 +101,21 @@ export interface UserDatasetsViewProps {
   hasEdit: boolean
 }
 
+export interface UserNotificationsViewProps {
+  orcidUser: User
+}
+
 export interface AccountContainerProps {
   orcidUser: User
   hasEdit: boolean
   isUser: boolean
+}
+
+/** ------------------ Outlet Context ------------------ */
+export type OutletContextType = {
+  notifications: MappedNotification[]
+  handleUpdateNotification: (
+    id: string,
+    updates: Partial<MappedNotification>,
+  ) => void
 }

@@ -134,6 +134,7 @@ const File = ({
   const [agreed] = useAgreement()
   const [cookies] = useCookies()
   const user = getProfile(cookies)
+  const admin = isAdmin()
   return (
     <>
       <Icon icon={`${icon}`} color={color} />
@@ -218,7 +219,7 @@ const File = ({
 
         {!isMobile &&
           annexed &&
-          (isAdmin()
+          (admin
             ? (
               <Media greaterThanOrEqual="medium">
                 <RemoveAnnexObject

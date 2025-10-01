@@ -10,6 +10,7 @@
   line-height: 1.4em;
 }
 
+
 .on-button--primary {
   color: #fff;
   background-color: var(--current-theme-primary);
@@ -38,6 +39,20 @@
     background-color: transparent;
     color: $on-dark-aqua;
     border-color: $on-light-green;
+  }
+}
+.on-button--ghost {
+  color: $on-dark-aqua;
+  background-color: transparent;
+  text-transform: uppercase;
+  transition: background-color 0.3s;
+  box-shadow:none;
+  border: 2px solid transparent;
+  &:hover,
+  &.active {
+    background-color: transparent;
+    color: $on-dark-aqua;
+    border: 2px solid $on-dark-aqua;
   }
 }
 

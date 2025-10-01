@@ -206,6 +206,16 @@ export const typeDefs = `
     saveAdminNote(id: ID, datasetId: ID!, note: String!): DatasetEvent
     # Create a git event log for dataset changes
     createGitEvent(datasetId: ID!, commit: String!, reference: String!): DatasetEvent
+    # Request contributor status for a dataset
+    createContributorRequestEvent(datasetId: ID!): DatasetEvent
+    # Save contributor request response data
+    processContributorRequest(
+      datasetId: ID!
+      targetUserId: ID!
+      requestId: ID!
+      status: String!
+      reason: String 
+    ): DatasetEvent
     # Create or update a fileCheck document
     updateFileCheck(
       datasetId: ID!
@@ -214,6 +224,21 @@ export const typeDefs = `
       annexFsck: [AnnexFsckInput!]!
       remote: String
     ): FileCheck
+    # Profile Event Status updates
+    updateEventStatus(eventId: ID!, status: NotificationStatusType!): UserNotificationStatus
+    updateContributors(
+      datasetId: String!
+      newContributors: [ContributorInput!]!
+    ): UpdateContributorsPayload!
+    createContributorCitationEvent(
+      datasetId: ID!
+      targetUserId: ID!
+      contributorData: ContributorInput!
+    ): DatasetEvent
+    processContributorCitation(
+      eventId: ID!
+      status: String!
+    ): DatasetEvent
     # Update worker task queue status
     updateWorkerTask(
       id: ID!,
@@ -352,7 +377,7 @@ export const typeDefs = `
 
   # OpenNeuro user records from all providers
   type User {
-    id: ID!
+    id: ID
     provider: UserProvider
     avatar: String
     orcid: String
@@ -368,6 +393,7 @@ export const typeDefs = `
     github: String
     githubSynced: Date
     links: [String]
+    notifications: [DatasetEvent!] 
     orcidConsent: Boolean
   }
 
@@ -561,11 +587,9 @@ export const typeDefs = `
     head: String
     # Total size in bytes of this draft
     size: BigInt
-    # Creators list from datacite.yml || Authors list from dataset_description.json
-    creators: [Creator] 
     # File issues
     fileCheck: FileCheck
-    # NEW: Contributors list from datacite.yml
+    # Contributors list from datacite.yml
     contributors: [Contributor]
   }
 
@@ -606,9 +630,7 @@ export const typeDefs = `
     size: BigInt
     # Single list of files to download this snapshot (only available on snapshots)
     downloadFiles: [DatasetFile]
-    # Authors list from datacite.yml || dataset_description.json
-    creators: [Creator] 
-    # NEW: Contributors list from datacite.yml
+    # Contributors list from datacite.yml
     contributors: [Contributor]
   }
 
@@ -679,21 +701,30 @@ export const typeDefs = `
     EthicsApprovals: [String]
   }
 
-  # Defines the Creator type in creators.ts
-  type Creator {
-    name: String! 
-    givenName: String 
-    familyName: String 
-    orcid: String 
-  }
 
-  # NEW: Defines the Contributor type in contributors.ts
+  # Defines the Contributor type in contributors.ts
   type Contributor {
     name: String!
     givenName: String
     familyName: String
     orcid: String
     contributorType: String!
+    order: Int
+  }
+
+  # ContributorInput input type
+  input ContributorInput {
+    name: String
+    givenName: String
+    familyName: String
+    orcid: String
+    contributorType: String
+    order: Int
+  }
+
+  type UpdateContributorsPayload {
+    success: Boolean!
+    dataset: Dataset
   }
 
 
@@ -931,12 +962,20 @@ export const typeDefs = `
     version: String
     public: Boolean
     target: User
+    targetUserId: ID
     level: String
     ref: String
     message: String
+    requestId: ID
+    status: String
+    reason: String
+    datasetId: ID
+    resolutionStatus: String
+    contributorType: String
+    contributorData: Contributor
   }
 
-  # Dataset events
+    # Dataset events
   type DatasetEvent {
     # Unique identifier for the event
     id: ID
@@ -950,7 +989,28 @@ export const typeDefs = `
     success: Boolean
     # Notes associated with the event
     note: String
+    # top-level datasetId field
+    datasetId: ID
+    # User's notification status event
+    notificationStatus: UserNotificationStatus
+    responseStatus: String
+    hasBeenRespondedTo: Boolean
   }
+
+
+ # Possible statuses for user notification/events
+  enum NotificationStatusType {
+    UNREAD
+    SAVED
+    ARCHIVED
+  }
+
+  # User's notification status
+  type UserNotificationStatus {
+    status: NotificationStatusType!
+  }
+
+
 
   type FileCheck {
     datasetId: String!

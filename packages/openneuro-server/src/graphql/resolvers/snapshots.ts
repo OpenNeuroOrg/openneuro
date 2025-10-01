@@ -18,7 +18,6 @@ import { getDraftHead } from "../../datalad/dataset"
 import { downloadFiles } from "../../datalad/snapshots"
 import { snapshotValidation } from "./validation"
 import { advancedDatasetSearchConnection } from "./dataset-search"
-import { creators } from "../../datalad/creators"
 import { contributors } from "../../datalad/contributors"
 
 export const snapshots = (obj) => {
@@ -30,6 +29,7 @@ export const snapshot = (obj, { datasetId, tag }, context) => {
     () => {
       return datalad.getSnapshot(datasetId, tag).then((snapshot) => ({
         ...snapshot,
+        datasetId,
         dataset: () => dataset(snapshot, { id: datasetId }, context),
         description: () => description(snapshot),
         readme: () => readme(snapshot),
@@ -312,8 +312,14 @@ const Snapshot = {
   issues: (snapshot) => snapshotIssues(snapshot),
   issuesStatus: (snapshot) => issuesSnapshotStatus(snapshot),
   validation: (snapshot) => snapshotValidation(snapshot),
-  creators: (parent) => creators(parent),
-  contributors: (parent) => contributors(parent),
+  contributors: (snapshot) => {
+    const datasetId = snapshot.datasetId
+    return contributors({
+      id: `${datasetId}:${snapshot.hexsha}`,
+      tag: snapshot.tag,
+      hexsha: snapshot.hexsha,
+    })
+  },
 }
 
 export default Snapshot
