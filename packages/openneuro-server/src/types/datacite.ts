@@ -32,6 +32,7 @@ export interface Contributor {
   orcid?: string
   contributorType?: string
   order?: number
+  userId?: string
 }
 
 /**

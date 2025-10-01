@@ -776,17 +776,7 @@ OCI-1131441 (R. Poldrack, PI) in any publications.
             ds001032
           </div>
           <div
-            class="dataset-meta-block "
-          >
-            <h2
-              class="dmb-heading"
-            >
-              Creators
-            </h2>
-            N/A
-          </div>
-          <div
-            class="dataset-meta-block "
+            class="dataset-meta-block dmb-inline-list"
           >
             <h2
               class="dmb-heading"
