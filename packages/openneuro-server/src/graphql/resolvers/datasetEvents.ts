@@ -51,9 +51,6 @@ export type EnrichedDatasetEvent =
 /**
  * Get all events for a dataset
  */
-
-/** Unified datasetEvents query */
-// --- Query: all dataset events ---
 export async function datasetEvents(
   obj,
   _,
@@ -359,10 +356,6 @@ export async function createContributorCitationEvent(
 /**
  * Process a contributor citation (approve or deny)
  * Only the target user can approve/deny
- */
-/**
- * Process a contributor citation (approve or deny)
- * Only the target user or an admin can approve/deny
  */
 export async function processContributorCitation(
   obj,
