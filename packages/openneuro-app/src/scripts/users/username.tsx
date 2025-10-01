@@ -7,6 +7,10 @@ import { Link } from "react-router-dom"
  * Display component for usernames showing ORCID linking if connected
  */
 export const Username = ({ user }): JSX.Element => {
+  if (!user) {
+    return <span>Unknown User</span>
+  }
+
   if (user.orcid) {
     let orcidURL = "https://orcid.org/"
     if (config.auth.orcid.ORCID_API_ENDPOINT.includes("sandbox")) {
@@ -21,6 +25,6 @@ export const Username = ({ user }): JSX.Element => {
       </>
     )
   } else {
-    return user.name as JSX.Element
+    return <>{user.name}</>
   }
 }

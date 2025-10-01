@@ -1,37 +1,54 @@
 import React, { useEffect } from "react"
-import Uploader from "./uploader/uploader.jsx"
+import { useLocation, useNavigate } from "react-router-dom"
+import Uploader from "./uploader/uploader"
 import AppRoutes from "./routes"
 import HeaderContainer from "./common/containers/header"
 import FooterContainer from "./common/containers/footer"
 import { SearchParamsProvider } from "./search/search-params-ctx"
 import { UserModalOpenProvider } from "./utils/user-login-modal-ctx"
 import { useAnalytics } from "./utils/analytics"
-import { useLocation, useNavigate } from "react-router-dom"
+import { useUser } from "./queries/user"
+import { NotificationsProvider } from "./users/user-notifications-context"
 import "../assets/email-header.png"
-import { useUser } from "./queries/user.js"
 
-const Index = (): React.ReactElement => {
+const Index: React.FC = () => {
   useAnalytics()
-  // Redirect authenticated Google users to the migration step if they are in any other route
+
   const navigate = useNavigate()
   const location = useLocation()
   const { user, loading, error } = useUser()
+
   useEffect(() => {
     if (
-      !loading && !error && location.pathname !== "/orcid-link" &&
+      !loading &&
+      !error &&
+      location.pathname !== "/orcid-link" &&
       user?.provider === "google"
     ) {
       navigate("/orcid-link")
     }
-  }, [location.pathname, user])
+  }, [location.pathname, user, loading, error, navigate])
+
+  if (loading || error) return null
+
+  const initialNotifications = user?.notifications?.map((n) => ({
+    id: n.id,
+    status: Array.isArray(n.notificationStatus)
+      ? n.notificationStatus.map((ns) => ns.status.toLowerCase())[0] || "unread"
+      : n.notificationStatus?.status?.toLowerCase() || "unread",
+    ...n,
+  })) || []
+
   return (
     <Uploader>
       <SearchParamsProvider>
         <UserModalOpenProvider>
-          <div className="sticky-content">
-            <HeaderContainer />
-            <AppRoutes />
-          </div>
+          <NotificationsProvider initialNotifications={initialNotifications}>
+            <div className="sticky-content">
+              <HeaderContainer />
+              <AppRoutes />
+            </div>
+          </NotificationsProvider>
           <div className="sticky-footer">
             <FooterContainer />
           </div>

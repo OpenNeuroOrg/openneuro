@@ -3,7 +3,7 @@ import { useCookies } from "react-cookie"
 import { getProfile } from "../authentication/profile"
 import * as Sentry from "@sentry/react"
 
-// GraphQL query to fetch user data
+// GraphQL query to fetch detailed user information including nested notifications and event metadata
 export const GET_USER = gql`
   query User($userId: ID!) {
     user(id: $userId) {
@@ -27,7 +27,7 @@ export const GET_USER = gql`
         timestamp
         note
         success
-        user { # The user who initiated the event
+        user { 
           id
           name
           email
@@ -52,6 +52,9 @@ export const GET_USER = gql`
             email
             orcid
           }
+        }
+        notificationStatus {
+          status
         }
       }
       orcidConsent 

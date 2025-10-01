@@ -5,99 +5,149 @@ import {
   type DatasetOrSnapshot,
   datasetOrSnapshot,
 } from "../utils/datasetOrSnapshot"
-import { getDataciteYml } from "../utils/datacite-utils"
-import { validateOrcid } from "../utils/orcid-utils"
-import type {
-  Contributor,
-  NameIdentifier,
-  RawDataciteContributor,
-} from "../types/datacite"
+import {
+  getDataciteYml,
+  normalizeRawContributors,
+  updateContributorsUtil,
+} from "../utils/datacite-utils"
+import type { Contributor, RawDataciteYml } from "../types/datacite"
+import { description } from "./description"
 
 /**
- * Normalizes datacite contributors to the Contributor interface, extracting ORCID IDs.
- * Returns Contributor[]
- */
-export const normalizeDataciteContributors = (
-  rawContributors: RawDataciteContributor[] | undefined,
-): Contributor[] => {
-  if (!rawContributors) {
-    return []
-  }
-
-  return rawContributors.map((rawContributor) => {
-    const orcidIdentifier = rawContributor.nameIdentifiers?.find(
-      (ni: NameIdentifier) =>
-        ni.nameIdentifierScheme?.toUpperCase() === "ORCID",
-    )
-
-    const orcidNumber = validateOrcid(orcidIdentifier?.nameIdentifier)
-
-    return {
-      name: rawContributor.name ||
-        [rawContributor.givenName, rawContributor.familyName].filter(Boolean)
-          .join(
-            " ",
-          ) ||
-        "Unknown Contributor",
-      givenName: rawContributor.givenName,
-      familyName: rawContributor.familyName,
-      orcid: orcidNumber, // ORCID number or undefined
-      contributorType: rawContributor.contributorType,
-    }
-  })
-}
-
-/**
- * Get contributors for a dataset, prioritizing datacite
- * checking resourceTypeGeneral for Dataset.
+ * GraphQL resolver: fetch contributors for a dataset or snapshot
+ * Pure function: reads Datacite.yml or dataset_description.json and returns the list
  */
 export const contributors = async (
   obj: DatasetOrSnapshot,
 ): Promise<Contributor[]> => {
+  if (!obj) return []
+
   const { datasetId, revision } = datasetOrSnapshot(obj)
-  const revisionShort = revision.substring(0, 7)
+  if (!datasetId) return []
 
-  let parsedContributors: Contributor[] = []
-
-  // 1. Try to get contributors from datacite
+  const revisionShort = revision ? revision.substring(0, 7) : "HEAD"
   const dataciteCache = new CacheItem(redis, CacheType.dataciteYml, [
     datasetId,
     revisionShort,
   ])
+
   try {
-    const dataciteData = await dataciteCache.get(() =>
-      getDataciteYml(datasetId, revision)
-    )
+    const dataciteData: RawDataciteYml & { contentType?: string } | null =
+      await dataciteCache.get(() => getDataciteYml(datasetId, revision))
 
-    // --- Check resourceTypeGeneral and access new contributors path ---
-    if (dataciteData) {
-      const resourceTypeGeneral = dataciteData?.data?.attributes?.types
-        ?.resourceTypeGeneral
+    if (!dataciteData) return []
 
-      if (resourceTypeGeneral === "Dataset") {
-        parsedContributors = normalizeDataciteContributors(
-          dataciteData.data.attributes.contributors,
-        )
-        if (parsedContributors.length > 0) {
-          Sentry.captureMessage(
-            `Loaded contributors from datacite file for ${datasetId}:${revision} (ResourceType: ${resourceTypeGeneral})`,
-          )
-        } else {
-          // No contributors found in datacite file even if resourceTypeGeneral is Dataset
-          Sentry.captureMessage(
-            `Datacite file for ${datasetId}:${revision} is Dataset type but provided no contributors.`,
-          )
-        }
-      } else {
-        Sentry.captureMessage(
-          `Datacite file for ${datasetId}:${revision} found but resourceTypeGeneral is '${resourceTypeGeneral}', not 'Dataset'.`,
-        )
-      }
+    // --- Capture unexpected content type ---
+    if (
+      dataciteData.contentType &&
+      dataciteData.contentType !== "application/yaml"
+    ) {
+      Sentry.captureMessage(
+        `Datacite file for ${datasetId}:${revisionShort} served with unexpected Content-Type: ${dataciteData.contentType}. Attempting YAML parse anyway.`,
+      )
     }
-  } catch (error) {
-    Sentry.captureException(error)
+
+    const attributes = dataciteData.data?.attributes
+    const resourceType = attributes?.types?.resourceTypeGeneral
+
+    // --- Wrong resourceTypeGeneral ---
+    if (resourceType && resourceType !== "Dataset") {
+      Sentry.captureMessage(
+        `Datacite file for ${datasetId}:${revisionShort} found but resourceTypeGeneral is '${resourceType}', not 'Dataset'.`,
+      )
+      return []
+    }
+
+    // --- Contributors from Datacite.yml ---
+    if (attributes?.contributors?.length) {
+      const normalized = await normalizeRawContributors(attributes.contributors)
+      return normalized
+        .map((c, index) => ({ ...c, order: c.order ?? index + 1 }))
+        .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+    }
+
+    // --- Dataset type but no contributors ---
+    if (resourceType === "Dataset") {
+      Sentry.captureMessage(
+        `Datacite file for ${datasetId}:${revisionShort} is Dataset type but provided no contributors.`,
+      )
+    }
+
+    // --- Fallback: dataset_description.json authors ---
+    const datasetDescription = await description(obj)
+    if (datasetDescription?.Authors?.length) {
+      return datasetDescription.Authors.map((
+        author: string,
+        index: number,
+      ) => ({
+        name: author.trim(),
+        givenName: undefined,
+        familyName: undefined,
+        orcid: undefined,
+        contributorType: "Contributor",
+        order: index + 1,
+        userId: undefined,
+      }))
+    }
+
+    return []
+  } catch (err) {
+    Sentry.captureException(err)
+    return []
+  }
+}
+
+/**
+ * GraphQL mutation resolver
+ */
+export interface UserInfo {
+  id?: string
+  _id?: string
+}
+
+export interface GraphQLContext {
+  userInfo: UserInfo | null
+}
+
+export const updateContributors = async (
+  _parent: DatasetOrSnapshot,
+  args: { datasetId: string; newContributors: Contributor[] },
+  context: GraphQLContext,
+) => {
+  const userId = context?.userInfo?.id || context?.userInfo?._id
+  if (!userId) {
+    return { success: false, dataset: null }
   }
 
-  // Return the parsed contributors or the default empty array
-  return parsedContributors
+  try {
+    const contributorsToSave = args.newContributors.map((c, index) => ({
+      ...c,
+      contributorType: c.contributorType || "Researcher",
+      order: c.order ?? index + 1,
+    }))
+
+    const result = await updateContributorsUtil(
+      args.datasetId,
+      contributorsToSave,
+      userId,
+    )
+
+    return {
+      success: true,
+      dataset: {
+        id: args.datasetId,
+        draft: {
+          id: args.datasetId,
+          contributors: contributorsToSave.sort((a, b) =>
+            (a.order ?? 0) - (b.order ?? 0)
+          ),
+          files: result.draft.files || [],
+          modified: new Date().toISOString(),
+        },
+      },
+    }
+  } catch (err) {
+    Sentry.captureException(err)
+    return { success: false, dataset: null }
+  }
 }

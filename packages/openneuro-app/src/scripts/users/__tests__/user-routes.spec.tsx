@@ -19,6 +19,7 @@ const testUser = {
   avatar: "https://dummyimage.com/200x200/000/fff",
   orcid: "0000-0000-0000-0000",
   links: [],
+  notifications: [],
 }
 
 const setupUserRoutes = (
@@ -159,7 +160,8 @@ vi.mock("./user-notifications-view", () => {
     id: "1",
     timestamp: "2023-01-01T12:00:00Z",
     event: { type: "published", message: "A dataset has been published." },
-    status: "unread",
+    // The status field is nested here now
+    notificationStatus: { status: "UNREAD" },
   }
 
   const mockNotifications: MappedNotification[] = [
@@ -169,7 +171,11 @@ vi.mock("./user-notifications-view", () => {
       content: "Dataset 'My Awesome Dataset' has been published.",
       status: "unread",
       type: "general",
-      originalNotification: { ...baseDatasetEvent, id: "1" },
+      originalNotification: {
+        ...baseDatasetEvent,
+        id: "1",
+        notificationStatus: { status: "UNREAD" },
+      },
     },
     {
       id: "2",
@@ -177,7 +183,11 @@ vi.mock("./user-notifications-view", () => {
       content: "Dataset 'Another Dataset' has been saved.",
       status: "saved",
       type: "general",
-      originalNotification: { ...baseDatasetEvent, id: "2", status: "saved" },
+      originalNotification: {
+        ...baseDatasetEvent,
+        id: "2",
+        notificationStatus: { status: "SAVED" },
+      },
     },
     {
       id: "3",
@@ -188,7 +198,7 @@ vi.mock("./user-notifications-view", () => {
       originalNotification: {
         ...baseDatasetEvent,
         id: "3",
-        status: "archived",
+        notificationStatus: { status: "ARCHIVED" },
       },
     },
   ]

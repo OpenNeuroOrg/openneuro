@@ -110,7 +110,7 @@ export const DatasetEventItem: React.FC<DatasetEventItemProps> = ({
             <strong>{statusText} Contributor Request:</strong>
             <div>
               <small>
-                Admin: <Username user={event.user} />
+                <Username user={event.user} />
                 {targetUserLoading ? <span>for ...</span> : targetUser
                   ? (
                     <>
@@ -146,6 +146,12 @@ export const DatasetEventItem: React.FC<DatasetEventItemProps> = ({
         return (
           <>
             {event.note}
+          </>
+        )
+      } else if (event.event.type === "contributorCitation") {
+        return (
+          <>
+            {event.event.resolutionStatus} contributorship
           </>
         )
       } else {

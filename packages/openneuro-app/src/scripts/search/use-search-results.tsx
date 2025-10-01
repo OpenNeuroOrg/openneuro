@@ -98,12 +98,6 @@ const searchQuery = gql`
               Authors
               DatasetDOI
             }
-            creators {
-              name
-              givenName 
-              familyName 
-              orcid 
-            }
             contributors {
               name
               givenName 
@@ -182,7 +176,6 @@ export const useSearchResults = () => {
         "latestSnapshot.readme",
         "latestSnapshot.description.Name^6",
         "latestSnapshot.description.Authors^3", // TODO: Nell - do we need this still?
-        "latestSnapshot.creators.name^3",
         "latestSnapshot.contributors.name^2",
       ]),
     )
@@ -278,13 +271,8 @@ export const useSearchResults = () => {
       ]),
     )
   }
-  if (authors.length) { // TODO - NELL - this was switched to creators - is that correct?
+  if (authors.length) { // TODO - NELL - does this look right?
     const authorQuery = matchQuery(
-      "latestSnapshot.creators.name",
-      joinWithOR(authors),
-      "2",
-    )
-    const contributorQuery = matchQuery(
       "latestSnapshot.contributors.name",
       joinWithOR(authors),
       "2",
@@ -293,7 +281,7 @@ export const useSearchResults = () => {
       "must",
       {
         bool: {
-          should: [authorQuery, contributorQuery],
+          should: [authorQuery],
         },
       },
     )

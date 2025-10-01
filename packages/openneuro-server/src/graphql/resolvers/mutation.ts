@@ -44,12 +44,16 @@ import {
   importRemoteDataset,
 } from "./importRemoteDataset"
 import {
+  createContributorCitationEvent,
   createContributorRequestEvent,
+  processContributorCitation,
   processContributorRequest,
   saveAdminNote,
+  updateEventStatus,
 } from "./datasetEvents"
 import { createGitEvent } from "./gitEvents"
 import { updateFileCheck } from "./fileCheck"
+import { updateContributors } from "../../datalad/contributors"
 
 const Mutation = {
   createDataset,
@@ -98,9 +102,13 @@ const Mutation = {
   updateUser,
   saveAdminNote,
   createContributorRequestEvent,
+  createContributorCitationEvent,
   processContributorRequest,
+  processContributorCitation,
   createGitEvent,
   updateFileCheck,
+  updateEventStatus,
+  updateContributors,
 }
 
 export default Mutation
