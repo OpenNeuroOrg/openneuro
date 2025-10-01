@@ -58,6 +58,7 @@ export const NotificationAccordion = ({
   const [currentApprovalAction, setCurrentApprovalAction] = useState<
     "accepted" | "denied" | null
   >(null)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [localError, setLocalError] = useState<string | null>(null)
   const [processContributorRequest, { loading: processRequestLoading }] =
     useMutation(PROCESS_CONTRIBUTOR_REQUEST_MUTATION)
@@ -126,10 +127,12 @@ export const NotificationAccordion = ({
       setShowReasonInput(false)
       setReasonInput("")
       setCurrentApprovalAction(null)
-    } catch (error: any) {
-      const errorMessage = `Error processing contributor request: ${
-        error.message || "Unknown error"
-      }`
+    } catch (error: unknown) {
+      let message = "Unknown error"
+      if (error instanceof Error) {
+        message = error.message
+      }
+      const errorMessage = `Error processing contributor request: ${message}`
       Sentry.captureException(error)
       toast.error(
         <ToastContent title="Processing Failed" body={errorMessage} />,
