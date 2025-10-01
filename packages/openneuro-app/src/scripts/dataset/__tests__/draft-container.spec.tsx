@@ -36,14 +36,23 @@ const mockDataset = {
       subjects: [],
     },
     readme: "This is a test dataset readme.",
-    creators: [
+    contributors: [
       {
         name: "Author One",
-        firstname: "Author",
-        lastname: "One",
+        givenName: "Author",
+        familyName: "One",
         orcid: "0000-0001-2345-6789",
+        contributorType: "Researcher",
+        order: 1,
       },
-      { name: "Author Two", firstname: "Author", lastname: "Two", id: null },
+      {
+        name: "Author Two",
+        givenName: "Author",
+        familyName: "Two",
+        orcid: null,
+        contributorType: "Researcher",
+        order: 2,
+      },
     ],
   },
   snapshots: [],
@@ -70,7 +79,6 @@ const renderComponent = (
   mocks = [],
   token = mockUser,
 ) => {
-  // Mock the login state
   const cookieObject = new Cookies()
   cookieObject.set("accessToken", token)
   return render(
@@ -87,7 +95,7 @@ const renderComponent = (
 }
 
 describe("DraftContainer", () => {
-  it("renders dataset name and authors", async () => {
+  it("renders dataset name and contributors as authors", async () => {
     vi.mock("../../queries/user", async (importOriginal) => {
       const actual = await importOriginal<typeof UserQueriesModule>()
       return {
@@ -109,6 +117,8 @@ describe("DraftContainer", () => {
     expect(await screen.findByRole("heading", { level: 1 })).toHaveTextContent(
       /Test Dataset Name/,
     )
+
+    // Check contributor names
     expect(await screen.findByText(/Author One/)).toBeInTheDocument()
     expect(await screen.findByText(/Author Two/)).toBeInTheDocument()
 
@@ -132,6 +142,7 @@ describe("DraftContainer", () => {
     expect(orcidExternalLink).toHaveAttribute("target", "_blank")
     expect(orcidExternalLink).toHaveAttribute("rel", "noopener noreferrer")
 
+    // Author Two has no ORCID, so no profile link
     const authorTwoProfileLink = screen.queryByRole("link", {
       name: /Author Two/i,
     })

@@ -8,7 +8,6 @@ import { checkDatasetWrite } from "../permissions.js"
 import { getFiles } from "../../datalad/files"
 import { filterRemovedAnnexObjects } from "../utils/file.js"
 import { validation } from "./validation"
-import { creators } from "../../datalad/creators"
 import FileCheck from "../../models/fileCheck"
 import { contributors } from "../../datalad/contributors"
 
@@ -60,7 +59,6 @@ const draft = {
   description,
   readme,
   head: (obj) => obj.revision,
-  creators: (parent) => creators(parent),
   fileCheck,
   contributors: (parent) => contributors(parent),
 }

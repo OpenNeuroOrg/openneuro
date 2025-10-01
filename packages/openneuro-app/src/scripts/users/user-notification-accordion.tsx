@@ -1,159 +1,241 @@
-import React, { useState } from "react"
+import React, { useCallback, useState } from "react"
+import * as Sentry from "@sentry/react"
+import { toast } from "react-toastify"
+import { useMutation, useQuery } from "@apollo/client"
+import {
+  PROCESS_CONTRIBUTOR_REQUEST_MUTATION,
+  UPDATE_NOTIFICATION_STATUS_MUTATION,
+} from "../queries/datasetEvents"
+import { GET_USER, useUser } from "../queries/user"
+import { NotificationHeader } from "./user-notification-accordion-header"
+import { NotificationBodyContent } from "./user-notifications-accordion-body"
+import { NotificationReasonInput } from "./user-notification-reason-input"
+import { NotificationActionButtons } from "./user-notification-accordion-actions"
+import ToastContent from "../common/partials/toast-content"
 import styles from "./scss/usernotifications.module.scss"
-import { Tooltip } from "../components/tooltip/Tooltip"
-import iconUnread from "../../assets/icon-unread.png"
-import iconSaved from "../../assets/icon-saved.png"
-import iconArchived from "../../assets/icon-archived.png"
 
-export const NotificationAccordion = ({ notification, onUpdate }) => {
-  const { id, title, content, status, type, approval } = notification
+import type { MappedNotification } from "../types/event-types"
 
+export const NotificationAccordion = ({
+  notification,
+  onUpdate,
+}: {
+  notification: MappedNotification
+  onUpdate: (id: string, updates: Partial<MappedNotification>) => void
+}) => {
+  const { user } = useUser()
+  const {
+    id,
+    title,
+    content,
+    type,
+    approval,
+    datasetId,
+    requestId,
+    targetUserId,
+    requesterUser,
+    adminUser,
+    reason,
+  } = notification
+
+  const isContributorRequest = type === "approval"
+  const isContributorResponse = type === "response"
+
+  const { data: targetUserData, loading: targetUserLoading } = useQuery(
+    GET_USER,
+    {
+      variables: { userId: targetUserId },
+      skip: !targetUserId,
+    },
+  )
+
+  const targetUser = targetUserData?.user
   const hasContent = content && content.trim().length > 0
 
   const [isOpen, setIsOpen] = useState(false)
-  const toggleAccordion = () => setIsOpen(!isOpen)
+  const [showReasonInput, setShowReasonInput] = useState(false)
+  const [reasonInput, setReasonInput] = useState("")
+  const [currentApprovalAction, setCurrentApprovalAction] = useState<
+    "accepted" | "denied" | null
+  >(null)
+  const [localError, setLocalError] = useState<string | null>(null)
+  const [processContributorRequest, { loading: processRequestLoading }] =
+    useMutation(PROCESS_CONTRIBUTOR_REQUEST_MUTATION)
+  const isProcessing = processRequestLoading || targetUserLoading
 
-  const handleApprovalChange = (approvalStatus) => {
-    onUpdate(id, { approval: approvalStatus })
-  }
+  const [updateNotificationStatus] = useMutation(
+    UPDATE_NOTIFICATION_STATUS_MUTATION,
+  )
 
-  const handleStatusChange = (newStatus) => {
-    onUpdate(id, { status: newStatus })
-  }
+  const toggleAccordion = useCallback(() => {
+    setIsOpen((prev) => !prev)
+    if (isOpen) {
+      setShowReasonInput(false)
+      setReasonInput("")
+      setCurrentApprovalAction(null)
+      setLocalError(null)
+    }
+  }, [isOpen])
+
+  const handleProcessAction = useCallback((action: "accepted" | "denied") => {
+    setIsOpen(true)
+    setShowReasonInput(true)
+    setReasonInput("")
+    setCurrentApprovalAction(action)
+    setLocalError(null)
+  }, [])
+
+  const handleReasonSubmit = useCallback(async () => {
+    if (!reasonInput.trim()) {
+      const errorMessage = "Please provide a reason for this action."
+      toast.error(<ToastContent title="Reason Required" body={errorMessage} />)
+      setLocalError(errorMessage)
+      return
+    }
+
+    if (isProcessing || !currentApprovalAction) return
+
+    if (!datasetId || !requestId || !targetUserId) {
+      const missingDataError =
+        "Missing required data for processing contributor request."
+      Sentry.captureException(missingDataError)
+      toast.error(<ToastContent title="Missing Data" body={missingDataError} />)
+      setLocalError(missingDataError)
+      return
+    }
+
+    setLocalError(null)
+
+    try {
+      await processContributorRequest({
+        variables: {
+          datasetId,
+          requestId,
+          targetUserId,
+          status: currentApprovalAction,
+          reason: reasonInput,
+        },
+      })
+      toast.success(
+        <ToastContent
+          title="Contributor Request Processed"
+          body={`Request has been ${currentApprovalAction}.`}
+        />,
+      )
+
+      setShowReasonInput(false)
+      setReasonInput("")
+      setCurrentApprovalAction(null)
+    } catch (error: any) {
+      const errorMessage = `Error processing contributor request: ${
+        error.message || "Unknown error"
+      }`
+      Sentry.captureException(error)
+      toast.error(
+        <ToastContent title="Processing Failed" body={errorMessage} />,
+      )
+      setLocalError(errorMessage)
+    }
+  }, [
+    reasonInput,
+    isProcessing,
+    currentApprovalAction,
+    datasetId,
+    requestId,
+    targetUserId,
+    processContributorRequest,
+  ])
+
+  const handleReasonCancel = useCallback(() => {
+    setShowReasonInput(false)
+    setReasonInput("")
+    setCurrentApprovalAction(null)
+    setLocalError(null)
+  }, [])
+
+  const handleStatusChange = useCallback(
+    async (newStatus: "unread" | "saved" | "archived") => {
+      onUpdate(id, { status: newStatus })
+
+      try {
+        const backendStatus = newStatus.toUpperCase()
+
+        await updateNotificationStatus({
+          variables: { eventId: id, status: backendStatus },
+          refetchQueries: [{ query: GET_USER, variables: { userId: user.id } }],
+        })
+
+        toast.success(
+          <ToastContent
+            title="Update Successful"
+            body={`Notification status changed to ${newStatus}.`}
+          />,
+        )
+      } catch (error) {
+        Sentry.captureException(error)
+        toast.error(
+          <ToastContent
+            title="Update Failed"
+            body="Failed to update notification status. Please try again."
+          />,
+        )
+      }
+    },
+    [id, updateNotificationStatus, user, onUpdate],
+  )
+
+  const showReviewButton = hasContent || isContributorRequest ||
+    isContributorResponse
 
   return (
     <li
       className={`${styles.notificationAccordion} ${isOpen ? styles.open : ""}`}
     >
-      <div className={styles.header}>
-        {/* Render title as button if content exists, otherwise as plain text */}
-        <h3 className={styles.accordiontitle}>{title}</h3>
+      <NotificationHeader
+        title={title}
+        datasetId={datasetId}
+        isOpen={isOpen}
+        toggleAccordion={toggleAccordion}
+        showReviewButton={showReviewButton}
+        isProcessing={isProcessing}
+      >
+        <NotificationActionButtons
+          notification={notification}
+          isProcessing={isProcessing}
+          setError={setLocalError}
+          onUpdate={onUpdate}
+          handleProcessAction={handleProcessAction}
+          handleStatusChange={handleStatusChange}
+        />
+      </NotificationHeader>
 
-        {hasContent && (
-          <button className={styles.readbutton} onClick={toggleAccordion}>
-            {isOpen
-              ? (
-                <span>
-                  <i className="fa fa-times"></i> Close
-                </span>
-              )
-              : (
-                <span>
-                  <i className="fa fa-eye"></i> Review
-                </span>
-              )}
-          </button>
-        )}
-        <div className={styles.actions}>
-          {type === "approval" && (
-            <>
-              {(approval === "not provided" || approval === "approved") && (
-                <button
-                  className={`${styles.notificationapprove} ${
-                    approval === "approved" ? styles.active : ""
-                  }`}
-                  onClick={() => handleApprovalChange("approved")}
-                  disabled={approval === "approved"}
-                >
-                  <i className="fa fa-check"></i>{" "}
-                  {approval === "approved" ? "Approved" : "Approve"}
-                </button>
-              )}
-
-              {(approval === "not provided" || approval === "denied") && (
-                <button
-                  className={`${styles.notificationdeny} ${
-                    approval === "denied" ? styles.active : ""
-                  }`}
-                  onClick={() => handleApprovalChange("denied")}
-                  disabled={approval === "denied"}
-                >
-                  <i className="fa fa-times"></i>{" "}
-                  {approval === "denied" ? "Denied" : "Deny"}
-                </button>
-              )}
-            </>
-          )}
-          {/* Render actions based on the notification's status */}
-          {status === "unread" && (
-            <>
-              <Tooltip tooltip="Save and mark as read">
-                <button
-                  className={styles.save}
-                  onClick={() => handleStatusChange("saved")}
-                >
-                  <img
-                    className={`${styles.accordionicon} ${styles.saveicon}`}
-                    src={iconUnread}
-                    alt=""
-                  />
-                  <span className="sr-only">Save</span>
-                </button>
-              </Tooltip>
-              <Tooltip tooltip="Archive">
-                <button
-                  className={styles.archive}
-                  onClick={() => handleStatusChange("archived")}
-                >
-                  <img
-                    className={`${styles.accordionicon} ${styles.archiveicon}`}
-                    src={iconArchived}
-                    alt=""
-                  />
-                  <span className="sr-only">Archive</span>
-                </button>
-              </Tooltip>
-            </>
-          )}
-          {status === "saved" && (
-            <>
-              <Tooltip tooltip="Mark as Unread">
-                <button
-                  className={styles.unread}
-                  onClick={() => handleStatusChange("unread")}
-                >
-                  <img
-                    className={`${styles.accordionicon} ${styles.unreadicon}`}
-                    src={iconSaved}
-                    alt=""
-                  />
-                  <span className="sr-only">Mark as Unread</span>
-                </button>
-              </Tooltip>
-              <Tooltip tooltip="Archive">
-                <button
-                  className={styles.archive}
-                  onClick={() => handleStatusChange("archived")}
-                >
-                  <img
-                    className={`${styles.accordionicon} ${styles.archiveicon}`}
-                    src={iconArchived}
-                    alt=""
-                  />
-                  <span className="sr-only">Archive</span>
-                </button>
-              </Tooltip>
-            </>
-          )}
-          {status === "archived" && (
-            <Tooltip tooltip="Mark as Unread">
-              <button
-                className={styles.unarchive}
-                onClick={() => handleStatusChange("unread")}
-              >
-                <img
-                  className={`${styles.accordionicon} ${styles.unreadicon}`}
-                  src={iconUnread}
-                  alt=""
-                />
-                <span className="sr-only">Unarchive</span>
-              </button>
-            </Tooltip>
-          )}
+      {isOpen && (
+        <div className={styles.accordionbody}>
+          {showReasonInput
+            ? (
+              <NotificationReasonInput
+                reasonInput={reasonInput}
+                setReasonInput={setReasonInput}
+                currentApprovalAction={currentApprovalAction}
+                handleReasonCancel={handleReasonCancel}
+                handleReasonSubmit={handleReasonSubmit}
+                isProcessing={isProcessing}
+              />
+            )
+            : (
+              <NotificationBodyContent
+                content={content}
+                isContributorRequest={isContributorRequest}
+                isContributorResponse={isContributorResponse}
+                approval={approval}
+                requesterUser={requesterUser}
+                adminUser={adminUser}
+                targetUser={targetUser}
+                targetUserLoading={targetUserLoading}
+                reason={reason}
+              />
+            )}
         </div>
-      </div>
-      {isOpen && hasContent && (
-        <div className={styles.accordionbody}>{content}</div>
       )}
     </li>
   )

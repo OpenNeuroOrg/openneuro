@@ -43,9 +43,17 @@ import {
   finishImportRemoteDataset,
   importRemoteDataset,
 } from "./importRemoteDataset"
-import { saveAdminNote } from "./datasetEvents"
+import {
+  createContributorCitationEvent,
+  createContributorRequestEvent,
+  processContributorCitation,
+  processContributorRequest,
+  saveAdminNote,
+  updateEventStatus,
+} from "./datasetEvents"
 import { createGitEvent } from "./gitEvents"
 import { updateFileCheck } from "./fileCheck"
+import { updateContributors } from "../../datalad/contributors"
 import { updateWorkerTask } from "./worker"
 
 const Mutation = {
@@ -94,8 +102,14 @@ const Mutation = {
   finishImportRemoteDataset,
   updateUser,
   saveAdminNote,
+  createContributorRequestEvent,
+  createContributorCitationEvent,
+  processContributorRequest,
+  processContributorCitation,
   createGitEvent,
   updateFileCheck,
+  updateEventStatus,
+  updateContributors,
   updateWorkerTask,
 }
 
