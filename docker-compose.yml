@@ -4,7 +4,7 @@ version: "2.3"
 services:
   # This dummy service provides shared configuration for all Node deps
   node:
-    image: docker.io/library/node:20.12.2-bullseye
+    image: docker.io/library/node:22.20-bullseye
     env_file: ./config.env
     working_dir: /srv
     command: bash -c 'yarn install && yarn pnpify tsc-watch -b --onSuccess "touch /watch/done"'

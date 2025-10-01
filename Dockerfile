@@ -1,4 +1,4 @@
-FROM docker.io/library/node:20.12.2-bullseye as dependencies
+FROM docker.io/library/node:22.20-bullseye as dependencies
 
 WORKDIR /srv
 
