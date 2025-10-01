@@ -1,8 +1,7 @@
-import { PipelineStage } from "mongoose"
+import type { PipelineStage } from "mongoose"
 import User from "../../models/user"
 import DatasetEvent from "../../models/datasetEvents"
-import Permission from "../../models/permission"
-import { UserNotificationStatusDocument } from "../../models/userNotificationStatus"
+import type { UserNotificationStatusDocument } from "../../models/userNotificationStatus"
 
 function isValidOrcid(orcid: string): boolean {
   return /^[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{3}[0-9X]$/.test(orcid || "")
@@ -23,7 +22,6 @@ export async function user(
   }
 
   if (!user) {
-    console.warn(`User not found for id: ${id}`)
     return null // Fail silently
   }
 

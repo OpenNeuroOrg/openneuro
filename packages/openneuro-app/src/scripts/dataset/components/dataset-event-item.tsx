@@ -148,6 +148,12 @@ export const DatasetEventItem: React.FC<DatasetEventItemProps> = ({
             {event.note}
           </>
         )
+      } else if (event.event.type === "contributorCitation") {
+        return (
+          <>
+            {event.event.resolutionStatus} contributorship
+          </>
+        )
       } else {
         return event.event.type
       }
