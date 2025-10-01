@@ -1,5 +1,6 @@
 import DatasetEvent from "../../models/datasetEvents"
-import User, { UserDocument } from "../../models/user"
+import User from "../../models/user"
+import type { UserDocument } from "../../models/user"
 import { checkDatasetAdmin } from "../permissions"
 import type {
   DatasetEventContributorCitation,
@@ -378,11 +379,8 @@ export async function processContributorCitation(
     throw new Error("Authentication required to process contributor citation.")
   }
 
-  console.log("processContributorCitation called", { eventId, status, user })
-
   // Fetch the citation event
   const citationEvent = await DatasetEvent.findOne({ id: eventId })
-  console.log("Fetched citationEvent:", citationEvent?.toObject())
 
   if (!citationEvent || citationEvent.event.type !== "contributorCitation") {
     throw new Error("Contributor citation event not found.")
@@ -397,16 +395,8 @@ export async function processContributorCitation(
   const isAdmin = userInfo?.admin === true
 
   if (!isTargetUser && !isAdmin) {
-    console.log("Authorization failed:", {
-      targetUserId: citationEvent.event.targetUserId,
-      user,
-      userOrcid: currentUser?.orcid,
-      isAdmin,
-    })
     throw new Error("Not authorized to respond to this contributor citation.")
   }
-
-  console.log("Authorization passed. Creating response event...")
 
   // Must still be pending
   if (citationEvent.event.resolutionStatus !== "pending") {

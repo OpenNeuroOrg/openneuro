@@ -181,7 +181,7 @@ const datasetEventSchema = new Schema<DatasetEventDocument>(
         enum: ["pending", "approved", "denied"],
         default: "pending",
       },
-      contributorType: { type: String }, // e.g., "Researcher", "Data Curator"
+      contributorType: { type: String },
       contributorData: {
         type: Object,
         default: {},

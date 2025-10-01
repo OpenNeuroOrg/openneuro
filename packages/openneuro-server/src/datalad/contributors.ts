@@ -12,8 +12,6 @@ import {
 } from "../utils/datacite-utils"
 import type { Contributor, RawDataciteYml } from "../types/datacite"
 import { description } from "./description"
-import User from "../models/user"
-import DatasetEvent from "../models/datasetEvents"
 
 /**
  * GraphQL resolver: fetch contributors for a dataset or snapshot
@@ -34,19 +32,45 @@ export const contributors = async (
   ])
 
   try {
-    const dataciteData: RawDataciteYml | null = await dataciteCache.get(() =>
-      getDataciteYml(datasetId, revision)
-    )
+    const dataciteData: RawDataciteYml & { contentType?: string } | null =
+      await dataciteCache.get(() => getDataciteYml(datasetId, revision))
+
+    if (!dataciteData) return []
+
+    // --- Capture unexpected content type ---
+    if (
+      dataciteData.contentType &&
+      dataciteData.contentType !== "application/yaml"
+    ) {
+      Sentry.captureMessage(
+        `Datacite file for ${datasetId}:${revisionShort} served with unexpected Content-Type: ${dataciteData.contentType}. Attempting YAML parse anyway.`,
+      )
+    }
+
+    const attributes = dataciteData.data?.attributes
+    const resourceType = attributes?.types?.resourceTypeGeneral
+
+    // --- Wrong resourceTypeGeneral ---
+    if (resourceType && resourceType !== "Dataset") {
+      Sentry.captureMessage(
+        `Datacite file for ${datasetId}:${revisionShort} found but resourceTypeGeneral is '${resourceType}', not 'Dataset'.`,
+      )
+      return []
+    }
 
     // --- Contributors from Datacite.yml ---
-    if (dataciteData?.data?.attributes?.contributors?.length) {
-      const normalized = await normalizeRawContributors(
-        dataciteData.data.attributes.contributors,
-      )
-
+    if (attributes?.contributors?.length) {
+      const normalized = await normalizeRawContributors(attributes.contributors)
       return normalized
         .map((c, index) => ({ ...c, order: c.order ?? index + 1 }))
         .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+    }
+
+    // --- Dataset type but no contributors ---
+    if (resourceType === "Dataset") {
+      Sentry.captureMessage(
+        `Datacite file for ${datasetId}:${revisionShort} is Dataset type but provided no contributors.`,
+      )
     }
 
     // --- Fallback: dataset_description.json authors ---
