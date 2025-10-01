@@ -44,7 +44,9 @@ import {
   importRemoteDataset,
 } from "./importRemoteDataset"
 import {
+  createContributorCitationEvent,
   createContributorRequestEvent,
+  processContributorCitation,
   processContributorRequest,
   saveAdminNote,
   updateEventStatus,
@@ -100,7 +102,9 @@ const Mutation = {
   updateUser,
   saveAdminNote,
   createContributorRequestEvent,
+  createContributorCitationEvent,
   processContributorRequest,
+  processContributorCitation,
   createGitEvent,
   updateFileCheck,
   updateEventStatus,

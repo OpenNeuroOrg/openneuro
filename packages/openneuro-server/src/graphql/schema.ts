@@ -230,6 +230,15 @@ export const typeDefs = `
       datasetId: String!
       newContributors: [ContributorInput!]!
     ): UpdateContributorsPayload!
+    createContributorCitationEvent(
+      datasetId: ID!
+      targetUserId: ID!
+      contributorData: ContributorInput!
+    ): DatasetEvent
+    processContributorCitation(
+      eventId: ID!
+      status: String!
+    ): DatasetEvent
   }
 
   # Anonymous dataset reviewer
@@ -355,7 +364,7 @@ export const typeDefs = `
 
   # OpenNeuro user records from all providers
   type User {
-    id: ID!
+    id: ID
     provider: UserProvider
     avatar: String
     orcid: String
@@ -940,30 +949,20 @@ export const typeDefs = `
     version: String
     public: Boolean
     target: User
+    targetUserId: ID
     level: String
     ref: String
     message: String
     requestId: ID
-    targetUserId: ID
     status: String
     reason: String
     datasetId: ID
     resolutionStatus: String
+    contributorType: String
+    contributorData: Contributor
   }
 
- # Possible statuses for user notification/events
-  enum NotificationStatusType {
-    UNREAD
-    SAVED
-    ARCHIVED
-  }
-
-  # User's notification status
-  type UserNotificationStatus {
-    status: NotificationStatusType!
-  }
-
-  # Dataset events
+    # Dataset events
   type DatasetEvent {
     # Unique identifier for the event
     id: ID
@@ -984,6 +983,21 @@ export const typeDefs = `
     responseStatus: String
     hasBeenRespondedTo: Boolean
   }
+
+
+ # Possible statuses for user notification/events
+  enum NotificationStatusType {
+    UNREAD
+    SAVED
+    ARCHIVED
+  }
+
+  # User's notification status
+  type UserNotificationStatus {
+    status: NotificationStatusType!
+  }
+
+
 
   type FileCheck {
     datasetId: String!
