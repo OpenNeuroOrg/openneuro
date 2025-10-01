@@ -1,5 +1,5 @@
 import React from "react"
-import { fireEvent, render, screen, waitFor } from "@testing-library/react"
+import { fireEvent, render, screen } from "@testing-library/react"
 import { MockedProvider } from "@apollo/client/testing"
 import { ContributorsListDisplay } from "../contributors-list"
 import type { Contributor } from "../../types/datacite"

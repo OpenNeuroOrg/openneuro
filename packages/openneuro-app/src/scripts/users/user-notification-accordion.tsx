@@ -58,7 +58,6 @@ export const NotificationAccordion = ({
   const [currentApprovalAction, setCurrentApprovalAction] = useState<
     "accepted" | "denied" | null
   >(null)
-  const [localError, setLocalError] = useState<string | null>(null)
   const [processContributorRequest, { loading: processRequestLoading }] =
     useMutation(PROCESS_CONTRIBUTOR_REQUEST_MUTATION)
   const isProcessing = processRequestLoading || targetUserLoading
@@ -73,7 +72,6 @@ export const NotificationAccordion = ({
       setShowReasonInput(false)
       setReasonInput("")
       setCurrentApprovalAction(null)
-      setLocalError(null)
     }
   }, [isOpen])
 
@@ -82,14 +80,12 @@ export const NotificationAccordion = ({
     setShowReasonInput(true)
     setReasonInput("")
     setCurrentApprovalAction(action)
-    setLocalError(null)
   }, [])
 
   const handleReasonSubmit = useCallback(async () => {
     if (!reasonInput.trim()) {
       const errorMessage = "Please provide a reason for this action."
       toast.error(<ToastContent title="Reason Required" body={errorMessage} />)
-      setLocalError(errorMessage)
       return
     }
 
@@ -100,11 +96,8 @@ export const NotificationAccordion = ({
         "Missing required data for processing contributor request."
       Sentry.captureException(missingDataError)
       toast.error(<ToastContent title="Missing Data" body={missingDataError} />)
-      setLocalError(missingDataError)
       return
     }
-
-    setLocalError(null)
 
     try {
       await processContributorRequest({
@@ -126,15 +119,14 @@ export const NotificationAccordion = ({
       setShowReasonInput(false)
       setReasonInput("")
       setCurrentApprovalAction(null)
-    } catch (error: any) {
-      const errorMessage = `Error processing contributor request: ${
-        error.message || "Unknown error"
-      }`
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error
+        ? error.message
+        : "Unknown error"
       Sentry.captureException(error)
       toast.error(
         <ToastContent title="Processing Failed" body={errorMessage} />,
       )
-      setLocalError(errorMessage)
     }
   }, [
     reasonInput,
@@ -150,7 +142,6 @@ export const NotificationAccordion = ({
     setShowReasonInput(false)
     setReasonInput("")
     setCurrentApprovalAction(null)
-    setLocalError(null)
   }, [])
 
   const handleStatusChange = useCallback(
@@ -202,7 +193,6 @@ export const NotificationAccordion = ({
         <NotificationActionButtons
           notification={notification}
           isProcessing={isProcessing}
-          setError={setLocalError}
           onUpdate={onUpdate}
           handleProcessAction={handleProcessAction}
           handleStatusChange={handleStatusChange}

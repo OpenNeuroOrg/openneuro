@@ -10,7 +10,6 @@ interface NotificationActionButtonsProps {
   notification: MappedNotification
   isProcessing: boolean
   onUpdate: (id: string, updates: Partial<MappedNotification>) => void
-  setError: (error: string | null) => void
   handleProcessAction: (action: "accepted" | "denied") => void
   handleStatusChange: (
     newStatus: "unread" | "saved" | "archived",

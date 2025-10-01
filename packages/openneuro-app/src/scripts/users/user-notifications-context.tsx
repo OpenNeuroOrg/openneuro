@@ -1,4 +1,5 @@
 import React, { createContext, useCallback, useContext, useState } from "react"
+import * as Sentry from "@sentry/react"
 import { useMutation } from "@apollo/client"
 import { UPDATE_NOTIFICATION_STATUS_MUTATION } from "../queries/datasetEvents"
 import type { MappedNotification } from "../types/event-types"
@@ -44,7 +45,7 @@ export const NotificationsProvider: React.FC<NotificationsProviderProps> = ({
             variables: { eventId: id, status: updates.status.toUpperCase() },
           })
         } catch (err) {
-          console.error("Failed to update notification status:", err)
+          Sentry.captureException(err)
         }
       }
     },
