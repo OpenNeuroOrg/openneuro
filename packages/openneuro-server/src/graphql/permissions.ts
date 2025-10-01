@@ -169,3 +169,12 @@ export const checkAdmin = (userId, userInfo) =>
   userId && userInfo.admin
     ? Promise.resolve(true)
     : Promise.reject(states.ADMIN.errorMessage)
+
+/**
+ * Check if the user is a worker
+ * @param userInfo User context
+ */
+export const checkWorker = (userInfo) => {
+  if (userInfo?.worker) return true
+  else throw new Error("You must be a worker to make this request.")
+}

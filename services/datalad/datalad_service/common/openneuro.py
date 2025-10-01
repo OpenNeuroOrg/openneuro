@@ -4,7 +4,7 @@ import jwt
 import logging
 from datetime import datetime, timedelta, timezone
 
-from datalad_service.config import GRAPHQL_ENDPOINT, JWT_SECRET
+from datalad_service.config import GRAPHQL_ENDPOINT, get_jwt_secret
 
 
 def generate_service_token(dataset_id):
@@ -18,23 +18,25 @@ def generate_service_token(dataset_id):
             'scopes': ['dataset:worker'],
             'dataset': dataset_id,
         },
-        JWT_SECRET,
+        get_jwt_secret(),
         algorithm='HS256',
     )
 
 
-def cache_clear_mutation(dataset_id, tag):
+def cache_clear_mutation(dataset_id):
     """Update the draft HEAD reference to an new git commit id (hexsha)."""
     return {
-        'query': 'mutation ($datasetId: ID!) { cacheClear(datasetId: $datasetId, tag: $tag) }',
-        'variables': {'datasetId': dataset_id, 'tag': tag},
+        'query': 'mutation ($datasetId: ID!) { cacheClear(datasetId: $datasetId) }',
+        'variables': {'datasetId': dataset_id},
     }
 
 
-def clear_dataset_cache(dataset, tag, cookies={}):
+def clear_dataset_cache(dataset_id):
     """Post a cacheClear event to OpenNeuro to allow the API to query new data after changes"""
     r = requests.post(
-        url=GRAPHQL_ENDPOINT, json=cache_clear_mutation(dataset, tag), cookies=cookies
+        url=GRAPHQL_ENDPOINT,
+        json=cache_clear_mutation(dataset_id),
+        headers={'authorization': f'Bearer {generate_service_token(dataset_id)}'},
     )
     if r.status_code != 200:
         raise Exception(r.text)

@@ -176,8 +176,8 @@ export const typeDefs = `
     prepareUpload(datasetId: ID!, uploadId: ID!): UploadMetadata
     # Add files from a completed upload to the dataset draft
     finishUpload(uploadId: ID!): Boolean
-    # Drop download cache for a snapshot - requires site admin access
-    cacheClear(datasetId: ID!, tag: String!): Boolean
+    # Drop cached data for a dataset - requires site admin access
+    cacheClear(datasetId: ID!): Boolean
     # Rerun the latest validator on a given commit
     revalidate(datasetId: ID!, ref: String!): Boolean
     # Request a temporary token for git access
@@ -239,6 +239,19 @@ export const typeDefs = `
       eventId: ID!
       status: String!
     ): DatasetEvent
+    # Update worker task queue status
+    updateWorkerTask(
+      id: ID!,
+      args: JSON,
+      kwargs: JSON,
+      taskName: String,
+      worker: String,
+      queuedAt: DateTime,
+      startedAt: DateTime,
+      finishedAt: DateTime,
+      error: String,
+      executionTime: Int,
+    ): WorkerTask
   }
 
   # Anonymous dataset reviewer
@@ -1029,6 +1042,18 @@ export const typeDefs = `
     input: [String]
   }
 
+  type WorkerTask {
+    id: ID!
+    args: JSON
+    kwargs: JSON
+    taskName: String
+    worker: String
+    queuedAt: DateTime
+    startedAt: DateTime
+    finishedAt: DateTime
+    error: String
+    executionTime: Int
+  }
 `
 
 schemaComposer.addTypeDefs(typeDefs)

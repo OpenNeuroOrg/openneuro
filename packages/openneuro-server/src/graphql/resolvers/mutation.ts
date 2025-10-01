@@ -54,6 +54,7 @@ import {
 import { createGitEvent } from "./gitEvents"
 import { updateFileCheck } from "./fileCheck"
 import { updateContributors } from "../../datalad/contributors"
+import { updateWorkerTask } from "./worker"
 
 const Mutation = {
   createDataset,
@@ -109,6 +110,7 @@ const Mutation = {
   updateFileCheck,
   updateEventStatus,
   updateContributors,
+  updateWorkerTask,
 }
 
 export default Mutation
