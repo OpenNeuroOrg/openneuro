@@ -32,7 +32,7 @@ const _datasetEventTypes = [
  * upload - A non-git upload occurred (typically one file changed)
  * note - A note unrelated to another event
  * contributorRequest - a request event is created for user access
- * contributorResponse - response of deny or approve is granted
+ * contributorResponse - response of deny or accept is granted
  */
 export type DatasetEventName = typeof _datasetEventTypes[number]
 
@@ -122,7 +122,7 @@ export type DatasetEventContributorCitation = DatasetEventCommon & {
     email?: string
     userId?: string
   }
-  resolutionStatus: "pending" | "approved" | "denied"
+  resolutionStatus: "pending" | "accepted" | "denied"
 }
 
 /**
@@ -178,7 +178,7 @@ const datasetEventSchema = new Schema<DatasetEventDocument>(
       datasetId: { type: String },
       resolutionStatus: {
         type: String,
-        enum: ["pending", "approved", "denied"],
+        enum: ["pending", "accepted", "denied"],
         default: "pending",
       },
       contributorType: { type: String },

@@ -26,7 +26,7 @@ export const NotificationActionButtons: React.FC<
 }) => {
   const { status, type, approval } = notification
   const isContributorRequest = type === "approval"
-
+  const isCitationRequest = type === "citationRequest"
   return (
     <div className={styles.actions}>
       {isContributorRequest && (
@@ -40,7 +40,7 @@ export const NotificationActionButtons: React.FC<
               disabled={approval === "accepted" || isProcessing}
             >
               <i className="fa fa-check" />{" "}
-              {approval === "accepted" ? "Approved" : "Approve"}
+              {approval === "accepted" ? "Accepted" : "Accept"}
             </button>
           )}
 
@@ -56,6 +56,26 @@ export const NotificationActionButtons: React.FC<
               {approval === "denied" ? "Denied" : "Deny"}
             </button>
           )}
+        </>
+      )}
+
+      {isCitationRequest && approval == "pending" && (
+        <>
+          <button
+            className={`${styles.notificationapprove}`}
+            onClick={() => handleProcessAction("accepted")}
+            disabled={isProcessing}
+          >
+            <i className="fa fa-check" /> Accept
+          </button>
+
+          <button
+            className={`${styles.notificationdeny}`}
+            onClick={() => handleProcessAction("denied")}
+            disabled={isProcessing}
+          >
+            <i className="fa fa-times" /> Deny
+          </button>
         </>
       )}
 

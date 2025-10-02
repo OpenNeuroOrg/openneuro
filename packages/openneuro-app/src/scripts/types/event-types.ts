@@ -42,7 +42,7 @@ export interface MappedNotification {
   title: string
   content: string
   status: "unread" | "saved" | "archived"
-  type: "general" | "approval" | "response"
+  type: "general" | "approval" | "response" | "citationRequest"
   approval?: "pending" | "accepted" | "denied"
   originalNotification: Event
   datasetId?: string
@@ -72,20 +72,43 @@ export const mapRawEventToMappedNotification = (
   let approval: MappedNotification["approval"]
   let requesterUser: User | undefined
   let adminUser: User | undefined
+  const capitalize = (str: string) =>
+    str ? str.charAt(0).toUpperCase() + str.slice(1) : str
 
   switch (type) {
     case "contributorRequest":
-      title = "Contributor Request for Dataset"
+      title = "User Contributor Request for Dataset"
       mappedType = "approval"
       approval = resolutionStatus ?? "pending"
       requesterUser = user
       break
     case "contributorResponse":
-      title = `Contributor ${eventStatus} for Dataset`
+      title = `User Contributor ${capitalize(eventStatus ?? "")} for Dataset`
       mappedType = "response"
       approval = eventStatus as "accepted" | "denied"
       adminUser = user
       break
+    case "contributorCitation": {
+      mappedType = "citationRequest"
+
+      // Determine status
+      const status = resolutionStatus ?? eventStatus ?? "pending"
+      approval = status as "pending" | "accepted" | "denied"
+
+      // Use targetUser name if available, otherwise fallback
+      const targetName = event.target?.name || "Unknown User"
+
+      // Set title based on status
+      if (status === "pending") {
+        title = `An admin has requested ${targetName} be added as an Author`
+      } else {
+        // accepted or denied
+        const capitalizedStatus = status.charAt(0).toUpperCase() +
+          status.slice(1)
+        title = `${targetName} has ${capitalizedStatus} authorship`
+      }
+      break
+    }
     case "note":
       title = note || "Admin Note on Dataset"
       break

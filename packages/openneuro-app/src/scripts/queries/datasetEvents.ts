@@ -117,3 +117,39 @@ export const DATASET_EVENTS_QUERY = gql`
     }
   }
 `
+
+export const PROCESS_CONTRIBUTOR_CITATION_MUTATION = gql`
+  mutation ProcessContributorCitation(
+    $eventId: ID!
+    $status: String!
+    $reason: String
+  ) {
+    processContributorCitation(
+      eventId: $eventId
+      status: $status
+      reason: $reason
+    ) {
+      id
+      timestamp
+      success
+      note
+      user {
+        id
+        name
+      }
+      event {
+        type
+        targetUserId
+        resolutionStatus
+        contributorData {
+          name
+          givenName
+          familyName
+          orcid
+          contributorType
+          order
+        }
+      }
+    }
+  }
+`

@@ -40,6 +40,7 @@ export const NotificationAccordion = ({
 
   const isContributorRequest = type === "approval"
   const isContributorResponse = type === "response"
+  const isCitationRequest = type === "citationRequest"
 
   const { data: targetUserData, loading: targetUserLoading } = useQuery(
     GET_USER,
@@ -177,13 +178,25 @@ export const NotificationAccordion = ({
 
   const showReviewButton = hasContent || isContributorRequest ||
     isContributorResponse
+  // inside NotificationAccordion
+  let dynamicTitle: string
+  const currentStatus = notification.approval ?? "pending"
 
+  if (currentStatus === "pending") {
+    dynamicTitle = `An admin has requested ${
+      targetUser?.name ?? "Unknown User"
+    } be added as an Author`
+  } else {
+    dynamicTitle = `${
+      targetUser?.name ?? "Unknown User"
+    } has ${currentStatus} authorship`
+  }
   return (
     <li
       className={`${styles.notificationAccordion} ${isOpen ? styles.open : ""}`}
     >
       <NotificationHeader
-        title={title}
+        title={dynamicTitle}
         datasetId={datasetId}
         isOpen={isOpen}
         toggleAccordion={toggleAccordion}
@@ -217,6 +230,7 @@ export const NotificationAccordion = ({
                 content={content}
                 isContributorRequest={isContributorRequest}
                 isContributorResponse={isContributorResponse}
+                isCitationRequest={isCitationRequest}
                 approval={approval}
                 requesterUser={requesterUser}
                 adminUser={adminUser}

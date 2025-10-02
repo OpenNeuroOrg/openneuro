@@ -44,7 +44,7 @@ export type EnrichedDatasetEvent =
   & {
     hasBeenRespondedTo?: boolean
     responseStatus?: "accepted" | "denied"
-    citationStatus?: "pending" | "approved" | "denied"
+    citationStatus?: "pending" | "accepted" | "denied"
     notificationStatus?: UserNotificationStatusDocument
   }
 
@@ -72,7 +72,7 @@ export async function datasetEvents(
 
   const enriched: EnrichedDatasetEvent[] = allEvents
     .filter((e) => {
-      // Only include contributorCitation if it's approved or denied
+      // Only include contributorCitation if it's accepted or denied
       if (isContributorCitation(e)) {
         return e.event.resolutionStatus !== "pending"
       }
@@ -284,7 +284,7 @@ export async function processContributorRequest(
   await responseEvent.populate("user")
 
   if (status === "accepted") {
-    // TODO: Add logic here to modify permissions if ADMIN approved
+    // TODO: Add logic here to modify permissions if ADMIN accepted
   }
 
   return responseEvent
@@ -364,7 +364,7 @@ export async function processContributorCitation(
     status,
   }: {
     eventId: string
-    status: "approved" | "denied"
+    status: "accepted" | "denied"
   },
   { user, userInfo }: { user: string; userInfo: { admin?: boolean } },
 ) {
@@ -418,8 +418,8 @@ export async function processContributorCitation(
   await responseEvent.save()
   await responseEvent.populate("user")
 
-  // If approved, update contributors in Datacite YAML
-  if (status === "approved") {
+  // If accepted, update contributors in Datacite YAML
+  if (status === "accepted") {
     const { contributorData } = citationEvent.event
     if (!contributorData) {
       throw new Error("Contributor data missing in citation event.")

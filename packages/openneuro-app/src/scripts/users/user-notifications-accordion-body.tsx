@@ -6,6 +6,7 @@ interface NotificationBodyContentProps {
   content?: string
   isContributorRequest: boolean
   isContributorResponse: boolean
+  isCitationRequest: boolean
   approval?: "pending" | "accepted" | "denied"
   requesterUser?: User
   adminUser?: User
@@ -19,6 +20,7 @@ export const NotificationBodyContent: React.FC<NotificationBodyContentProps> = (
     content,
     isContributorRequest,
     isContributorResponse,
+    isCitationRequest,
     approval,
     requesterUser,
     adminUser,
@@ -32,7 +34,7 @@ export const NotificationBodyContent: React.FC<NotificationBodyContentProps> = (
       return (
         <p>
           Contributor request from <Username user={requesterUser} /> was{" "}
-          <strong>approved</strong>.
+          <strong>Accepted</strong>.
         </p>
       )
     } else if (approval === "denied") {
@@ -66,6 +68,16 @@ export const NotificationBodyContent: React.FC<NotificationBodyContentProps> = (
             {reason || "No reason provided."}
           </small>
         </div>
+      </>
+    )
+  } else if (isCitationRequest) {
+    return (
+      <>
+        {targetUserLoading ? <span>for ...</span> : (
+          <>
+            Sent to <Username user={targetUser} />
+          </>
+        )}
       </>
     )
   }
