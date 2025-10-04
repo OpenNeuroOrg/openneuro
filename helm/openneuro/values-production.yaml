@@ -62,6 +62,10 @@ workerDiskSize:
 
 # Disable Redis password for testing
 redis:
+  image:
+    registry: docker.io
+    repository: bitnamilegacy/redis
+    tag: 8.2.1
   architecture: standalone
   auth:
     enabled: false
