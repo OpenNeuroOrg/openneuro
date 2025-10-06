@@ -124,7 +124,7 @@ export const deleteDataset = async (datasetId, user) => {
   )
   await request
     .del(`${getDatasetWorker(datasetId)}/datasets/${datasetId}`)
-  await Dataset.deleteOne({ datasetId }).exec()
+  await Dataset.deleteOne({ id: datasetId }).exec()
   await updateEvent(event)
   return true
 }
