@@ -207,7 +207,6 @@ datasetEventSchema.virtual("user", {
   justOne: true,
 })
 
-// in datasetEventSchema
 datasetEventSchema.add({
   responseStatus: {
     type: String,
