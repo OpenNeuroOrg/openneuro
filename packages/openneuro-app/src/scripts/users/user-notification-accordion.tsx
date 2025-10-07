@@ -178,25 +178,13 @@ export const NotificationAccordion = ({
 
   const showReviewButton = hasContent || isContributorRequest ||
     isContributorResponse
-  // inside NotificationAccordion
-  let dynamicTitle: string
-  const currentStatus = notification.approval ?? "pending"
 
-  if (currentStatus === "pending") {
-    dynamicTitle = `An admin has requested ${
-      targetUser?.name ?? "Unknown User"
-    } be added as an Author`
-  } else {
-    dynamicTitle = `${
-      targetUser?.name ?? "Unknown User"
-    } has ${currentStatus} authorship`
-  }
   return (
     <li
       className={`${styles.notificationAccordion} ${isOpen ? styles.open : ""}`}
     >
       <NotificationHeader
-        title={dynamicTitle}
+        title={title}
         datasetId={datasetId}
         isOpen={isOpen}
         toggleAccordion={toggleAccordion}

@@ -967,11 +967,9 @@ export const typeDefs = `
     ref: String
     message: String
     requestId: ID
-    status: String
     reason: String
     datasetId: ID
     resolutionStatus: String
-    contributorType: String
     contributorData: Contributor
   }
 
@@ -993,7 +991,7 @@ export const typeDefs = `
     datasetId: ID
     # User's notification status event
     notificationStatus: UserNotificationStatus
-    responseStatus: String
+    responseStatus: String 
     hasBeenRespondedTo: Boolean
   }
 
@@ -1003,6 +1001,13 @@ export const typeDefs = `
     UNREAD
     SAVED
     ARCHIVED
+  }
+
+  # Define the enum for responseStatus
+  enum ResponseStatusType {
+    PENDING
+    ACCEPTED
+    DENIED
   }
 
   # User's notification status

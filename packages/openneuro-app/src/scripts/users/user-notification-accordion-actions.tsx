@@ -59,25 +59,26 @@ export const NotificationActionButtons: React.FC<
         </>
       )}
 
-      {isCitationRequest && approval == "pending" && (
-        <>
-          <button
-            className={`${styles.notificationapprove}`}
-            onClick={() => handleProcessAction("accepted")}
-            disabled={isProcessing}
-          >
-            <i className="fa fa-check" /> Accept
-          </button>
+      {isCitationRequest && approval !== "accepted" && approval !== "denied" &&
+        (
+          <>
+            <button
+              className={`${styles.notificationapprove}`}
+              onClick={() => handleProcessAction("accepted")}
+              disabled={isProcessing}
+            >
+              <i className="fa fa-check" /> Accept
+            </button>
 
-          <button
-            className={`${styles.notificationdeny}`}
-            onClick={() => handleProcessAction("denied")}
-            disabled={isProcessing}
-          >
-            <i className="fa fa-times" /> Deny
-          </button>
-        </>
-      )}
+            <button
+              className={`${styles.notificationdeny}`}
+              onClick={() => handleProcessAction("denied")}
+              disabled={isProcessing}
+            >
+              <i className="fa fa-times" /> Deny
+            </button>
+          </>
+        )}
 
       {status === "unread" && (
         <>

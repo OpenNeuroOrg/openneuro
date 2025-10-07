@@ -17,7 +17,6 @@ export const GET_DATASET_EVENTS = gql`
         event {
           type
           requestId 
-          status    
           targetUserId
           resolutionStatus
         }
@@ -67,8 +66,8 @@ export const PROCESS_CONTRIBUTOR_REQUEST_MUTATION = gql`
       id
       event {
         type
-        status
         requestId
+        resolutionStatus
       }
       note
     }
