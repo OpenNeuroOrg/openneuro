@@ -9,16 +9,18 @@
 # ]
 # ///
 
-import subprocess
+import asyncio
+from dataclasses import dataclass
 from functools import cache
 from operator import itemgetter
-from typing import Iterator
+from typing import NamedTuple
 
 import httpx
 import stamina
 import structlog
+import gql
 from gql import Client, gql as gql_query
-from gql.transport.httpx import HTTPXTransport
+from gql.transport.httpx import HTTPXAsyncTransport
 from rich.progress import Progress, TextColumn, BarColumn, MofNCompleteColumn
 
 logger = structlog.get_logger()
@@ -52,76 +54,185 @@ query DatasetsWithLatestSnapshots($count: Int, $after: String) {
 """)
 
 
-@cache
-def get_client(url: str) -> Client:
-    return Client(transport=HTTPXTransport(url=url))
+@dataclass
+class Dataset:
+    id: str
+    tag: str
+    created: str
+    hexsha: str
 
 
 @stamina.retry(on=httpx.HTTPError)
-def get_page(url: str, count: int, after: str | None) -> dict:
-    return get_client(url).execute(
+async def get_page(client: Client, count: int, after: str | None) -> dict:
+    return await client.execute_async(
         QUERY, variable_values={"count": count, "after": after}
     )
 
 
-def get_dataset_count(url: str) -> int:
-    response = get_page(url, 0, None)
+async def get_dataset_count(client: Client) -> int:
+    response = await get_page(client, 0, None)
     return response["datasets"]["pageInfo"]["count"]
 
 
-def dataset_iterator(url: str) -> Iterator[tuple[str, str, str, str]]:
+async def dataset_producer(
+    client: Client, queue: asyncio.Queue[Dataset | None], progress: Progress, task_id
+) -> None:
+    """Producer that fetches datasets from GraphQL API and puts them in the queue."""
     page_info = {"hasNextPage": True, "endCursor": None}
 
-    while page_info["hasNextPage"]:
-        result = get_page(url, 100, page_info["endCursor"])
+    try:
+        while page_info["hasNextPage"]:
+            try:
+                result = await get_page(client, 100, page_info["endCursor"])
+            except gql.transport.exceptions.TransportQueryError as e:
+                logger.error("GraphQL query error")
+                if e.data is not None:
+                    result = e.data
 
-        edges, page_info = itemgetter("edges", "pageInfo")(result["datasets"])
+            edges, page_info = itemgetter("edges", "pageInfo")(result["datasets"])
 
-        for edge in edges:
-            dataset_id, latest_snapshot = itemgetter("id", "latestSnapshot")(
-                edge["node"]
-            )
-            yield (dataset_id, *itemgetter("tag", "created", "hexsha")(latest_snapshot))
+            for edge in edges:
+                if edge is None:
+                    continue
+                dataset_id, latest_snapshot = itemgetter("id", "latestSnapshot")(
+                    edge["node"]
+                )
+                dataset = Dataset(
+                    id=dataset_id,
+                    tag=latest_snapshot["tag"],
+                    created=latest_snapshot["created"],
+                    hexsha=latest_snapshot["hexsha"],
+                )
+                await queue.put(dataset)
+                progress.update(task_id, advance=1, dataset=dataset_id)
+
+    finally:
+        # Signal that we're done producing
+        await queue.put(None)
 
 
-def check_remote(dataset_id: str, tag: str, hexsha: str) -> bool | None:
-    log = logger.bind(dataset=dataset_id, tag=tag)
-    repo = f"https://github.com/OpenNeuroDatasets/{dataset_id}.git"
-    result = subprocess.run(
-        ["git", "ls-remote", "--exit-code", repo, tag],
-        capture_output=True,
+async def check_remote(dataset: Dataset) -> bool | None:
+    """Check if the git remote has the expected tag and commit hash."""
+    log = logger.bind(dataset=dataset.id, tag=dataset.tag)
+    repo = f"https://github.com/OpenNeuroDatasets/{dataset.id}.git"
+
+    proc = await asyncio.create_subprocess_exec(
+        "git",
+        "ls-remote",
+        "--exit-code",
+        repo,
+        dataset.tag,
+        stdout=asyncio.subprocess.PIPE,
+        stderr=asyncio.subprocess.PIPE,
     )
-    if result.returncode:
-        if "Repository not found" in result.stderr.decode():
+
+    stdout, stderr = await proc.communicate()
+
+    if proc.returncode:
+        stderr_text = stderr.decode()
+        if "Repository not found" in stderr_text:
             log.error("Missing repository")
             return None
         log.error("Missing latest tag")
         return False
 
-    shasum, ref = result.stdout.decode("utf-8").strip().split()
-
-    if shasum != hexsha:
-        log.warning(f"mismatch: {shasum[:7]}({ref[10:]}) != {hexsha[:7]}")
+    stdout_text = stdout.decode("utf-8").strip()
+    if not stdout_text:
+        log.error("Empty response from git ls-remote")
         return False
 
-    return ref == f"refs/tags/{tag}"
+    shasum, ref = stdout_text.split()
+
+    if shasum != dataset.hexsha:
+        log.warning(f"mismatch: {shasum[:7]}({ref[10:]}) != {dataset.hexsha[:7]}")
+        return False
+
+    return ref == f"refs/tags/{dataset.tag}"
 
 
-if __name__ == "__main__":
-    count = get_dataset_count(ENDPOINT)
+async def dataset_consumer(
+    queue: asyncio.Queue[Dataset | None],
+    progress: Progress,
+    task_id,
+    semaphore: asyncio.Semaphore,
+    results: list[bool | None],
+) -> None:
+    """Consumer that checks git remotes for datasets from the queue."""
 
-    retcode = 0
+    async def check_single_dataset(dataset: Dataset) -> bool | None:
+        async with semaphore:
+            result = await check_remote(dataset)
+            progress.update(task_id, advance=1, dataset=dataset.id)
+            return result
+
+    tasks = []
+
+    while True:
+        dataset = await queue.get()
+        if dataset is None:
+            # Producer is done, wait for remaining tasks to complete
+            break
+
+        # Create task for checking this dataset
+        task = asyncio.create_task(check_single_dataset(dataset))
+        tasks.append(task)
+
+    # Wait for all remaining tasks to complete
+    if tasks:
+        completed_results = await asyncio.gather(*tasks, return_exceptions=True)
+        for result in completed_results:
+            if isinstance(result, Exception):
+                logger.error("Error checking dataset", exc_info=result)
+                results.append(False)
+            else:
+                results.append(result)
+
+
+async def main() -> int:
+    client = Client(transport=HTTPXAsyncTransport(url=ENDPOINT))
+    count = await get_dataset_count(client)
+
+    # Queue to pass datasets from producer to consumer
+    queue: asyncio.Queue[Dataset | None] = asyncio.Queue(maxsize=200)
+
+    # Semaphore to limit concurrent git operations
+    git_semaphore = asyncio.Semaphore(20)  # Adjust based on your needs
+
+    # Results collection
+    results: list[bool | None] = []
 
     with Progress(
-        TextColumn("[progress.description]{task.description} {task.fields[dataset]:8s}"),
+        TextColumn(
+            "[progress.description]{task.description} {task.fields[dataset]:8s}"
+        ),
         BarColumn(),
         MofNCompleteColumn(),
     ) as progress:
-        task = progress.add_task("Checking", total=count, dataset="...")
+        # Create progress tasks
+        fetch_task = progress.add_task("Fetching", total=count, dataset="...")
+        check_task = progress.add_task("Checking", total=count, dataset="...")
 
-        for dataset_id, tag, created, hexsha in dataset_iterator(ENDPOINT):
-            progress.update(task, advance=1, dataset=dataset_id)
+        # Start producer and consumer
+        producer_task = asyncio.create_task(
+            dataset_producer(client, queue, progress, fetch_task)
+        )
+        consumer_task = asyncio.create_task(
+            dataset_consumer(queue, progress, check_task, git_semaphore, results)
+        )
 
-            retcode |= not check_remote(dataset_id, tag, hexsha)
+        # Wait for both to complete
+        await asyncio.gather(producer_task, consumer_task)
 
+    # Calculate return code
+    retcode = 0
+    for result in results:
+        if result is False:  # Only False indicates failure, None is ignored
+            retcode = 1
+            break
+
+    return retcode
+
+
+if __name__ == "__main__":
+    retcode = asyncio.run(main())
     raise SystemExit(retcode)

@@ -35,7 +35,7 @@ chmod +x .git/hooks/post-rewrite
 FIND_ADD="echo NOMATCH*NOMATCH; git diff-tree --no-commit-id --name-only -r --diff-filter=AMT HEAD"
 REMOVE_FROM_STDIN="git rm --cached --ignore-unmatch --pathspec-from-file=-"
 COMMIT_IF_NEEDED="git diff --cached --quiet || git commit --allow-empty --amend --no-edit"
-EXEC="(${FIND_ADD}) | ${REMOVE_FROM_STDIN} && git annex add . && (${COMMIT_IF_NEEDED})"
+EXEC="(${FIND_ADD}) | ${REMOVE_FROM_STDIN} && git annex add -J4 . && (${COMMIT_IF_NEEDED})"
 
 # --strategy-option theirs = accept the working tree (original) changes over any files edited in this rebase
 # Find any added or changed files in the commit, remove and add with git-annex
