@@ -53,14 +53,14 @@ export const PROCESS_CONTRIBUTOR_REQUEST_MUTATION = gql`
     $datasetId: ID!
     $requestId: ID!
     $targetUserId: ID!
-    $status: String!
+    $resolutionStatus: String!
     $reason: String
   ) {
     processContributorRequest(
       datasetId: $datasetId
       requestId: $requestId
       targetUserId: $targetUserId
-      status: $status
+      resolutionStatus: $resolutionStatus
       reason: $reason
     ) {
       id

@@ -183,7 +183,7 @@ export const DatasetEventItem: React.FC<DatasetEventItemProps> = ({
             datasetId,
             requestId: event.id,
             targetUserId: event.user.id,
-            status: status,
+            resolutionStatus: status,
             reason: updatedNote.trim(),
           },
         })

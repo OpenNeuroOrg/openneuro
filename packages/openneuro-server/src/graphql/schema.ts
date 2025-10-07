@@ -213,7 +213,7 @@ export const typeDefs = `
       datasetId: ID!
       targetUserId: ID!
       requestId: ID!
-      status: String!
+      resolutionStatus: String!
       reason: String 
     ): DatasetEvent
     # Create or update a fileCheck document

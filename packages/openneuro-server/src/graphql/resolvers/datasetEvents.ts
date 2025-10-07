@@ -196,7 +196,7 @@ export async function saveAdminNote(
 }
 
 /**
- * Process a contributor request (accept or deny)
+ * Process a contributor request (accept or deny) and update Datacite YAML if accepted
  */
 export async function processContributorRequest(
   obj: unknown,
@@ -222,8 +222,10 @@ export async function processContributorRequest(
     throw new Error("Authentication required to process contributor requests.")
   }
 
+  // Ensure the user is an admin for this dataset
   await checkDatasetAdmin(datasetId, currentUserId, userInfo)
 
+  // Fetch the original request event
   const originalRequestEvent = await DatasetEvent.findOne({
     "event.type": "contributorRequest",
     "event.requestId": requestId,
@@ -233,6 +235,7 @@ export async function processContributorRequest(
     throw new Error("Original contributor request event not found or invalid.")
   }
 
+  // Prevent double processing
   const existingResponse = await DatasetEvent.findOne({
     "event.type": "contributorResponse",
     "event.requestId": requestId,
@@ -241,9 +244,11 @@ export async function processContributorRequest(
     throw new Error("This contributor request has already been processed.")
   }
 
+  // Update original request resolution status
   originalRequestEvent.event.resolutionStatus = resolutionStatus
   await originalRequestEvent.save()
 
+  // Create a response event
   const responseEvent = new DatasetEvent({
     datasetId,
     userId: currentUserId,
@@ -262,6 +267,43 @@ export async function processContributorRequest(
 
   await responseEvent.save()
   await responseEvent.populate("user")
+
+  // --- If accepted, update Datacite YAML contributors ---
+  if (resolutionStatus === "accepted") {
+    const targetUser = await User.findOne({ id: targetUserId })
+    if (!targetUser) throw new Error("Target user not found.")
+
+    const existingDatacite = await getDataciteYml(datasetId)
+    const existingContributors =
+      existingDatacite?.data.attributes.contributors || []
+
+    const mappedExisting: Contributor[] = existingContributors.map((
+      c,
+      index,
+    ) => ({
+      name: c.name || "Unknown Contributor",
+      givenName: c.givenName || "",
+      familyName: c.familyName || "",
+      orcid: c.nameIdentifiers?.[0]?.nameIdentifier,
+      contributorType: c.contributorType || "Researcher",
+      order: index + 1,
+    }))
+
+    const newContributor: Contributor = {
+      name: targetUser.name || "Unknown Contributor",
+      givenName: (targetUser as any).givenName || "",
+      familyName: (targetUser as any).familyName || "",
+      orcid: targetUser.orcid,
+      contributorType: "Researcher",
+      order: mappedExisting.length + 1,
+    }
+
+    await updateContributorsUtil(
+      datasetId,
+      [...mappedExisting, newContributor],
+      currentUserId,
+    )
+  }
 
   return responseEvent
 }

@@ -106,7 +106,7 @@ export const NotificationAccordion = ({
           datasetId,
           requestId,
           targetUserId,
-          status: currentApprovalAction,
+          resolutionStatus: currentApprovalAction,
           reason: reasonInput,
         },
       })
