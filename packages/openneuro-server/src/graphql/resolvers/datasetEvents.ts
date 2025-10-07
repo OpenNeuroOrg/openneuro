@@ -47,18 +47,6 @@ export type EnrichedDatasetEvent =
     notificationStatus?: UserNotificationStatusDocument
   }
 
-const mapStatusToEnum = (status: "pending" | "accepted" | "denied" | null) => {
-  if (!status) return null
-  switch (status) {
-    case "pending":
-      return "PENDING"
-    case "accepted":
-      return "ACCEPTED"
-    case "denied":
-      return "DENIED"
-  }
-}
-
 /**
  * Get all events for a dataset
  */
@@ -119,11 +107,9 @@ export const DatasetEventResolvers = {
       ? ev.event.requestId
       : null,
   target: async (ev: EnrichedDatasetEvent): Promise<UserDocument | null> => {
-    let targetUserId: string | undefined
-
-    if (isContributorResponse(ev) || isContributorCitation(ev)) {
-      targetUserId = ev.event.targetUserId
-    }
+    const targetUserId = isContributorResponse(ev) || isContributorCitation(ev)
+      ? ev.event.targetUserId
+      : undefined
 
     if (!targetUserId) return null
     return User.findById(targetUserId)
@@ -131,7 +117,12 @@ export const DatasetEventResolvers = {
   user: async (ev: EnrichedDatasetEvent): Promise<UserDocument | null> =>
     ev.userId ? User.findById(ev.userId) : null,
   contributorData: (ev: EnrichedDatasetEvent) => {
-    const data = (ev.event as any).contributorData || {}
+    let data: DatasetEventContributorCitation["contributorData"] = {}
+
+    if (isContributorCitation(ev) && ev.event.contributorData) {
+      data = ev.event.contributorData
+    }
+
     return {
       ...data,
       contributorType: data.contributorType || "Researcher", // fallback
@@ -301,13 +292,14 @@ export async function createContributorCitationEvent(
       email?: string
       userId?: string
       contributorType?: string
+      givenName?: string
+      familyName?: string
     }
   },
   { user }: { user: string },
 ) {
   if (!user) throw new Error("Authentication required.")
 
-  // Ensure contributorType is always set
   const finalContributorData = {
     ...contributorData,
     contributorType: contributorData.contributorType || "Researcher",
@@ -334,48 +326,51 @@ export async function createContributorCitationEvent(
 }
 
 /**
- * Process a contributor citation
+ * Process a contributor citation (accept or deny)
  */
 export async function processContributorCitation(
   obj,
   {
     eventId,
-    resolutionStatus,
+    status,
   }: {
     eventId: string
-    resolutionStatus: "accepted" | "denied"
+    status: "accepted" | "denied"
   },
   { user, userInfo }: { user: string; userInfo: { admin?: boolean } },
 ) {
   if (!user) throw new Error("Authentication required.")
 
   const citationEvent = await DatasetEvent.findOne({ id: eventId })
-  if (!citationEvent || !isContributorCitation(citationEvent)) {
+
+  if (!citationEvent || citationEvent.event.type !== "contributorCitation") {
     throw new Error("Contributor citation event not found.")
   }
 
   const currentUser = await User.findOne({ id: user })
+
   const isTargetUser = citationEvent.event.targetUserId === user ||
     citationEvent.event.targetUserId === currentUser?.orcid
   const isAdmin = userInfo?.admin === true
+
   if (!isTargetUser && !isAdmin) {
     throw new Error("Not authorized to respond to this contributor citation.")
   }
+
   if (citationEvent.event.resolutionStatus !== "pending") {
     throw new Error("This contributor citation has already been responded to.")
   }
-  // Update original
-  citationEvent.event.resolutionStatus = resolutionStatus
+
+  citationEvent.event.resolutionStatus = status
   await citationEvent.save()
 
-  // Create response event
   const responseEvent = new DatasetEvent({
     datasetId: citationEvent.datasetId,
     userId: user,
     event: {
       type: "contributorResponse",
       originalCitationId: citationEvent.id,
-      action: resolutionStatus,
+      action: status,
       datasetId: citationEvent.datasetId,
       addedBy: citationEvent.event.addedBy,
       targetUserId: citationEvent.event.targetUserId,
@@ -383,13 +378,49 @@ export async function processContributorCitation(
     },
     success: true,
     note:
-      `User ${user} ${resolutionStatus} contributor citation for ${citationEvent.event.targetUserId}.`,
+      `User ${user} ${status} contributor citation for ${citationEvent.event.targetUserId}.`,
   })
 
   await responseEvent.save()
   await responseEvent.populate("user")
-  return {
-    ...citationEvent.toObject(),
-    responseStatus: mapStatusToEnum(resolutionStatus),
+
+  if (status === "accepted") {
+    const { contributorData } = citationEvent.event
+    if (!contributorData) {
+      throw new Error("Contributor data missing in citation event.")
+    }
+
+    const existingDatacite = await getDataciteYml(citationEvent.datasetId)
+    const existingContributors =
+      existingDatacite?.data.attributes.contributors || []
+
+    const mappedExisting: Contributor[] = existingContributors.map((
+      c,
+      index,
+    ) => ({
+      name: c.name || "Unknown Contributor",
+      givenName: c.givenName || "",
+      familyName: c.familyName || "",
+      orcid: c.nameIdentifiers?.[0]?.nameIdentifier,
+      contributorType: c.contributorType || "Researcher",
+      order: index + 1,
+    }))
+
+    const newContributor: Contributor = {
+      name: contributorData.name || "Unknown Contributor",
+      givenName: contributorData.givenName || "",
+      familyName: contributorData.familyName || "",
+      orcid: contributorData.orcid,
+      contributorType: contributorData.contributorType || "Researcher",
+      order: mappedExisting.length + 1,
+    }
+
+    await updateContributorsUtil(
+      citationEvent.datasetId,
+      [...mappedExisting, newContributor],
+      user,
+    )
   }
+
+  return responseEvent
 }

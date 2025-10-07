@@ -86,19 +86,22 @@ export type DatasetEventNote = DatasetEventCommon & {
   admin: boolean
   datasetId?: string
 }
+export interface ContributorDataInput {
+  orcid?: string
+  name?: string
+  email?: string
+  userId?: string
+  contributorType?: string
+  givenName?: string
+  familyName?: string
+}
 
 export type DatasetEventContributorRequest = DatasetEventCommon & {
   type: "contributorRequest"
   requestId?: string
   resolutionStatus?: "pending" | "accepted" | "denied"
   datasetId?: string
-  contributorData: {
-    orcid?: string
-    name?: string
-    email?: string
-    userId?: string
-    contributorType?: string
-  }
+  contributorData: ContributorDataInput
 }
 
 export type DatasetEventContributorResponse = DatasetEventCommon & {
@@ -108,6 +111,7 @@ export type DatasetEventContributorResponse = DatasetEventCommon & {
   resolutionStatus: "pending" | "accepted" | "denied"
   reason?: string
   datasetId?: string
+  contributorData?: ContributorDataInput
 }
 
 export type DatasetEventContributorCitation = DatasetEventCommon & {
@@ -115,13 +119,7 @@ export type DatasetEventContributorCitation = DatasetEventCommon & {
   datasetId: string
   addedBy: OpenNeuroUserId
   targetUserId: OpenNeuroUserId
-  contributorData: {
-    orcid?: string
-    name?: string
-    email?: string
-    userId?: string
-    contributorType?: string
-  }
+  contributorData: ContributorDataInput
   resolutionStatus: "pending" | "accepted" | "denied"
 }
 
@@ -182,7 +180,13 @@ const datasetEventSchema = new Schema<DatasetEventDocument>(
         default: "pending",
       },
       contributorData: {
-        type: Object,
+        orcid: { type: String },
+        name: { type: String },
+        email: { type: String },
+        userId: { type: String },
+        contributorType: { type: String },
+        givenName: { type: String },
+        familyName: { type: String },
         default: {},
       },
     },
