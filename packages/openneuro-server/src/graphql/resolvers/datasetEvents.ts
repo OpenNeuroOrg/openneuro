@@ -291,8 +291,8 @@ export async function processContributorRequest(
 
     const newContributor: Contributor = {
       name: targetUser.name || "Unknown Contributor",
-      givenName: (targetUser as any).givenName || "",
-      familyName: (targetUser as any).familyName || "",
+      givenName: targetUser?.givenName || "",
+      familyName: targetUser?.familyName || "",
       orcid: targetUser.orcid,
       contributorType: "Researcher",
       order: mappedExisting.length + 1,
