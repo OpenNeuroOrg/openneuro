@@ -11,19 +11,43 @@ import type {
   RawDataciteYml,
 } from "../types/datacite"
 import { validateOrcid } from "../utils/orcid-utils"
+import { description as getDescription } from "../datalad/description"
 
 /**
  * Returns a minimal datacite.yml structure
  */
-export const emptyDataciteYml = (): RawDataciteYml => ({
-  data: {
-    attributes: {
-      types: { resourceTypeGeneral: "Dataset" },
-      contributors: [],
-      creators: [],
+export const emptyDataciteYml = async (
+  obj?: { datasetId: string; revision?: string },
+): Promise<RawDataciteYml> => {
+  let fallbackDescription = "N/A"
+
+  if (obj?.datasetId) {
+    try {
+      const descObj = await getDescription(obj)
+      if (descObj?.Description) {
+        fallbackDescription = descObj.Description
+      }
+    } catch (_err) {
+      // fallback remains "No description provided"
+    }
+  }
+
+  return {
+    data: {
+      attributes: {
+        types: { resourceTypeGeneral: "Dataset" },
+        contributors: [],
+        creators: [],
+        descriptions: [
+          {
+            description: fallbackDescription,
+            descriptionType: "Abstract",
+          },
+        ],
+      },
     },
-  },
-})
+  }
+}
 
 /**
  * Fetch datacite.yml for a dataset revision
@@ -31,26 +55,48 @@ export const emptyDataciteYml = (): RawDataciteYml => ({
 export const getDataciteYml = async (
   datasetId: string,
   revision?: string,
-): Promise<RawDataciteYml | null> => {
+): Promise<RawDataciteYml> => {
   const dataciteFileUrl = fileUrl(datasetId, "", "datacite", revision)
 
   try {
     const res = await fetch(dataciteFileUrl)
+
     if (res.status === 200) {
       const text = await res.text()
       const parsed: RawDataciteYml = yaml.load(text) as RawDataciteYml
 
+      // Add fallback if no descriptions exist
+      if (
+        !parsed.data.attributes.descriptions ||
+        parsed.data.attributes.descriptions.length === 0
+      ) {
+        const descObj = await getDescription({ datasetId, revision })
+        const fallbackDescription = descObj?.Description ||
+          "No description provided"
+
+        parsed.data.attributes.descriptions = [
+          {
+            description: fallbackDescription,
+            descriptionType: "Abstract",
+          },
+        ]
+      }
+
       return parsed
-    } else if (res.status === 404) {
-      return null
-    } else {
-      throw new Error(
-        `Unexpected status ${res.status} when fetching datacite.yml`,
-      )
     }
+
+    // If datacite.yml missing (404), create from dataset_description
+    if (res.status === 404) {
+      return await emptyDataciteYml({ datasetId, revision })
+    }
+
+    throw new Error(
+      `Unexpected status ${res.status} when fetching datacite.yml`,
+    )
   } catch (err) {
     Sentry.captureException(err)
-    return null
+    // Even if fetch fails, still try to build from dataset_description
+    return await emptyDataciteYml({ datasetId, revision })
   }
 }
 
@@ -83,6 +129,7 @@ export const saveDataciteYmlToRepo = async (
     throw err
   }
 }
+
 /**
  * Converts RawDataciteContributor -> internal Contributor type.
  * Optionally attaches a `userId` if the contributor exists as a site user.
@@ -118,6 +165,7 @@ export const normalizeRawContributors = async (
     }
   })
 }
+
 /**
  * Update contributors in datacite.yml
  */
@@ -132,7 +180,7 @@ export const updateContributors = async (
 
     // If no datacite.yml, create a new one
     if (!dataciteData) {
-      dataciteData = emptyDataciteYml()
+      dataciteData = await emptyDataciteYml({ datasetId, revision })
     }
 
     // Map contributors to RawDataciteContributor format
@@ -170,7 +218,7 @@ export const updateContributorsUtil = async (
   userId: string,
 ) => {
   let dataciteData = await getDataciteYml(datasetId)
-  if (!dataciteData) dataciteData = emptyDataciteYml()
+  if (!dataciteData) dataciteData = await emptyDataciteYml({ datasetId })
 
   const contributorsCopy: RawDataciteContributor[] = newContributors.map(
     (c) => ({

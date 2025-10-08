@@ -3,7 +3,6 @@ import * as Sentry from "@sentry/react"
 import { useMutation } from "@apollo/client"
 import { UPDATE_NOTIFICATION_STATUS_MUTATION } from "../queries/datasetEvents"
 import type { MappedNotification } from "../types/event-types"
-import * as Sentry from "@sentry/react"
 
 interface NotificationsContextValue {
   notifications: MappedNotification[]
