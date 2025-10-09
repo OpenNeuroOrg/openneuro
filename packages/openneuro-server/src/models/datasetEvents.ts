@@ -118,7 +118,7 @@ export type DatasetEventContributorRequestResponse = DatasetEventCommon & {
 export type DatasetEventContributorCitationResponse = DatasetEventCommon & {
   type: "contributorCitationResponse"
   originalCitationId: string
-  action: "accepted" | "denied"
+  resolutionStatus: "pending" | "accepted" | "denied"
   datasetId: string
   addedBy: OpenNeuroUserId
   targetUserId: OpenNeuroUserId
