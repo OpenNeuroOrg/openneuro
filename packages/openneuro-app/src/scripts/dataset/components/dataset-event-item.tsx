@@ -102,7 +102,7 @@ export const DatasetEventItem: React.FC<DatasetEventItemProps> = ({
       )
     } else {
       if (event.event.type === "contributorResponse") {
-        const statusText = event.event.status === "accepted"
+        const statusText = event.event.resolutionStatus === "accepted"
           ? "Accepted"
           : "Denied"
         return (
