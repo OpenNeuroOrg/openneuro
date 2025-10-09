@@ -418,7 +418,7 @@ export async function processContributorCitation(
     event: {
       type: "contributorCitationResponse",
       originalCitationId: citationEvent.id,
-      action: status,
+      resolutionStatus: status,
       datasetId: citationEvent.datasetId,
       addedBy: citationEvent.event.addedBy,
       targetUserId: citationEvent.event.targetUserId,
