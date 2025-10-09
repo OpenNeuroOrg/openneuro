@@ -16,8 +16,9 @@ const _datasetEventTypes = [
   "upload",
   "note",
   "contributorRequest",
-  "contributorResponse",
   "contributorCitation",
+  "contributorRequestResponse",
+  "contributorCitationResponse",
 ] as const
 
 /**
@@ -104,14 +105,24 @@ export type DatasetEventContributorRequest = DatasetEventCommon & {
   contributorData: ContributorDataInput
 }
 
-export type DatasetEventContributorResponse = DatasetEventCommon & {
-  type: "contributorResponse"
+export type DatasetEventContributorRequestResponse = DatasetEventCommon & {
+  type: "contributorRequestResponse"
   requestId: string
   targetUserId: OpenNeuroUserId
   resolutionStatus: "pending" | "accepted" | "denied"
   reason?: string
   datasetId?: string
   contributorData?: ContributorDataInput
+}
+
+export type DatasetEventContributorCitationResponse = DatasetEventCommon & {
+  type: "contributorCitationResponse"
+  originalCitationId: string
+  action: "accepted" | "denied"
+  datasetId: string
+  addedBy: OpenNeuroUserId
+  targetUserId: OpenNeuroUserId
+  contributorData: ContributorDataInput
 }
 
 export type DatasetEventContributorCitation = DatasetEventCommon & {
@@ -136,8 +147,9 @@ export type DatasetEventType =
   | DatasetEventUpload
   | DatasetEventNote
   | DatasetEventContributorRequest
-  | DatasetEventContributorResponse
   | DatasetEventContributorCitation
+  | DatasetEventContributorRequestResponse
+  | DatasetEventContributorCitationResponse
 
 /**
  * Dataset events log changes to a dataset

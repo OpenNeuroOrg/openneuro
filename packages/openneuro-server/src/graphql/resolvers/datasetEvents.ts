@@ -4,8 +4,9 @@ import type { UserDocument } from "../../models/user"
 import { checkDatasetAdmin } from "../permissions"
 import type {
   DatasetEventContributorCitation,
+  DatasetEventContributorCitationResponse,
   DatasetEventContributorRequest,
-  DatasetEventContributorResponse,
+  DatasetEventContributorRequestResponse,
   DatasetEventDocument,
 } from "../../models/datasetEvents"
 import { UserNotificationStatus } from "../../models/userNotificationStatus"
@@ -23,24 +24,31 @@ function isContributorRequest(
   return event.event.type === "contributorRequest"
 }
 
-function isContributorResponse(
-  event: DatasetEventDocument,
-): event is DatasetEventDocument & { event: DatasetEventContributorResponse } {
-  return event.event.type === "contributorResponse"
-}
-
 function isContributorCitation(
   event: DatasetEventDocument,
 ): event is DatasetEventDocument & { event: DatasetEventContributorCitation } {
   return event.event.type === "contributorCitation"
 }
 
+function isContributorRequestResponse(
+  event: DatasetEventDocument,
+): event is DatasetEventDocument & {
+  event: DatasetEventContributorRequestResponse
+} {
+  return event.event.type === "contributorRequestResponse"
+}
+
+function isContributorCitationResponse(
+  event: DatasetEventDocument,
+): event is DatasetEventDocument & {
+  event: DatasetEventContributorCitationResponse
+} {
+  return event.event.type === "contributorCitationResponse"
+}
+
 /** Enriched type for GraphQL */
 export type EnrichedDatasetEvent =
-  & Omit<
-    DatasetEventDocument,
-    "notificationStatus"
-  >
+  & Omit<DatasetEventDocument, "notificationStatus">
   & {
     hasBeenRespondedTo?: boolean
     responseStatus?: "pending" | "accepted" | "denied" | null
@@ -103,11 +111,13 @@ export const DatasetEventResolvers = {
   notificationStatus: (ev: EnrichedDatasetEvent) =>
     ev.notificationStatus?.status ?? "UNREAD",
   requestId: (ev: EnrichedDatasetEvent) =>
-    isContributorRequest(ev) || isContributorResponse(ev)
+    isContributorRequest(ev) || isContributorRequestResponse(ev)
       ? ev.event.requestId
       : null,
   target: async (ev: EnrichedDatasetEvent): Promise<UserDocument | null> => {
-    const targetUserId = isContributorResponse(ev) || isContributorCitation(ev)
+    const targetUserId = isContributorRequestResponse(ev) ||
+        isContributorCitation(ev) ||
+        isContributorCitationResponse(ev)
       ? ev.event.targetUserId
       : undefined
 
@@ -120,6 +130,8 @@ export const DatasetEventResolvers = {
     let data: DatasetEventContributorCitation["contributorData"] = {}
 
     if (isContributorCitation(ev) && ev.event.contributorData) {
+      data = ev.event.contributorData
+    } else if (isContributorCitationResponse(ev) && ev.event.contributorData) {
       data = ev.event.contributorData
     }
 
@@ -222,10 +234,8 @@ export async function processContributorRequest(
     throw new Error("Authentication required to process contributor requests.")
   }
 
-  // Ensure the user is an admin for this dataset
   await checkDatasetAdmin(datasetId, currentUserId, userInfo)
 
-  // Fetch the original request event
   const originalRequestEvent = await DatasetEvent.findOne({
     "event.type": "contributorRequest",
     "event.requestId": requestId,
@@ -235,25 +245,22 @@ export async function processContributorRequest(
     throw new Error("Original contributor request event not found or invalid.")
   }
 
-  // Prevent double processing
   const existingResponse = await DatasetEvent.findOne({
-    "event.type": "contributorResponse",
+    "event.type": "contributorRequestResponse",
     "event.requestId": requestId,
   })
   if (existingResponse) {
     throw new Error("This contributor request has already been processed.")
   }
 
-  // Update original request resolution status
   originalRequestEvent.event.resolutionStatus = resolutionStatus
   await originalRequestEvent.save()
 
-  // Create a response event
   const responseEvent = new DatasetEvent({
     datasetId,
     userId: currentUserId,
     event: {
-      type: "contributorResponse",
+      type: "contributorRequestResponse",
       requestId,
       targetUserId,
       reason,
@@ -268,7 +275,6 @@ export async function processContributorRequest(
   await responseEvent.save()
   await responseEvent.populate("user")
 
-  // --- If accepted, update Datacite YAML contributors ---
   if (resolutionStatus === "accepted") {
     const targetUser = await User.findOne({ id: targetUserId })
     if (!targetUser) throw new Error("Target user not found.")
@@ -410,7 +416,7 @@ export async function processContributorCitation(
     datasetId: citationEvent.datasetId,
     userId: user,
     event: {
-      type: "contributorResponse",
+      type: "contributorCitationResponse",
       originalCitationId: citationEvent.id,
       action: status,
       datasetId: citationEvent.datasetId,
