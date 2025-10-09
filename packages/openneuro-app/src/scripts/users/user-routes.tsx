@@ -2,7 +2,7 @@ import React, { createContext, useContext } from "react"
 import { Outlet, Route, Routes } from "react-router-dom"
 import { UserAccountContainer } from "./user-container"
 import { UserAccountView } from "./user-account-view"
-import { UserNotificationsView } from "./user-notifications-view"
+import { UserNotificationsView } from "./notifications/user-notifications-view"
 import { UserDatasetsView } from "./user-datasets-view"
 import FourOFourPage from "../errors/404page"
 import FourOThreePage from "../errors/403page"
@@ -10,7 +10,7 @@ import {
   ArchivedNotifications,
   SavedNotifications,
   UnreadNotifications,
-} from "./user-notifications-tab-content"
+} from "./notifications/user-notifications-tab-content"
 import type { OutletContextType, UserRoutesProps } from "../types/user-types"
 import { OrcidConsentModal } from "./user-orcid-consent-modal"
 

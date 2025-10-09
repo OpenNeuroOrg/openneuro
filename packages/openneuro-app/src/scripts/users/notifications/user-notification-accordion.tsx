@@ -5,16 +5,16 @@ import { useMutation, useQuery } from "@apollo/client"
 import {
   PROCESS_CONTRIBUTOR_REQUEST_MUTATION,
   UPDATE_NOTIFICATION_STATUS_MUTATION,
-} from "../queries/datasetEvents"
-import { GET_USER, useUser } from "../queries/user"
+} from "../../queries/datasetEvents"
+import { GET_USER, useUser } from "../../queries/user"
 import { NotificationHeader } from "./user-notification-accordion-header"
 import { NotificationBodyContent } from "./user-notifications-accordion-body"
 import { NotificationReasonInput } from "./user-notification-reason-input"
 import { NotificationActionButtons } from "./user-notification-accordion-actions"
-import ToastContent from "../common/partials/toast-content"
+import ToastContent from "../../common/partials/toast-content"
 import styles from "./scss/usernotifications.module.scss"
 
-import type { MappedNotification } from "../types/event-types"
+import type { MappedNotification } from "../../types/event-types"
 
 export const NotificationAccordion = ({
   notification,

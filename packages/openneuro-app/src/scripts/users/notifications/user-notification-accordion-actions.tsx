@@ -1,9 +1,9 @@
 import React from "react"
-import type { MappedNotification } from "../types/event-types"
-import { StatusActionButton } from "./components/status-action-buttons"
-import iconUnread from "../../assets/icon-unread.png"
-import iconSaved from "../../assets/icon-saved.png"
-import iconArchived from "../../assets/icon-archived.png"
+import type { MappedNotification } from "../../types/event-types"
+import { StatusActionButton } from "./status-action-buttons"
+import iconUnread from "../../../assets/icon-unread.png"
+import iconSaved from "../../../assets/icon-saved.png"
+import iconArchived from "../../../assets/icon-archived.png"
 import styles from "./scss/usernotifications.module.scss"
 
 interface NotificationActionButtonsProps {

@@ -1,6 +1,6 @@
 import React from "react"
-import { Username } from "./username"
-import type { User } from "../types/user-types"
+import { Username } from "../username"
+import type { User } from "../../types/user-types"
 
 interface NotificationBodyContentProps {
   content?: string

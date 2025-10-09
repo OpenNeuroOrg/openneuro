@@ -8,7 +8,7 @@ import { SearchParamsProvider } from "./search/search-params-ctx"
 import { UserModalOpenProvider } from "./utils/user-login-modal-ctx"
 import { useAnalytics } from "./utils/analytics"
 import { useUser } from "./queries/user"
-import { NotificationsProvider } from "./users/user-notifications-context"
+import { NotificationsProvider } from "./users/notifications/user-notifications-context"
 import "../assets/email-header.png"
 
 const Index: React.FC = () => {

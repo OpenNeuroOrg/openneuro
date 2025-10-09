@@ -1,7 +1,7 @@
 import React from "react"
 import styles from "./scss/usernotifications.module.scss"
 import { NotificationAccordion } from "./user-notification-accordion"
-import type { MappedNotification } from "../types/event-types"
+import type { MappedNotification } from "../../types/event-types"
 
 interface NotificationsListProps {
   notificationdata: MappedNotification[]
