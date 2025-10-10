@@ -3,6 +3,7 @@ import * as Sentry from "@sentry/react"
 import { toast } from "react-toastify"
 import { useMutation, useQuery } from "@apollo/client"
 import {
+  PROCESS_CONTRIBUTOR_CITATION_MUTATION,
   PROCESS_CONTRIBUTOR_REQUEST_MUTATION,
   UPDATE_NOTIFICATION_STATUS_MUTATION,
 } from "../../queries/datasetEvents"
@@ -33,14 +34,12 @@ export const NotificationAccordion = ({
     datasetId,
     requestId,
     targetUserId,
-    requesterUser,
-    adminUser,
-    reason,
   } = notification
 
-  const isContributorRequest = type === "approval"
-  const isContributorResponse = type === "response"
-  const isCitationRequest = type === "citationRequest"
+  const isContributorRequest = type === "contributorRequest"
+  const isContributorResponse = type === "contributorRequestResponse" ||
+    type === "contributorCitationResponse"
+  const isContributorCitation = type === "contributorCitation"
 
   const { data: targetUserData, loading: targetUserLoading } = useQuery(
     GET_USER,
@@ -59,8 +58,14 @@ export const NotificationAccordion = ({
   const [currentApprovalAction, setCurrentApprovalAction] = useState<
     "accepted" | "denied" | null
   >(null)
+
   const [processContributorRequest, { loading: processRequestLoading }] =
     useMutation(PROCESS_CONTRIBUTOR_REQUEST_MUTATION)
+
+  const [processContributorCitation] = useMutation(
+    PROCESS_CONTRIBUTOR_CITATION_MUTATION,
+  )
+
   const isProcessing = processRequestLoading || targetUserLoading
 
   const [updateNotificationStatus] = useMutation(
@@ -85,37 +90,70 @@ export const NotificationAccordion = ({
 
   const handleReasonSubmit = useCallback(async () => {
     if (!reasonInput.trim()) {
-      const errorMessage = "Please provide a reason for this action."
-      toast.error(<ToastContent title="Reason Required" body={errorMessage} />)
+      toast.error(
+        <ToastContent
+          title="Reason Required"
+          body="Please provide a reason for this action."
+        />,
+      )
       return
     }
 
     if (isProcessing || !currentApprovalAction) return
 
-    if (!datasetId || !requestId || !targetUserId) {
-      const missingDataError =
-        "Missing required data for processing contributor request."
-      Sentry.captureException(missingDataError)
-      toast.error(<ToastContent title="Missing Data" body={missingDataError} />)
-      return
-    }
-
     try {
-      await processContributorRequest({
-        variables: {
-          datasetId,
-          requestId,
-          targetUserId,
-          resolutionStatus: currentApprovalAction,
-          reason: reasonInput,
-        },
-      })
-      toast.success(
-        <ToastContent
-          title="Contributor Request Processed"
-          body={`Request has been ${currentApprovalAction}.`}
-        />,
-      )
+      if (isContributorRequest) {
+        if (!datasetId || !requestId || !targetUserId) {
+          const err = "Missing required data for contributor request."
+          Sentry.captureException(err)
+          toast.error(<ToastContent title="Missing Data" body={err} />)
+          return
+        }
+
+        await processContributorRequest({
+          variables: {
+            datasetId,
+            requestId,
+            targetUserId,
+            resolutionStatus: currentApprovalAction,
+            reason: reasonInput,
+          },
+        })
+
+        toast.success(
+          <ToastContent
+            title="Contributor Request Processed"
+            body={`Request has been ${currentApprovalAction}.`}
+          />,
+        )
+      } else if (isContributorCitation) {
+        const eventId = notification.originalNotification.id
+        if (!eventId) {
+          const err = "Contributor citation event not found."
+          Sentry.captureException(err)
+          toast.error(<ToastContent title="Missing Data" body={err} />)
+          return
+        }
+
+        await processContributorCitation({
+          variables: {
+            eventId,
+            status: currentApprovalAction,
+            reason: reasonInput,
+          },
+        })
+
+        toast.success(
+          <ToastContent
+            title="Contributor Citation Processed"
+            body={`Citation has been ${currentApprovalAction}.`}
+          />,
+        )
+      } else if (isContributorResponse) {
+        // additional actions
+      } else {
+        console.warn("Unhandled notification type:", type)
+      }
 
       setShowReasonInput(false)
       setReasonInput("")
@@ -137,6 +175,12 @@ export const NotificationAccordion = ({
     requestId,
     targetUserId,
     processContributorRequest,
+    processContributorCitation,
+    isContributorRequest,
+    isContributorCitation,
+    isContributorResponse,
+    type,
+    notification,
   ])
 
   const handleReasonCancel = useCallback(() => {

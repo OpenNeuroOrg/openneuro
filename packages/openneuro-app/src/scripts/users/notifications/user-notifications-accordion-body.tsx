@@ -42,42 +42,42 @@ export const NotificationBodyContent: React.FC<NotificationBodyContentProps> = (
 
   if (needsReview && isContributorRequest) {
     return (
-      <p>
+      <div>
         <Username user={requesterUser} />{" "}
         is requesting contributor status for this dataset.
         {renderContribInfo()}
-      </p>
+      </div>
     )
   }
 
   if (needsReview && isContributorCitation) {
     return (
-      <p>
+      <div>
         Admin of {datasetId} is requesting to add{" "}
         <Username user={targetUser} />.
         {renderContribInfo()}
-      </p>
+      </div>
     )
   }
 
   if (approval === "accepted" && isContributorRequest) {
     return (
-      <p>
+      <div>
         <Username user={requesterUser} />{" "}
         accepted request and the following info has been added to {datasetId}.
         {renderContribInfo()}
-      </p>
+      </div>
     )
   }
 
   if (approval === "accepted" && isContributorResponse) {
     return (
-      <p>
+      <div>
         Admin <Username user={adminUser} />{" "}
         has accepted request and the following info has been added to{" "}
         {datasetId}.
         {renderContribInfo()}
-      </p>
+      </div>
     )
   }
 

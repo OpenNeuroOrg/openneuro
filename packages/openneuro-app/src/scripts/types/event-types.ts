@@ -52,7 +52,7 @@ export interface MappedNotification {
   title: string
   content: string
   status: "unread" | "saved" | "archived"
-  type: "general" | "approval" | "response" | "citationRequest"
+  type: EventDescription["type"]
   approval?: "pending" | "accepted" | "denied"
   originalNotification: Event
   datasetId?: string
@@ -80,7 +80,7 @@ export const mapRawEventToMappedNotification = (
   } = event
 
   let title = "General Notification"
-  let mappedType: MappedNotification["type"] = "general"
+  let mappedType: MappedNotification["type"] = type
   let approval: MappedNotification["approval"]
   let requesterUser: User | undefined
   let adminUser: User | undefined
