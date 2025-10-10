@@ -176,9 +176,6 @@ export const NotificationAccordion = ({
     [id, updateNotificationStatus, user, onUpdate],
   )
 
-  const showReviewButton = hasContent || isContributorRequest ||
-    isContributorResponse
-
   return (
     <li
       className={`${styles.notificationAccordion} ${isOpen ? styles.open : ""}`}
@@ -188,7 +185,6 @@ export const NotificationAccordion = ({
         datasetId={datasetId}
         isOpen={isOpen}
         toggleAccordion={toggleAccordion}
-        showReviewButton={showReviewButton}
         isProcessing={isProcessing}
       >
         <NotificationActionButtons
@@ -213,20 +209,7 @@ export const NotificationAccordion = ({
                 isProcessing={isProcessing}
               />
             )
-            : (
-              <NotificationBodyContent
-                content={content}
-                isContributorRequest={isContributorRequest}
-                isContributorResponse={isContributorResponse}
-                isCitationRequest={isCitationRequest}
-                approval={approval}
-                requesterUser={requesterUser}
-                adminUser={adminUser}
-                targetUser={targetUser}
-                targetUserLoading={targetUserLoading}
-                reason={reason}
-              />
-            )}
+            : <NotificationBodyContent notification={notification} />}
         </div>
       )}
     </li>

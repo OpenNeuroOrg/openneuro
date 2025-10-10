@@ -1,85 +1,85 @@
 import React from "react"
 import { Username } from "../username"
-import type { User } from "../../types/user-types"
+import type { MappedNotification } from "../../types/event-types"
 
 interface NotificationBodyContentProps {
-  content?: string
-  isContributorRequest: boolean
-  isContributorResponse: boolean
-  isCitationRequest: boolean
-  approval?: "pending" | "accepted" | "denied"
-  requesterUser?: User
-  adminUser?: User
-  targetUser?: User
-  targetUserLoading: boolean
-  reason?: string
+  notification: MappedNotification
 }
 
 export const NotificationBodyContent: React.FC<NotificationBodyContentProps> = (
-  {
-    content,
-    isContributorRequest,
-    isContributorResponse,
-    isCitationRequest,
-    approval,
-    requesterUser,
-    adminUser,
-    targetUser,
-    targetUserLoading,
-    reason,
-  },
+  { notification },
 ) => {
-  if (isContributorRequest) {
-    if (approval === "accepted") {
-      return (
-        <p>
-          Contributor request from <Username user={requesterUser} /> was{" "}
-          <strong>Accepted</strong>.
-        </p>
-      )
-    } else if (approval === "denied") {
-      return (
-        <p>
-          Contributor request from <Username user={requesterUser} /> was{" "}
-          <strong>denied</strong>.
-        </p>
-      )
-    }
+  if (!notification) return null
+
+  const { approval, needsReview, reason, requesterUser, adminUser, datasetId } =
+    notification
+  const event = notification.originalNotification.event
+  const contributorData = event?.contributorData
+  console.log(contributorData)
+  console.log(notification.originalNotification.event)
+
+  const targetUser = notification.targetUser ||
+    notification.originalNotification.user
+
+  const isContributorRequest = event?.type === "contributorRequest"
+  const isContributorCitation = event?.type === "contributorCitation"
+  const isContributorResponse = event?.type === "contributorRequestResponse" ||
+    event?.type === "contributorCitationResponse"
+
+  const renderContribInfo = () => {
+    if (!contributorData) return null
+    return (
+      <div style={{ marginTop: "0.5em", paddingLeft: "1em" }}>
+        <strong>Contributor Info:</strong>
+        <div>Name: {contributorData.name || "-"}</div>
+        <div>Given: {contributorData.givenName || "-"}</div>
+        <div>Family: {contributorData.familyName || "-"}</div>
+        <div>ORCID: {contributorData.orcid || "-"}</div>
+        <div>Type: {contributorData.contributorType || "-"}</div>
+      </div>
+    )
+  }
+
+  if (needsReview && isContributorRequest) {
     return (
       <p>
         <Username user={requesterUser} />{" "}
-        requested contributor status for this dataset.
+        is requesting contributor status for this dataset.
+        {renderContribInfo()}
       </p>
     )
-  } else if (isContributorResponse) {
+  }
+
+  if (needsReview && isContributorCitation) {
     return (
-      <>
-        <Username user={adminUser} /> {approval} contributor request
-        {targetUserLoading ? <span>for ...</span> : (
-          <>
-            {" "}for <Username user={targetUser} />
-            {" "}
-          </>
-        )}
-        <div>
-          <small>
-            {" Reason:"}
-            <br />
-            {reason || "No reason provided."}
-          </small>
-        </div>
-      </>
-    )
-  } else if (isCitationRequest) {
-    return (
-      <>
-        {targetUserLoading ? <span>for ...</span> : (
-          <>
-            Sent to <Username user={targetUser} />
-          </>
-        )}
-      </>
+      <p>
+        Admin of {datasetId} is requesting to add{" "}
+        <Username user={targetUser} />.
+        {renderContribInfo()}
+      </p>
     )
   }
-  return <>{content}</>
+
+  if (approval === "accepted" && isContributorRequest) {
+    return (
+      <p>
+        <Username user={requesterUser} />{" "}
+        accepted request and the following info has been added to {datasetId}.
+        {renderContribInfo()}
+      </p>
+    )
+  }
+
+  if (approval === "accepted" && isContributorResponse) {
+    return (
+      <p>
+        Admin <Username user={adminUser} />{" "}
+        has accepted request and the following info has been added to{" "}
+        {datasetId}.
+        {renderContribInfo()}
+      </p>
+    )
+  }
+
+  return <>{notification.content || "No additional details."}</>
 }
