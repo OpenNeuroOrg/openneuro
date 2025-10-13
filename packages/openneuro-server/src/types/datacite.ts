@@ -76,13 +76,22 @@ export interface RawDataciteAttributes {
   contributors?: RawDataciteContributor[]
   creators?: RawDataciteCreator[]
   types: RawDataciteTypes
+  descriptions?: {
+    description: string
+    descriptionType: string
+  }[]
 }
-
 /**
  * The top-level interface for the entire datacite.yml file structure.
  */
 export interface RawDataciteYml {
   data: {
     attributes: RawDataciteAttributes
+  }
+}
+
+export interface DatasetWithDescription {
+  dataset_description?: {
+    Description?: string
   }
 }

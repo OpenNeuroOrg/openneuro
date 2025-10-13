@@ -2,6 +2,15 @@ import type { User } from "./user-types"
 
 export type RequestStatus = "pending" | "accepted" | "denied"
 
+export interface ContributorData {
+  name?: string
+  givenName?: string
+  familyName?: string | null
+  orcid?: string
+  contributorType?: string
+  order?: number | null
+}
+
 export interface EventDescription {
   type: string
   targetUserId?: string
@@ -16,6 +25,7 @@ export interface EventDescription {
   public?: boolean
   level?: string
   ref?: string
+  contributorData?: ContributorData | null
 }
 
 export interface Event {
@@ -42,11 +52,13 @@ export interface MappedNotification {
   title: string
   content: string
   status: "unread" | "saved" | "archived"
-  type: "general" | "approval" | "response"
+  type: EventDescription["type"]
   approval?: "pending" | "accepted" | "denied"
   originalNotification: Event
   datasetId?: string
+  needsReview?: boolean
   requestId?: string
+  targetUser?: User
   targetUserId?: string
   requesterUser?: User
   adminUser?: User
@@ -67,35 +79,47 @@ export const mapRawEventToMappedNotification = (
     reason,
   } = event
 
-  let title = note || "General Notification"
-  let mappedType: MappedNotification["type"] = "general"
+  let title = "General Notification"
+  let mappedType: MappedNotification["type"] = type
   let approval: MappedNotification["approval"]
   let requesterUser: User | undefined
   let adminUser: User | undefined
 
+  let needsReview = false
+
   switch (type) {
     case "contributorRequest":
-      title = "Contributor Request for Dataset"
-      mappedType = "approval"
+      title = `[${type}], [${resolutionStatus}]`
       approval = resolutionStatus ?? "pending"
       requesterUser = user
+      needsReview = approval === "pending"
       break
-    case "contributorResponse":
-      title = `Contributor ${eventStatus} for Dataset`
-      mappedType = "response"
-      approval = eventStatus as "accepted" | "denied"
+    case "contributorCitation":
+      title = `[${type}], [${resolutionStatus}] `
+      approval = resolutionStatus ?? "pending"
+      adminUser = user
+      needsReview = approval === "pending"
+      break
+    case "contributorRequestResponse":
+      title = `[${type}], [${resolutionStatus}] `
+      approval = resolutionStatus ?? "pending"
+      adminUser = user
+      break
+    case "contributorCitationResponse":
+      title = `[${type}], [${resolutionStatus}] `
+      approval = resolutionStatus ?? "pending"
       adminUser = user
       break
     case "note":
-      title = note || "Admin Note on Dataset"
+      title = "Admin Note on Dataset"
+      approval = resolutionStatus ?? "pending"
       break
     default:
-      title = note || `Dataset ${type || "Unknown Type"}`
+      title = `[${type}] ${note || `Dataset ${type || "Unknown Type"}`}`
       break
   }
 
   const datasetId = dataset?.id || rawDatasetId || event.datasetId || ""
-
   const notificationStatus =
     (rawNotification.notificationStatus?.status?.toLowerCase() as
       | "unread"
@@ -109,6 +133,7 @@ export const mapRawEventToMappedNotification = (
     status: notificationStatus,
     type: mappedType,
     approval,
+    needsReview,
     datasetId,
     requestId,
     targetUserId: targetUserId || user?.id,

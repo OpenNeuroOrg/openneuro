@@ -3,18 +3,19 @@ import * as Sentry from "@sentry/react"
 import { toast } from "react-toastify"
 import { useMutation, useQuery } from "@apollo/client"
 import {
+  PROCESS_CONTRIBUTOR_CITATION_MUTATION,
   PROCESS_CONTRIBUTOR_REQUEST_MUTATION,
   UPDATE_NOTIFICATION_STATUS_MUTATION,
-} from "../queries/datasetEvents"
-import { GET_USER, useUser } from "../queries/user"
+} from "../../queries/datasetEvents"
+import { GET_USER, useUser } from "../../queries/user"
 import { NotificationHeader } from "./user-notification-accordion-header"
 import { NotificationBodyContent } from "./user-notifications-accordion-body"
 import { NotificationReasonInput } from "./user-notification-reason-input"
 import { NotificationActionButtons } from "./user-notification-accordion-actions"
-import ToastContent from "../common/partials/toast-content"
+import ToastContent from "../../common/partials/toast-content"
 import styles from "./scss/usernotifications.module.scss"
 
-import type { MappedNotification } from "../types/event-types"
+import type { MappedNotification } from "../../types/event-types"
 
 export const NotificationAccordion = ({
   notification,
@@ -33,13 +34,12 @@ export const NotificationAccordion = ({
     datasetId,
     requestId,
     targetUserId,
-    requesterUser,
-    adminUser,
-    reason,
   } = notification
 
-  const isContributorRequest = type === "approval"
-  const isContributorResponse = type === "response"
+  const isContributorRequest = type === "contributorRequest"
+  const isContributorResponse = type === "contributorRequestResponse" ||
+    type === "contributorCitationResponse"
+  const isContributorCitation = type === "contributorCitation"
 
   const { data: targetUserData, loading: targetUserLoading } = useQuery(
     GET_USER,
@@ -58,10 +58,14 @@ export const NotificationAccordion = ({
   const [currentApprovalAction, setCurrentApprovalAction] = useState<
     "accepted" | "denied" | null
   >(null)
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [localError, setLocalError] = useState<string | null>(null)
+
   const [processContributorRequest, { loading: processRequestLoading }] =
     useMutation(PROCESS_CONTRIBUTOR_REQUEST_MUTATION)
+
+  const [processContributorCitation] = useMutation(
+    PROCESS_CONTRIBUTOR_CITATION_MUTATION,
+  )
+
   const isProcessing = processRequestLoading || targetUserLoading
 
   const [updateNotificationStatus] = useMutation(
@@ -74,7 +78,6 @@ export const NotificationAccordion = ({
       setShowReasonInput(false)
       setReasonInput("")
       setCurrentApprovalAction(null)
-      setLocalError(null)
     }
   }, [isOpen])
 
@@ -83,61 +86,86 @@ export const NotificationAccordion = ({
     setShowReasonInput(true)
     setReasonInput("")
     setCurrentApprovalAction(action)
-    setLocalError(null)
   }, [])
 
   const handleReasonSubmit = useCallback(async () => {
     if (!reasonInput.trim()) {
-      const errorMessage = "Please provide a reason for this action."
-      toast.error(<ToastContent title="Reason Required" body={errorMessage} />)
-      setLocalError(errorMessage)
+      toast.error(
+        <ToastContent
+          title="Reason Required"
+          body="Please provide a reason for this action."
+        />,
+      )
       return
     }
 
     if (isProcessing || !currentApprovalAction) return
 
-    if (!datasetId || !requestId || !targetUserId) {
-      const missingDataError =
-        "Missing required data for processing contributor request."
-      Sentry.captureException(missingDataError)
-      toast.error(<ToastContent title="Missing Data" body={missingDataError} />)
-      setLocalError(missingDataError)
-      return
-    }
-
-    setLocalError(null)
-
     try {
-      await processContributorRequest({
-        variables: {
-          datasetId,
-          requestId,
-          targetUserId,
-          status: currentApprovalAction,
-          reason: reasonInput,
-        },
-      })
-      toast.success(
-        <ToastContent
-          title="Contributor Request Processed"
-          body={`Request has been ${currentApprovalAction}.`}
-        />,
-      )
+      if (isContributorRequest) {
+        if (!datasetId || !requestId || !targetUserId) {
+          const err = "Missing required data for contributor request."
+          Sentry.captureException(err)
+          toast.error(<ToastContent title="Missing Data" body={err} />)
+          return
+        }
+
+        await processContributorRequest({
+          variables: {
+            datasetId,
+            requestId,
+            targetUserId,
+            resolutionStatus: currentApprovalAction,
+            reason: reasonInput,
+          },
+        })
+
+        toast.success(
+          <ToastContent
+            title="Contributor Request Processed"
+            body={`Request has been ${currentApprovalAction}.`}
+          />,
+        )
+      } else if (isContributorCitation) {
+        const eventId = notification.originalNotification.id
+        if (!eventId) {
+          const err = "Contributor citation event not found."
+          Sentry.captureException(err)
+          toast.error(<ToastContent title="Missing Data" body={err} />)
+          return
+        }
+
+        await processContributorCitation({
+          variables: {
+            eventId,
+            status: currentApprovalAction,
+            reason: reasonInput,
+          },
+        })
+
+        toast.success(
+          <ToastContent
+            title="Contributor Citation Processed"
+            body={`Citation has been ${currentApprovalAction}.`}
+          />,
+        )
+      } else if (isContributorResponse) {
+        // additional actions
+      } else {
+        console.warn("Unhandled notification type:", type)
+      }
 
       setShowReasonInput(false)
       setReasonInput("")
       setCurrentApprovalAction(null)
     } catch (error: unknown) {
-      let message = "Unknown error"
-      if (error instanceof Error) {
-        message = error.message
-      }
-      const errorMessage = `Error processing contributor request: ${message}`
+      const errorMessage = error instanceof Error
+        ? error.message
+        : "Unknown error"
       Sentry.captureException(error)
       toast.error(
         <ToastContent title="Processing Failed" body={errorMessage} />,
       )
-      setLocalError(errorMessage)
     }
   }, [
     reasonInput,
@@ -147,13 +175,18 @@ export const NotificationAccordion = ({
     requestId,
     targetUserId,
     processContributorRequest,
+    processContributorCitation,
+    isContributorRequest,
+    isContributorCitation,
+    isContributorResponse,
+    type,
+    notification,
   ])
 
   const handleReasonCancel = useCallback(() => {
     setShowReasonInput(false)
     setReasonInput("")
     setCurrentApprovalAction(null)
-    setLocalError(null)
   }, [])
 
   const handleStatusChange = useCallback(
@@ -187,9 +220,6 @@ export const NotificationAccordion = ({
     [id, updateNotificationStatus, user, onUpdate],
   )
 
-  const showReviewButton = hasContent || isContributorRequest ||
-    isContributorResponse
-
   return (
     <li
       className={`${styles.notificationAccordion} ${isOpen ? styles.open : ""}`}
@@ -199,13 +229,11 @@ export const NotificationAccordion = ({
         datasetId={datasetId}
         isOpen={isOpen}
         toggleAccordion={toggleAccordion}
-        showReviewButton={showReviewButton}
         isProcessing={isProcessing}
       >
         <NotificationActionButtons
           notification={notification}
           isProcessing={isProcessing}
-          setError={setLocalError}
           onUpdate={onUpdate}
           handleProcessAction={handleProcessAction}
           handleStatusChange={handleStatusChange}
@@ -225,19 +253,7 @@ export const NotificationAccordion = ({
                 isProcessing={isProcessing}
               />
             )
-            : (
-              <NotificationBodyContent
-                content={content}
-                isContributorRequest={isContributorRequest}
-                isContributorResponse={isContributorResponse}
-                approval={approval}
-                requesterUser={requesterUser}
-                adminUser={adminUser}
-                targetUser={targetUser}
-                targetUserLoading={targetUserLoading}
-                reason={reason}
-              />
-            )}
+            : <NotificationBodyContent notification={notification} />}
         </div>
       )}
     </li>
