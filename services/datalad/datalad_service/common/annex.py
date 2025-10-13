@@ -29,7 +29,11 @@ class EditAnnexedFileException(Exception):
 
 def init_annex(dataset_path):
     """Setup git-annex within an existing git repo"""
-    subprocess.run(['git-annex', 'init', 'OpenNeuro'], check=True, cwd=dataset_path)
+    subprocess.run(
+        ['git-annex', 'init', 'OpenNeuro', '--numcopies=2'],
+        check=True,
+        cwd=dataset_path,
+    )
 
 
 def compute_git_hash(path, size):

@@ -9,6 +9,7 @@ import datalad_service.version
 from datalad_service.datalad import DataladStore
 from datalad_service.handlers.dataset import DatasetResource
 from datalad_service.handlers.draft import DraftResource
+from datalad_service.handlers.drop import DropResource
 from datalad_service.handlers.description import DescriptionResource
 from datalad_service.handlers.files import FilesResource
 from datalad_service.handlers.objects import ObjectsResource
@@ -83,6 +84,7 @@ def create_app():
     dataset_draft = DraftResource(store)
     dataset_validation = ValidationResource(store)
     dataset_history = HistoryResource(store)
+    dataset_drop = DropResource(store)
     dataset_description = DescriptionResource(store)
     dataset_files = FilesResource(store)
     dataset_objects = ObjectsResource(store)
@@ -107,6 +109,7 @@ def create_app():
 
     app.add_route('/datasets/{dataset}/draft', dataset_draft)
     app.add_route('/datasets/{dataset}/history', dataset_history)
+    app.add_route('/datasets/{dataset}/drop', dataset_drop)
     app.add_route('/datasets/{dataset}/description', dataset_description)
     app.add_route('/datasets/{dataset}/validate/{hexsha}', dataset_validation)
     app.add_route('/datasets/{dataset}/reset/{hexsha}', dataset_reset_resource)
