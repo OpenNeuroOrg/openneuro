@@ -23,7 +23,7 @@ certifcateArn: "arn:aws:acm:us-west-2:488777458602:certificate/d37b43e0-9af3-423
 dataladWorkers: 4
 
 # OpenNeuro-server API parallelism
-apiReplicas: 4
+apiReplicas: 3
 
 # Static service parallelism
 webReplicas: 3
