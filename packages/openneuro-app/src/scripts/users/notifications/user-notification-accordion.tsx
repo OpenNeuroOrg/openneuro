@@ -31,6 +31,7 @@ export const NotificationAccordion = ({
     content,
     type,
     approval,
+    resStatus,
     datasetId,
     requestId,
     targetUserId,
@@ -103,6 +104,9 @@ export const NotificationAccordion = ({
 
     try {
       if (isContributorRequest) {
+        console.log("ds", datasetId)
+        console.log("rid", requestId)
+        console.log("tu", targetUserId)
         if (!datasetId || !requestId || !targetUserId) {
           const err = "Missing required data for contributor request."
           Sentry.captureException(err)
@@ -174,6 +178,7 @@ export const NotificationAccordion = ({
     datasetId,
     requestId,
     targetUserId,
+    resStatus,
     processContributorRequest,
     processContributorCitation,
     isContributorRequest,
@@ -226,10 +231,15 @@ export const NotificationAccordion = ({
     >
       <NotificationHeader
         title={title}
+        type={type}
         datasetId={datasetId}
         isOpen={isOpen}
         toggleAccordion={toggleAccordion}
         isProcessing={isProcessing}
+        adminUser={notification.adminUser}
+        requesterUser={notification.requesterUser}
+        resStatus={resStatus}
+        targetUser={targetUser || notification.targetUser}
       >
         <NotificationActionButtons
           notification={notification}
