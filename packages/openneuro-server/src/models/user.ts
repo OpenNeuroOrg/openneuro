@@ -46,6 +46,8 @@ export interface UserDocument extends Document {
   githubSynced: Date
   // Defaults to NULL populated from ORCID Consent Form Mutation
   orcidConsent?: boolean | null
+  givenName?: string
+  familyName?: string
 }
 
 const userSchema = new Schema({

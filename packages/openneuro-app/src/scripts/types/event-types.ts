@@ -42,7 +42,7 @@ export interface MappedNotification {
   title: string
   content: string
   status: "unread" | "saved" | "archived"
-  type: "general" | "approval" | "response"
+  type: "general" | "approval" | "response" | "citationRequest"
   approval?: "pending" | "accepted" | "denied"
   originalNotification: Event
   datasetId?: string
@@ -72,30 +72,49 @@ export const mapRawEventToMappedNotification = (
   let approval: MappedNotification["approval"]
   let requesterUser: User | undefined
   let adminUser: User | undefined
+  const capitalize = (str: string) =>
+    str ? str.charAt(0).toUpperCase() + str.slice(1) : str
 
   switch (type) {
     case "contributorRequest":
-      title = "Contributor Request for Dataset"
+      title = `[${type}] User Contributor Request for Dataset`
       mappedType = "approval"
       approval = resolutionStatus ?? "pending"
       requesterUser = user
       break
     case "contributorResponse":
-      title = `Contributor ${eventStatus} for Dataset`
+      title = `[${type}] User Contributor ${
+        capitalize(eventStatus ?? "")
+      } for Dataset`
       mappedType = "response"
       approval = eventStatus as "accepted" | "denied"
       adminUser = user
       break
+    case "contributorCitation": {
+      mappedType = "citationRequest"
+      const status: "pending" | "accepted" | "denied" =
+        (resolutionStatus as "pending" | "accepted" | "denied") ?? "pending"
+      approval = status
+      const targetName = event.target?.name || "Unknown User"
+      if (status === "pending") {
+        title =
+          `[${type}] An admin has requested ${targetName} be added as an Author`
+      } else {
+        const capitalizedStatus = status.charAt(0).toUpperCase() +
+          status.slice(1)
+        title = `[${type}] ${targetName} has ${capitalizedStatus} authorship`
+      }
+      break
+    }
     case "note":
-      title = note || "Admin Note on Dataset"
+      title = `[${type}] ${note || "Admin Note on Dataset"}`
       break
     default:
-      title = note || `Dataset ${type || "Unknown Type"}`
+      title = `[${type}] ${note || `Dataset ${type || "Unknown Type"}`}`
       break
   }
 
   const datasetId = dataset?.id || rawDatasetId || event.datasetId || ""
-
   const notificationStatus =
     (rawNotification.notificationStatus?.status?.toLowerCase() as
       | "unread"

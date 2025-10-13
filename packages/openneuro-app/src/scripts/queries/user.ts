@@ -42,7 +42,6 @@ export const GET_USER = gql`
           message
           requestId
           targetUserId
-          status
           reason
           datasetId
           resolutionStatus
@@ -51,6 +50,14 @@ export const GET_USER = gql`
             name
             email
             orcid
+          }
+          contributorData { 
+            name
+            givenName
+            familyName
+            orcid
+            contributorType
+            order
           }
         }
         notificationStatus {

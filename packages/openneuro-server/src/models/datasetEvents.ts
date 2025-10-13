@@ -16,8 +16,9 @@ const _datasetEventTypes = [
   "upload",
   "note",
   "contributorRequest",
-  "contributorResponse",
   "contributorCitation",
+  "contributorRequestResponse",
+  "contributorCitationResponse",
 ] as const
 
 /**
@@ -32,7 +33,7 @@ const _datasetEventTypes = [
  * upload - A non-git upload occurred (typically one file changed)
  * note - A note unrelated to another event
  * contributorRequest - a request event is created for user access
- * contributorResponse - response of deny or approve is granted
+ * contributorResponse - response of deny or accept is granted
  */
 export type DatasetEventName = typeof _datasetEventTypes[number]
 
@@ -86,28 +87,42 @@ export type DatasetEventNote = DatasetEventCommon & {
   admin: boolean
   datasetId?: string
 }
+export interface ContributorDataInput {
+  orcid?: string
+  name?: string
+  email?: string
+  userId?: string
+  contributorType?: string
+  givenName?: string
+  familyName?: string
+}
 
 export type DatasetEventContributorRequest = DatasetEventCommon & {
   type: "contributorRequest"
   requestId?: string
   resolutionStatus?: "pending" | "accepted" | "denied"
   datasetId?: string
-  contributorType: string
-  contributorData: {
-    orcid?: string
-    name?: string
-    email?: string
-    userId?: string
-  }
+  contributorData: ContributorDataInput
 }
 
-export type DatasetEventContributorResponse = DatasetEventCommon & {
-  type: "contributorResponse"
+export type DatasetEventContributorRequestResponse = DatasetEventCommon & {
+  type: "contributorRequestResponse"
   requestId: string
   targetUserId: OpenNeuroUserId
-  status: "accepted" | "denied"
+  resolutionStatus: "pending" | "accepted" | "denied"
   reason?: string
   datasetId?: string
+  contributorData?: ContributorDataInput
+}
+
+export type DatasetEventContributorCitationResponse = DatasetEventCommon & {
+  type: "contributorCitationResponse"
+  originalCitationId: string
+  resolutionStatus: "pending" | "accepted" | "denied"
+  datasetId: string
+  addedBy: OpenNeuroUserId
+  targetUserId: OpenNeuroUserId
+  contributorData: ContributorDataInput
 }
 
 export type DatasetEventContributorCitation = DatasetEventCommon & {
@@ -115,14 +130,8 @@ export type DatasetEventContributorCitation = DatasetEventCommon & {
   datasetId: string
   addedBy: OpenNeuroUserId
   targetUserId: OpenNeuroUserId
-  contributorType: string
-  contributorData: {
-    orcid?: string
-    name?: string
-    email?: string
-    userId?: string
-  }
-  resolutionStatus: "pending" | "approved" | "denied"
+  contributorData: ContributorDataInput
+  resolutionStatus: "pending" | "accepted" | "denied"
 }
 
 /**
@@ -138,8 +147,9 @@ export type DatasetEventType =
   | DatasetEventUpload
   | DatasetEventNote
   | DatasetEventContributorRequest
-  | DatasetEventContributorResponse
   | DatasetEventContributorCitation
+  | DatasetEventContributorRequestResponse
+  | DatasetEventContributorCitationResponse
 
 /**
  * Dataset events log changes to a dataset
@@ -153,6 +163,7 @@ export interface DatasetEventDocument extends Document {
   event: DatasetEventType
   success: boolean
   note: string
+  responseStatus?: "pending" | "accepted" | "denied" | null
   notificationStatus?: UserNotificationStatusDocument | null
 }
 
@@ -173,17 +184,21 @@ const datasetEventSchema = new Schema<DatasetEventDocument>(
       admin: { type: Boolean, default: false },
       requestId: { type: String, sparse: true, index: true },
       targetUserId: { type: String },
-      status: { type: String, enum: ["accepted", "denied"] },
       reason: { type: String },
       datasetId: { type: String },
       resolutionStatus: {
         type: String,
-        enum: ["pending", "approved", "denied"],
+        enum: ["pending", "accepted", "denied"],
         default: "pending",
       },
-      contributorType: { type: String },
       contributorData: {
-        type: Object,
+        orcid: { type: String },
+        name: { type: String },
+        email: { type: String },
+        userId: { type: String },
+        contributorType: { type: String },
+        givenName: { type: String },
+        familyName: { type: String },
         default: {},
       },
     },
@@ -202,6 +217,14 @@ datasetEventSchema.virtual("user", {
   localField: "userId",
   foreignField: "id",
   justOne: true,
+})
+
+datasetEventSchema.add({
+  responseStatus: {
+    type: String,
+    enum: ["pending", "accepted", "denied"],
+    default: null,
+  },
 })
 
 // Virtual for the notification status associated with this event
