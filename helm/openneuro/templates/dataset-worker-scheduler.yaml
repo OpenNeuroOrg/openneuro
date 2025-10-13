@@ -26,8 +26,8 @@ spec:
           command: ['/srv/.venv/bin/taskiq', 'scheduler', 'datalad_service.broker.scheduler:scheduler', '--tasks-pattern', 'datalad_service/tasks/*.py', '--fs-discover']
           resources:
             requests:
-              cpu: {{ .Values.workerCpuRequests }}
-              memory: {{ .Values.workerMemoryRequests }}
+              cpu: 0.5
+              memory: 2Gi
           envFrom:
             - configMapRef:
                 name: {{ .Release.Name }}-configmap
