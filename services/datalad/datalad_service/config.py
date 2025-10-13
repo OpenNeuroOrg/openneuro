@@ -19,6 +19,12 @@ AWS_ACCOUNT_ID = os.getenv('AWS_ACCOUNT_ID')
 AWS_S3_PRIVATE_BUCKET = os.getenv('AWS_S3_PRIVATE_BUCKET')
 AWS_S3_PUBLIC_BUCKET = os.getenv('AWS_S3_PUBLIC_BUCKET')
 
+# GCP S3 compatible object storage
+GCP_ACCESS_KEY_ID = os.getenv('GCP_ACCESS_KEY_ID')
+GCP_SECRET_ACCESS_KEY = os.getenv('GCP_SECRET_ACCESS_KEY')
+GCP_S3_BACKUP_BUCKET = os.getenv('GCP_S3_BACKUP_BUCKET')
+
+
 # GraphQL URL - override if not docker-compose
 GRAPHQL_ENDPOINT = os.getenv('GRAPHQL_ENDPOINT', 'http://server:8111/crn/graphql')
 
