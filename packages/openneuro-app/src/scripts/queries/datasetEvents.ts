@@ -117,6 +117,41 @@ export const DATASET_EVENTS_QUERY = gql`
   }
 `
 
+export const CREATE_CONTRIBUTOR_CITATION_EVENT = gql`
+  mutation CreateContributorCitationEvent(
+    $datasetId: ID!
+    $targetUserId: ID!
+    $contributorData: ContributorInput!
+  ) {
+    createContributorCitationEvent(
+      datasetId: $datasetId
+      targetUserId: $targetUserId
+      contributorData: $contributorData
+    ) {
+      id
+      timestamp
+      success
+      user {
+        id
+        name
+      }
+      event {
+        type
+        resolutionStatus
+        contributorData {
+          name
+          givenName
+          familyName
+          orcid
+          contributorType
+          order
+        }
+      }
+      note
+    }
+  }
+`
+
 export const PROCESS_CONTRIBUTOR_CITATION_MUTATION = gql`
   mutation ProcessContributorCitation($eventId: ID!, $status: String!) {
     processContributorCitation(eventId: $eventId, status: $status) {

@@ -5,19 +5,21 @@ import type { Contributor } from "../types/datacite"
 import ORCIDiDLogo from "../../assets/ORCIDiD_iconvector.svg"
 
 interface SingleContributorDisplayProps {
-  contributor: Contributor
+  contributor: Contributor & {
+    resolutionStatus?: "pending" | "accepted" | "denied"
+  }
   isLast: boolean
   separator: React.ReactNode
 }
 
 export const SingleContributorDisplay: React.FC<SingleContributorDisplayProps> =
-  ({
-    contributor,
-    isLast,
-    separator,
-  }) => {
+  ({ contributor, isLast, separator }) => {
     const { user, loading } = useUser(contributor.orcid || undefined)
-    const displayName = contributor.name || "Unknown Contributor"
+
+    const displayName = contributor.familyName
+      ? `${contributor.familyName}, ${contributor.givenName || ""}`.trim()
+      : contributor.name || "Unknown Contributor"
+
     const orcidBaseURL = "https://orcid.org/"
 
     if (loading) {
@@ -30,14 +32,16 @@ export const SingleContributorDisplay: React.FC<SingleContributorDisplayProps> =
     }
 
     const userExists = !!user?.id
-    // TODO add event to allow user to approve attribution and if userApproved response allow linking to profile
-    const userApproved = true
+
+    // TODO get resolutionStatus from event/contributor
+    const resolutionAccepted = true //contributor.resolutionStatus === "accepted"
+
     return (
       <>
-        {contributor.orcid && userExists && userApproved
+        {contributor.orcid && userExists && resolutionAccepted
           ? <Link to={`/user/${contributor.orcid}`}>{displayName}</Link>
           : displayName}
-        {contributor.orcid && userApproved && (
+        {contributor.orcid && resolutionAccepted && (
           <>
             {" "}
             <a
