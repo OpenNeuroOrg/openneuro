@@ -63,6 +63,7 @@ export interface MappedNotification {
   requesterUser?: User
   adminUser?: User
   reason?: string
+  resStatus?: string
 }
 
 export const mapRawEventToMappedNotification = (
@@ -75,7 +76,8 @@ export const mapRawEventToMappedNotification = (
     resolutionStatus,
     status: eventStatus,
     requestId,
-    targetUserId,
+    targetUserId: eventTargetUserId,
+    target,
     reason,
   } = event
 
@@ -84,42 +86,53 @@ export const mapRawEventToMappedNotification = (
   let approval: MappedNotification["approval"]
   let requesterUser: User | undefined
   let adminUser: User | undefined
-
+  let targetUser: User | undefined
   let needsReview = false
+  let resStatus = resolutionStatus
 
   switch (type) {
     case "contributorRequest":
-      title = `[${type}], [${resolutionStatus}]`
+      title = "is requesting to be added to"
+      requesterUser = user // user initiating the request (admin)
+      targetUser = target || rawNotification.user // fallback
       approval = resolutionStatus ?? "pending"
-      requesterUser = user
       needsReview = approval === "pending"
       break
     case "contributorCitation":
-      title = `[${type}], [${resolutionStatus}] `
-      approval = resolutionStatus ?? "pending"
+      title = "is requesting"
       adminUser = user
+      targetUser = target
+      approval = resolutionStatus ?? "pending"
       needsReview = approval === "pending"
       break
+
     case "contributorRequestResponse":
-      title = `[${type}], [${resolutionStatus}] `
-      approval = resolutionStatus ?? "pending"
+      title = "responded to a contributor request"
       adminUser = user
+      targetUser = target
+      approval = resolutionStatus ?? "pending"
       break
+
     case "contributorCitationResponse":
-      title = `[${type}], [${resolutionStatus}] `
-      approval = resolutionStatus ?? "pending"
+      title = "had their citation responded to"
       adminUser = user
-      break
-    case "note":
-      title = "Admin Note on Dataset"
+      targetUser = target
       approval = resolutionStatus ?? "pending"
       break
+
+    case "note":
+      title = "Admin note on"
+      adminUser = user
+      resStatus = null
+      break
+
     default:
       title = `[${type}] ${note || `Dataset ${type || "Unknown Type"}`}`
       break
   }
 
   const datasetId = dataset?.id || rawDatasetId || event.datasetId || ""
+
   const notificationStatus =
     (rawNotification.notificationStatus?.status?.toLowerCase() as
       | "unread"
@@ -133,13 +146,15 @@ export const mapRawEventToMappedNotification = (
     status: notificationStatus,
     type: mappedType,
     approval,
+    resStatus,
     needsReview,
     datasetId,
     requestId,
-    targetUserId: targetUserId || user?.id,
-    originalNotification: rawNotification,
+    targetUserId: eventTargetUserId || target?.id || rawNotification.user?.id,
+    targetUser,
     requesterUser,
     adminUser,
     reason,
+    originalNotification: rawNotification,
   }
 }

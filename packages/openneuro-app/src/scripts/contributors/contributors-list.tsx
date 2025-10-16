@@ -6,6 +6,7 @@ import { SingleContributorDisplay } from "./contributor"
 import { Loading } from "../components/loading/Loading"
 import { ContributorFormRow } from "./contributor-form-row"
 import { cloneContributor } from "./contributor-utils"
+import { CREATE_CONTRIBUTOR_CITATION_EVENT } from "../queries/datasetEvents"
 
 interface ContributorsListDisplayProps {
   contributors: Contributor[] | null | undefined
@@ -43,6 +44,7 @@ export const ContributorsListDisplay: React.FC<ContributorsListDisplayProps> = (
   const [editingContributors, setEditingContributors] = useState<Contributor[]>(
     contributors?.map((c) => ({ ...c, order: c.order ?? 0 })) || [],
   )
+
   const [errors, setErrors] = useState<Record<number, string>>({})
 
   useEffect(() => {
@@ -88,7 +90,14 @@ export const ContributorsListDisplay: React.FC<ContributorsListDisplayProps> = (
       },
     },
   )
-
+  const [createContributorCitationEvent] = useMutation(
+    CREATE_CONTRIBUTOR_CITATION_EVENT,
+    {
+      onError(err) {
+        Sentry.captureException(err)
+      },
+    },
+  )
   const handleChange = (
     index: number,
     field: keyof Contributor,
@@ -142,7 +151,7 @@ export const ContributorsListDisplay: React.FC<ContributorsListDisplayProps> = (
       return updated.map((c, idx) => ({ ...c, order: idx + 1 }))
     })
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!datasetId) return
     const newErrors: Record<number, string> = {}
     editingContributors.forEach((c, idx) => {
@@ -158,9 +167,38 @@ export const ContributorsListDisplay: React.FC<ContributorsListDisplayProps> = (
       contributorType: c.contributorType,
       order: c.order,
     }))
-    updateContributorsMutation({
-      variables: { datasetId, newContributors: cleanContributors },
-    })
+
+    try {
+      const { data } = await updateContributorsMutation({
+        variables: { datasetId, newContributors: cleanContributors },
+      })
+
+      const prevOrcids = new Set(contributors?.map((c) => c.orcid))
+      const newContributors = cleanContributors.filter(
+        (c) => c.orcid && !prevOrcids.has(c.orcid),
+      )
+
+      await Promise.all(
+        newContributors.map((contributor) =>
+          createContributorCitationEvent({
+            variables: {
+              datasetId,
+              targetUserId: contributor.orcid || contributor.name,
+              contributorData: {
+                name: contributor.name,
+                givenName: contributor.givenName,
+                familyName: contributor.familyName,
+                orcid: contributor.orcid,
+                contributorType: contributor.contributorType,
+                order: contributor.order,
+              },
+            },
+          })
+        ),
+      )
+    } catch (err) {
+      Sentry.captureException(err)
+    }
   }
 
   if (!contributors || contributors.length === 0) return <>N/A</>

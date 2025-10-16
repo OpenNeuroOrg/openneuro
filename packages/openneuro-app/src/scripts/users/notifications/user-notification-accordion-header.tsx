@@ -1,32 +1,70 @@
 import React from "react"
+import type { User } from "../../types/user-types"
+import { Username } from "../username"
 import styles from "./scss/usernotifications.module.scss"
 
 interface NotificationHeaderProps {
   title: string
   isOpen: boolean
+  type: string
   toggleAccordion: () => void
   isProcessing: boolean
   children?: React.ReactNode
+  adminUser?: User
+  requesterUser?: User
+  targetUser?: User
   datasetId?: string
+  resStatus?: string
 }
 
 export const NotificationHeader: React.FC<NotificationHeaderProps> = ({
   title,
   isOpen,
+  type,
   toggleAccordion,
   isProcessing,
   children,
+  adminUser,
+  requesterUser,
+  targetUser,
   datasetId,
+  resStatus,
 }) => {
+  console.log(adminUser)
   const renderTitle = () => {
     if (datasetId) {
       const datasetLink = `/datasets/${datasetId}/`
       return (
         <span>
-          {title}{" "}
+          <small>{type}:</small>
+          <br />
+          {type === "contributorCitation"
+            ? (
+              <>
+                <Username user={adminUser} /> {title}{" "}
+                <Username user={targetUser} />
+                {" be added to "}
+              </>
+            )
+            : (
+              <>
+                {
+                  /* {targetUser ? <Username user={targetUser}/> : <Username user={requesterUser}/>}{" "}{title}{" "}
           <a href={datasetLink} className={styles.titlelink}>
             {datasetId}
-          </a>
+          </a>{" "}{resStatus} */
+                }
+
+                {targetUser
+                  ? <Username user={targetUser} />
+                  : <Username user={requesterUser} />} {title}
+                {" "}
+              </>
+            )}
+          <a href={datasetLink} className={styles.titlelink}>
+            {datasetId}
+          </a>{" "}
+          {resStatus}
         </span>
       )
     }
