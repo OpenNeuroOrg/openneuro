@@ -2,6 +2,7 @@ import asyncio
 import logging
 import os.path
 import re
+import subprocess
 from concurrent.futures import ProcessPoolExecutor
 
 import pygit2
@@ -10,6 +11,7 @@ from github import Github
 
 import datalad_service.common.s3
 import datalad_service.common.github
+from datalad_service.common.asyncio import run_check
 from datalad_service.config import DATALAD_GITHUB_ORG
 from datalad_service.config import DATALAD_GITHUB_TOKEN
 from datalad_service.config import DATALAD_GITHUB_EXPORTS_ENABLED
@@ -69,7 +71,7 @@ def create_remotes(dataset_path):
 
 
 @broker.task
-def export_dataset(
+async def export_dataset(
     dataset_path,
     s3_export=s3_export,
     github_export=github_export,
@@ -96,6 +98,8 @@ def export_dataset(
                 github_export(dataset_id, dataset_path, tags[-1].name)
         # Drop cache once all exports are complete
         clear_dataset_cache(dataset_id)
+        # Clean local annexed files once export is complete
+        await annex_drop.kiq(dataset_path)
 
 
 def check_remote_has_version(dataset_path, remote, tag):
@@ -188,3 +192,19 @@ def monitor_remote_configs(dataset_path):
     s3_ok = datalad_service.common.s3.validate_s3_config(dataset_path)
     if not s3_ok:
         update_s3_sibling(dataset_path)
+
+
+@broker.task
+async def annex_drop(dataset_path):
+    """Drop local contents from the annex."""
+    # Ensure numcopies is set to 2 before running drop
+    await run_check(['git-annex', 'numcopies', '2'], dataset_path)
+    # Early versions of OpenNeuro used an s3-PRIVATE remote
+    # Mark it dead before dropping to avoid counting it in numcopies
+    try:
+        await run_check(['git-annex', 'dead', 's3-PRIVATE'], dataset_path)
+    except subprocess.CalledProcessError:
+        # Not an issue if this fails
+        pass
+    # Drop will only drop successfully exported files present on both remotes
+    await run_check(['git-annex', 'drop'], dataset_path)
