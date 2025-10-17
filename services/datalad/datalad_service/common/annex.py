@@ -7,9 +7,10 @@ import os
 import urllib.parse
 
 import aiofiles
+import pygit2
 
 import datalad_service.config
-
+from datalad_service.common.git import git_show
 
 SERVICE_EMAIL = 'git@openneuro.org'
 SERVICE_USER = 'Git Worker'
@@ -350,3 +351,20 @@ async def edit_annexed_file(path, expected_content, new_content, encoding='utf-8
         os.unlink(path)
     async with aiofiles.open(path, 'w', encoding=encoding, newline='') as changes_file:
         await changes_file.write(new_content)
+
+
+def test_key_remote(dataset_path, key, remote_name='s3-PUBLIC'):
+    """
+    Test if a key exists in the named remote and return the rmet URL if so.
+    """
+    repo = pygit2.Repository(dataset_path)
+    remote_log = git_show(repo, 'git-annex', 'remote.log')
+    for line in remote_log:
+        remote = parse_remote_line(line)
+        if remote['name'] == remote_name:
+            rmet_path = compute_rmet(key)
+            rmet = git_show(repo, 'git-annex', rmet_path)
+            for line in rmet:
+                if remote['uuid'] in line:
+                    return parse_rmet_line(remote, line)
+    return None
