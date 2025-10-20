@@ -83,7 +83,9 @@ def read_ls_tree_line(gitTreeLine, files, symlinkFilenames, symlinkObjects):
             # Tree objects do not have sizes and are never annexed
             files.append(
                 {
-                    'id': obj_hash,
+                    # Computing an id here is important but the client needs to manage the cache merge since only the client knows the parent directory
+                    'id': compute_file_hash(obj_hash, filename),
+                    'key': obj_hash,
                     'filename': filename,
                     'directory': True,
                     'annexed': False,
