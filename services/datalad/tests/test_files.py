@@ -210,7 +210,8 @@ def test_file_indexing(client, new_dataset):
             'directory': False,
         },
         {
-            'id': '2f8451ae1016f936999aaacc0b3d79fb284ac3ea',
+            'id': 'c645e39adc3bd84b8d9a30635efb2c0df3b3e0cc',
+            'key': '2f8451ae1016f936999aaacc0b3d79fb284ac3ea',
             'filename': 'sub-01',
             'directory': True,
             'annexed': False,
@@ -224,7 +225,7 @@ def test_file_indexing(client, new_dataset):
         '/datasets/{}/tree/{}'.format(
             ds_id,
             next(
-                (f['id'] for f in root_content['files'] if f['filename'] == 'sub-01'),
+                (f['key'] for f in root_content['files'] if f['filename'] == 'sub-01'),
                 None,
             ),
         )
@@ -236,7 +237,8 @@ def test_file_indexing(client, new_dataset):
         '/datasets/{}/tree/{}'.format(
             ds_id,
             next(
-                (f['id'] for f in sub_content['files'] if f['filename'] == 'anat'), None
+                (f['key'] for f in sub_content['files'] if f['filename'] == 'anat'),
+                None,
             ),
         )
     )
@@ -318,7 +320,7 @@ def test_duplicate_file_id(client, new_dataset):
     assert response.status == falcon.HTTP_OK
     response_content = json.loads(response.content)
     derivatives_tree = next(
-        (f['id'] for f in response_content['files'] if f['filename'] == 'derivatives'),
+        (f['key'] for f in response_content['files'] if f['filename'] == 'derivatives'),
         None,
     )
     response = client.simulate_get(f'/datasets/{ds_id}/tree/{derivatives_tree}')
