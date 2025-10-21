@@ -43,6 +43,8 @@ export const SNAPSHOT_FILES_QUERY = gql`
  */
 export const nestFiles = (path) => (file) => ({
   ...file,
+  // Generate a unique id for any nested files to avoid overwriting trees with two parents
+  id: `${path}:${file.id}`,
   filename: `${path}:${file.filename}`,
 })
 
@@ -72,7 +74,7 @@ export const fetchMoreDirectory = (
 ) =>
   fetchMore({
     query: snapshotTag ? SNAPSHOT_FILES_QUERY : DRAFT_FILES_QUERY,
-    variables: { datasetId, snapshotTag, tree: directory.id },
+    variables: { datasetId, snapshotTag, tree: directory.key },
     updateQuery: mergeNewFiles(directory, snapshotTag),
   })
 
