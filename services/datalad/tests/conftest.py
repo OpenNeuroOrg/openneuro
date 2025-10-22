@@ -136,6 +136,21 @@ def no_init_remote(monkeypatch, tmpdir_factory):
             check=True,
             cwd=dataset_path,
         )
+        path = tmpdir_factory.mktemp('fake_s3_backup_remote')
+        subprocess.run(
+            [
+                'git',
+                'annex',
+                'initremote',
+                's3-BACKUP',
+                'type=directory',
+                f'directory={path}',
+                'encryption=none',
+                'exporttree=no',
+            ],
+            check=True,
+            cwd=dataset_path,
+        )
 
     def mock_github_remote_setup(dataset_path, dataset_id):
         path = tmpdir_factory.mktemp('fake_github_remote')
@@ -182,6 +197,14 @@ def no_publish(monkeypatch):
 def s3_creds(monkeypatch):
     monkeypatch.setenv('AWS_S3_PUBLIC_BUCKET', 'a-fake-test-public-bucket')
     monkeypatch.setenv('AWS_S3_PRIVATE_BUCKET', 'a-fake-test-private-bucket')
+
+
+@pytest.fixture(autouse=True)
+def access_keys(monkeypatch):
+    monkeypatch.setenv('AWS_ACCESS_KEY_ID', 'aws-id')
+    monkeypatch.setenv('AWS_SECRET_ACCESS_KEY', 'aws-secret')
+    monkeypatch.setenv('GCP_ACCESS_KEY_ID', 'gcp-id')
+    monkeypatch.setenv('GCP_SECRET_ACCESS_KEY', 'gcp-secret')
 
 
 @pytest.fixture(autouse=True)

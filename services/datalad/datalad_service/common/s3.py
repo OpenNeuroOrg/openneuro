@@ -12,43 +12,88 @@ def get_s3_remote():
     return 's3-PUBLIC'
 
 
+def get_s3_backup_remote():
+    return 's3-BACKUP'
+
+
 def get_s3_bucket():
     return getattr(datalad_service.config, 'AWS_S3_PUBLIC_BUCKET')
 
 
-def generate_s3_annex_options(dataset_path):
+def get_s3_backup_bucket():
+    return getattr(datalad_service.config, 'GCP_S3_BACKUP_BUCKET')
+
+
+def generate_s3_annex_options(dataset_path, backup=False):
     dataset_id = os.path.basename(dataset_path)
     annex_options = [
         'type=S3',
-        f'bucket={get_s3_bucket()}',
-        'exporttree=yes',
-        'versioning=yes',
         'partsize=1GiB',
         'encryption=none',
         f'fileprefix={dataset_id}/',
-        'autoenable=true',
-        f'publicurl=https://s3.amazonaws.com/{get_s3_bucket()}',
         'public=no',
     ]
+    if backup:
+        annex_options += [
+            f'bucket={get_s3_backup_bucket()}',
+            'cost=400',
+            'host=storage.googleapis.com',
+            'storageclass=ARCHIVE',
+        ]
+    else:
+        annex_options += [
+            'exporttree=yes',
+            'versioning=yes',
+            f'bucket={get_s3_bucket()}',
+            'autoenable=true',
+            f'publicurl=https://s3.amazonaws.com/{get_s3_bucket()}',
+        ]
     return annex_options
+
+
+def backup_remote_env():
+    """Copy and modify the environment for setup/modification of backup remote settings."""
+    backup_remote_env = os.environ.copy()
+    # Overwrite the AWS keys with the GCP key
+    backup_remote_env['AWS_ACCESS_KEY_ID'] = backup_remote_env['GCP_ACCESS_KEY_ID']
+    backup_remote_env['AWS_SECRET_ACCESS_KEY'] = backup_remote_env[
+        'GCP_SECRET_ACCESS_KEY'
+    ]
+    return backup_remote_env
 
 
 def setup_s3_sibling(dataset_path):
     """Add a sibling for an S3 bucket publish."""
-    annex_options = generate_s3_annex_options(dataset_path)
+    # Public remote
     subprocess.run(
-        ['git-annex', 'initremote', get_s3_remote()] + annex_options, cwd=dataset_path
+        ['git-annex', 'initremote', get_s3_remote()]
+        + generate_s3_annex_options(dataset_path),
+        cwd=dataset_path,
+    )
+    # Backup remote
+    subprocess.run(
+        ['git-annex', 'initremote', get_s3_backup_remote()]
+        + generate_s3_annex_options(dataset_path, backup=True),
+        cwd=dataset_path,
+        env=backup_remote_env(),
     )
 
 
 def update_s3_sibling(dataset_path):
     """Update S3 remote with latest config."""
-    annex_options = generate_s3_annex_options(dataset_path)
     # note: enableremote command will only upsert config options, none are deleted
     subprocess.run(
-        ['git-annex', 'enableremote', get_s3_remote()] + annex_options,
+        ['git-annex', 'enableremote', get_s3_remote()]
+        + generate_s3_annex_options(dataset_path),
         check=True,
         cwd=dataset_path,
+    )
+    subprocess.run(
+        ['git-annex', 'enableremote', get_s3_backup_remote()]
+        + generate_s3_annex_options(dataset_path, backup=True),
+        check=True,
+        cwd=dataset_path,
+        env=backup_remote_env(),
     )
 
 
@@ -86,4 +131,14 @@ def s3_export(dataset_path, target, treeish):
     """Perform an S3 export on a git-annex repo."""
     subprocess.check_call(
         ['git-annex', 'export', treeish, '--to', target], cwd=dataset_path
+    )
+
+
+def s3_backup_push(dataset_path):
+    """Perform an S3 push to the backup remote on a git-annex repo."""
+    print(backup_remote_env())
+    subprocess.check_call(
+        ['git-annex', 'push', get_s3_backup_remote()],
+        cwd=dataset_path,
+        env=backup_remote_env(),
     )

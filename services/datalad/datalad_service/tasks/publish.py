@@ -15,14 +15,18 @@ from datalad_service.config import DATALAD_GITHUB_TOKEN
 from datalad_service.config import DATALAD_GITHUB_EXPORTS_ENABLED
 from datalad_service.config import AWS_ACCESS_KEY_ID
 from datalad_service.config import AWS_SECRET_ACCESS_KEY
+from datalad_service.config import GCP_ACCESS_KEY_ID
+from datalad_service.config import GCP_SECRET_ACCESS_KEY
 from datalad_service.common.annex import get_tag_info, is_git_annex_remote
 from datalad_service.common.openneuro import clear_dataset_cache
 from datalad_service.common.git import git_show, git_tag, git_tag_tree
 from datalad_service.common.github import github_export
 from datalad_service.common.s3 import (
     s3_export,
+    s3_backup_push,
     get_s3_remote,
     get_s3_bucket,
+    get_s3_backup_bucket,
     update_s3_sibling,
 )
 from datalad_service.broker import broker
@@ -90,6 +94,7 @@ def export_dataset(
         # Push the most recent tag
         if tags:
             s3_export(dataset_path, get_s3_remote(), tags[-1].name)
+            s3_backup_push(dataset_path)
             # Once all S3 tags are exported, update GitHub
             if github_enabled:
                 # Perform all GitHub export steps
@@ -129,16 +134,27 @@ def check_remote_has_version(dataset_path, remote, tag):
 def delete_s3_sibling(dataset_id):
     """Run S3 sibling deletion in another process to avoid blocking any callers"""
     delete_executor.submit(delete_s3_sibling_executor, dataset_id)
+    delete_executor.submit(delete_s3_sibling_executor, dataset_id, True)
 
 
-def delete_s3_sibling_executor(dataset_id):
+def delete_s3_sibling_executor(dataset_id, backup=False):
     """Delete all versions of a dataset from S3."""
     try:
-        client = boto3.client(
-            's3',
-            aws_access_key_id=AWS_ACCESS_KEY_ID,
-            aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
-        )
+        if backup:
+            s3_bucket = get_s3_backup_bucket()
+            client = boto3.client(
+                's3',
+                aws_access_key_id=GCP_ACCESS_KEY_ID,
+                aws_secret_access_key=GCP_SECRET_ACCESS_KEY,
+                endpoint_url='https://storage.googleapis.com',
+            )
+        else:
+            s3_bucket = get_s3_bucket()
+            client = boto3.client(
+                's3',
+                aws_access_key_id=AWS_ACCESS_KEY_ID,
+                aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+            )
         paginator = client.get_paginator('list_object_versions')
         object_delete_list = []
         for response in paginator.paginate(
@@ -154,12 +170,12 @@ def delete_s3_sibling_executor(dataset_id):
             )
         for i in range(0, len(object_delete_list), 1000):
             client.delete_objects(
-                Bucket=get_s3_bucket(),
+                Bucket=s3_bucket,
                 Delete={'Objects': object_delete_list[i : i + 1000], 'Quiet': True},
             )
     except Exception as e:
         raise Exception(
-            f'Attempt to delete dataset {dataset_id} from {get_s3_remote()} has failed. ({e})'
+            f'Attempt to delete dataset {dataset_id} from {s3_bucket} has failed. ({e})'
         )
 
 
