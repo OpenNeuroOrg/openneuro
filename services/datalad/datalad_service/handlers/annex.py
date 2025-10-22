@@ -6,6 +6,7 @@ import struct
 import aiofiles
 import falcon
 
+from datalad_service.common.annex import test_key_remote
 from datalad_service.common.stream import update_file
 from datalad_service.handlers.git import _check_git_access, _handle_failed_access
 
@@ -45,7 +46,10 @@ class GitAnnexResource:
         if os.path.exists(annex_object_path):
             resp.status = falcon.HTTP_OK
         else:
-            resp.status = falcon.HTTP_NOT_FOUND
+            if test_key_remote(dataset_path, key):
+                resp.status = falcon.HTTP_OK
+            else:
+                resp.status = falcon.HTTP_NOT_FOUND
 
     async def on_get(self, req, resp, dataset, key, worker=None):
         resp.set_header('WWW-Authenticate', 'Basic realm="dataset git repo"')
@@ -58,7 +62,13 @@ class GitAnnexResource:
             fd = await aiofiles.open(annex_object_path, 'rb')
             resp.set_stream(fd, os.fstat(fd.fileno()).st_size)
         else:
-            resp.status = falcon.HTTP_NOT_FOUND
+            rmet_url = test_key_remote(dataset_path, key)
+            if rmet_url:
+                # Return a redirect to S3 if possible here
+                resp.status = falcon.HTTP_SEE_OTHER
+                resp.location = rmet_url
+            else:
+                resp.status = falcon.HTTP_NOT_FOUND
 
     async def on_post(self, req, resp, worker, dataset, key):
         resp.set_header('WWW-Authenticate', 'Basic realm="dataset git repo"')
@@ -66,7 +76,7 @@ class GitAnnexResource:
             return _handle_failed_access(req, resp)
         dataset_path = self.store.get_dataset_path(dataset)
         annex_object_path = os.path.join(dataset_path, key_to_path(key))
-        if os.path.exists(annex_object_path):
+        if os.path.exists(annex_object_path) or test_key_remote(dataset_path, key):
             # Don't allow objects to be replaced
             resp.status = falcon.HTTP_CONFLICT
         else:
