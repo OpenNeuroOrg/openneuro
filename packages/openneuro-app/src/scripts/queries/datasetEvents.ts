@@ -17,7 +17,6 @@ export const GET_DATASET_EVENTS = gql`
         event {
           type
           requestId 
-          status    
           targetUserId
           resolutionStatus
         }
@@ -54,21 +53,21 @@ export const PROCESS_CONTRIBUTOR_REQUEST_MUTATION = gql`
     $datasetId: ID!
     $requestId: ID!
     $targetUserId: ID!
-    $status: String!
+    $resolutionStatus: String!
     $reason: String
   ) {
     processContributorRequest(
       datasetId: $datasetId
       requestId: $requestId
       targetUserId: $targetUserId
-      status: $status
+      resolutionStatus: $resolutionStatus
       reason: $reason
     ) {
       id
       event {
         type
-        status
         requestId
+        resolutionStatus
       }
       note
     }
@@ -113,6 +112,42 @@ export const DATASET_EVENTS_QUERY = gql`
         }
         success
         note
+      }
+    }
+  }
+`
+
+export const PROCESS_CONTRIBUTOR_CITATION_MUTATION = gql`
+  mutation ProcessContributorCitation(
+    $eventId: ID!
+    $status: String!
+    $reason: String
+  ) {
+    processContributorCitation(
+      eventId: $eventId
+      status: $status
+      reason: $reason
+    ) {
+      id
+      timestamp
+      success
+      note
+      user {
+        id
+        name
+      }
+      event {
+        type
+        targetUserId
+        resolutionStatus
+        contributorData {
+          name
+          givenName
+          familyName
+          orcid
+          contributorType
+          order
+        }
       }
     }
   }

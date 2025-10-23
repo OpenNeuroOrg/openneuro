@@ -10,7 +10,6 @@ interface NotificationActionButtonsProps {
   notification: MappedNotification
   isProcessing: boolean
   onUpdate: (id: string, updates: Partial<MappedNotification>) => void
-  setError: (error: string | null) => void
   handleProcessAction: (action: "accepted" | "denied") => void
   handleStatusChange: (
     newStatus: "unread" | "saved" | "archived",
@@ -27,7 +26,7 @@ export const NotificationActionButtons: React.FC<
 }) => {
   const { status, type, approval } = notification
   const isContributorRequest = type === "approval"
-
+  const isCitationRequest = type === "citationRequest"
   return (
     <div className={styles.actions}>
       {isContributorRequest && (
@@ -41,7 +40,7 @@ export const NotificationActionButtons: React.FC<
               disabled={approval === "accepted" || isProcessing}
             >
               <i className="fa fa-check" />{" "}
-              {approval === "accepted" ? "Approved" : "Approve"}
+              {approval === "accepted" ? "Accepted" : "Accept"}
             </button>
           )}
 
@@ -59,6 +58,27 @@ export const NotificationActionButtons: React.FC<
           )}
         </>
       )}
+
+      {isCitationRequest && approval !== "accepted" && approval !== "denied" &&
+        (
+          <>
+            <button
+              className={`${styles.notificationapprove}`}
+              onClick={() => handleProcessAction("accepted")}
+              disabled={isProcessing}
+            >
+              <i className="fa fa-check" /> Accept
+            </button>
+
+            <button
+              className={`${styles.notificationdeny}`}
+              onClick={() => handleProcessAction("denied")}
+              disabled={isProcessing}
+            >
+              <i className="fa fa-times" /> Deny
+            </button>
+          </>
+        )}
 
       {status === "unread" && (
         <>
