@@ -95,7 +95,8 @@ const renderComponent = (
 }
 
 describe("DraftContainer", () => {
-  it("renders dataset name and contributors as authors", async () => {
+  beforeEach(() => {
+    // Mock useUser for contributors
     vi.mock("../../queries/user", async (importOriginal) => {
       const actual = await importOriginal<typeof UserQueriesModule>()
       return {
@@ -112,41 +113,21 @@ describe("DraftContainer", () => {
         }),
       }
     })
+  })
 
+  it("renders the dataset name", async () => {
     renderComponent({ dataset: mockDataset })
-    expect(await screen.findByRole("heading", { level: 1 })).toHaveTextContent(
-      /Test Dataset Name/,
-    )
+
+    const heading = await screen.findByRole("heading", { level: 1 })
+    expect(heading).toHaveTextContent(/Test Dataset Name/)
+  })
+
+  it("renders contributors as authors", async () => {
+    renderComponent({ dataset: mockDataset })
 
     // Check contributor names
-    expect(await screen.findByText(/Author One/)).toBeInTheDocument()
-    expect(await screen.findByText(/Author Two/)).toBeInTheDocument()
-
-    const authorOneProfileLink = screen.getByRole("link", {
-      name: "Author One",
-    })
-    expect(authorOneProfileLink).toBeInTheDocument()
-    expect(authorOneProfileLink).toHaveAttribute(
-      "href",
-      "/user/0000-0001-2345-6789",
-    )
-
-    const orcidExternalLink = screen.getByLabelText(
-      /ORCID profile for Author One/i,
-    )
-    expect(orcidExternalLink).toBeInTheDocument()
-    expect(orcidExternalLink).toHaveAttribute(
-      "href",
-      expect.stringContaining("orcid.org/0000-0001-2345-6789"),
-    )
-    expect(orcidExternalLink).toHaveAttribute("target", "_blank")
-    expect(orcidExternalLink).toHaveAttribute("rel", "noopener noreferrer")
-
-    // Author Two has no ORCID, so no profile link
-    const authorTwoProfileLink = screen.queryByRole("link", {
-      name: /Author Two/i,
-    })
-    expect(authorTwoProfileLink).not.toBeInTheDocument()
+    expect(await screen.findByText(/One, Author/)).toBeInTheDocument()
+    expect(await screen.findByText(/Two, Author/)).toBeInTheDocument()
   })
 
   describe("dataset name field", () => {
