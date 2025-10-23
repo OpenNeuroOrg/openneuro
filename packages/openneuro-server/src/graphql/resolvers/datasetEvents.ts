@@ -122,26 +122,32 @@ export const DatasetEventResolvers = {
       : undefined
 
     if (!targetUserId) return null
-    return User.findById(targetUserId)
+    // Use findOne({ id }) for UUID strings
+    return User.findOne({ id: targetUserId })
   },
   user: async (ev: EnrichedDatasetEvent): Promise<UserDocument | null> =>
-    ev.userId ? User.findById(ev.userId) : null,
+    ev.userId ? User.findOne({ id: ev.userId }) : null,
   contributorData: (ev: EnrichedDatasetEvent) => {
-    let data: DatasetEventContributorCitation["contributorData"] = {}
+    let data: DatasetEventContributorCitation["contributorData"] | undefined
 
-    if (isContributorCitation(ev) && ev.event.contributorData) {
+    if (
+      (isContributorCitation(ev) || isContributorCitationResponse(ev)) &&
+      ev.event.contributorData
+    ) {
       data = ev.event.contributorData
-    } else if (isContributorCitationResponse(ev) && ev.event.contributorData) {
+    } else if (
+      (isContributorRequest(ev) || isContributorRequestResponse(ev)) &&
+      ev.event.contributorData
+    ) {
       data = ev.event.contributorData
     }
 
     return {
       ...data,
-      contributorType: data.contributorType || "Researcher", // fallback
+      contributorType: data?.contributorType || "Researcher",
     }
   },
 }
-
 /**
  * Create a 'contributor request' event
  */
@@ -154,6 +160,19 @@ export async function createContributorRequestEvent(
     throw new Error("Authentication required to request contributor status.")
   }
 
+  // Fetch user info for contributorData
+  const targetUser = await User.findOne({ id: user })
+  if (!targetUser) throw new Error("User not found.")
+
+  const contributorData = {
+    userId: targetUser.id,
+    name: targetUser.name || "Unknown Contributor",
+    givenName: targetUser.givenName || "",
+    familyName: targetUser.familyName || "",
+    orcid: targetUser.orcid,
+    contributorType: "Researcher",
+  }
+
   const event = new DatasetEvent({
     datasetId,
     userId: user,
@@ -161,6 +180,7 @@ export async function createContributorRequestEvent(
       type: "contributorRequest",
       datasetId,
       resolutionStatus: "pending",
+      contributorData,
     },
     success: true,
     note: "User requested contributor status for this dataset.",
@@ -171,7 +191,6 @@ export async function createContributorRequestEvent(
   await event.populate("user")
   return event
 }
-
 /**
  * Create or update an admin note event
  */
@@ -266,6 +285,7 @@ export async function processContributorRequest(
       reason,
       datasetId,
       resolutionStatus,
+      contributorData: originalRequestEvent.event.contributorData,
     },
     success: true,
     note: reason?.trim() ||
