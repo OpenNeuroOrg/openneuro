@@ -11,12 +11,10 @@ export const NotificationBodyContent: React.FC<NotificationBodyContentProps> = (
 ) => {
   if (!notification) return null
 
-  const { approval, needsReview, reason, requesterUser, adminUser, datasetId } =
+  const { approval, needsReview, requesterUser, adminUser, datasetId } =
     notification
   const event = notification.originalNotification.event
   const contributorData = event?.contributorData
-  console.log(contributorData)
-  console.log(notification.originalNotification.event)
 
   const targetUser = notification.targetUser ||
     notification.originalNotification.user

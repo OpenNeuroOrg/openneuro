@@ -24,6 +24,17 @@ interface ContributorFormRowProps {
   isLast: boolean
 }
 
+interface UserSuggestion {
+  id?: string
+  name?: string
+  givenName?: string
+  familyName?: string
+  orcid?: string
+  avatar?: string
+  contributorType?: string
+  order?: number
+}
+
 export const ContributorFormRow: React.FC<ContributorFormRowProps> = ({
   contributor,
   index,
@@ -48,7 +59,7 @@ export const ContributorFormRow: React.FC<ContributorFormRowProps> = ({
     initialLimit: 10,
   })
 
-  // Fetch suggestions on debounced input
+  // Fetch suggestions when the debounced input changes
   useEffect(() => {
     if (debouncedQuery && debouncedQuery.trim().length > 0) {
       void refetchFullList({ search: debouncedQuery, limit: 10 })
@@ -65,8 +76,7 @@ export const ContributorFormRow: React.FC<ContributorFormRowProps> = ({
     if (contributor.name !== undefined && contributor.name !== query) {
       setQuery(contributor.name)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [contributor.name])
+  }, [contributor.name, query])
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -87,7 +97,7 @@ export const ContributorFormRow: React.FC<ContributorFormRowProps> = ({
     setHighlightIndex(-1)
   }
 
-  const selectUser = (user: any) => {
+  const selectUser = (user: UserSuggestion) => {
     onChange(index, "name", user.name ?? "")
     onChange(index, "givenName", user.givenName ?? "")
     onChange(index, "familyName", user.familyName ?? "")
@@ -95,7 +105,8 @@ export const ContributorFormRow: React.FC<ContributorFormRowProps> = ({
     onChange(
       index,
       "contributorType",
-      (contributor.contributorType || user.contributorType ||
+      (contributor.contributorType ||
+        user.contributorType ||
         "Researcher") as string,
     )
     if (user.order !== undefined) onChange(index, "order", String(user.order))

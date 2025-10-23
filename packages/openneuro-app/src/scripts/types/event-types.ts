@@ -74,7 +74,6 @@ export const mapRawEventToMappedNotification = (
   const {
     type,
     resolutionStatus,
-    status: eventStatus,
     requestId,
     targetUserId: eventTargetUserId,
     target,
@@ -82,7 +81,7 @@ export const mapRawEventToMappedNotification = (
   } = event
 
   let title = "General Notification"
-  let mappedType: MappedNotification["type"] = type
+  const mappedType: MappedNotification["type"] = type
   let approval: MappedNotification["approval"]
   let requesterUser: User | undefined
   let adminUser: User | undefined

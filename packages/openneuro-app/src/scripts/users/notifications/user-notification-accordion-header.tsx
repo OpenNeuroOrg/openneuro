@@ -30,7 +30,6 @@ export const NotificationHeader: React.FC<NotificationHeaderProps> = ({
   datasetId,
   resStatus,
 }) => {
-  console.log(adminUser)
   const renderTitle = () => {
     if (datasetId) {
       const datasetLink = `/datasets/${datasetId}/`

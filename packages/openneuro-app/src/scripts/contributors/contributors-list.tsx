@@ -169,7 +169,7 @@ export const ContributorsListDisplay: React.FC<ContributorsListDisplayProps> = (
     }))
 
     try {
-      const { data } = await updateContributorsMutation({
+      const { data: _ } = await updateContributorsMutation({
         variables: { datasetId, newContributors: cleanContributors },
       })
 

@@ -28,9 +28,7 @@ export const NotificationAccordion = ({
   const {
     id,
     title,
-    content,
     type,
-    approval,
     resStatus,
     datasetId,
     requestId,
@@ -51,7 +49,6 @@ export const NotificationAccordion = ({
   )
 
   const targetUser = targetUserData?.user
-  const hasContent = content && content.trim().length > 0
 
   const [isOpen, setIsOpen] = useState(false)
   const [showReasonInput, setShowReasonInput] = useState(false)
@@ -104,9 +101,6 @@ export const NotificationAccordion = ({
 
     try {
       if (isContributorRequest) {
-        console.log("ds", datasetId)
-        console.log("rid", requestId)
-        console.log("tu", targetUserId)
         if (!datasetId || !requestId || !targetUserId) {
           const err = "Missing required data for contributor request."
           Sentry.captureException(err)
@@ -153,12 +147,7 @@ export const NotificationAccordion = ({
             body={`Citation has been ${currentApprovalAction}.`}
           />,
         )
-      } else if (isContributorResponse) {
-        // additional actions
-      } else {
-        console.warn("Unhandled notification type:", type)
       }
-
       setShowReasonInput(false)
       setReasonInput("")
       setCurrentApprovalAction(null)

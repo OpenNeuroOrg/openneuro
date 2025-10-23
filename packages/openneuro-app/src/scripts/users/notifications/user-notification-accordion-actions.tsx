@@ -24,7 +24,7 @@ export const NotificationActionButtons: React.FC<
   handleProcessAction,
   handleStatusChange,
 }) => {
-  const { status, type, approval } = notification
+  const { status, approval } = notification
   const needsReview = notification.needsReview
   return (
     <div className={styles.actions}>
