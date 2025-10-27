@@ -11,6 +11,7 @@ const options: ValidatorOptions = {
   json: true,
   blacklistModalities: ["micr"],
   debug: "INFO",
+  datasetTypes: ["raw", "derivative"],
 }
 
 export async function runValidator(

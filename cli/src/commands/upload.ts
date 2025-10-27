@@ -69,6 +69,9 @@ export async function uploadAction(
     `upload ${dataset_directory} resolved to ${dataset_directory_abs}`,
   )
 
+  // Match OpenNeuro's server side rules for datasetTypes overriding user settings
+  options.datasetTypes = ["raw", "derivative"]
+
   const schemaResult = await validate(
     await readFileTree(dataset_directory_abs),
     options,
