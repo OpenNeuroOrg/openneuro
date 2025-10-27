@@ -59,6 +59,8 @@ async def validate_dataset_deno_call(dataset_path, ref, logger=logger):
             dataset_path,
             '--blacklistModalities',
             'micr',
+            '--datasetTypes',
+            'raw,derivative',
         ],
         logger=logger,
     )
