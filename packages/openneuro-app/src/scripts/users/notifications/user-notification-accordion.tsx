@@ -17,6 +17,11 @@ import styles from "./scss/usernotifications.module.scss"
 
 import type { MappedNotification } from "../../types/event-types"
 
+// Helper to log events consistently
+const logEvent = (label: string, data?: any) => {
+  console.log(`[NotificationAccordion] ${label}`, data)
+}
+
 export const NotificationAccordion = ({
   notification,
   onUpdate,
@@ -50,6 +55,12 @@ export const NotificationAccordion = ({
 
   const targetUser = targetUserData?.user
 
+  logEvent("Render NotificationAccordion", {
+    notification,
+    currentUser: user,
+    targetUser,
+  })
+
   const [isOpen, setIsOpen] = useState(false)
   const [showReasonInput, setShowReasonInput] = useState(false)
   const [reasonInput, setReasonInput] = useState("")
@@ -77,14 +88,16 @@ export const NotificationAccordion = ({
       setReasonInput("")
       setCurrentApprovalAction(null)
     }
-  }, [isOpen])
+    logEvent("Toggle Accordion", { isOpen: !isOpen, notificationId: id })
+  }, [isOpen, id])
 
   const handleProcessAction = useCallback((action: "accepted" | "denied") => {
     setIsOpen(true)
     setShowReasonInput(true)
     setReasonInput("")
     setCurrentApprovalAction(action)
-  }, [])
+    logEvent("Handle Process Action", { action, notificationId: id })
+  }, [id])
 
   const handleReasonSubmit = useCallback(async () => {
     if (!reasonInput.trim()) {
@@ -108,6 +121,15 @@ export const NotificationAccordion = ({
           return
         }
 
+        logEvent("Processing Contributor Request", {
+          currentUser: user,
+          targetUserId,
+          datasetId,
+          requestId,
+          resolutionStatus: currentApprovalAction,
+          reason: reasonInput,
+        })
+
         await processContributorRequest({
           variables: {
             datasetId,
@@ -118,6 +140,12 @@ export const NotificationAccordion = ({
           },
         })
 
+        logEvent("Contributor Request Processed", {
+          currentUser: user,
+          targetUserId,
+          resolutionStatus: currentApprovalAction,
+        })
+
         toast.success(
           <ToastContent
             title="Contributor Request Processed"
@@ -126,6 +154,15 @@ export const NotificationAccordion = ({
         )
       } else if (isContributorCitation) {
         const eventId = notification.originalNotification.id
+
+        logEvent("Processing Contributor Citation", {
+          currentUser: user,
+          targetUserId,
+          eventId,
+          notification,
+          currentApprovalAction,
+        })
+
         if (!eventId) {
           const err = "Contributor citation event not found."
           Sentry.captureException(err)
@@ -139,6 +176,13 @@ export const NotificationAccordion = ({
             status: currentApprovalAction,
             reason: reasonInput,
           },
+        })
+
+        logEvent("Contributor Citation Processed", {
+          currentUser: user,
+          targetUserId,
+          eventId,
+          status: currentApprovalAction,
         })
 
         toast.success(
@@ -156,6 +200,7 @@ export const NotificationAccordion = ({
         ? error.message
         : "Unknown error"
       Sentry.captureException(error)
+      logEvent("Error processing notification", { error, notificationId: id })
       toast.error(
         <ToastContent title="Processing Failed" body={errorMessage} />,
       )
@@ -175,13 +220,16 @@ export const NotificationAccordion = ({
     isContributorResponse,
     type,
     notification,
+    user,
+    id,
   ])
 
   const handleReasonCancel = useCallback(() => {
     setShowReasonInput(false)
     setReasonInput("")
     setCurrentApprovalAction(null)
-  }, [])
+    logEvent("Cancelled Reason Input", { notificationId: id })
+  }, [id])
 
   const handleStatusChange = useCallback(
     async (newStatus: "unread" | "saved" | "archived") => {
@@ -190,9 +238,20 @@ export const NotificationAccordion = ({
       try {
         const backendStatus = newStatus.toUpperCase()
 
+        logEvent("Updating Notification Status", {
+          notificationId: id,
+          newStatus,
+          backendStatus,
+        })
+
         await updateNotificationStatus({
           variables: { eventId: id, status: backendStatus },
           refetchQueries: [{ query: GET_USER, variables: { userId: user.id } }],
+        })
+
+        logEvent("Notification Status Updated", {
+          notificationId: id,
+          newStatus,
         })
 
         toast.success(
@@ -203,6 +262,10 @@ export const NotificationAccordion = ({
         )
       } catch (error) {
         Sentry.captureException(error)
+        logEvent("Error updating notification status", {
+          error,
+          notificationId: id,
+        })
         toast.error(
           <ToastContent
             title="Update Failed"
