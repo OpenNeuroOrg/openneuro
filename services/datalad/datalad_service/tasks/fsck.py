@@ -57,39 +57,27 @@ def git_annex_fsck_local(dataset_path):
 
 
 @broker.task
-def git_annex_fsck_remote(dataset_path, branch=None, remote='s3-PUBLIC'):
-    """Run incremental fsck for one branch (tag) and remote."""
+def git_annex_fsck_remote(dataset_path, branch, remote='s3-PUBLIC'):
+    """
+    Run incremental fsck for one branch (tag) and remote.
+
+    Returns True if the check ran and no files failed, False otherwise.
+    """
     try:
         repo = pygit2.Repository(dataset_path)
         commit, references = get_head_commit_and_references(repo)
     except pygit2.GitError:
         logging.error(f'Could not open git repository for {dataset_path}')
-        return
-    if not branch:
-        # Find the newest tag chronologically
-        all_tags = sorted(
-            [tag for tag in repo.references if tag.startswith('refs/tags/')],
-            key=lambda tag: repo.lookup_reference(tag).target.commit_time,
-            reverse=True,
-        )
-        if all_tags:
-            branch = all_tags[0]
-        else:
-            logging.info(
-                f'No tags found for dataset: {dataset_path}. Skipping remote fsck.'
-            )
-            return
+        return False
 
-    # Run at most once per month per dataset
     annex_command = (
         'git-annex',
         'fsck',
         f'--branch={branch}',
-        '--from={remote}',
-        '--fast',
+        f'--from={remote}',
         '--json',
         '--json-error-messages',
-        '--incremental-schedule=7d',
+        '--incremental-schedule=30d',
     )
     annex_process = subprocess.Popen(
         annex_command, cwd=dataset_path, stdout=subprocess.PIPE
@@ -99,8 +87,11 @@ def git_annex_fsck_remote(dataset_path, branch=None, remote='s3-PUBLIC'):
         annexed_file = json.loads(annexed_file_json)
         if not annexed_file['success']:
             bad_files.append(annexed_file)
+    update_file_check(dataset_path, commit, references, bad_files, remote)
     if len(bad_files) > 0:
         logging.error(
             f'{dataset_path} remote {remote} has missing or corrupt annexed objects'
         )
-    update_file_check(dataset_path, commit, references, bad_files, remote)
+        return False
+    else:
+        return True

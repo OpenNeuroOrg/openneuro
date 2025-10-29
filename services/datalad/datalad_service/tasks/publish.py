@@ -8,6 +8,7 @@ from concurrent.futures import ProcessPoolExecutor
 import pygit2
 import boto3
 from github import Github
+from taskiq_pipelines import Pipeline
 
 import datalad_service.common.s3
 import datalad_service.common.github
@@ -33,6 +34,7 @@ from datalad_service.common.s3 import (
     update_s3_sibling,
 )
 from datalad_service.broker import broker
+from datalad_service.tasks.fsck import git_annex_fsck_remote
 
 logger = logging.getLogger('datalad_service.' + __name__)
 
@@ -98,16 +100,28 @@ async def export_dataset(
         update_s3_sibling(dataset_path)
         # Push the most recent tag
         if tags:
-            s3_export(dataset_path, get_s3_remote(), tags[-1].name)
+            new_tag = tags[-1].name
+            s3_export(dataset_path, get_s3_remote(), new_tag)
             s3_backup_push(dataset_path)
             # Once all S3 tags are exported, update GitHub
             if github_enabled:
                 # Perform all GitHub export steps
-                github_export(dataset_id, dataset_path, tags[-1].name)
-        # Drop cache once all exports are complete
-        clear_dataset_cache(dataset_id)
-        # Clean local annexed files once export is complete
-        await annex_drop.kiq(dataset_path)
+                github_export(dataset_id, dataset_path, new_tag)
+            # Drop cache once all exports are complete
+            clear_dataset_cache(dataset_id)
+            # Check and clean local annexed files once export is complete
+            pipeline = Pipeline(broker, git_annex_fsck_remote).call_next(
+                annex_drop, dataset_path=dataset_path, branch=new_tag
+            )
+            # Call the pipeline (arguments for git_annex_fsck_remote)
+            await pipeline.kiq(
+                dataset_path,
+                branch=new_tag,  # Check the history from the new tag just exported
+                remote=get_s3_remote(),
+            )
+        else:
+            # Clear the cache even if only sibling updates occurred
+            clear_dataset_cache(dataset_id)
 
 
 def check_remote_has_version(dataset_path, remote, tag):
@@ -214,7 +228,7 @@ def monitor_remote_configs(dataset_path):
 
 
 @broker.task
-async def annex_drop(dataset_path):
+async def annex_drop(fsck_success, dataset_path, branch):
     """Drop local contents from the annex."""
     # Ensure numcopies is set to 2 before running drop
     await run_check(['git-annex', 'numcopies', '2'], dataset_path)
@@ -226,4 +240,5 @@ async def annex_drop(dataset_path):
         # Not an issue if this fails
         pass
     # Drop will only drop successfully exported files present on both remotes
-    await run_check(['git-annex', 'drop'], dataset_path)
+    if fsck_success:
+        await run_check(['git-annex', 'drop', '--branch', branch], dataset_path)
