@@ -1,5 +1,5 @@
 import { defineConfig } from "vite"
-import nodePolyfills from "rollup-plugin-polyfill-node"
+import { nodePolyfills } from "vite-plugin-node-polyfills"
 
 /**
  * Vite plugin to hack a bug injected by the default assetImportMetaUrlPlugin
@@ -32,7 +32,12 @@ export default defineConfig({
   build: {
     sourcemap: true,
     rollupOptions: {
-      external: "/crn/config.js",
+      external: [
+        "/crn/config.js",
+        "vite-plugin-node-polyfills/shims/global",
+        "vite-plugin-node-polyfills/shims/process",
+        "vite-plugin-node-polyfills/shims/buffer",
+      ],
     },
   },
   optimizeDeps: {
@@ -54,10 +59,6 @@ export default defineConfig({
       },
       // Workaround for bids-validator -> hed-validator -> xml2js -> sax -> Stream shim
       { find: "stream", replacement: "stream-browserify" },
-      // sax -> Buffer shim
-      { find: "buffer", replacement: "buffer/" },
-      // bids-validator deno buffer
-      { find: "node:buffer", replacement: "buffer/" },
     ],
   },
   plugins: [workaroundAssetImportMetaUrlPluginBug(), nodePolyfills()],
