@@ -1,5 +1,5 @@
 import React from "react"
-import { fireEvent, render, screen, waitFor } from "@testing-library/react"
+import { fireEvent, render, screen } from "@testing-library/react"
 import { vi } from "vitest"
 import { act } from "react-dom/test-utils"
 import { MockedProvider } from "@apollo/client/testing"
@@ -17,9 +17,9 @@ interface ContributorFormRowProps {
   value: string
   type: string
   orcid: string
-  onChange: (...args: any[]) => void
-  onMove: (...args: any[]) => void
-  onRemove: (...args: any[]) => void
+  onChange: (...args: unknown[]) => void
+  onMove: (...args: unknown[]) => void
+  onRemove: (...args: unknown[]) => void
   contributor: Contributor
   errors: Record<string, string>
   isFirst: boolean
@@ -94,17 +94,15 @@ describe("ContributorFormRow", () => {
   it("calls onMove and onRemove callbacks", async () => {
     renderComponent()
 
-    const upButton = screen.getByRole("button", { name: "↑" })
+    const _upButton = screen.getByRole("button", { name: "↑" })
     const downButton = screen.getByRole("button", { name: "↓" })
     const removeButton = screen.getByRole("button", { name: "" })
 
-    // Click down
     await act(async () => {
       fireEvent.click(downButton)
     })
     expect(defaultProps.onMove).toHaveBeenCalledWith(0, "down")
 
-    // Click remove
     await act(async () => {
       fireEvent.click(removeButton)
     })
