@@ -2,7 +2,7 @@ import React from "react"
 import { Link } from "react-router-dom"
 import { Dropdown } from "../components/dropdown/Dropdown"
 import { useUser } from "../queries/user"
-import { useNotifications } from "./user-notifications-context"
+import { useNotifications } from "./notifications/user-notifications-context"
 import "./scss/user-menu.scss"
 
 export interface UserMenuProps {

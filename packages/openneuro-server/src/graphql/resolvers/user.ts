@@ -55,16 +55,18 @@ type MongoOperatorValue =
   | RegExp
   | (string | number | boolean | RegExp)[]
 
-type MongoQueryOperator<T> = T | {
-  $ne?: T
-  $regex?: string
-  $options?: string
-  $gt?: T
-  $gte?: T
-  $lt?: T
-  $lte?: T
-  $in?: T[]
-}
+type MongoQueryOperator<T> =
+  | T
+  | {
+    $ne?: T
+    $regex?: string
+    $options?: string
+    $gt?: T
+    $gte?: T
+    $lt?: T
+    $lte?: T
+    $in?: T[]
+  }
 
 type MongoFilterValue =
   | MongoOperatorValue
@@ -76,7 +78,14 @@ interface MongoQueryCondition {
 
 export const users = async (
   obj: unknown,
-  { isAdmin, isBlocked, search, limit = 100, offset = 0, orderBy }: {
+  {
+    isAdmin,
+    isBlocked,
+    search,
+    limit = 100,
+    offset = 0,
+    orderBy,
+  }: {
     isAdmin?: boolean
     isBlocked?: boolean
     search?: string
@@ -180,10 +189,10 @@ export const updateUser = async (
 
     if (isValidOrcid(id)) {
       user = await User.findOne({
-        $or: [{ "orcid": id }, { "providerId": id }],
+        $or: [{ orcid: id }, { providerId: id }],
       }).exec()
     } else {
-      user = await User.findOne({ "id": id }).exec()
+      user = await User.findOne({ id: id }).exec()
     }
 
     if (!user) {
@@ -211,24 +220,35 @@ export const updateUser = async (
 export async function notifications(obj, _, { userInfo }) {
   const userId = obj.id
 
-  // Authorization check: Only the user themselves or a site admin can view their notifications
+  // --- authorization ---
   if (!userInfo || (userInfo.id !== userId && !userInfo.admin)) {
     throw new Error("Not authorized to view these notifications.")
   }
 
+  // --- get user and orcid ---
+  const currentUser = await User.findOne({ id: userId }).exec()
+  const orcid = currentUser?.orcid
+
+  // --- base match conditions: either the user created it OR it targets them ---
+  const matchConditions: Record<string, unknown>[] = [
+    { userId },
+    { "event.targetUserId": userId },
+  ]
+  if (orcid) matchConditions.push({ "event.targetUserId": orcid })
+
   const pipeline: PipelineStage[] = [
-    // Lookup permissions for dataset admin checks
+    { $match: { $or: matchConditions } },
     {
       $lookup: {
         from: "permissions",
-        let: { datasetId: "$datasetId" },
+        let: { datasetId: "$datasetId", currentUserId: userId },
         pipeline: [
           {
             $match: {
               $expr: {
                 $and: [
                   { $eq: ["$datasetId", "$$datasetId"] },
-                  { $eq: ["$userId", userId] },
+                  { $eq: ["$userId", "$$currentUserId"] },
                 ],
               },
             },
@@ -237,30 +257,8 @@ export async function notifications(obj, _, { userInfo }) {
         as: "permissions",
       },
     },
-    {
-      $unwind: { path: "$permissions", preserveNullAndEmptyArrays: true },
-    },
-    // Match relevant events
-    {
-      $match: {
-        $or: [
-          // Condition 1: All events for a user where they are the creator
-          { userId: userId },
-          // Condition 2: All events for a user where they are the target
-          { "event.targetUserId": userId },
-          // Condition 3: All contributor requests for a site admin
-          ...(userInfo.admin ? [{ "event.type": "contributorRequest" }] : []),
-          // Condition 4: All contributor requests for a dataset admin (using the Permission model)
-          {
-            "event.type": "contributorRequest",
-            "permissions.level": "admin",
-          },
-        ],
-      },
-    },
-    {
-      $sort: { timestamp: -1 },
-    },
+    { $unwind: { path: "$permissions", preserveNullAndEmptyArrays: true } },
+    { $sort: { timestamp: -1 } },
     {
       $lookup: {
         from: "users",
@@ -269,9 +267,7 @@ export async function notifications(obj, _, { userInfo }) {
         as: "user",
       },
     },
-    {
-      $unwind: { path: "$user", preserveNullAndEmptyArrays: true },
-    },
+    { $unwind: { path: "$user", preserveNullAndEmptyArrays: true } },
     {
       $lookup: {
         from: "usernotificationstatuses",
@@ -301,15 +297,35 @@ export async function notifications(obj, _, { userInfo }) {
 
   const events = await DatasetEvent.aggregate(pipeline).exec()
 
-  return events.map((event) => {
+  // --- apply visibility rules ---
+  const filtered = events.filter((ev) => {
+    if (!ev.event || !ev.event.type) return false
+
+    const type = ev.event.type
+    const targetId = ev.event.targetUserId
+    const isDatasetAdmin = userInfo.admin || ev.permissions?.level === "admin"
+    const isTargetUser = targetId === userId || (orcid && targetId === orcid)
+
+    switch (type) {
+      case "contributorRequest":
+        return isDatasetAdmin
+      case "contributorCitation":
+        return isTargetUser
+      case "contributorRequestResponse":
+      case "contributorCitationResponse":
+        return isDatasetAdmin || isTargetUser
+      default:
+        return isDatasetAdmin
+    }
+  })
+
+  // --- map results with notification status ---
+  return filtered.map((event) => {
     const notificationStatus = event.notificationStatus
       ? event.notificationStatus
       : ({ status: "UNREAD" } as UserNotificationStatusDocument)
 
-    return {
-      ...event,
-      notificationStatus,
-    }
+    return { ...event, notificationStatus }
   })
 }
 

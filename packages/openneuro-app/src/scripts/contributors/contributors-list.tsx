@@ -6,6 +6,7 @@ import { SingleContributorDisplay } from "./contributor"
 import { Loading } from "../components/loading/Loading"
 import { ContributorFormRow } from "./contributor-form-row"
 import { cloneContributor } from "./contributor-utils"
+import { CREATE_CONTRIBUTOR_CITATION_EVENT } from "../queries/datasetEvents"
 
 interface ContributorsListDisplayProps {
   contributors: Contributor[] | null | undefined
@@ -15,15 +16,36 @@ interface ContributorsListDisplayProps {
 }
 
 const UPDATE_CONTRIBUTORS = gql`
-  mutation UpdateContributors($datasetId: String!, $newContributors: [ContributorInput!]!) {
-    updateContributors(datasetId: $datasetId, newContributors: $newContributors) {
+  mutation UpdateContributors(
+    $datasetId: String!
+    $newContributors: [ContributorInput!]!
+  ) {
+    updateContributors(
+      datasetId: $datasetId
+      newContributors: $newContributors
+    ) {
       success
       dataset {
         id
         draft {
           id
-          contributors { name givenName familyName orcid contributorType order }
-          files { id filename key size annexed urls directory }
+          contributors {
+            name
+            givenName
+            familyName
+            orcid
+            contributorType
+            order
+          }
+          files {
+            id
+            filename
+            key
+            size
+            annexed
+            urls
+            directory
+          }
           modified
         }
       }
@@ -32,17 +54,13 @@ const UPDATE_CONTRIBUTORS = gql`
 `
 
 export const ContributorsListDisplay: React.FC<ContributorsListDisplayProps> = (
-  {
-    contributors,
-    separator = <br />,
-    datasetId,
-    editable,
-  },
+  { contributors, separator = <br />, datasetId, editable },
 ) => {
   const [isEditing, setIsEditing] = useState(false)
-  const [editingContributors, setEditingContributors] = useState<Contributor[]>(
-    contributors?.map((c) => ({ ...c, order: c.order ?? 0 })) || [],
-  )
+  const [editingContributors, setEditingContributors] = useState<
+    Contributor[]
+  >(contributors?.map((c) => ({ ...c, order: c.order ?? 0 })) || [])
+
   const [errors, setErrors] = useState<Record<number, string>>({})
 
   useEffect(() => {
@@ -75,9 +93,9 @@ export const ContributorsListDisplay: React.FC<ContributorsListDisplayProps> = (
         const updated = data?.updateContributors?.dataset?.draft?.contributors
         if (updated) {
           setEditingContributors(
-            updated.map((c) => ({ ...c })).sort((a, b) =>
-              (a.order ?? 0) - (b.order ?? 0)
-            ),
+            updated
+              .map((c) => ({ ...c }))
+              .sort((a, b) => (a.order ?? 0) - (b.order ?? 0)),
           )
         }
         setIsEditing(false)
@@ -88,7 +106,14 @@ export const ContributorsListDisplay: React.FC<ContributorsListDisplayProps> = (
       },
     },
   )
-
+  const [createContributorCitationEvent] = useMutation(
+    CREATE_CONTRIBUTOR_CITATION_EVENT,
+    {
+      onError(err) {
+        Sentry.captureException(err)
+      },
+    },
+  )
   const handleChange = (
     index: number,
     field: keyof Contributor,
@@ -124,10 +149,12 @@ export const ContributorsListDisplay: React.FC<ContributorsListDisplayProps> = (
 
   const handleRemove = (index: number) =>
     setEditingContributors((prev) =>
-      prev.filter((_, i) => i !== index).map((c, idx) => ({
-        ...cloneContributor(c),
-        order: idx + 1,
-      }))
+      prev
+        .filter((_, i) => i !== index)
+        .map((c, idx) => ({
+          ...cloneContributor(c),
+          order: idx + 1,
+        }))
     )
 
   const handleMove = (index: number, direction: "up" | "down") =>
@@ -142,7 +169,7 @@ export const ContributorsListDisplay: React.FC<ContributorsListDisplayProps> = (
       return updated.map((c, idx) => ({ ...c, order: idx + 1 }))
     })
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!datasetId) return
     const newErrors: Record<number, string> = {}
     editingContributors.forEach((c, idx) => {
@@ -158,9 +185,48 @@ export const ContributorsListDisplay: React.FC<ContributorsListDisplayProps> = (
       contributorType: c.contributorType,
       order: c.order,
     }))
-    updateContributorsMutation({
-      variables: { datasetId, newContributors: cleanContributors },
-    })
+
+    // Determine which contributors are new (for citation events)
+    const prevOrcids = new Set(contributors?.map((c) => c.orcid))
+    const newContributors = cleanContributors.filter(
+      (c) => c.orcid && !prevOrcids.has(c.orcid),
+    )
+
+    // Exclude these new contributors from the updateContributorsMutation list
+    const contributorsToUpdate = cleanContributors.filter(
+      (c) => !newContributors.includes(c),
+    )
+
+    try {
+      // Only update datacite.yml for existing contributors
+      if (contributorsToUpdate.length > 0) {
+        await updateContributorsMutation({
+          variables: { datasetId, newContributors: contributorsToUpdate },
+        })
+      }
+
+      // Now create citation events for the new contributors
+      await Promise.all(
+        newContributors.map((contributor) =>
+          createContributorCitationEvent({
+            variables: {
+              datasetId,
+              targetUserId: contributor.orcid || contributor.name,
+              contributorData: {
+                name: contributor.name,
+                givenName: contributor.givenName,
+                familyName: contributor.familyName,
+                orcid: contributor.orcid,
+                contributorType: contributor.contributorType,
+                order: contributor.order,
+              },
+            },
+          })
+        ),
+      )
+    } catch (err) {
+      Sentry.captureException(err)
+    }
   }
 
   if (!contributors || contributors.length === 0) return <>N/A</>
