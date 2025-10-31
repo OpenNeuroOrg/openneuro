@@ -122,7 +122,7 @@ export const mapRawEventToMappedNotification = (
       break
 
     case "contributorCitationResponse":
-      title = "had their citation responded to"
+      title = "had their citation request for"
       adminUser = user
       targetUser = target
       approval = resolutionStatus ?? "pending"
