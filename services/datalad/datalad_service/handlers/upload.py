@@ -1,6 +1,7 @@
 import logging
 import os
 import pathlib
+import re
 import aioshutil
 
 import falcon
@@ -8,6 +9,10 @@ import pygit2
 
 from datalad_service.common.git import git_commit
 from datalad_service.common.user import get_user_info
+
+annex_key_re = re.compile(
+    r'^(?P<backend>[A-Z0-9]+)-s(?P<size>[0-9]+)--(?P<hash>[a-f0-9]+)'
+)
 
 
 async def move_files(upload_path, dataset_path):
@@ -17,6 +22,17 @@ async def move_files(upload_path, dataset_path):
                 dataset_path, os.path.relpath(filename, start=upload_path)
             )
             pathlib.Path(target).parent.mkdir(parents=True, exist_ok=True)
+            # Avoid reuploading dropped files
+            if os.path.islink(target):
+                link_path = os.readlink(target)
+                annex_key = os.path.basename(link_path)
+                match = annex_key_re.match(annex_key)
+                if match:
+                    key_size = int(match.group('size'))
+                    source_size = os.path.getsize(filename)
+                    if key_size == source_size:
+                        # This is the same size file, we can skip moving it
+                        continue
             await aioshutil.move(str(filename), target)
 
 
