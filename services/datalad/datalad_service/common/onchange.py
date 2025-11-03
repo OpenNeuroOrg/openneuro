@@ -8,4 +8,4 @@ async def on_head(dataset_path):
 
 async def on_tag(dataset_path, tag):
     """Called after any new tag."""
-    await git_annex_fsck_remote.kiq(dataset_path, tag)
+    pass
