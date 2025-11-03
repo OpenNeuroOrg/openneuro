@@ -1,9 +1,9 @@
 import React from "react"
-import type { MappedNotification } from "../types/event-types"
-import { StatusActionButton } from "./components/status-action-buttons"
-import iconUnread from "../../assets/icon-unread.png"
-import iconSaved from "../../assets/icon-saved.png"
-import iconArchived from "../../assets/icon-archived.png"
+import type { MappedNotification } from "../../types/event-types"
+import { StatusActionButton } from "./status-action-buttons"
+import iconUnread from "../../../assets/icon-unread.png"
+import iconSaved from "../../../assets/icon-saved.png"
+import iconArchived from "../../../assets/icon-archived.png"
 import styles from "./scss/usernotifications.module.scss"
 
 interface NotificationActionButtonsProps {
@@ -24,61 +24,29 @@ export const NotificationActionButtons: React.FC<
   handleProcessAction,
   handleStatusChange,
 }) => {
-  const { status, type, approval } = notification
-  const isContributorRequest = type === "approval"
-  const isCitationRequest = type === "citationRequest"
+  const { status, approval } = notification
+  const needsReview = notification.needsReview
   return (
     <div className={styles.actions}>
-      {isContributorRequest && (
+      {needsReview && (
         <>
-          {approval !== "denied" && (
-            <button
-              className={`${styles.notificationapprove} ${
-                approval === "accepted" ? styles.active : ""
-              }`}
-              onClick={() => handleProcessAction("accepted")}
-              disabled={approval === "accepted" || isProcessing}
-            >
-              <i className="fa fa-check" />{" "}
-              {approval === "accepted" ? "Accepted" : "Accept"}
-            </button>
-          )}
+          <button
+            className={`${styles.notificationapprove}`}
+            onClick={() => handleProcessAction("accepted")}
+            disabled={approval === "accepted" || isProcessing}
+          >
+            <i className="fa fa-check" /> Accept
+          </button>
 
-          {approval !== "accepted" && (
-            <button
-              className={`${styles.notificationdeny} ${
-                approval === "denied" ? styles.active : ""
-              }`}
-              onClick={() => handleProcessAction("denied")}
-              disabled={approval === "denied" || isProcessing}
-            >
-              <i className="fa fa-times" />{" "}
-              {approval === "denied" ? "Denied" : "Deny"}
-            </button>
-          )}
+          <button
+            className={`${styles.notificationdeny}`}
+            onClick={() => handleProcessAction("denied")}
+            disabled={approval === "denied" || isProcessing}
+          >
+            <i className="fa fa-times" /> Deny
+          </button>
         </>
       )}
-
-      {isCitationRequest && approval !== "accepted" && approval !== "denied" &&
-        (
-          <>
-            <button
-              className={`${styles.notificationapprove}`}
-              onClick={() => handleProcessAction("accepted")}
-              disabled={isProcessing}
-            >
-              <i className="fa fa-check" /> Accept
-            </button>
-
-            <button
-              className={`${styles.notificationdeny}`}
-              onClick={() => handleProcessAction("denied")}
-              disabled={isProcessing}
-            >
-              <i className="fa fa-times" /> Deny
-            </button>
-          </>
-        )}
 
       {status === "unread" && (
         <>

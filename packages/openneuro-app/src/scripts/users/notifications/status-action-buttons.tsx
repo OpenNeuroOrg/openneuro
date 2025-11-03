@@ -1,6 +1,6 @@
 import React from "react"
 import { Tooltip } from "../../components/tooltip/Tooltip"
-import styles from "../scss/usernotifications.module.scss"
+import styles from "./scss/usernotifications.module.scss"
 
 interface StatusActionButtonProps {
   status: "unread" | "saved" | "archived"

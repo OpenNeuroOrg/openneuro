@@ -7,18 +7,18 @@ import {
   useParams,
 } from "react-router-dom"
 import styles from "./scss/usernotifications.module.scss"
-import iconUnread from "../../assets/icon-unread.png"
-import iconSaved from "../../assets/icon-saved.png"
-import iconArchived from "../../assets/icon-archived.png"
-import { useUser } from "../queries/user"
-import { Loading } from "../components/loading/Loading"
+import iconUnread from "../../../assets/icon-unread.png"
+import iconSaved from "../../../assets/icon-saved.png"
+import iconArchived from "../../../assets/icon-archived.png"
+import { useUser } from "../../queries/user"
+import { Loading } from "../../components/loading/Loading"
 import * as Sentry from "@sentry/react"
-import { mapRawEventToMappedNotification } from "../types/event-types"
+import { mapRawEventToMappedNotification } from "../../types/event-types"
 import {
   NotificationsProvider,
   useNotifications,
 } from "./user-notifications-context"
-import type { UserNotificationsViewProps } from "../types/user-types"
+import type { UserNotificationsViewProps } from "../../types/user-types"
 
 export const UserNotificationsView: React.FC<UserNotificationsViewProps> = (
   { orcidUser },

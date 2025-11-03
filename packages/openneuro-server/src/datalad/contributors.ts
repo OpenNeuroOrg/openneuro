@@ -84,7 +84,7 @@ export const contributors = async (
         givenName: undefined,
         familyName: undefined,
         orcid: undefined,
-        contributorType: "Contributor",
+        contributorType: "Researcher",
         order: index + 1,
         userId: undefined,
       }))

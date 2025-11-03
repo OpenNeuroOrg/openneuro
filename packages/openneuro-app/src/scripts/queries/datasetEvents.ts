@@ -117,28 +117,26 @@ export const DATASET_EVENTS_QUERY = gql`
   }
 `
 
-export const PROCESS_CONTRIBUTOR_CITATION_MUTATION = gql`
-  mutation ProcessContributorCitation(
-    $eventId: ID!
-    $status: String!
-    $reason: String
+export const CREATE_CONTRIBUTOR_CITATION_EVENT = gql`
+  mutation CreateContributorCitationEvent(
+    $datasetId: ID!
+    $targetUserId: ID!
+    $contributorData: ContributorInput!
   ) {
-    processContributorCitation(
-      eventId: $eventId
-      status: $status
-      reason: $reason
+    createContributorCitationEvent(
+      datasetId: $datasetId
+      targetUserId: $targetUserId
+      contributorData: $contributorData
     ) {
       id
       timestamp
       success
-      note
       user {
         id
         name
       }
       event {
         type
-        targetUserId
         resolutionStatus
         contributorData {
           name
@@ -148,6 +146,34 @@ export const PROCESS_CONTRIBUTOR_CITATION_MUTATION = gql`
           contributorType
           order
         }
+      }
+      note
+    }
+  }
+`
+
+export const PROCESS_CONTRIBUTOR_CITATION_MUTATION = gql`
+  mutation ProcessContributorCitation($eventId: ID!, $status: String!) {
+    processContributorCitation(eventId: $eventId, status: $status) {
+      id
+      timestamp
+      success
+      user {
+        id
+        name
+      }
+      event {
+        type
+        targetUserId
+        contributorData {
+          name
+          givenName
+          familyName
+          orcid
+          contributorType
+          order
+        }
+        resolutionStatus
       }
     }
   }
