@@ -70,6 +70,10 @@ def setup_s3_sibling(dataset_path):
         + generate_s3_annex_options(dataset_path),
         cwd=dataset_path,
     )
+
+
+def setup_s3_backup_sibling(dataset_path):
+    """Add a sibling for an S3 backup bucket."""
     # Backup remote
     subprocess.run(
         ['git-annex', 'initremote', get_s3_backup_remote()]
