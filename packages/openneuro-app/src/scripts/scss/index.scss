@@ -4,3 +4,15 @@
 @import './dataset/dropdown.scss';
 @import './dataset/validation.scss';
 @import './dataset/version-dropdown.scss';
+
+.maintenance-notice {
+  background-color: #fff3cd;
+  border: 1px solid #ffeeba;
+  padding: 10px;
+  border-radius: 4px;
+  text-align: center;
+
+  h4 {
+    margin: 0;
+  }
+}
