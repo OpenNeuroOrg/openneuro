@@ -58,14 +58,14 @@ def s3_sibling(dataset_path):
 
 
 @broker.task
-def create_remotes_and_export(dataset_path):
+async def create_remotes_and_export(dataset_path):
     """
     Create public S3 and GitHub remotes and export to them.
 
     Called by publish handler to make a dataset public initially.
     """
     create_remotes(dataset_path)
-    export_dataset(dataset_path)
+    await export_dataset(dataset_path)
 
 
 def create_remotes(dataset_path):
