@@ -140,7 +140,6 @@ def s3_export(dataset_path, target, treeish):
 
 def s3_backup_push(dataset_path):
     """Perform an S3 push to the backup remote on a git-annex repo."""
-    print(backup_remote_env())
     subprocess.check_call(
         ['git-annex', 'push', get_s3_backup_remote()],
         cwd=dataset_path,
