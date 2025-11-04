@@ -57,7 +57,7 @@ def s3_sibling(dataset_path):
     if not is_git_annex_remote(dataset_path, get_s3_remote()):
         datalad_service.common.s3.setup_s3_sibling(dataset_path)
     if not is_git_annex_remote(dataset_path, get_s3_backup_remote()):
-        datalad_service.common.s3.setup_s3_backup_sibling(dataset_path)
+        datalad_service.common.s3.setup_s3_backup_sibling_workaround(dataset_path)
 
 
 @broker.task

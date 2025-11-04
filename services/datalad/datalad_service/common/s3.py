@@ -1,7 +1,11 @@
 import os
 import subprocess
 
+import boto3
+from botocore.config import Config
+
 import datalad_service.config
+from datalad_service.common.annex import annex_initremote
 
 
 class S3ConfigException(Exception):
@@ -59,6 +63,13 @@ def backup_remote_env():
     backup_remote_env['AWS_SECRET_ACCESS_KEY'] = backup_remote_env[
         'GCP_SECRET_ACCESS_KEY'
     ]
+    # Overwrite the AWS keys with the GCP keys from config
+    backup_remote_env['AWS_ACCESS_KEY_ID'] = getattr(
+        datalad_service.config, 'GCP_ACCESS_KEY_ID'
+    )
+    backup_remote_env['AWS_SECRET_ACCESS_KEY'] = getattr(
+        datalad_service.config, 'GCP_SECRET_ACCESS_KEY'
+    )
     return backup_remote_env
 
 
@@ -78,6 +89,43 @@ def setup_s3_backup_sibling(dataset_path):
     subprocess.run(
         ['git-annex', 'initremote', get_s3_backup_remote()]
         + generate_s3_annex_options(dataset_path, backup=True),
+        cwd=dataset_path,
+        env=backup_remote_env(),
+    )
+
+
+def setup_s3_backup_sibling_workaround(dataset_path):
+    """setup_s3_backup_sibling with workaround for git-annex bug."""
+    dataset_id = os.path.basename(dataset_path)
+    uuid = annex_initremote(
+        dataset_path,
+        get_s3_backup_remote(),
+        generate_s3_annex_options(dataset_path, backup=True),
+    )
+    # Manually upload the remote uuid file to the bucket
+    aws_access_key_id = getattr(datalad_service.config, 'GCP_ACCESS_KEY_ID')
+    aws_secret_access_key = getattr(datalad_service.config, 'GCP_SECRET_ACCESS_KEY')
+    gcp_config = Config(
+        region_name='auto',
+        signature_version='s3v4',
+        # This is required for GCP compatibility with boto3
+        request_checksum_calculation='when_required',
+    )
+    s3 = boto3.client(
+        's3',
+        aws_access_key_id=aws_access_key_id,
+        aws_secret_access_key=aws_secret_access_key,
+        endpoint_url='https://storage.googleapis.com',
+        config=gcp_config,
+    )
+    s3.put_object(
+        Bucket=get_s3_backup_bucket(),
+        Key=f'{dataset_id}/annex-uuid',
+        Body=uuid.encode('utf-8'),
+    )
+    # Enableremote after
+    subprocess.run(
+        ['git-annex', 'enableremote', get_s3_backup_remote()],
         cwd=dataset_path,
         env=backup_remote_env(),
     )

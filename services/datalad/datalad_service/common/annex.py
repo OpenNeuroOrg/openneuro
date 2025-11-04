@@ -5,6 +5,8 @@ from mmap import mmap
 import subprocess
 import os
 import urllib.parse
+import time
+import uuid
 
 import aiofiles
 import pygit2
@@ -20,6 +22,12 @@ S3_BUCKETS_WHITELIST = [
     'openneuro-derivatives',
     'bobsrepository',
 ]
+
+
+class InitRemoteException(Exception):
+    """Raised when git-annex initremote fails."""
+
+    pass
 
 
 class EditAnnexedFileException(Exception):
@@ -380,3 +388,52 @@ def test_key_remote(dataset_path, key, remote_name='s3-PUBLIC'):
                 if remote['uuid'] in line:
                     return parse_rmet_line(remote, line)
     return None
+
+
+def annex_initremote(dataset_path, remote_name, remote_options):
+    """Initialize a git-annex remote manually."""
+    remote_uuid = str(uuid.uuid4())
+    repo = pygit2.Repository(dataset_path)
+    branch = repo.branches.get('git-annex')
+    if not branch:
+        raise InitRemoteException('git-annex branch not found')
+    commit = branch.peel()
+    tree = commit.tree
+    # Read remote.log
+    file_content = ''
+    log_entry = None
+    try:
+        # Check if 'remote.log' exists in the tree
+        log_entry = tree['remote.log']
+        blob = repo.get(log_entry.id)
+
+        # Ensure file is not binary
+        if not blob.is_binary:
+            file_content = blob.data.decode('utf-8')
+        else:
+            raise InitRemoteException("'remote.log' is a binary file, cannot read.")
+    except KeyError:
+        # 'remote.log' doesn't exist yet, we'll create it.
+        file_content = ''  # Ensure it's an empty string
+
+    new_content = (
+        file_content
+        + f'{remote_uuid} name={remote_name} timestamp={int(time.time())}s '
+        + ' '.join(remote_options)
+    )
+    new_blob_oid = repo.create_blob(new_content.encode('utf-8'))
+    builder = repo.TreeBuilder(tree)
+    builder.insert('remote.log', new_blob_oid, pygit2.GIT_FILEMODE_BLOB)
+    new_tree_oid = builder.write()
+    author = pygit2.Signature(SERVICE_USER, SERVICE_EMAIL)
+    committer = pygit2.Signature(SERVICE_USER, SERVICE_EMAIL)
+    commit_message = f'[OpenNeuro] Initialize git-annex remote {remote_name}'
+    repo.create_commit(
+        branch.name,  # The ref to update (our branch)
+        author,  # The commit author
+        committer,  # The commit committer
+        commit_message,  # The commit message
+        new_tree_oid,  # The OID of the new tree
+        [commit.id],  # List of parent commit OIDs
+    )
+    return remote_uuid
