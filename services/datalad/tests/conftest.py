@@ -107,6 +107,12 @@ def new_dataset(datalad_store):
 class MockResponse:
     status_code = 200
 
+    def raise_for_status(self):
+        pass
+
+    def json(self):
+        return {}
+
 
 @pytest.fixture(autouse=True)
 def no_posts(monkeypatch):
