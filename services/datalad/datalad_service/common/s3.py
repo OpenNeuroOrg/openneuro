@@ -58,18 +58,13 @@ def generate_s3_annex_options(dataset_path, backup=False):
 def backup_remote_env():
     """Copy and modify the environment for setup/modification of backup remote settings."""
     backup_remote_env = os.environ.copy()
-    # Overwrite the AWS keys with the GCP key
-    backup_remote_env['AWS_ACCESS_KEY_ID'] = backup_remote_env['GCP_ACCESS_KEY_ID']
-    backup_remote_env['AWS_SECRET_ACCESS_KEY'] = backup_remote_env[
-        'GCP_SECRET_ACCESS_KEY'
-    ]
-    # Overwrite the AWS keys with the GCP keys from config
-    backup_remote_env['AWS_ACCESS_KEY_ID'] = getattr(
-        datalad_service.config, 'GCP_ACCESS_KEY_ID'
-    )
-    backup_remote_env['AWS_SECRET_ACCESS_KEY'] = getattr(
-        datalad_service.config, 'GCP_SECRET_ACCESS_KEY'
-    )
+    gcp_access_key_id = getattr(datalad_service.config, 'GCP_ACCESS_KEY_ID')
+    gcp_secret_access_key = getattr(datalad_service.config, 'GCP_SECRET_ACCESS_KEY')
+    if gcp_access_key_id:
+        backup_remote_env['AWS_ACCESS_KEY_ID'] = gcp_access_key_id
+    if gcp_secret_access_key:
+        backup_remote_env['AWS_SECRET_ACCESS_KEY'] = gcp_secret_access_key
+
     return backup_remote_env
 
 
