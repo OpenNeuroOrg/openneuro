@@ -47,6 +47,8 @@ async def validate_dataset_deno_call(dataset_path, ref, logger=logger):
     """
     # Sync to packages/openneuro-app/src/scripts/workers/schema.worker.ts
     config_path = Path(__file__).parent / 'assets' / 'validator-config.json'
+    # Use an extended schema with datacite.yml allowed for now
+    schema_path = Path(__file__).parent / 'assets' / 'schema-1.1.1-datacite.json'
     return await run_and_decode(
         [
             'deno',
@@ -61,6 +63,8 @@ async def validate_dataset_deno_call(dataset_path, ref, logger=logger):
             'micr',
             '--datasetTypes',
             'raw,derivative',
+            '--schema',
+            f'file://{str(schema_path)}',
         ],
         logger=logger,
     )

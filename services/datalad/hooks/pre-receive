@@ -37,7 +37,8 @@ readonly WHITELIST=".bidsignore
 **/.gitattributes
 **/.gitignore
 .datalad/.gitattributes
-.datalad/config"
+.datalad/config
+datacite.yml"
 
 function validateGitAttributes() {
   # Find .gitattributes file

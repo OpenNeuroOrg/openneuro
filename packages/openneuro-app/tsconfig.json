@@ -6,5 +6,9 @@
     "tsBuildInfoFile": "../../.build-cache/app.tsbuildinfo"
   },
   "include": ["./src"],
-  "files": ["./src/lerna.json", "./src/scripts/workers/validator-config.json"]
+  "files": [
+    "./src/lerna.json",
+    "./src/scripts/workers/validator-config.json",
+    "./src/scripts/workers/schema-1.1.1-datacite.json"
+  ]
 }
