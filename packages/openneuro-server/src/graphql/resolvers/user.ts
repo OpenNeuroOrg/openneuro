@@ -314,6 +314,15 @@ export async function notifications(obj, _, { userInfo }) {
       case "contributorRequestResponse":
       case "contributorCitationResponse":
         return isDatasetAdmin || isTargetUser
+      // Reduce the notification noise by hiding non-actionable events
+      case "created":
+      case "versioned":
+      case "deleted":
+      case "published":
+      case "permissionChange":
+      case "git":
+      case "upload":
+        return false
       default:
         return isDatasetAdmin
     }
