@@ -17,7 +17,7 @@ RUN mkdir -p /root/.ssh \
 # Install Deno the Dockery-but-hacky-way
 COPY --from=deno /deno /usr/local/bin/deno
 
-RUN uv tool install git-annex==10.20250520b7
+RUN uv tool install git-annex==10.20250929
 
 COPY . /srv
 
