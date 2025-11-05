@@ -42,7 +42,7 @@ export const NotificationHeader: React.FC<NotificationHeaderProps> = ({
               <>
                 <Username user={adminUser} /> {title}{" "}
                 <Username user={targetUser} />
-                {" be added to "}
+                {" as a contributor to "}
               </>
             )
             : (
@@ -63,7 +63,7 @@ export const NotificationHeader: React.FC<NotificationHeaderProps> = ({
           <a href={datasetLink} className={styles.titlelink}>
             {datasetId}
           </a>{" "}
-          {resStatus}
+          {type != "contributorCitation" ? resStatus : ""}
         </span>
       )
     }

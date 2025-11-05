@@ -348,6 +348,8 @@ export async function updateEventStatus(obj, { eventId, status }, { user }) {
 
 /**
  * Create a 'contributor citation' event
+ * Immediately adds the contributor to datacite.yml
+ * Automatically sets the resolutionStatus to 'accepted'
  */
 export async function createContributorCitationEvent(
   obj,
@@ -373,6 +375,39 @@ export async function createContributorCitationEvent(
     contributorType: contributorData.contributorType || "Researcher",
   }
 
+  // --- Immediately add to datacite.yml ---
+  const existingDatacite = await getDataciteYml(datasetId)
+  const existingContributors = existingDatacite?.data.attributes.contributors ||
+    []
+
+  const mappedExisting: Contributor[] = existingContributors.map((
+    c,
+    index,
+  ) => ({
+    name: c.name || "Unknown Contributor",
+    givenName: c.givenName || "",
+    familyName: c.familyName || "",
+    orcid: c.nameIdentifiers?.[0]?.nameIdentifier,
+    contributorType: c.contributorType || "Researcher",
+    order: index + 1,
+  }))
+
+  const newContributor: Contributor = {
+    name: finalContributorData.name || "Unknown Contributor",
+    givenName: finalContributorData.givenName || "",
+    familyName: finalContributorData.familyName || "",
+    orcid: finalContributorData.orcid,
+    contributorType: finalContributorData.contributorType || "Researcher",
+    order: mappedExisting.length + 1,
+  }
+
+  await updateContributorsUtil(
+    datasetId,
+    [...mappedExisting, newContributor],
+    user,
+  )
+
+  // --- Log dataset event ---
   const event = new DatasetEvent({
     datasetId,
     userId: user,
@@ -382,7 +417,7 @@ export async function createContributorCitationEvent(
       addedBy: user,
       targetUserId,
       contributorData: finalContributorData,
-      resolutionStatus: "pending",
+      resolutionStatus: "accepted", // auto-approved
     },
     success: true,
     note: `User ${user} added a contributor citation for user ${targetUserId}.`,
@@ -390,11 +425,13 @@ export async function createContributorCitationEvent(
 
   await event.save()
   await event.populate("user")
+
   return event
 }
 
 /**
  * Process a contributor citation (accept or deny)
+ * No longer updates datacite.yml — only logs a response event
  */
 export async function processContributorCitation(
   obj,
@@ -432,6 +469,7 @@ export async function processContributorCitation(
   citationEvent.event.resolutionStatus = status
   await citationEvent.save()
 
+  // --- Only log response event ---
   const responseEvent = new DatasetEvent({
     datasetId: citationEvent.datasetId,
     userId: user,
@@ -451,44 +489,6 @@ export async function processContributorCitation(
 
   await responseEvent.save()
   await responseEvent.populate("user")
-
-  if (status === "accepted") {
-    const { contributorData } = citationEvent.event
-    if (!contributorData) {
-      throw new Error("Contributor data missing in citation event.")
-    }
-
-    const existingDatacite = await getDataciteYml(citationEvent.datasetId)
-    const existingContributors =
-      existingDatacite?.data.attributes.contributors || []
-
-    const mappedExisting: Contributor[] = existingContributors.map((
-      c,
-      index,
-    ) => ({
-      name: c.name || "Unknown Contributor",
-      givenName: c.givenName || "",
-      familyName: c.familyName || "",
-      orcid: c.nameIdentifiers?.[0]?.nameIdentifier,
-      contributorType: c.contributorType || "Researcher",
-      order: index + 1,
-    }))
-
-    const newContributor: Contributor = {
-      name: contributorData.name || "Unknown Contributor",
-      givenName: contributorData.givenName || "",
-      familyName: contributorData.familyName || "",
-      orcid: contributorData.orcid,
-      contributorType: contributorData.contributorType || "Researcher",
-      order: mappedExisting.length + 1,
-    }
-
-    await updateContributorsUtil(
-      citationEvent.datasetId,
-      [...mappedExisting, newContributor],
-      user,
-    )
-  }
 
   return responseEvent
 }

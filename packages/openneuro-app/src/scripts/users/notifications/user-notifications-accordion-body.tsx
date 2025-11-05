@@ -58,6 +58,15 @@ export const NotificationBodyContent: React.FC<NotificationBodyContentProps> = (
     )
   }
 
+  if (approval === "accepted" && isContributorCitation) {
+    return (
+      <div>
+        The following user has been added as a contributor to {datasetId}.
+        {renderContribInfo()}
+      </div>
+    )
+  }
+
   if (approval === "accepted" && isContributorRequest) {
     return (
       <div>
