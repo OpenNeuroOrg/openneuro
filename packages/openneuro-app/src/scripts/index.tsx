@@ -46,6 +46,13 @@ const Index: React.FC = () => {
           <NotificationsProvider initialNotifications={initialNotifications}>
             <div className="sticky-content">
               <HeaderContainer />
+              <div className="maintenance-notice">
+                <h4>
+                  Maintenance Notice: OpenNeuro will be undergoing scheduled
+                  maintenance from November 12th to November 26th and uploads
+                  may be temporarily disabled during this period.
+                </h4>
+              </div>
               <AppRoutes />
             </div>
           </NotificationsProvider>
