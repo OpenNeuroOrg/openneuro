@@ -3946,7 +3946,7 @@ const RAW_RUNTIME_STATE =
           ["typescript", "patch:typescript@npm%3A5.6.3#optional!builtin<compat/typescript>::version=5.6.3&hash=8c6c40"],\
           ["universal-cookie", "npm:4.0.4"],\
           ["vite", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:7.1.7"],\
-          ["vite-plugin-node-polyfills", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:0.24.0"],\
+          ["vite-plugin-node-polyfills", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:0.17.0"],\
           ["vitest", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:3.2.4"]\
         ],\
         "linkType": "SOFT"\
@@ -5752,11 +5752,11 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "SOFT"\
       }],\
-      ["virtual:2d3e02ee458dbfe31f52b8f0e8d739df21cc20c812db9f4c3d4af9d21975d31d5ba40e310dd3b9b377726e078fe8575569f1ef9e2c8f3a6333bcbfcaf799fc8f#npm:5.0.5", {\
-        "packageLocation": "./.yarn/__virtual__/@rollup-plugin-inject-virtual-db671ca5f4/0/cache/@rollup-plugin-inject-npm-5.0.5-06525e4573-1d0e68dff0.zip/node_modules/@rollup/plugin-inject/",\
+      ["virtual:e5931db16762c46ecf3a64ff1024ce5451a0ad628e1cbcda9fa9d572a33c8176beccbd8d20a13f10d8011084dcf8deb55bf7a96c66d8e77593a53f427bd00811#npm:5.0.5", {\
+        "packageLocation": "./.yarn/__virtual__/@rollup-plugin-inject-virtual-0fb7df719d/0/cache/@rollup-plugin-inject-npm-5.0.5-06525e4573-1d0e68dff0.zip/node_modules/@rollup/plugin-inject/",\
         "packageDependencies": [\
-          ["@rollup/plugin-inject", "virtual:2d3e02ee458dbfe31f52b8f0e8d739df21cc20c812db9f4c3d4af9d21975d31d5ba40e310dd3b9b377726e078fe8575569f1ef9e2c8f3a6333bcbfcaf799fc8f#npm:5.0.5"],\
-          ["@rollup/pluginutils", "virtual:db671ca5f49578d8168761768d3532e2f7eb15357b9f4590851c6c20e1ea087347cd0d144cc979b85ee95567549a3f11e0f50d42d886e7d7c0b58c6d156ff360#npm:5.0.2"],\
+          ["@rollup/plugin-inject", "virtual:e5931db16762c46ecf3a64ff1024ce5451a0ad628e1cbcda9fa9d572a33c8176beccbd8d20a13f10d8011084dcf8deb55bf7a96c66d8e77593a53f427bd00811#npm:5.0.5"],\
+          ["@rollup/pluginutils", "virtual:0fb7df719de1e6f2680e165bd7195fff297b4360aaa3be785a4b8e616c4e6d20290a1dc45beabad529bda1de029b8793bb1bbe06694c5253b703b772305dc29c#npm:5.0.2"],\
           ["@types/rollup", null],\
           ["estree-walker", "npm:2.0.2"],\
           ["magic-string", "npm:0.30.19"],\
@@ -5777,10 +5777,10 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "SOFT"\
       }],\
-      ["virtual:db671ca5f49578d8168761768d3532e2f7eb15357b9f4590851c6c20e1ea087347cd0d144cc979b85ee95567549a3f11e0f50d42d886e7d7c0b58c6d156ff360#npm:5.0.2", {\
-        "packageLocation": "./.yarn/__virtual__/@rollup-pluginutils-virtual-a59083901c/0/cache/@rollup-pluginutils-npm-5.0.2-6aa9d0ddd4-7aebf04d5d.zip/node_modules/@rollup/pluginutils/",\
+      ["virtual:0fb7df719de1e6f2680e165bd7195fff297b4360aaa3be785a4b8e616c4e6d20290a1dc45beabad529bda1de029b8793bb1bbe06694c5253b703b772305dc29c#npm:5.0.2", {\
+        "packageLocation": "./.yarn/__virtual__/@rollup-pluginutils-virtual-ab6b96df8c/0/cache/@rollup-pluginutils-npm-5.0.2-6aa9d0ddd4-7aebf04d5d.zip/node_modules/@rollup/pluginutils/",\
         "packageDependencies": [\
-          ["@rollup/pluginutils", "virtual:db671ca5f49578d8168761768d3532e2f7eb15357b9f4590851c6c20e1ea087347cd0d144cc979b85ee95567549a3f11e0f50d42d886e7d7c0b58c6d156ff360#npm:5.0.2"],\
+          ["@rollup/pluginutils", "virtual:0fb7df719de1e6f2680e165bd7195fff297b4360aaa3be785a4b8e616c4e6d20290a1dc45beabad529bda1de029b8793bb1bbe06694c5253b703b772305dc29c#npm:5.0.2"],\
           ["@types/estree", "npm:1.0.1"],\
           ["@types/rollup", null],\
           ["estree-walker", "npm:2.0.2"],\
@@ -26117,21 +26117,26 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["vite-plugin-node-polyfills", [\
-      ["npm:0.24.0", {\
-        "packageLocation": "./.yarn/cache/vite-plugin-node-polyfills-npm-0.24.0-5a6a5794e5-9c85b94bd7.zip/node_modules/vite-plugin-node-polyfills/",\
+      ["npm:0.17.0", {\
+        "packageLocation": "./.yarn/cache/vite-plugin-node-polyfills-npm-0.17.0-a35098c3fc-2e0f7c611a.zip/node_modules/vite-plugin-node-polyfills/",\
         "packageDependencies": [\
-          ["vite-plugin-node-polyfills", "npm:0.24.0"]\
+          ["vite-plugin-node-polyfills", "npm:0.17.0"]\
         ],\
         "linkType": "SOFT"\
       }],\
-      ["virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:0.24.0", {\
-        "packageLocation": "./.yarn/__virtual__/vite-plugin-node-polyfills-virtual-2d3e02ee45/0/cache/vite-plugin-node-polyfills-npm-0.24.0-5a6a5794e5-9c85b94bd7.zip/node_modules/vite-plugin-node-polyfills/",\
+      ["virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:0.17.0", {\
+        "packageLocation": "./.yarn/__virtual__/vite-plugin-node-polyfills-virtual-e5931db167/0/cache/vite-plugin-node-polyfills-npm-0.17.0-a35098c3fc-2e0f7c611a.zip/node_modules/vite-plugin-node-polyfills/",\
         "packageDependencies": [\
-          ["@rollup/plugin-inject", "virtual:2d3e02ee458dbfe31f52b8f0e8d739df21cc20c812db9f4c3d4af9d21975d31d5ba40e310dd3b9b377726e078fe8575569f1ef9e2c8f3a6333bcbfcaf799fc8f#npm:5.0.5"],\
+          ["@rollup/plugin-inject", "virtual:e5931db16762c46ecf3a64ff1024ce5451a0ad628e1cbcda9fa9d572a33c8176beccbd8d20a13f10d8011084dcf8deb55bf7a96c66d8e77593a53f427bd00811#npm:5.0.5"],\
           ["@types/vite", null],\
+          ["buffer-polyfill", [\
+            "buffer",\
+            "npm:6.0.3"\
+          ]],\
           ["node-stdlib-browser", "npm:1.3.1"],\
+          ["process", "npm:0.11.10"],\
           ["vite", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:7.1.7"],\
-          ["vite-plugin-node-polyfills", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:0.24.0"]\
+          ["vite-plugin-node-polyfills", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:0.17.0"]\
         ],\
         "packagePeers": [\
           "@types/vite",\
