@@ -90,7 +90,11 @@ describe("ContributorsListDisplay", () => {
   // Mock getProfile so hasEdit === true
   beforeEach(() => {
     vi.spyOn(profileModule, "getProfile").mockReturnValue({
+      sub: "123",
       email: "test@example.com",
+      admin: false,
+      iat: Math.floor(Date.now() / 1000),
+      exp: Math.floor(Date.now() / 1000) + 3600,
     })
   })
 
