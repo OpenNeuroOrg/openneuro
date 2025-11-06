@@ -49,8 +49,8 @@ const Index: React.FC = () => {
               <div className="maintenance-notice">
                 <h4>
                   Maintenance Notice: OpenNeuro will be undergoing scheduled
-                  maintenance from November 12th to November 26th and uploads
-                  may be temporarily disabled during this period.
+                  maintenance from November 12th to November 26th and new
+                  uploads may be temporarily unavailable during this period.
                 </h4>
               </div>
               <AppRoutes />
