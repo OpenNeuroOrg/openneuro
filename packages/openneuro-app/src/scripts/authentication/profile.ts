@@ -3,6 +3,7 @@ import jwtDecode from "jwt-decode"
 export interface OpenNeuroTokenProfile {
   sub: string
   admin: boolean
+  email?: string
   iat: number
   exp: number
   scopes?: string[]

@@ -98,7 +98,7 @@ export const mapRawEventToMappedNotification = (
       needsReview = approval === "pending"
       break
     case "contributorCitation":
-      title = "is requesting"
+      title = "added"
       adminUser = user
       // fallback to rawNotification.user if target is missing (but not the admin)
       targetUser = target ||

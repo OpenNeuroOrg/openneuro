@@ -95,13 +95,9 @@ export const users = async (
   },
   context: GraphQLContext,
 ) => {
-  // --- check admin ---
-  if (!context.userInfo?.admin) {
-    return Promise.reject(
-      new Error("You must be a site admin to retrieve users"),
-    )
-  }
+  const isSiteAdmin = context.userInfo?.admin === true
 
+  // Build filter for all users (admin or not)
   const filter: {
     admin?: MongoQueryOperator<boolean>
     blocked?: MongoQueryOperator<boolean>
@@ -120,6 +116,7 @@ export const users = async (
     filter.$or = [
       { name: { $regex: search, $options: "i" } },
       { email: { $regex: search, $options: "i" } },
+      { orcid: { $regex: search, $options: "i" } },
     ]
   }
 
@@ -148,9 +145,18 @@ export const users = async (
 
   const users = await query.exec()
 
+  // If the requester is not a site admin, hide sensitive fields
+  const sanitizedUsers = isSiteAdmin ? users : users.map((u) => {
+    const obj = u.toObject()
+    obj.email = null
+    obj.blocked = null
+    obj.admin = null
+    return obj
+  })
+
   return {
-    users: users,
-    totalCount: totalCount,
+    users: sanitizedUsers,
+    totalCount,
   }
 }
 
