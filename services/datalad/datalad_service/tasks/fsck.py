@@ -86,10 +86,9 @@ def git_annex_fsck_remote(dataset_path, branch=None, remote='s3-PUBLIC'):
         'fsck',
         f'--branch={branch}',
         '--from={remote}',
-        '--fast',
         '--json',
         '--json-error-messages',
-        '--incremental-schedule=7d',
+        '--incremental-schedule=30d',
     )
     annex_process = subprocess.Popen(
         annex_command, cwd=dataset_path, stdout=subprocess.PIPE
