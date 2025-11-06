@@ -133,9 +133,24 @@ describe("user resolvers", () => {
   })
 
   describe("users()", () => {
-    it("rejects data for non-admin context", async () => {
-      await expect(users(null, {}, nonAdminContext)).rejects.toThrow(
-        "You must be a site admin to retrieve users",
+    it("returns sanitized data for non-admin context", async () => {
+      const result = await users(null, {}, nonAdminContext)
+
+      // Should return all non-migrated users (same as admin)
+      expect(result.users.length).toBe(6)
+      expect(result.totalCount).toBe(6)
+
+      // Sensitive fields should be hidden
+      result.users.forEach((u) => {
+        expect(u.email).toBeNull()
+        expect(u.blocked).toBeNull()
+        expect(u.admin).toBeNull()
+      })
+
+      // Non-sensitive fields should still be populated
+      const userIds = result.users.map((u) => u.id)
+      expect(userIds).toEqual(
+        expect.arrayContaining(["u1", "u2", "u3", "u4", "u6", "u7"]),
       )
     })
 

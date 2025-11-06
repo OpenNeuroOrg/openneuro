@@ -4,6 +4,8 @@ import { MockedProvider } from "@apollo/client/testing"
 import { ContributorsListDisplay } from "../contributors-list"
 import { GET_USERS } from "../../queries/users"
 import type { Contributor } from "../../types/datacite"
+import * as profileModule from "../../authentication/profile"
+import { vi } from "vitest"
 
 describe("ContributorsListDisplay", () => {
   const baseContributors: Contributor[] = [
@@ -34,13 +36,15 @@ describe("ContributorsListDisplay", () => {
       result: {
         data: {
           users: {
-            users: [{
-              id: "1",
-              name: "Jane Doe",
-              avatar: "",
-              orcid: "",
-              __typename: "User",
-            }],
+            users: [
+              {
+                id: "1",
+                name: "Jane Doe",
+                avatar: "",
+                orcid: "",
+                __typename: "User",
+              },
+            ],
             totalCount: 1,
             __typename: "UsersResponse",
           },
@@ -55,13 +59,15 @@ describe("ContributorsListDisplay", () => {
       result: {
         data: {
           users: {
-            users: [{
-              id: "2",
-              name: "John Smith",
-              avatar: "",
-              orcid: "",
-              __typename: "User",
-            }],
+            users: [
+              {
+                id: "2",
+                name: "John Smith",
+                avatar: "",
+                orcid: "",
+                __typename: "User",
+              },
+            ],
             totalCount: 1,
             __typename: "UsersResponse",
           },
@@ -81,6 +87,13 @@ describe("ContributorsListDisplay", () => {
     },
   ]
 
+  // Mock getProfile so hasEdit === true
+  beforeEach(() => {
+    vi.spyOn(profileModule, "getProfile").mockReturnValue({
+      email: "test@example.com",
+    })
+  })
+
   const renderComponent = (props = {}) =>
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
@@ -95,14 +108,12 @@ describe("ContributorsListDisplay", () => {
 
   it("renders contributors list", async () => {
     renderComponent()
-    // Match Jane Doe
     expect(
       await screen.findByText((content) =>
         ["Jane", "Doe"].every((part) => content.includes(part))
       ),
     ).toBeInTheDocument()
 
-    // Match John Smith
     expect(
       screen.getByText((content) =>
         ["John", "Smith"].every((part) => content.includes(part))
@@ -136,9 +147,10 @@ describe("ContributorsListDisplay", () => {
     const addButton = await screen.findByText("Add Contributor")
     fireEvent.click(addButton)
 
-    expect(
-      await screen.findAllByPlaceholderText("Type name or ORCID (or add new)"),
-    ).toHaveLength(3)
+    const nameInputs = await screen.findAllByPlaceholderText(
+      "Type name or ORCID (or add new)",
+    )
+    expect(nameInputs).toHaveLength(3)
   })
 
   it("shows an error when trying to submit with empty name", async () => {
