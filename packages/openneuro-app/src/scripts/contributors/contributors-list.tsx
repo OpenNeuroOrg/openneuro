@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from "react"
+import { toast } from "react-toastify"
 import { gql, useMutation } from "@apollo/client"
 import * as Sentry from "@sentry/react"
 import type { Contributor } from "../types/datacite"
 import { SingleContributorDisplay } from "./contributor"
+import ToastContent from "../common/partials/toast-content"
 import { Loading } from "../components/loading/Loading"
 import { ContributorFormRow } from "./contributor-form-row"
 import { cloneContributor } from "./contributor-utils"
 import { CREATE_CONTRIBUTOR_CITATION_EVENT } from "../queries/datasetEvents"
+import { useCookies } from "react-cookie"
+import { getProfile } from "../authentication/profile"
 
 interface ContributorsListDisplayProps {
   contributors: Contributor[] | null | undefined
@@ -60,8 +64,37 @@ export const ContributorsListDisplay: React.FC<ContributorsListDisplayProps> = (
   const [editingContributors, setEditingContributors] = useState<
     Contributor[]
   >(contributors?.map((c) => ({ ...c, order: c.order ?? 0 })) || [])
-
   const [errors, setErrors] = useState<Record<number, string>>({})
+  const [cookies] = useCookies()
+  const profile = getProfile(cookies)
+
+  const hasEdit = Boolean(profile?.email)
+
+  const handleEditClick = () => {
+    if (!hasEdit) {
+      toast.error(
+        <ToastContent
+          title="Connect an Email"
+          body={
+            <>
+              Connect an email to make contributions to OpenNeuro. See our{" "}
+              <a
+                href="https://docs.openneuro.org/orcid.html#enabling-trusted-access-to-emails"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: "#007bff", textDecoration: "underline" }}
+              >
+                ORCID documentation
+              </a>{" "}
+              for detailed instructions.
+            </>
+          }
+        />,
+      )
+      return
+    }
+    setIsEditing(true)
+  }
 
   useEffect(() => {
     if (contributors) {
@@ -106,6 +139,7 @@ export const ContributorsListDisplay: React.FC<ContributorsListDisplayProps> = (
       },
     },
   )
+
   const [createContributorCitationEvent] = useMutation(
     CREATE_CONTRIBUTOR_CITATION_EVENT,
     {
@@ -114,6 +148,7 @@ export const ContributorsListDisplay: React.FC<ContributorsListDisplayProps> = (
       },
     },
   )
+
   const handleChange = (
     index: number,
     field: keyof Contributor,
@@ -276,7 +311,7 @@ export const ContributorsListDisplay: React.FC<ContributorsListDisplayProps> = (
         {editable && !isEditing && (
           <button
             className="on-button on-button--small on-button--primary"
-            onClick={() => setIsEditing(true)}
+            onClick={handleEditClick}
             style={{
               width: 60,
               top: -5,
