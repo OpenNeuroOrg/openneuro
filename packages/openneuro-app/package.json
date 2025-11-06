@@ -49,8 +49,7 @@
     "remark-gfm": "^4.0.0",
     "semver": "^5.5.0",
     "subscriptions-transport-ws": "0.11.0",
-    "universal-cookie": "^4.0.4",
-    "vite-plugin-node-polyfills": "^0.24.0"
+    "universal-cookie": "^4.0.4"
   },
   "devDependencies": {
     "@testing-library/dom": "^10.4.0",
@@ -73,6 +72,7 @@
     "stream-browserify": "^3.0.0",
     "typescript": "5.6.3",
     "vite": "^7.1.7",
+    "vite-plugin-node-polyfills": "^0.24.0",
     "vitest": "3.2.4"
   },
   "publishConfig": {
