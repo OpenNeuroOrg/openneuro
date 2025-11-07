@@ -67,7 +67,8 @@ export const contributors = async (
     }
 
     // --- Dataset type but no contributors ---
-    if (resourceType === "Dataset") {
+    // Only log if a Datacite file actually exists
+    if (dataciteData && resourceType === "Dataset") {
       Sentry.captureMessage(
         `Datacite file for ${datasetId}:${revisionShort} is Dataset type but provided no contributors.`,
       )
