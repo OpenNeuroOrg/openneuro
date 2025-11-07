@@ -5,7 +5,7 @@ import boto3
 from botocore.config import Config
 
 import datalad_service.config
-from datalad_service.common.annex import annex_initremote
+from datalad_service.common.annex import annex_initremote, is_git_annex_remote
 
 
 class S3ConfigException(Exception):
@@ -135,13 +135,18 @@ def update_s3_sibling(dataset_path):
         check=True,
         cwd=dataset_path,
     )
-    subprocess.run(
-        ['git-annex', 'enableremote', get_s3_backup_remote()]
-        + generate_s3_annex_options(dataset_path, backup=True),
-        check=True,
-        cwd=dataset_path,
-        env=backup_remote_env(),
-    )
+    # Setup the backup remote if it doesn't exist yet
+    if not is_git_annex_remote(dataset_path, get_s3_backup_remote()):
+        setup_s3_backup_sibling_workaround(dataset_path)
+    else:
+        # Update the backup remote config
+        subprocess.run(
+            ['git-annex', 'enableremote', get_s3_backup_remote()]
+            + generate_s3_annex_options(dataset_path, backup=True),
+            check=True,
+            cwd=dataset_path,
+            env=backup_remote_env(),
+        )
 
 
 def validate_s3_config(dataset_path):
