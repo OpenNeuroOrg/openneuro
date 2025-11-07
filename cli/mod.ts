@@ -20,6 +20,7 @@ export async function main() {
   } else {
     await commandLine(Deno.args)
   }
+  Deno.exit(0)
 }
 
 await main()
