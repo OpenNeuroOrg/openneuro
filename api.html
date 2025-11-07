@@ -367,8 +367,8 @@
 <span class="w">          </span><span class="nt">&quot;annexed&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
 <span class="w">        </span><span class="p">},</span>
 <span class="w">        </span><span class="p">{</span>
-<span class="w">          </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;10834f1acb4897eaed5b29fc642718451100721b&quot;</span><span class="p">,</span>
-<span class="w">          </span><span class="nt">&quot;key&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1882d325538b14729e3c715d8ccf1aede77a6143&quot;</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">&quot;key&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;db72baeb3665a309db35d6ef649e117eb45a8a87&quot;</span><span class="p">,</span>
 <span class="w">          </span><span class="nt">&quot;filename&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;sub-01&quot;</span><span class="p">,</span>
 <span class="w">          </span><span class="nt">&quot;size&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
 <span class="w">          </span><span class="nt">&quot;directory&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
@@ -380,10 +380,10 @@
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>In this example, you can see that sub-01 has the <code class="docutils literal notranslate"><span class="pre">&quot;directory&quot;:</span> <span class="pre">true</span></code>. This means the directory <code class="docutils literal notranslate"><span class="pre">id</span></code> field can be used to retrieve additional trees.</p>
+<p>In this example, you can see that sub-01 has the <code class="docutils literal notranslate"><span class="pre">&quot;directory&quot;:</span> <span class="pre">true</span></code>. This means the directory <code class="docutils literal notranslate"><span class="pre">key</span></code> field can be used to retrieve additional trees.</p>
 <div class="highlight-graphql notranslate"><div class="highlight"><pre><span></span><span class="k">query</span><span class="w"> </span><span class="nf">snapshotFiles</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">snapshot</span><span class="p">(</span><span class="n">datasetId</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ds000001&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">tag</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1.0.0&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">files</span><span class="p">(</span><span class="n">tree</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;10834f1acb4897eaed5b29fc642718451100721b&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">files</span><span class="p">(</span><span class="n">tree</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;db72baeb3665a309db35d6ef649e117eb45a8a87&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">      </span><span class="n">id</span>
 <span class="w">      </span><span class="n">key</span>
 <span class="w">      </span><span class="n">filename</span>
@@ -401,16 +401,16 @@
 <span class="w">    </span><span class="nt">&quot;snapshot&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 <span class="w">      </span><span class="nt">&quot;files&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
 <span class="w">        </span><span class="p">{</span>
-<span class="w">          </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;c63eeb1e0f41fea629f34269025f9d8225a2f3ff&quot;</span><span class="p">,</span>
-<span class="w">          </span><span class="nt">&quot;key&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1156b949676f8afcbded143b695ebaa1d18027f1&quot;</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">&quot;key&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;26d2ff4f763308d462f151c53e3e06f6b7d2aaaa&quot;</span><span class="p">,</span>
 <span class="w">          </span><span class="nt">&quot;filename&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;anat&quot;</span><span class="p">,</span>
 <span class="w">          </span><span class="nt">&quot;size&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
 <span class="w">          </span><span class="nt">&quot;directory&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
 <span class="w">          </span><span class="nt">&quot;annexed&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
 <span class="w">        </span><span class="p">},</span>
 <span class="w">        </span><span class="p">{</span>
-<span class="w">          </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;309cd8eae8896096c8734b024ac52be4743c9f44&quot;</span><span class="p">,</span>
-<span class="w">          </span><span class="nt">&quot;key&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;5e262c7c950f44a21f44a096f07e6727c8c747af&quot;</span><span class="p">,</span>
+<span class="w">          </span><span class="nt">&quot;key&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;4113b1609e2b0ea2e0a04e0800204d2ee6aab578&quot;</span><span class="p">,</span>
 <span class="w">          </span><span class="nt">&quot;filename&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;func&quot;</span><span class="p">,</span>
 <span class="w">          </span><span class="nt">&quot;size&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
 <span class="w">          </span><span class="nt">&quot;directory&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
