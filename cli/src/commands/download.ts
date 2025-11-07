@@ -57,11 +57,14 @@ export async function downloadAction(
   // Close after all tasks are queued
   worker.postMessage({ command: "done" })
 
-  worker.addEventListener("message", (event) => {
-    if (event.data.command === "closed") {
-      console.log(
-        "Download complete. To download all data files, use `datalad get` or `git-annex get`.",
-      )
+  await new Promise<void>((resolve) => {
+    worker.onmessage = (event) => {
+      if (event.data.command === "closed") {
+        console.log(
+          "Download complete. To download all data files, use `datalad get` or `git-annex get`.",
+        )
+        resolve()
+      }
     }
   })
 }

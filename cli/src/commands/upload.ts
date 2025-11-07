@@ -153,6 +153,14 @@ export async function uploadAction(
 
   // Close after all tasks are queued
   worker.postMessage({ command: "done" })
+
+  await new Promise<void>((resolve) => {
+    worker.onmessage = (event) => {
+      if (event.data.command === "closed") {
+        resolve()
+      }
+    }
+  })
 }
 
 /**
