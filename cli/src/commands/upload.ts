@@ -142,6 +142,10 @@ export async function uploadAction(
     "command": "clone",
   })
 
+  if (options.delete) {
+    worker.postMessage({ command: "clearWorktree" })
+  }
+
   // Upload all files
   await addGitFiles(worker, dataset_directory_abs)
 
@@ -184,6 +188,13 @@ export const upload = validateCommand
   .option("-n, --new", "Skip confirmation to create a new dataset.", {
     conflicts: ["dataset"],
   })
+  .option(
+    "--delete",
+    "Similar to rsync --delete, remove files in the remote dataset that are not present in the local dataset.",
+    {
+      depends: ["dataset"],
+    },
+  )
   .option(
     "--affirmDefaced",
     "All structural scans have been defaced, obscuring any tissue on or near the face that could potentially be used to reconstruct the facial structure.",
