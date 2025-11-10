@@ -545,6 +545,9 @@ export const typeDefs = `
     location: String
     severity: Severity
     rule: String
+    issueMessage: String
+    affects: String
+    line: Number
   }
 
   type DatasetValidation {
@@ -835,6 +838,7 @@ export const typeDefs = `
     rule: String
     issueMessage: String
     affects: String
+    line: Number
   }
 
   input ValidatorCodeMessageInput {
