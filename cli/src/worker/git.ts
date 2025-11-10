@@ -2,7 +2,7 @@ import type { GitWorkerEventAdd } from "./types/git-context.ts"
 import type { GitAnnexAttributes, GitAnnexBackend } from "../gitattributes.ts"
 import { matchGitAttributes, parseGitAttributes } from "../gitattributes.ts"
 import { dirname, join } from "@std/path"
-import { default as git, STAGE, TREE } from "isomorphic-git"
+import { default as git, STAGE, TREE, walk } from "isomorphic-git"
 import { logger, setupLogging } from "../logger.ts"
 import { PromiseQueue } from "./queue.ts"
 import { checkKey, storeKey } from "./transferKey.ts"
@@ -74,6 +74,33 @@ async function update() {
     }
   }
   logger.info(`${context.datasetId} draft fetched!`)
+}
+
+/**
+ * Stages removal of all files from the working tree
+ * Used when the --delete flag prior to adding new files
+ */
+async function clearWorktree() {
+  logger.info(`Clearing working tree (--delete flag)...`)
+  await resetWorktree(context, await getDefault(context))
+  let fileCount = 0
+  for (const file of await git.listFiles({ ...context.config() })) {
+    if (file === ".gitattributes" || file === ".datalad/config") {
+      continue
+    }
+    await git.remove({
+      ...context.config(),
+      filepath: file,
+    })
+    const filePath = join(context.repoPath, file)
+    if ((await context.fs.promises.lstat(filePath)).isSymbolicLink()) {
+      await context.fs.promises.unlink(filePath)
+    } else {
+      await context.fs.promises.rm(filePath)
+    }
+    fileCount += 1
+  }
+  logger.info(`Cleared working tree (${fileCount} files removed)`)
 }
 
 /**
@@ -530,6 +557,8 @@ self.onmessage = (event: GitWorkerEvent) => {
     setupLogging(event.data.logLevel)
   } else if (event.data.command === "clone") {
     workQueue.enqueue(update)
+  } else if (event.data.command === "clearWorktree") {
+    workQueue.enqueue(clearWorktree)
   } else if (event.data.command === "add") {
     workQueue.enqueue(add, event)
   } else if (event.data.command === "commit") {
