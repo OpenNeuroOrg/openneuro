@@ -3,6 +3,8 @@ import type { CommandOptions } from "@cliffy/command"
 import { readConfig } from "../config.ts"
 import { logger } from "../logger.ts"
 import { getRepoAccess } from "./git-credential.ts"
+import { getLatestSnapshotVersion } from "../graphq.ts"
+import { version } from "node:os"
 
 export const download = new Command()
   .name("download")
@@ -11,10 +13,12 @@ export const download = new Command()
   .option(
     "-d, --draft",
     "Download a draft instead of the latest version snapshot.",
+    { conflicts: ["version"] },
   )
   .option(
-    "-v, --version",
+    "-v, --version <version:string>",
     "Download a specific version.",
+    { conflicts: ["draft"] },
   )
   .action(downloadAction)
 
@@ -44,14 +48,23 @@ export async function downloadAction(
 
   console.log("Downloading...")
 
-  // Clone main/master and git-annex branches
+  let version
+  if (options.version) {
+    version = options.version
+  } else if (!options.draft) {
+    version = await getLatestSnapshotVersion(datasetId)
+  }
+
+  // Clone the repo
   worker.postMessage({
     "command": "clone",
+    "version": version,
   })
 
   // Setup any git-annex remotes required for downloads
   worker.postMessage({
     "command": "remote-setup",
+    "version": version,
   })
 
   // Close after all tasks are queued

@@ -1,4 +1,8 @@
-import type { GitWorkerEventAdd } from "./types/git-context.ts"
+import type {
+  GitWorkerEventAdd,
+  GitWorkerEventClone,
+  GitWorkerEventRemoteSetup,
+} from "./types/git-context.ts"
 import type { GitAnnexAttributes, GitAnnexBackend } from "../gitattributes.ts"
 import { matchGitAttributes, parseGitAttributes } from "../gitattributes.ts"
 import { dirname, join } from "@std/path"
@@ -28,11 +32,12 @@ async function done() {
 /**
  * Clone or fetch the draft
  */
-async function update() {
+async function update(event: GitWorkerEventClone) {
+  const version = event.data?.version
   try {
     await context.fs.promises.access(join(context.repoPath, ".git"))
     logger.info(
-      `Fetching ${context.datasetId} draft from "${context.repoEndpoint}"`,
+      `Fetching ${context.datasetId} from "${context.repoEndpoint}"`,
     )
     // Reset first to be sure that an interrupted run didn't create untracked files
     await resetWorktree(context, await getDefault(context))
@@ -49,19 +54,26 @@ async function update() {
         theirs: "origin/git-annex",
       },
     )
-    logger.info("Checkout latest HEAD.")
     // Make sure the default branch checkout is updated
     const defaultBranch = await getDefault(context)
+    const ref = version || defaultBranch
+    logger.info(`Checking out ${ref} branch.`)
     await git.checkout({
       ...context.config(),
-      ref: defaultBranch, // Checkout main
+      ref, // Checkout main
       noUpdateHead: false, // Make sure we update the local branch HEAD
     })
   } catch (_err) {
     logger.info(
-      `Cloning ${context.datasetId} draft from "${context.repoEndpoint}"`,
+      `Cloning ${context.datasetId} from "${context.repoEndpoint}"`,
     )
+    // Get the default branch
     await git.clone(context.config())
+    // Checkout a specific version if needed
+    if (version) {
+      logger.info(`Checking out ${version}.`)
+      await git.checkout({ ...context.config(), ref: version })
+    }
     await git.fetch({ ...context.config(), ref: "git-annex" })
     try {
       await git.branch({
@@ -232,14 +244,14 @@ async function createAnnexBranch() {
 /**
  * Generate a commit for remote.log updates if needed
  */
-async function remoteSetup() {
-  await commitAnnexBranch()
+async function remoteSetup(event: GitWorkerEventRemoteSetup) {
+  await commitAnnexBranch(event.data?.version)
 }
 
 /**
  * Generate one commit for all pending git-annex branch changes
  */
-async function commitAnnexBranch() {
+async function commitAnnexBranch(version?: string) {
   // Find the UUID of this repository if it exists already
   const expectedRemote = "OpenNeuro" // TODO - This could be more flexible?
   let uuid
@@ -347,7 +359,7 @@ async function commitAnnexBranch() {
       }
     }
   } finally {
-    const defaultBranch = await getDefault(context)
+    const defaultBranch = version || await getDefault(context)
     await git.checkout({
       ...context.config(),
       ref: defaultBranch,
@@ -556,7 +568,7 @@ self.onmessage = (event: GitWorkerEvent) => {
     )
     setupLogging(event.data.logLevel)
   } else if (event.data.command === "clone") {
-    workQueue.enqueue(update)
+    workQueue.enqueue(update, event)
   } else if (event.data.command === "clearWorktree") {
     workQueue.enqueue(clearWorktree)
   } else if (event.data.command === "add") {
@@ -566,7 +578,7 @@ self.onmessage = (event: GitWorkerEvent) => {
   } else if (event.data.command === "push") {
     workQueue.enqueue(push)
   } else if (event.data.command === "remote-setup") {
-    workQueue.enqueue(remoteSetup)
+    workQueue.enqueue(remoteSetup, event)
   } else if (event.data.command === "done") {
     workQueue.enqueue(done)
   }

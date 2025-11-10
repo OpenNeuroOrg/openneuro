@@ -92,3 +92,26 @@ export async function prepareUpload(
 
 export async function finishUpload() {
 }
+
+export async function getLatestSnapshotVersion(datasetId: string) {
+  const query = `
+  query($datasetId: ID!) {
+    dataset(id: $datasetId) {
+      latestSnapshot {
+        id
+        tag
+      }
+    }
+  }
+  `
+  const res = await request(query, { datasetId })
+  const body = await res.json()
+  if (body.errors) {
+    throw new ResponseError(JSON.stringify(body.errors))
+  }
+  if (body.data) {
+    return body.data.dataset.latestSnapshot.tag
+  } else {
+    throw new QueryError("Invalid response")
+  }
+}
