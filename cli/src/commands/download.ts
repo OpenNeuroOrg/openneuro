@@ -53,6 +53,12 @@ export async function downloadAction(
     version = options.version
   } else if (!options.draft) {
     version = await getLatestSnapshotVersion(datasetId)
+    if (
+      version.length === 40 /* sha1 */ || version.length === 64 /* sha256 */
+    ) {
+      // Commit hash -> get the draft instead
+      version = undefined
+    }
   }
 
   // Clone the repo
