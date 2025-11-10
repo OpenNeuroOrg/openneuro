@@ -104,7 +104,26 @@ export interface GitWorkerEventAdd {
   }
 }
 
+/** Clone event to clone or fetch a version */
+export interface GitWorkerEventClone {
+  data: {
+    command: "clone"
+    // Version to clone
+    version?: string
+  }
+}
+
+export interface GitWorkerEventRemoteSetup {
+  data: {
+    command: "remoteSetup"
+    // Version to checkout after setup
+    version?: string
+  }
+}
+
 export type GitWorkerEvent =
   | GitWorkerEventSetup
   | GitWorkerEventGeneric
   | GitWorkerEventAdd
+  | GitWorkerEventClone
+  | GitWorkerEventRemoteSetup
