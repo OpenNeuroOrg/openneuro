@@ -547,7 +547,7 @@ export const typeDefs = `
     rule: String
     issueMessage: String
     affects: String
-    line: Number
+    line: Int
   }
 
   type DatasetValidation {
@@ -838,7 +838,7 @@ export const typeDefs = `
     rule: String
     issueMessage: String
     affects: String
-    line: Number
+    line: Int
   }
 
   input ValidatorCodeMessageInput {
