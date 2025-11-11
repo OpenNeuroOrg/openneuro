@@ -138,7 +138,6 @@ async def export_dataset(
                 annex_drop,
                 dataset_path=dataset_path,
                 branch=new_tag,
-                remote=get_s3_remote(),
             )
             # Call the pipeline (arguments for git_annex_fsck_remote)
             await pipeline.kiq(
