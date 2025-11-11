@@ -119,6 +119,9 @@ def setup_s3_backup_sibling_workaround(dataset_path):
         Key=f'{dataset_id}/annex-uuid',
         Body=uuid.encode('utf-8'),
     )
+    # Create the creds file
+    with open(os.path.join(dataset_path, '.git', 'annex', 'creds', uuid), 'w') as f:
+        f.write(f'{aws_access_key_id}\n{aws_secret_access_key}\n')
     # Enableremote after
     subprocess.run(
         ['git-annex', 'enableremote', get_s3_backup_remote()],
