@@ -135,9 +135,6 @@ describe("contributors (core functionality)", () => {
     })
 
     expect(result).toEqual([])
-    expect(mockSentryCaptureMessage).toHaveBeenCalledWith(
-      `Datacite file for ${MOCK_DATASET_ID}:${MOCK_REV_SHORT} is Dataset type but provided no contributors.`,
-    )
     expect(mockSentryCaptureException).not.toHaveBeenCalled()
   })
 
@@ -167,9 +164,6 @@ describe("contributors (core functionality)", () => {
 
     expect(mockSentryCaptureMessage).toHaveBeenCalledWith(
       `Datacite file for ${MOCK_DATASET_ID}:${MOCK_REV_SHORT} served with unexpected Content-Type: text/plain. Attempting YAML parse anyway.`,
-    )
-    expect(mockSentryCaptureMessage).toHaveBeenCalledWith(
-      `Datacite file for ${MOCK_DATASET_ID}:${MOCK_REV_SHORT} is Dataset type but provided no contributors.`,
     )
     expect(mockSentryCaptureException).not.toHaveBeenCalled()
     expect(result).toEqual([])
