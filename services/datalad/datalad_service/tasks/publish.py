@@ -79,6 +79,30 @@ def create_remotes(dataset_path):
     github_sibling(dataset_path, dataset)
 
 
+async def export_backup_and_drop(dataset_path):
+    """
+    Export dataset to S3 backup, verify s3-PUBLIC, and drop local data.
+    """
+    repo = pygit2.Repository(dataset_path)
+    tags = sorted(git_tag(repo), key=lambda tag: tag.name)
+    if tags:
+        s3_backup_push(dataset_path)
+        for tag in tags:
+            # Check and clean local annexed files once export is complete
+            pipeline = Pipeline(broker, git_annex_fsck_remote).call_next(
+                annex_drop,
+                dataset_path=dataset_path,
+                branch=tag,
+                remote=get_s3_remote(),
+            )
+            # Call the pipeline (arguments for git_annex_fsck_remote)
+            await pipeline.kiq(
+                dataset_path,
+                branch=tag,  # Check the history from the new tag just exported
+                remote=get_s3_remote(),
+            )
+
+
 @broker.task
 async def export_dataset(
     dataset_path,
@@ -111,7 +135,10 @@ async def export_dataset(
             clear_dataset_cache(dataset_id)
             # Check and clean local annexed files once export is complete
             pipeline = Pipeline(broker, git_annex_fsck_remote).call_next(
-                annex_drop, dataset_path=dataset_path, branch=new_tag
+                annex_drop,
+                dataset_path=dataset_path,
+                branch=new_tag,
+                remote=get_s3_remote(),
             )
             # Call the pipeline (arguments for git_annex_fsck_remote)
             await pipeline.kiq(
