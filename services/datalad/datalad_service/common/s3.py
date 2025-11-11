@@ -6,6 +6,7 @@ from botocore.config import Config
 
 import datalad_service.config
 from datalad_service.common.annex import annex_initremote, is_git_annex_remote
+from datalad_service.common.asyncio import run_check
 
 
 class S3ConfigException(Exception):
@@ -118,6 +119,9 @@ def setup_s3_backup_sibling_workaround(dataset_path):
         Key=f'{dataset_id}/annex-uuid',
         Body=uuid.encode('utf-8'),
     )
+    # Create the creds file
+    with open(os.path.join(dataset_path, '.git', 'annex', 'creds', uuid), 'w') as f:
+        f.write(f'{aws_access_key_id}\n{aws_secret_access_key}\n')
     # Enableremote after
     subprocess.run(
         ['git-annex', 'enableremote', get_s3_backup_remote()],
@@ -179,17 +183,18 @@ def validate_s3_config(dataset_path):
     return True
 
 
-def s3_export(dataset_path, target, treeish):
+async def s3_export(dataset_path, target, treeish):
     """Perform an S3 export on a git-annex repo."""
-    subprocess.check_call(
-        ['git-annex', 'export', treeish, '--to', target], cwd=dataset_path
+    await run_check(
+        ['git-annex', 'export', treeish, '--to', target],
+        dataset_path,
     )
 
 
-def s3_backup_push(dataset_path):
+async def s3_backup_push(dataset_path):
     """Perform an S3 push to the backup remote on a git-annex repo."""
-    subprocess.check_call(
+    await run_check(
         ['git-annex', 'push', get_s3_backup_remote()],
-        cwd=dataset_path,
+        dataset_path,
         env=backup_remote_env(),
     )

@@ -1,6 +1,6 @@
 import json
 import os
-from unittest.mock import Mock, call
+from unittest.mock import AsyncMock, Mock, call
 
 import falcon
 
@@ -50,7 +50,7 @@ async def test_export_snapshots(no_init_remote, client, new_dataset):
     # Make it public
     create_remotes(new_dataset.path)
     # Export
-    s3_export_mock = Mock()
+    s3_export_mock = AsyncMock()
     github_export_mock = Mock()
     update_s3_sibling_mock = Mock()
     await export_dataset(
