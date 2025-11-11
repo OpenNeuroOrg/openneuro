@@ -268,4 +268,10 @@ async def annex_drop(fsck_success, dataset_path, branch):
         pass
     # Drop will only drop successfully exported files present on both remotes
     if fsck_success:
-        await run_check(['git-annex', 'drop', '--branch', branch], dataset_path)
+        env = os.environ.copy()
+        # Force git-annex to use cached credentials for this
+        del env['AWS_ACCESS_KEY_ID']
+        del env['AWS_SECRET_ACCESS_KEY']
+        await run_check(
+            ['git-annex', 'drop', '--branch', branch], dataset_path, env=env
+        )
