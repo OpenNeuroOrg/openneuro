@@ -86,7 +86,7 @@ async def export_backup_and_drop(dataset_path):
     repo = pygit2.Repository(dataset_path)
     tags = sorted(git_tag(repo), key=lambda tag: tag.name)
     if tags:
-        s3_backup_push(dataset_path)
+        await s3_backup_push(dataset_path)
         for tag in tags:
             # Check and clean local annexed files once export is complete
             pipeline = Pipeline(broker, git_annex_fsck_remote).call_next(
@@ -125,8 +125,8 @@ async def export_dataset(
         # Push the most recent tag
         if tags:
             new_tag = tags[-1].name
-            s3_export(dataset_path, get_s3_remote(), new_tag)
-            s3_backup_push(dataset_path)
+            await s3_export(dataset_path, get_s3_remote(), new_tag)
+            await s3_backup_push(dataset_path)
             # Once all S3 tags are exported, update GitHub
             if github_enabled:
                 # Perform all GitHub export steps
