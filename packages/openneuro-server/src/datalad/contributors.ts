@@ -66,18 +66,6 @@ export const contributors = async (
         .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
     }
 
-    // --- Dataset type but no contributors ---
-    // Only log if a Datacite file actually exists
-    if (
-      dataciteData?.data?.attributes &&
-      resourceType === "Dataset" &&
-      !attributes?.contributors?.length
-    ) {
-      Sentry.captureMessage(
-        `Datacite file for ${datasetId}:${revisionShort} is Dataset type but provided no contributors.`,
-      )
-    }
-
     // --- Fallback: dataset_description.json authors ---
     const datasetDescription = await description(obj)
     if (datasetDescription?.Authors?.length) {
