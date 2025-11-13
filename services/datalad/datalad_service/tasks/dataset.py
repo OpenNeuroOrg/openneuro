@@ -13,6 +13,7 @@ import pygit2
 
 from datalad_service.common.annex import init_annex
 from datalad_service.common.git import git_commit, COMMITTER_EMAIL, COMMITTER_NAME
+from datalad_service.tasks.publish import create_remotes
 
 # A list of patterns to avoid annexing in BIDS datasets
 GIT_ATTRIBUTES = """* annex.backend=SHA256E
@@ -44,12 +45,11 @@ def create_datalad_config(dataset_path):
         configfile.write(config)
 
 
-async def create_dataset(store, dataset, author=None, initial_head='main'):
+async def create_dataset(dataset_path, author=None, initial_head='main'):
     """Create a DataLad git-annex repo for a new dataset.
 
     initial_head is only meant for tests and is overridden by the implementation of git_commit
     """
-    dataset_path = store.get_dataset_path(dataset)
     if os.path.isdir(dataset_path):
         raise Exception('Dataset already exists')
     if not author:
@@ -70,6 +70,7 @@ async def create_dataset(store, dataset, author=None, initial_head='main'):
         '[OpenNeuro] Dataset created',
         parents=[],
     )
+    create_remotes(dataset_path)
     return str(repo.head.target)
 
 

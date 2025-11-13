@@ -41,7 +41,7 @@ class DatasetResource:
                 author = pygit2.Signature(name, email)
             else:
                 author = None
-            hexsha = await create_dataset(self.store, dataset, author)
+            hexsha = await create_dataset(ds_path, author)
             resp.media = {'hexsha': hexsha}
             resp.status = falcon.HTTP_OK
 
