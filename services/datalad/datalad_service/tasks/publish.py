@@ -21,7 +21,7 @@ from datalad_service.config import AWS_SECRET_ACCESS_KEY
 from datalad_service.config import GCP_ACCESS_KEY_ID
 from datalad_service.config import GCP_SECRET_ACCESS_KEY
 from datalad_service.common.annex import get_tag_info, is_git_annex_remote
-from datalad_service.common.openneuro import clear_dataset_cache
+from datalad_service.common.openneuro import clear_dataset_cache, is_public_dataset
 from datalad_service.common.git import git_show, git_tag, git_tag_tree
 from datalad_service.common.github import github_export
 from datalad_service.common.s3 import (
@@ -126,6 +126,8 @@ async def export_dataset(
         if tags:
             new_tag = tags[-1].name
             await s3_export(dataset_path, get_s3_remote(), new_tag)
+            if not is_public_dataset(dataset_id):
+                await set_s3_access_tag(dataset_id, 'private')
             await s3_backup_push(dataset_path)
             # Once all S3 tags are exported, update GitHub
             if github_enabled:
@@ -274,3 +276,48 @@ async def annex_drop(fsck_success, dataset_path, branch):
         await run_check(
             ['git-annex', 'drop', '--branch', branch], dataset_path, env=env
         )
+
+
+async def set_remote_public(dataset):
+    """Clear x-amz-meta-access when a dataset is made public."""
+    # If git-annex supports tags in the future, we'd modify this here.
+    # await run_check(
+    #    ['git-annex', 'enableremote', get_s3_remote(), 'x-amz-tagging=access=public'],
+    #    dataset_path,
+    # )
+    await set_s3_access_tag(dataset, 'public')
+
+
+@broker.task
+async def set_s3_access_tag(dataset, value='private'):
+    """Set access tag on all versions of all files."""
+    client = boto3.client(
+        's3',
+        aws_access_key_id=AWS_ACCESS_KEY_ID,
+        aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+    )
+    s3_bucket = get_s3_bucket()
+    paginator = client.get_paginator('list_object_versions')
+    for page in paginator.paginate(Bucket=s3_bucket, Prefix=f'{dataset}/'):
+        for version in page.get('Versions', []):
+            key = version['Key']
+            version_id = version['VersionId']
+            try:
+                response = client.get_object_tagging(
+                    Bucket=s3_bucket, Key=key, VersionId=version_id
+                )
+                tag_set = response.get('TagSet', [])
+            except client.exceptions.ClientError as e:
+                if e.response['Error']['Code'] == 'NoSuchTagSet':
+                    tag_set = []
+                else:
+                    raise
+            # Remove any existing access tag and add the new one
+            new_tags = [tag for tag in tag_set if tag['Key'] != 'access']
+            new_tags.append({'Key': 'access', 'Value': value})
+            client.put_object_tagging(
+                Bucket=s3_bucket,
+                Key=key,
+                VersionId=version_id,
+                Tagging={'TagSet': new_tags},
+            )
