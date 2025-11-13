@@ -132,7 +132,9 @@ def compute_rmet(key, legacy=False):
 
 
 def parse_remote_line(remoteLine):
-    remoteConfig = dict(item.split('=') for item in remoteLine[37:].split(' '))
+    remoteConfig = dict(
+        item.split('=', maxsplit=1) for item in remoteLine[37:].split(' ')
+    )
     if remoteConfig['type'] == 'S3' and remoteConfig['bucket'] in S3_BUCKETS_WHITELIST:
         remoteUuid = remoteLine[0:36]
         remoteUrl = remoteConfig['publicurl'] if 'publicurl' in remoteConfig else None
