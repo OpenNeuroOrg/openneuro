@@ -12,14 +12,8 @@ from datalad_service.config import DATALAD_GITHUB_EXPORTS_ENABLED
 def create_github_repo(dataset_path, dataset_id):
     """Setup a github sibling / remote."""
     try:
-        # raise exception if github exports are not enabled
         if not DATALAD_GITHUB_EXPORTS_ENABLED:
-            raise Exception(
-                'DATALAD_GITHUB_EXPORTS_ENABLED must be defined to create remote repos'
-            )
-
-        # this adds github remote to config and also creates repo
-        return create_sibling_github(dataset_path, dataset_id)
+            return create_sibling_github(dataset_path, dataset_id)
     except KeyError:
         raise Exception(
             'DATALAD_GITHUB_TOKEN and DATALAD_GITHUB_ORG must be defined to create remote repos'
