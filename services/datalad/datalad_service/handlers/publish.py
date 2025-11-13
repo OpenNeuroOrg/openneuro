@@ -5,7 +5,7 @@ from taskiq_pipelines import Pipeline
 from datalad_service.broker import broker
 from datalad_service.tasks.publish import (
     create_remotes_and_export,
-    set_access_access_tag,
+    set_s3_access_tag,
 )
 
 
@@ -20,7 +20,7 @@ class PublishResource:
         # Pipeline create and export -> set access tag to public
         await (
             Pipeline(broker, create_remotes_and_export)
-            .call_after(set_access_access_tag, dataset=dataset, value='public')
+            .call_after(set_s3_access_tag, dataset=dataset, value='public')
             .kiq(dataset_path)  # create_remotes_and_export
         )
         resp.media = {}
