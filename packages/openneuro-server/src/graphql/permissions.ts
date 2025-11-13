@@ -95,6 +95,10 @@ export const checkDatasetRead = async (datasetId, userId, userInfo) => {
       return true
     }
   }
+  // Allow worker scoped tokens to read specific datasets
+  if (userId && userInfo?.worker && datasetId === userInfo?.dataset) {
+    return true
+  }
   // Check that dataset exists.
   await checkDatasetExists(datasetId)
   // Look for any matching datasets
