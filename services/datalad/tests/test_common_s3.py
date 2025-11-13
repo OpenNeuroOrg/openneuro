@@ -37,6 +37,26 @@ def test_s3_annex_options(monkeypatch):
     # Check prefix and bucket strings are interpolated right
     assert 'fileprefix=test00001/' in options
     assert 'bucket=a-fake-test-public-bucket' in options
+    # Check that the private tag is applied by default
+    # assert 'x-amz-tagging=access=private' in options
+
+
+def test_s3_annex_backup_options(monkeypatch):
+    monkeypatch.setattr(
+        datalad_service.config, 'AWS_S3_PUBLIC_BUCKET', 'a-fake-test-public-bucket'
+    )
+    monkeypatch.setattr(datalad_service.config, 'GCP_S3_BACKUP_BUCKET', 'backup-bucket')
+    options = generate_s3_annex_options(
+        '/tmp/dataset/does/not/exist/test00001', backup=True
+    )
+    assert 'type=S3' in options
+    # Verify public=no (ACL deprecation)
+    assert 'public=no' in options
+    # Verify autoenable=true is not present
+    assert 'autoenable=true' not in options
+    # Check prefix and bucket strings are interpolated right
+    assert 'fileprefix=test00001/' in options
+    assert 'bucket=backup-bucket' in options
 
 
 def test_update_s3_sibling(monkeypatch, no_init_remote, new_dataset):
