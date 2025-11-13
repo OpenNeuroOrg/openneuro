@@ -16,7 +16,8 @@ from datalad_service.tasks.files import commit_files
 async def test_create_dataset(datalad_store):
     ds_id = 'ds000002'
     author = pygit2.Signature('test author', 'test@example.com')
-    await create_dataset(datalad_store, ds_id, author)
+    ds_path = os.path.join(datalad_store.annex_path, ds_id)
+    await create_dataset(ds_path, author)
     ds = Dataset(os.path.join(datalad_store.annex_path, ds_id))
     assert ds.repo is not None
     # Verify the dataset is created with datalad config
@@ -52,10 +53,11 @@ async def test_create_dataset_master(datalad_store):
 async def test_create_dataset_unusual_default_branch(datalad_store):
     ds_id = 'ds000026'
     author = pygit2.Signature('test author', 'test@example.com')
+    ds_path = os.path.join(datalad_store.annex_path, ds_id)
     # Create dataset will commit data and this should fail since HEAD is something 'unusual'
     # (such as the git-annex branch as a plausible example)
     with pytest.raises(OpenNeuroGitError) as e:
-        await create_dataset(datalad_store, ds_id, author, 'unusual')
+        await create_dataset(ds_path, author, 'unusual')
 
 
 async def test_delete_dataset(datalad_store, new_dataset):
