@@ -73,3 +73,30 @@ def update_file_check(dataset_path, commit, references, bad_files, remote=None):
     except requests.exceptions.HTTPError as e:
         logging.error(e)
         logging.error(req.text)
+
+
+def is_public_dataset(dataset_id):
+    """Ask the OpenNeuro API if this dataset is public."""
+    try:
+        logger = logging.getLogger(__name__)
+        response = requests.post(
+            GRAPHQL_ENDPOINT,
+            json={
+                'query': 'query($datasetId: ID!) { dataset(id: $datasetId) { public } }',
+                'variables': {'datasetId': dataset_id},
+            },
+            headers={'authorization': f'Bearer {generate_service_token(dataset_id)}'},
+        )
+        response.raise_for_status()
+        data = response.json()
+        if 'errors' in data:
+            logger.error(
+                f'GraphQL error checking public status for {dataset_id}: {data["errors"]}'
+            )
+            raise Exception(
+                f'GraphQL error checking public status for {dataset_id}: {data["errors"]}'
+            )
+        return data.get('data', {}).get('dataset', {}).get('public', False)
+    except requests.exceptions.RequestException as e:
+        logger.error(f'Failed to check public status for {dataset_id}: {e}')
+        raise
