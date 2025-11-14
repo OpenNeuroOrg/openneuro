@@ -1871,7 +1871,7 @@ const RAW_RUNTIME_STATE =
           ["globals", "npm:14.0.0"],\
           ["ignore", "npm:5.2.4"],\
           ["import-fresh", "npm:3.3.0"],\
-          ["js-yaml", "npm:4.1.0"],\
+          ["js-yaml", "npm:4.1.1"],\
           ["minimatch", "npm:3.1.2"],\
           ["strip-json-comments", "npm:3.1.1"]\
         ],\
@@ -4068,7 +4068,7 @@ const RAW_RUNTIME_STATE =
           ["immutable", "npm:3.8.2"],\
           ["ioredis", "npm:5.6.1"],\
           ["ioredis-mock", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:8.8.1"],\
-          ["js-yaml", "npm:4.1.0"],\
+          ["js-yaml", "npm:4.1.1"],\
           ["jsdom", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:24.0.0"],\
           ["jsonwebtoken", "npm:9.0.0"],\
           ["keyv", "npm:5.3.4"],\
@@ -16311,11 +16311,11 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "HARD"\
       }],\
-      ["npm:4.1.0", {\
-        "packageLocation": "./.yarn/cache/js-yaml-npm-4.1.0-3606f32312-c138a34a3f.zip/node_modules/js-yaml/",\
+      ["npm:4.1.1", {\
+        "packageLocation": "./.yarn/cache/js-yaml-npm-4.1.1-86ec786790-a52d0519f0.zip/node_modules/js-yaml/",\
         "packageDependencies": [\
           ["argparse", "npm:2.0.1"],\
-          ["js-yaml", "npm:4.1.0"]\
+          ["js-yaml", "npm:4.1.1"]\
         ],\
         "linkType": "HARD"\
       }]\
