@@ -72,6 +72,7 @@ def backup_remote_env():
 def setup_s3_sibling(dataset_path):
     """Add a sibling for an S3 bucket publish."""
     # Public remote
+    # TODO set ['x-amz-tagging=access=private'] if tagging is supported in git-annex
     subprocess.run(
         ['git-annex', 'initremote', get_s3_remote()]
         + generate_s3_annex_options(dataset_path),

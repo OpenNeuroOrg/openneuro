@@ -4,6 +4,7 @@ import os
 import json
 import subprocess
 import random
+from unittest import mock
 
 import pytest
 from falcon import testing
@@ -249,3 +250,11 @@ def mock_validate_dataset_task(monkeypatch):
     monkeypatch.setattr(
         'datalad_service.tasks.files.validate_dataset', async_noop_validator
     )
+
+
+@pytest.fixture(autouse=True)
+def is_public_dataset_mock(monkeypatch):
+    def _mock(dataset_id):
+        return True
+
+    monkeypatch.setattr('datalad_service.tasks.publish.is_public_dataset', _mock)
