@@ -13,6 +13,7 @@ import pygit2
 
 import datalad_service.config
 from datalad_service.common.git import git_show
+from datalad_service.common.s3_client import presign_remote_url, get_s3_remote
 
 SERVICE_EMAIL = 'git@openneuro.org'
 SERVICE_USER = 'Git Worker'
@@ -21,6 +22,7 @@ S3_BUCKETS_WHITELIST = [
     'openneuro-dev-datalad-public',
     'openneuro-derivatives',
     'bobsrepository',
+    'openneuro-datalad-public-nell-test',
 ]
 
 
@@ -147,8 +149,17 @@ def parse_rmet_line(remote, rmetLine):
         remoteContext, remoteData = rmetLine.split('V +')
         slash = '' if remote['url'][-1] == '/' else '/'
         s3version, path = remoteData.split('#')
-        return '{}{}{}?versionId={}'.format(remote['url'], slash, path, s3version)
+        if remote['name'] == get_s3_remote():
+            # Presigned via OpenNeuro's credentials
+            url = presign_remote_url(path, s3version)
+            return url
+        else:
+            # Anonymous access for any other buckets
+            return encode_remote_url(
+                '{}{}{}?versionId={}'.format(remote['url'], slash, path, s3version)
+            )
     except:
+        raise
         return None
 
 
@@ -260,8 +271,7 @@ def get_repo_urls(path, files):
         for path in rmetPaths:
             url = read_rmet_file(remote, catFile)
             if url:
-                encoded_url = encode_remote_url(url)
-                rmetFiles[path]['urls'].append(encoded_url)
+                rmetFiles[path]['urls'].append(url)
     return files
 
 
@@ -378,9 +388,9 @@ def test_key_remote(dataset_path, key, remote_name='s3-PUBLIC'):
         remote_log = git_show(repo, 'git-annex', 'remote.log')
     except KeyError:
         return None
-    for line in remote_log:
+    for line in remote_log.splitlines():
         remote = parse_remote_line(line)
-        if remote['name'] == remote_name:
+        if remote and remote['name'] == remote_name:
             rmet_path = compute_rmet(key)
             try:
                 rmet = git_show(repo, 'git-annex', rmet_path)
