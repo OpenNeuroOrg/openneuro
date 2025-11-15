@@ -200,10 +200,12 @@ def no_publish(monkeypatch):
     )
 
 
-@pytest.fixture
+@pytest.fixture(autouse=True)
 def s3_creds(monkeypatch):
     monkeypatch.setenv('AWS_S3_PUBLIC_BUCKET', 'a-fake-test-public-bucket')
-    monkeypatch.setenv('AWS_S3_PRIVATE_BUCKET', 'a-fake-test-private-bucket')
+    monkeypatch.setattr(
+        datalad_service.config, 'AWS_S3_PUBLIC_BUCKET', 'a-fake-test-public-bucket'
+    )
 
 
 @pytest.fixture(autouse=True)
@@ -212,6 +214,10 @@ def access_keys(monkeypatch):
     monkeypatch.setenv('AWS_SECRET_ACCESS_KEY', 'aws-secret')
     monkeypatch.setenv('GCP_ACCESS_KEY_ID', 'gcp-id')
     monkeypatch.setenv('GCP_SECRET_ACCESS_KEY', 'gcp-secret')
+    monkeypatch.setattr(datalad_service.config, 'AWS_ACCESS_KEY_ID', 'aws-id')
+    monkeypatch.setattr(datalad_service.config, 'AWS_SECRET_ACCESS_KEY', 'aws-secret')
+    monkeypatch.setattr(datalad_service.config, 'GCP_ACCESS_KEY_ID', 'gcp-id')
+    monkeypatch.setattr(datalad_service.config, 'GCP_SECRET_ACCESS_KEY', 'gcp-secret')
 
 
 @pytest.fixture(autouse=True)

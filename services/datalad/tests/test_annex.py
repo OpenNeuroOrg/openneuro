@@ -156,6 +156,7 @@ def test_parse_remote_line():
 
 def test_parse_rmet_line():
     remote = {
+        'name': 's3-PUBLIC',
         'url': 'http://openneuro.org.s3.amazonaws.com/',
         'uuid': '57894849-d0c8-4c62-8418-3627be18a196',
     }
@@ -164,13 +165,15 @@ def test_parse_rmet_line():
         """1590213748.042921433s 57894849-d0c8-4c62-8418-3627be18a196:V +iVcEk18e3J2WQys4zr_ANaTPfpUufW4Y#ds002778/dataset_description.json""",
     )
     assert (
-        url
-        == 'http://openneuro.org.s3.amazonaws.com/ds002778/dataset_description.json?versionId=iVcEk18e3J2WQys4zr_ANaTPfpUufW4Y'
+        'https://s3.amazonaws.com/a-fake-test-public-bucket/ds002778/dataset_description.json?versionId=iVcEk18e3J2WQys4zr_ANaTPfpUufW4Y&AWSAccessKeyId=aws-id'
+        in url
     )
+    assert 'Signature=' in url
 
 
 def test_parse_rmet_line_https():
     remote = {
+        'name': 's3-PUBLIC',
         'url': 'https://s3.amazonaws.com/openneuro.org',
         'uuid': '57894849-d0c8-4c62-8418-3627be18a196',
     }
@@ -179,13 +182,15 @@ def test_parse_rmet_line_https():
         """1590213748.042921433s 57894849-d0c8-4c62-8418-3627be18a196:V +iVcEk18e3J2WQys4zr_ANaTPfpUufW4Y#ds002778/dataset_description.json""",
     )
     assert (
-        url
-        == 'https://s3.amazonaws.com/openneuro.org/ds002778/dataset_description.json?versionId=iVcEk18e3J2WQys4zr_ANaTPfpUufW4Y'
+        'https://s3.amazonaws.com/a-fake-test-public-bucket/ds002778/dataset_description.json?versionId=iVcEk18e3J2WQys4zr_ANaTPfpUufW4Y&AWSAccessKeyId=aws-id'
+        in url
     )
+    assert 'Signature=' in url
 
 
 def test_read_rmet_file():
     remote = {
+        'name': 's3-PUBLIC',
         'url': 'http://openneuro.org.s3.amazonaws.com/',
         'uuid': '57894849-d0c8-4c62-8418-3627be18a196',
     }
@@ -193,9 +198,10 @@ def test_read_rmet_file():
     1590213748.042921433s 57894849-d0c8-4c62-8418-3627be18a196:V +iVcEk18e3J2WQys4zr_ANaTPfpUufW4Y#ds002778/dataset_description.json""")
     url = read_rmet_file(remote, catFile)
     assert (
-        url
-        == 'http://openneuro.org.s3.amazonaws.com/ds002778/dataset_description.json?versionId=iVcEk18e3J2WQys4zr_ANaTPfpUufW4Y'
+        'https://s3.amazonaws.com/a-fake-test-public-bucket/ds002778/dataset_description.json?versionId=iVcEk18e3J2WQys4zr_ANaTPfpUufW4Y&AWSAccessKeyId=aws-id'
+        in url
     )
+    assert 'Signature=' in url
 
 
 def test_remote_url_encoding():

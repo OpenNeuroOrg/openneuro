@@ -7,26 +7,16 @@ from botocore.config import Config
 import datalad_service.config
 from datalad_service.common.annex import annex_initremote, is_git_annex_remote
 from datalad_service.common.asyncio import run_check
+from datalad_service.common.s3_client import (
+    get_s3_bucket,
+    get_s3_remote,
+    get_s3_backup_bucket,
+    get_s3_backup_remote,
+)
 
 
 class S3ConfigException(Exception):
     pass
-
-
-def get_s3_remote():
-    return 's3-PUBLIC'
-
-
-def get_s3_backup_remote():
-    return 's3-BACKUP'
-
-
-def get_s3_bucket():
-    return getattr(datalad_service.config, 'AWS_S3_PUBLIC_BUCKET')
-
-
-def get_s3_backup_bucket():
-    return getattr(datalad_service.config, 'GCP_S3_BACKUP_BUCKET')
 
 
 def generate_s3_annex_options(dataset_path, backup=False):
