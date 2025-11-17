@@ -1,6 +1,6 @@
 {
   "name": "@openneuro/search",
-  "version": "4.40.1",
+  "version": "4.40.2",
   "description": "OpenNeuro search client functions.",
   "main": "dist/index.js",
   "browser": "src/index.ts",
