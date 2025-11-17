@@ -124,12 +124,16 @@ def setup_s3_backup_sibling_workaround(dataset_path):
 def update_s3_sibling(dataset_path):
     """Update S3 remote with latest config."""
     # note: enableremote command will only upsert config options, none are deleted
-    subprocess.run(
-        ['git-annex', 'enableremote', get_s3_remote()]
-        + generate_s3_annex_options(dataset_path),
-        check=True,
-        cwd=dataset_path,
-    )
+    if not is_git_annex_remote(dataset_path, get_s3_remote()):
+        setup_s3_sibling(dataset_path)
+    else:
+        # Update the remote config
+        subprocess.run(
+            ['git-annex', 'enableremote', get_s3_remote()]
+            + generate_s3_annex_options(dataset_path),
+            check=True,
+            cwd=dataset_path,
+        )
     # Setup the backup remote if it doesn't exist yet
     if not is_git_annex_remote(dataset_path, get_s3_backup_remote()):
         setup_s3_backup_sibling_workaround(dataset_path)
