@@ -2,7 +2,6 @@ import sys
 
 from taskiq import InMemoryBroker, SmartRetryMiddleware
 from taskiq_redis import RedisAsyncResultBackend, RedisStreamBroker
-from taskiq_pipelines import PipelineMiddleware
 
 
 from datalad_service import config
@@ -38,6 +37,5 @@ else:
                 use_delay_exponent=True,
                 max_delay_exponent=120,
             ),
-            PipelineMiddleware(),
         )
     )

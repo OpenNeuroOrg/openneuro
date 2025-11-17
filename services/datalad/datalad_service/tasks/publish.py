@@ -8,7 +8,6 @@ from concurrent.futures import ProcessPoolExecutor
 import pygit2
 import boto3
 from github import Github
-from taskiq_pipelines import Pipeline
 
 import datalad_service.common.s3
 import datalad_service.common.github
@@ -63,7 +62,7 @@ def s3_sibling(dataset_path):
 
 
 @broker.task
-async def create_remotes_and_export(dataset_path):
+async def create_remotes_and_export(dataset_path, public=False):
     """
     Create public S3 and GitHub remotes and export to them.
 
@@ -71,12 +70,25 @@ async def create_remotes_and_export(dataset_path):
     """
     create_remotes(dataset_path)
     await export_dataset(dataset_path)
+    if public:
+        await set_s3_access_tag(os.path.basename(dataset_path), 'public')
 
 
 def create_remotes(dataset_path):
     dataset = os.path.basename(dataset_path)
     s3_sibling(dataset_path)
     github_sibling(dataset_path, dataset)
+
+
+async def fsck_and_drop(dataset_path, branch):
+    # Check and clean local annexed files once export is complete
+    fsck_success = await git_annex_fsck_remote(dataset_path, branch, get_s3_remote())
+    if fsck_success:
+        logger.info(f'{dataset_path} remote fsck passed for {branch}')
+        await annex_drop(dataset_path, branch)
+        logger.info(f'{dataset_path} drop complete')
+    else:
+        logger.error(f'{dataset_path} remote fsck failed for {branch}')
 
 
 @broker.task
@@ -90,18 +102,7 @@ async def export_backup_and_drop(dataset_path):
     if tags:
         await s3_backup_push(dataset_path)
         for tag in tags:
-            # Check and clean local annexed files once export is complete
-            pipeline = Pipeline(broker, git_annex_fsck_remote).call_next(
-                annex_drop,
-                dataset_path=dataset_path,
-                branch=tag.name,
-            )
-            # Call the pipeline (arguments for git_annex_fsck_remote)
-            await pipeline.kiq(
-                dataset_path=dataset_path,
-                branch=tag.name,
-                remote=get_s3_remote(),
-            )
+            await fsck_and_drop(dataset_path, tag.name)
 
 
 @broker.task
@@ -137,17 +138,7 @@ async def export_dataset(
             # Drop cache once all exports are complete
             clear_dataset_cache(dataset_id)
             # Check and clean local annexed files once export is complete
-            pipeline = Pipeline(broker, git_annex_fsck_remote).call_next(
-                annex_drop,
-                dataset_path=dataset_path,
-                branch=new_tag,
-            )
-            # Call the pipeline (arguments for git_annex_fsck_remote)
-            await pipeline.kiq(
-                dataset_path,
-                branch=new_tag,  # Check the history from the new tag just exported
-                remote=get_s3_remote(),
-            )
+            await fsck_and_drop(dataset_path, new_tag)
         else:
             # Clear the cache even if only sibling updates occurred
             clear_dataset_cache(dataset_id)
@@ -257,7 +248,7 @@ def monitor_remote_configs(dataset_path):
 
 
 @broker.task
-async def annex_drop(fsck_success, dataset_path, branch):
+async def annex_drop(dataset_path, branch):
     """Drop local contents from the annex."""
     # Ensure numcopies is set to 2 before running drop
     await run_check(['git-annex', 'numcopies', '2'], dataset_path)
@@ -269,14 +260,11 @@ async def annex_drop(fsck_success, dataset_path, branch):
         # Not an issue if this fails
         pass
     # Drop will only drop successfully exported files present on both remotes
-    if fsck_success:
-        env = os.environ.copy()
-        # Force git-annex to use cached credentials for this
-        del env['AWS_ACCESS_KEY_ID']
-        del env['AWS_SECRET_ACCESS_KEY']
-        await run_check(
-            ['git-annex', 'drop', '--branch', branch], dataset_path, env=env
-        )
+    env = os.environ.copy()
+    # Force git-annex to use cached credentials for this
+    del env['AWS_ACCESS_KEY_ID']
+    del env['AWS_SECRET_ACCESS_KEY']
+    await run_check(['git-annex', 'drop', '--branch', branch], dataset_path, env=env)
 
 
 async def set_remote_public(dataset):

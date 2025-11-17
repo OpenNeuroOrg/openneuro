@@ -57,7 +57,7 @@ def git_annex_fsck_local(dataset_path):
 
 
 @broker.task
-def git_annex_fsck_remote(dataset_path, branch, remote='s3-PUBLIC'):
+async def git_annex_fsck_remote(dataset_path, branch, remote='s3-PUBLIC'):
     """
     Run incremental fsck for one branch (tag) and remote.
 

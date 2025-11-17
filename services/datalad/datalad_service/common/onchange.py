@@ -1,4 +1,4 @@
-from datalad_service.tasks.fsck import git_annex_fsck_local, git_annex_fsck_remote
+from datalad_service.tasks.fsck import git_annex_fsck_local
 
 
 async def on_head(dataset_path):

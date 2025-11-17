@@ -20,7 +20,6 @@ dependencies = [
     "taskiq-redis>=1.0.9",
     "uvicorn[standard]>=0.34.3",
     "httpx>=0.28.1",
-    "taskiq-pipelines>=0.1.4",
 ]
 dynamic = ["version"]
 
