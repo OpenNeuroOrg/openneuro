@@ -3155,7 +3155,7 @@ __metadata:
     "@apollo/client": "npm:3.13.8"
     "@elastic/elasticsearch": "npm:8.13.1"
     "@openneuro/client": "npm:^4.30.2"
-    "@openneuro/search": "npm:^4.39.4"
+    "@openneuro/search": "npm:^4.40.0"
     "@types/jsonwebtoken": "npm:^8"
     "@types/node": "npm:20.12.7"
     "@types/tsc-watch": "npm:^4"
@@ -3169,7 +3169,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@openneuro/search@npm:^4.39.4, @openneuro/search@workspace:packages/openneuro-search":
+"@openneuro/search@npm:^4.40.0, @openneuro/search@workspace:packages/openneuro-search":
   version: 0.0.0-use.local
   resolution: "@openneuro/search@workspace:packages/openneuro-search"
   dependencies:
@@ -3194,7 +3194,7 @@ __metadata:
     "@elastic/elasticsearch": "npm:8.13.1"
     "@graphql-tools/schema": "npm:^10.0.0"
     "@keyv/redis": "npm:^4.5.0"
-    "@openneuro/search": "npm:^4.39.4"
+    "@openneuro/search": "npm:^4.40.0"
     "@sentry/node": "npm:^8.25.0"
     "@sentry/profiling-node": "npm:^8.25.0"
     "@types/cors": "npm:^2"
