@@ -78,7 +78,7 @@ class WorkerMiddleware(TaskiqMiddleware):
 
     async def pre_send(self, message: TaskiqMessage) -> TaskiqMessage:
         """Assign new tasks to the correct worker."""
-        if self.worker_id:
+        if self.worker_id is not None:
             message.labels['queue_name'] = f'worker-{self.worker_id}'
         else:
             # Pick a random worker since this task was not assigned to one
