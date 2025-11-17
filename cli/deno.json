@@ -17,7 +17,7 @@
     "coverage": "deno test --allow-read --allow-write --allow-net --allow-env --allow-sys --coverage ./ && deno coverage ./coverage --lcov > ./coverage.lcov"
   },
   "imports": {
-    "@bids/validator": "jsr:@bids/validator@^2.2.1",
+    "@bids/validator": "jsr:@bids/validator@^2.2.2",
     "@cliffy/command": "jsr:@effigies/cliffy-command@1.0.0-dev.8",
     "@cliffy/prompt": "jsr:@cliffy/prompt@^1.0.0-rc.8",
     "@deno-library/progress": "jsr:@deno-library/progress@^1.5.1",
