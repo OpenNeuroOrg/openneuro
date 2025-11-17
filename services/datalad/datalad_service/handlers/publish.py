@@ -1,11 +1,7 @@
 import falcon
 
-from taskiq_pipelines import Pipeline
-
-from datalad_service.broker import broker
 from datalad_service.tasks.publish import (
     create_remotes_and_export,
-    set_s3_access_tag,
 )
 
 
@@ -18,10 +14,6 @@ class PublishResource:
     async def on_post(self, req, resp, dataset):
         dataset_path = self.store.get_dataset_path(dataset)
         # Pipeline create and export -> set access tag to public
-        await (
-            Pipeline(broker, create_remotes_and_export)
-            .call_after(set_s3_access_tag, dataset=dataset, value='public')
-            .kiq(dataset_path)  # create_remotes_and_export
-        )
+        await create_remotes_and_export.kiq(dataset_path, public=True)
         resp.media = {}
         resp.status = falcon.HTTP_OK
