@@ -23,7 +23,7 @@ certifcateArn: "arn:aws:acm:us-west-2:488777458602:certificate/d37b43e0-9af3-423
 dataladWorkers: 4
 
 # OpenNeuro-server API parallelism
-apiReplicas: 3
+apiReplicas: 5
 
 # Static service parallelism
 webReplicas: 3
@@ -39,8 +39,8 @@ apiCpuRequests: 3
 apiMemoryRequests: 2Gi
 
 # Worker resource configuration
-workerCpuRequests: 2
-workerMemoryRequests: 4Gi
+workerCpuRequests: 4
+workerMemoryRequests: 8Gi
 
 # Nginx resource configuration
 webCpuRequests: 0.25
