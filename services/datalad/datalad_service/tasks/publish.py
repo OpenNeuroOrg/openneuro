@@ -96,13 +96,24 @@ async def export_backup_and_drop(dataset_path):
     """
     Export dataset to S3 backup, verify s3-PUBLIC, and drop local data.
     """
+    dataset_id = os.path.basename(dataset_path)
+    public_dataset = is_public_dataset(dataset_id)
     repo = pygit2.Repository(dataset_path)
     update_s3_sibling(dataset_path)
     tags = sorted(git_tag(repo), key=lambda tag: tag.name)
     if tags:
         await s3_backup_push(dataset_path)
         for tag in tags:
+            logger.info(f'Exporting/dropping tag {dataset_id}@{tag.name}')
+            # Private datasets need to export each tag for this step
+            if not public_dataset:
+                await s3_export(dataset_path, get_s3_remote(), tag.name)
             await fsck_and_drop(dataset_path, tag.name)
+            logger.info(f'Exporting/dropping tag {dataset_id}@{tag.name} complete')
+    if not public_dataset:
+        logger.info(f'Setting access tag for {dataset_id}')
+        await set_s3_access_tag(dataset_id, 'private')
+    logger.info(f'{dataset_id} export_backup_and_drop complete')
 
 
 @broker.task
