@@ -23,13 +23,13 @@ def generate_s3_annex_options(dataset_path, backup=False):
     dataset_id = os.path.basename(dataset_path)
     annex_options = [
         'type=S3',
-        'partsize=1GiB',
         'encryption=none',
         f'fileprefix={dataset_id}/',
         'public=no',
     ]
     if backup:
         annex_options += [
+            'partsize=none',
             f'bucket={get_s3_backup_bucket()}',
             'cost=400',
             'host=storage.googleapis.com',
@@ -37,6 +37,7 @@ def generate_s3_annex_options(dataset_path, backup=False):
         ]
     else:
         annex_options += [
+            'partsize=1GiB',
             'exporttree=yes',
             'versioning=yes',
             f'bucket={get_s3_bucket()}',
