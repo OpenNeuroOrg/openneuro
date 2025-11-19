@@ -105,8 +105,12 @@ async def export_backup_and_drop(dataset_path):
         await s3_backup_push(dataset_path)
         for tag in tags:
             logger.info(f'Exporting/dropping tag {dataset_id}@{tag.name}')
-            # Private datasets need to export each tag for this step
-            if not public_dataset:
+            export_ran = False
+            if await find_in_remote(dataset_path, tag.name, get_s3_remote()):
+                export_ran = True
+                await s3_export(dataset_path, get_s3_remote(), tag.name)
+            if tag == tags[-1] and export_ran:
+                # Always export the most recent tag again if any export ran
                 await s3_export(dataset_path, get_s3_remote(), tag.name)
             await fsck_and_drop(dataset_path, tag.name)
             logger.info(f'Exporting/dropping tag {dataset_id}@{tag.name} complete')
@@ -114,6 +118,19 @@ async def export_backup_and_drop(dataset_path):
         logger.info(f'Setting access tag for {dataset_id}')
         await set_s3_access_tag(dataset_id, 'private')
     logger.info(f'{dataset_id} export_backup_and_drop complete')
+
+
+async def find_in_remote(dataset_path, tag, remote):
+    """Check if any git-annex objects available locally for a branch are not present in a remote."""
+    output = await run_check(
+        ['git-annex', 'find', f'--branch={tag}', '--not', f'--in={remote}'],
+        dataset_path,
+    )
+    if len(output) > 0:
+        # Some keys are missing
+        return False
+    # All keys are present
+    return True
 
 
 @broker.task
