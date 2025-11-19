@@ -39,7 +39,7 @@ def git_annex_fsck_local(dataset_path):
         'fsck',
         '--json',
         '--json-error-messages',
-        '--incremental-schedule=7d',
+        '--incremental-schedule=45d',
     )
     annex_process = subprocess.Popen(
         annex_command, cwd=dataset_path, stdout=subprocess.PIPE
@@ -77,7 +77,7 @@ async def git_annex_fsck_remote(dataset_path, branch, remote='s3-PUBLIC'):
         f'--from={remote}',
         '--json',
         '--json-error-messages',
-        '--incremental-schedule=30d',
+        '--incremental-schedule=365d',
     )
     annex_process = subprocess.Popen(
         annex_command, cwd=dataset_path, stdout=subprocess.PIPE
