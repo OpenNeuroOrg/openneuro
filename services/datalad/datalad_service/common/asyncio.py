@@ -22,3 +22,4 @@ async def run_check(command, dataset_path, env=None):
     stdout, stderr = await process.communicate()
     if process.returncode != 0:
         raise subprocess.CalledProcessError(process.returncode, command, stdout, stderr)
+    return stdout.decode('utf-8')
