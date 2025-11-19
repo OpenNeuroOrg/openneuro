@@ -37,6 +37,7 @@ def git_annex_fsck_local(dataset_path):
     annex_command = (
         'git-annex',
         'fsck',
+        '-J4',
         '--json',
         '--json-error-messages',
         '--incremental-schedule=45d',
@@ -73,6 +74,7 @@ async def git_annex_fsck_remote(dataset_path, branch, remote='s3-PUBLIC'):
     annex_command = (
         'git-annex',
         'fsck',
+        '-J4',
         f'--branch={branch}',
         f'--from={remote}',
         '--json',
