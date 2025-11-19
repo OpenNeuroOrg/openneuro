@@ -80,15 +80,15 @@ def create_remotes(dataset_path):
     github_sibling(dataset_path, dataset)
 
 
-async def fsck_and_drop(dataset_path, branch):
+async def fsck_and_drop(dataset_path, branches):
     # Check and clean local annexed files once export is complete
-    fsck_success = await git_annex_fsck_remote(dataset_path, branch, get_s3_remote())
+    fsck_success = await git_annex_fsck_remote(dataset_path, branches, get_s3_remote())
     if fsck_success:
-        logger.info(f'{dataset_path} remote fsck passed for {branch}')
-        await annex_drop(dataset_path, branch)
+        logger.info(f'{dataset_path} remote fsck passed')
+        await annex_drop(dataset_path, branches)
         logger.info(f'{dataset_path} drop complete')
     else:
-        logger.error(f'{dataset_path} remote fsck failed for {branch}')
+        logger.error(f'{dataset_path} remote fsck failed')
 
 
 @broker.task
@@ -112,8 +112,8 @@ async def export_backup_and_drop(dataset_path):
             if tag == tags[-1] and export_ran:
                 # Always export the most recent tag again if any export ran
                 await s3_export(dataset_path, get_s3_remote(), tag.name)
-            await fsck_and_drop(dataset_path, tag.name)
-            logger.info(f'Exporting/dropping tag {dataset_id}@{tag.name} complete')
+        await fsck_and_drop(dataset_path, [tag.name for tag in tags])
+        logger.info(f'Exporting/dropping tags for {dataset_id} complete')
     if not public_dataset:
         logger.info(f'Setting access tag for {dataset_id}')
         await set_s3_access_tag(dataset_id, 'private')
@@ -167,7 +167,7 @@ async def export_dataset(
             # Drop cache once all exports are complete
             clear_dataset_cache(dataset_id)
             # Check and clean local annexed files once export is complete
-            await fsck_and_drop(dataset_path, new_tag)
+            await fsck_and_drop(dataset_path, [new_tag])
         else:
             # Clear the cache even if only sibling updates occurred
             clear_dataset_cache(dataset_id)
@@ -277,7 +277,7 @@ def monitor_remote_configs(dataset_path):
 
 
 @broker.task
-async def annex_drop(dataset_path, branch):
+async def annex_drop(dataset_path, branches):
     """Drop local contents from the annex."""
     # Ensure numcopies is set to 2 before running drop
     await run_check(['git-annex', 'numcopies', '2'], dataset_path)
@@ -293,7 +293,9 @@ async def annex_drop(dataset_path, branch):
     # Force git-annex to use cached credentials for this
     del env['AWS_ACCESS_KEY_ID']
     del env['AWS_SECRET_ACCESS_KEY']
-    await run_check(['git-annex', 'drop', '--branch', branch], dataset_path, env=env)
+    command = ['git-annex', 'drop']
+    command += [f'--branch={branch}' for branch in branches]
+    await run_check(command, dataset_path, env=env)
 
 
 async def set_remote_public(dataset):

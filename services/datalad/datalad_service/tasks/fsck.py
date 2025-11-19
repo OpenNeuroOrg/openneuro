@@ -58,7 +58,7 @@ def git_annex_fsck_local(dataset_path):
 
 
 @broker.task
-async def git_annex_fsck_remote(dataset_path, branch, remote='s3-PUBLIC'):
+async def git_annex_fsck_remote(dataset_path, branches, remote='s3-PUBLIC'):
     """
     Run incremental fsck for one branch (tag) and remote.
 
@@ -71,16 +71,16 @@ async def git_annex_fsck_remote(dataset_path, branch, remote='s3-PUBLIC'):
         logging.error(f'Could not open git repository for {dataset_path}')
         return False
 
-    annex_command = (
+    annex_command = [
         'git-annex',
         'fsck',
         '-J4',
-        f'--branch={branch}',
         f'--from={remote}',
         '--json',
         '--json-error-messages',
         '--incremental-schedule=365d',
-    )
+    ]
+    annex_command += [f'--branch={branch}' for branch in branches]
     annex_process = subprocess.Popen(
         annex_command, cwd=dataset_path, stdout=subprocess.PIPE
     )
