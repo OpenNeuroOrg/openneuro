@@ -131,6 +131,7 @@ async def export_dataset(
     """
     if is_git_annex_remote(dataset_path, get_s3_remote()):
         dataset_id = os.path.basename(dataset_path)
+        public_dataset = is_public_dataset(dataset_id)
         repo = pygit2.Repository(dataset_path)
         tags = sorted(git_tag(repo), key=lambda tag: tag.name)
         # Update configuration for the remote
@@ -139,11 +140,11 @@ async def export_dataset(
         if tags:
             new_tag = tags[-1].name
             await s3_export(dataset_path, get_s3_remote(), new_tag)
-            if not is_public_dataset(dataset_id):
+            if not public_dataset:
                 await set_s3_access_tag(dataset_id, 'private')
             await s3_backup_push(dataset_path)
             # Once all S3 tags are exported, update GitHub
-            if github_enabled:
+            if github_enabled and public_dataset:
                 # Perform all GitHub export steps
                 github_export(dataset_id, dataset_path, new_tag)
             # Drop cache once all exports are complete
