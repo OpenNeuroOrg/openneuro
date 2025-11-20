@@ -1,6 +1,6 @@
 {
   "name": "@openneuro/app",
-  "version": "4.40.6",
+  "version": "4.40.7",
   "description": "React JS web frontend for the OpenNeuro platform.",
   "license": "MIT",
   "main": "public/client.js",
