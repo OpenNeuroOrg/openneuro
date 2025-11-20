@@ -1,7 +1,6 @@
 import json
-import io
+import asyncio
 import logging
-import subprocess
 
 import pygit2
 
@@ -25,7 +24,7 @@ def get_head_commit_and_references(repo):
 
 
 @broker.task
-def git_annex_fsck_local(dataset_path):
+async def git_annex_fsck_local(dataset_path):
     """Run git-annex fsck for local annexed objects in the draft. Runs on commits, verifies checksums."""
     try:
         commit, references = get_head_commit_and_references(
@@ -34,24 +33,25 @@ def git_annex_fsck_local(dataset_path):
     except pygit2.GitError:
         logging.error(f'Could not open git repository for {dataset_path}')
         return
-    annex_command = (
+    annex_command = [
         'git-annex',
         'fsck',
         '-J4',
         '--json',
         '--json-error-messages',
         '--incremental-schedule=45d',
-    )
-    annex_process = subprocess.Popen(
-        annex_command, cwd=dataset_path, stdout=subprocess.PIPE
+    ]
+    annex_process = await asyncio.create_subprocess_exec(
+        *annex_command, cwd=dataset_path, stdout=asyncio.subprocess.PIPE
     )
     bad_files = []
-    for annexed_file_json in io.TextIOWrapper(annex_process.stdout, encoding='utf-8'):
+    async for annexed_file_json in annex_process.stdout:
         annexed_file = json.loads(annexed_file_json)
         if not annexed_file['success']:
             # Rename for GraphQL consistency
             annexed_file['errorMessages'] = annexed_file.pop('error-messages')
             bad_files.append(annexed_file)
+    await annex_process.wait()
     if len(bad_files) > 0:
         logging.error(f'missing or corrupt annexed objects found in {dataset_path}')
     update_file_check(dataset_path, commit, references, bad_files)
@@ -81,14 +81,15 @@ async def git_annex_fsck_remote(dataset_path, branches, remote='s3-PUBLIC'):
         '--incremental-schedule=365d',
     ]
     annex_command += [f'--branch={branch}' for branch in branches]
-    annex_process = subprocess.Popen(
-        annex_command, cwd=dataset_path, stdout=subprocess.PIPE
+    annex_process = await asyncio.create_subprocess_exec(
+        *annex_command, cwd=dataset_path, stdout=asyncio.subprocess.PIPE
     )
     bad_files = []
-    for annexed_file_json in io.TextIOWrapper(annex_process.stdout, encoding='utf-8'):
+    async for annexed_file_json in annex_process.stdout:
         annexed_file = json.loads(annexed_file_json)
         if not annexed_file['success']:
             bad_files.append(annexed_file)
+    await annex_process.wait()
     update_file_check(dataset_path, commit, references, bad_files, remote)
     if len(bad_files) > 0:
         logging.error(
