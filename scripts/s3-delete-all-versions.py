@@ -1,3 +1,9 @@
+# /// script
+# requires-python = ">=3.13"
+# dependencies = [
+#     "boto3",
+# ]
+# ///
 import argparse
 import logging
 

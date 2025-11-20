@@ -1,3 +1,9 @@
+# /// script
+# requires-python = ">=3.13"
+# dependencies = [
+#     "pymongo",
+# ]
+# ///
 import argparse
 import csv
 from pymongo import MongoClient
