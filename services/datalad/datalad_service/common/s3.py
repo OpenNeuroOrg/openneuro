@@ -182,7 +182,7 @@ def validate_s3_config(dataset_path):
 async def s3_export(dataset_path, target, treeish):
     """Perform an S3 export on a git-annex repo."""
     await run_check(
-        ['git-annex', 'export', '-J4', treeish, '--to', target],
+        ['git-annex', 'export', '-J2', treeish, '--to', target],
         dataset_path,
     )
 
@@ -190,7 +190,7 @@ async def s3_export(dataset_path, target, treeish):
 async def s3_backup_push(dataset_path):
     """Perform an S3 push to the backup remote on a git-annex repo."""
     await run_check(
-        ['git-annex', 'push', '-J4', '--all', get_s3_backup_remote()],
+        ['git-annex', 'push', '-J2', '--all', get_s3_backup_remote()],
         dataset_path,
         env=backup_remote_env(),
     )
