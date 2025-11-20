@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import Helmet from "react-helmet"
 import * as Sentry from "@sentry/react"
 import { useMutation } from "@apollo/client"
 import { EditableContent } from "./components/editable-content"
@@ -8,6 +9,7 @@ import { GitHubAuthButton } from "./github-auth-button"
 import type { UserAccountViewProps } from "../types/user-types"
 import { OrcidConsentForm } from "./components/orcid-consent-form"
 import { validateHttpHttpsUrl } from "../utils/validationUtils"
+import { pageTitle } from "../resources/strings.js"
 
 export const UserAccountView: React.FC<UserAccountViewProps> = ({
   orcidUser,
@@ -84,66 +86,73 @@ export const UserAccountView: React.FC<UserAccountViewProps> = ({
   }
 
   return (
-    <div data-testid="user-account-view" className={styles.useraccountview}>
-      <h3>Account</h3>
-      <ul className={styles.accountDetail}>
-        <li>
-          <span>Name:</span>
-          {orcidUser.name}
-        </li>
-        <li>
-          <span>Email:</span>
-          {orcidUser.email}
-        </li>
-        <li>
-          <span>ORCID:</span>
-          {orcidUser.orcid}
-        </li>
-        {orcidUser?.github &&
-          (
-            <li>
-              <span>GitHub:</span>
-              {orcidUser.github}
-            </li>
-          )}
-        <li>
-          <GitHubAuthButton sync={orcidUser.githubSynced} />
-        </li>
-      </ul>
+    <>
+      <Helmet>
+        <title>
+            {orcidUser.name || "User"} profile - {pageTitle}
+        </title>
+      </Helmet>
+      <div data-testid="user-account-view" className={styles.useraccountview}>
+        <h3>Account</h3>
+        <ul className={styles.accountDetail}>
+          <li>
+            <span>Name:</span>
+            {orcidUser.name}
+          </li>
+          <li>
+            <span>Email:</span>
+            {orcidUser.email}
+          </li>
+          <li>
+            <span>ORCID:</span>
+            {orcidUser.orcid}
+          </li>
+          {orcidUser?.github &&
+            (
+              <li>
+                <span>GitHub:</span>
+                {orcidUser.github}
+              </li>
+            )}
+          <li>
+            <GitHubAuthButton sync={orcidUser.githubSynced} />
+          </li>
+        </ul>
 
-      <EditableContent
-        editableContent={userLinks}
-        setRows={handleLinksChange}
-        heading="Links"
-        validation={validateHttpHttpsUrl}
-        validationMessage="Invalid URL format. Please start with http:// or https://"
-        data-testid="links-section"
-      />
+        <EditableContent
+          editableContent={userLinks}
+          setRows={handleLinksChange}
+          heading="Links"
+          validation={validateHttpHttpsUrl}
+          validationMessage="Invalid URL format. Please start with http:// or https://"
+          data-testid="links-section"
+        />
 
-      {orcidUser?.id && orcidUser?.orcid !== undefined && (
-        <div className={styles.umbOrcidConsent}>
-          <div className={styles.umbOrcidHeading}>
-            <h4>ORCID Integration</h4>
+        {orcidUser?.id && orcidUser?.orcid !== undefined && (
+          <div className={styles.umbOrcidConsent}>
+            <div className={styles.umbOrcidHeading}>
+              <h4>ORCID Integration</h4>
+            </div>
+            <OrcidConsentForm
+              userId={orcidUser.id}
+              initialOrcidConsent={orcidUser.orcidConsent}
+            />
           </div>
-          <OrcidConsentForm
-            userId={orcidUser.id}
-            initialOrcidConsent={orcidUser.orcidConsent}
-          />
-        </div>
-      )}
+        )}
 
-      <EditableContent
-        editableContent={userLocation}
-        setRows={handleLocationChange}
-        heading="Location"
-        data-testid="location-section"
-      />
-      <EditableContent
-        editableContent={userInstitution}
-        setRows={handleInstitutionChange}
-        heading="Institution"
-        data-testid="institution-section"
-      />
-    </div>
+        <EditableContent
+          editableContent={userLocation}
+          setRows={handleLocationChange}
+          heading="Location"
+          data-testid="location-section"
+        />
+        <EditableContent
+          editableContent={userInstitution}
+          setRows={handleInstitutionChange}
+          heading="Institution"
+          data-testid="institution-section"
+        />
+      </div>
+    </>
   )
 }
