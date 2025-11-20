@@ -264,3 +264,18 @@ def is_public_dataset_mock(monkeypatch):
         return True
 
     monkeypatch.setattr('datalad_service.tasks.publish.is_public_dataset', _mock)
+
+
+@pytest.fixture(autouse=True)
+def mock_git_annex_fsck_local(monkeypatch):
+    """
+    Auto-used fixture to mock git_annex_fsck_local.kiq for all tests.
+
+    This prevents tests from hanging due to event loop issues with the
+    async fsck task and avoids running slow fsck operations during tests.
+    """
+    mock_kiq = mock.AsyncMock()
+    # The kiq method is what's called to enqueue the task.
+    # We mock it on the task object itself.
+    monkeypatch.setattr('datalad_service.tasks.fsck.git_annex_fsck_local.kiq', mock_kiq)
+    yield mock_kiq
