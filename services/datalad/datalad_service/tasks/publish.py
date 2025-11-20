@@ -106,7 +106,7 @@ async def export_backup_and_drop(dataset_path):
         for tag in tags:
             logger.info(f'Exporting/dropping tag {dataset_id}@{tag.name}')
             export_ran = False
-            if await find_in_remote(dataset_path, tag.name, get_s3_remote()):
+            if not await find_in_remote(dataset_path, tag.name, get_s3_remote()):
                 export_ran = True
                 await s3_export(dataset_path, get_s3_remote(), tag.name)
             if tag == tags[-1] and export_ran:
