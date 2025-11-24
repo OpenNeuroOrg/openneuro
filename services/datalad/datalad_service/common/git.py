@@ -176,10 +176,14 @@ async def git_commit_index(
     committer = pygit2.Signature(COMMITTER_NAME, COMMITTER_EMAIL)
     if not author:
         author = committer
-    if parents is None:
-        parent_commits = [str(repo.head.target)]
-    else:
-        parent_commits = parents
+
+    parent_commits = [repo.head.target] if parents is None else parents
+    if len(parent_commits) == 1 and not any(
+        repo.index.diff_to_tree(repo.get(parent_commits[0]).tree)
+    ):
+        # No changes to commit
+        return
+
     tree = repo.index.write_tree()
     commit = repo.create_commit(
         'refs/heads/main', author, committer, message, tree, parent_commits
