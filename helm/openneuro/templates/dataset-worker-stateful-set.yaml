@@ -17,6 +17,14 @@ spec:
         resources:
           requests:
             storage: 10Gi
+    - metadata:
+        name: datasets-new
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 10Gi
   template:
     metadata:
       labels:
@@ -64,6 +72,8 @@ spec:
         volumeMounts:
         - name: datasets
           mountPath: /datasets
+        - name: datasets-new
+          mountPath: /datasets-new
         - name: ssh-key
           mountPath: /datalad-key
           subPath: datalad-key
@@ -75,11 +85,11 @@ spec:
             port: 80
       - name: {{ .Release.Name }}-dataset-taskiq-worker
         image: 'openneuro/datalad-service:v{{ .Chart.AppVersion }}'
-        command: ['/srv/.venv/bin/taskiq', 'worker', 'datalad_service.broker:broker', '--tasks-pattern', 'datalad_service/tasks/*.py', '--fs-discover', '--max-async-tasks', '4']
+        command: ['/srv/.venv/bin/taskiq', 'worker', 'datalad_service.broker:broker', '--tasks-pattern', 'datalad_service/tasks/*.py', '--fs-discover', '--max-async-tasks', '2', '--use-process-pool']
         resources:
           requests:
             cpu: {{ .Values.workerCpuRequests }}
-            memory: 32Gi
+            memory: 96Gi
         envFrom:
         - configMapRef:
             name: {{ .Release.Name }}-configmap

@@ -20,3 +20,23 @@ spec:
     fsType: ext4
 ---
 {{- end }}
+{{- range $index, $config := .Values.newWorkerDiskSize }}
+apiVersion: v1
+kind: PersistentVolume
+metadata: 
+  name: datasets-new-{{ $relname }}-dataset-worker-{{ $index }}
+spec:
+  storageClassName: {{ $relname }}-datasets
+  capacity:
+    storage: {{ $config.size }}
+  accessModes:
+    - ReadWriteOnce
+  claimRef:
+    namespace: default
+    name: datasets-new-{{ $relname }}-dataset-worker-new-{{ $index }}
+  csi:
+    driver: pd.csi.storage.gke.io
+    volumeHandle: {{ $config.id }}
+    fsType: ext4
+---
+{{- end }}
