@@ -58,8 +58,22 @@ export const repairDescriptionTypes = (description) => {
   for (const field of arrayStringFields) {
     if (Object.hasOwn(description, field)) {
       if (!isArrayOfStrings(description[field])) {
-        // If it's not an array of strings (or not an array at all), replace with an empty array
-        newDescription[field] = []
+        // Check if the array is corrupted with objects (DataCite flow)
+        if (Array.isArray(description[field])) {
+          newDescription[field] = description[field]
+            .map((item) => {
+              // If item is an object with a 'name' field (DataCite contributor), extract the name.
+              if (typeof item === "object" && item !== null && item.name) {
+                return String(item.name)
+              }
+              // Otherwise, attempt to stringify the item (might still produce garbage, but defensive)
+              return String(item)
+            })
+            .filter((s) => typeof s === "string" && s.trim().length > 0) // Keep only clean strings
+        } else {
+          // If it's not an array at all, replace with an empty array (original logic)
+          newDescription[field] = []
+        }
       }
       // If it is already a valid array of strings, no change is needed.
     }
