@@ -58,7 +58,7 @@ export const repairDescriptionTypes = (description) => {
   for (const field of arrayStringFields) {
     if (Object.hasOwn(description, field)) {
       if (!isArrayOfStrings(description[field])) {
-        // Check if the array is corrupted with objects (DataCite flow)
+        // Check if the array is corrupted
         if (Array.isArray(description[field])) {
           newDescription[field] = description[field]
             .map((item) => {
@@ -66,12 +66,12 @@ export const repairDescriptionTypes = (description) => {
               if (typeof item === "object" && item !== null && item.name) {
                 return String(item.name)
               }
-              // Otherwise, attempt to stringify the item (might still produce garbage, but defensive)
+              // Otherwise, attempt to stringify the item
               return String(item)
             })
-            .filter((s) => typeof s === "string" && s.trim().length > 0) // Keep only clean strings
+            .filter((s) => typeof s === "string" && s.trim().length > 0)
         } else {
-          // If it's not an array at all, replace with an empty array (original logic)
+          // If it's not an array at all (original logic)
           newDescription[field] = []
         }
       }
