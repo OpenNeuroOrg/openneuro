@@ -33,7 +33,7 @@ spec:
     - ReadWriteOnce
   claimRef:
     namespace: default
-    name: datasets-new-{{ $relname }}-dataset-worker-new-{{ $index }}
+    name: datasets-new-{{ $relname }}-dataset-worker-{{ $index }}
   csi:
     driver: pd.csi.storage.gke.io
     volumeHandle: {{ $config.id }}
