@@ -10,14 +10,6 @@ spec:
   replicas: {{ .Values.dataladWorkers }}
   volumeClaimTemplates:
     - metadata:
-        name: datasets
-      spec:
-        accessModes:
-          - ReadWriteOnce
-        resources:
-          requests:
-            storage: 10Gi
-    - metadata:
         name: datasets-new
       spec:
         accessModes:
@@ -70,8 +62,6 @@ spec:
         - secretRef:
             name: {{ .Release.Name }}-secret
         volumeMounts:
-        - name: datasets
-          mountPath: /datasets-old
         - name: datasets-new
           mountPath: /datasets
         - name: ssh-key
