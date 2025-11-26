@@ -71,9 +71,9 @@ spec:
             name: {{ .Release.Name }}-secret
         volumeMounts:
         - name: datasets
-          mountPath: /datasets
+          mountPath: /datasets-old
         - name: datasets-new
-          mountPath: /datasets-new
+          mountPath: /datasets
         - name: ssh-key
           mountPath: /datalad-key
           subPath: datalad-key
@@ -96,7 +96,7 @@ spec:
         - secretRef:
             name: {{ .Release.Name }}-secret
         volumeMounts:
-        - name: datasets
+        - name: datasets-new
           mountPath: /datasets
         - name: ssh-key
           mountPath: /datalad-key
