@@ -15,6 +15,7 @@
   },
   "author": "Squishymedia",
   "dependencies": {
+    "@api/datacite": "file:.api/apis/datacite",
     "@apollo/client": "3.13.8",
     "@apollo/server": "4.12.1",
     "@apollo/utils.keyvadapter": "3.0.0",
