@@ -23,7 +23,7 @@ certifcateArn: "arn:aws:acm:us-west-2:488777458602:certificate/d37b43e0-9af3-423
 dataladWorkers: 4
 
 # OpenNeuro-server API parallelism
-apiReplicas: 5
+apiReplicas: 4
 
 # Static service parallelism
 webReplicas: 3
@@ -35,12 +35,12 @@ sentryDsn: https://b8eb90670f3386206200aa89e0d91076@o4507748938350592.ingest.us.
 apmServerUrl: https://17ae1d2cfa8f47f486b1b6fda3ed9f43.apm.us-west-2.aws.found.io
 
 # API resource configuration
-apiCpuRequests: 3
+apiCpuRequests: 2
 apiMemoryRequests: 2Gi
 
 # Worker resource configuration
-workerCpuRequests: 4
-workerMemoryRequests: 16Gi
+workerCpuRequests: 2
+workerMemoryRequests: 8Gi
 
 # Nginx resource configuration
 webCpuRequests: 0.25
@@ -51,14 +51,14 @@ workerZone: us-west1-c
 
 # Assigned volumes for each worker (max 64TB)
 workerDiskSize:
-  - id: projects/hs-openneuro/zones/us-west1-c/disks/openneuro-prod-datasets-0
-    size: 57000Gi
-  - id: projects/hs-openneuro/zones/us-west1-c/disks/openneuro-prod-datasets-1
-    size: 50000Gi
-  - id: projects/hs-openneuro/zones/us-west1-c/disks/openneuro-prod-datasets-2
-    size: 37000Gi
-  - id: projects/hs-openneuro/zones/us-west1-c/disks/openneuro-prod-datasets-3
-    size: 48000Gi
+  - id: projects/hs-openneuro/zones/us-west1-c/disks/openneuro-prod-worker-datasets-0
+    size: 9000Gi
+  - id: projects/hs-openneuro/zones/us-west1-c/disks/openneuro-prod-worker-datasets-1
+    size: 9000Gi
+  - id: projects/hs-openneuro/zones/us-west1-c/disks/openneuro-prod-worker-datasets-2
+    size: 7000Gi
+  - id: projects/hs-openneuro/zones/us-west1-c/disks/openneuro-prod-worker-datasets-3
+    size: 9000Gi
 
 # Disable Redis password for testing
 redis:
