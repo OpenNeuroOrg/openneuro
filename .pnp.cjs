@@ -14522,7 +14522,7 @@ const RAW_RUNTIME_STATE =
           ["hast-util-raw", "npm:9.0.2"],\
           ["hast-util-to-parse5", "npm:8.0.0"],\
           ["html-void-elements", "npm:3.0.0"],\
-          ["mdast-util-to-hast", "npm:13.1.0"],\
+          ["mdast-util-to-hast", "npm:13.2.1"],\
           ["parse5", "npm:7.1.2"],\
           ["unist-util-position", "npm:5.0.0"],\
           ["unist-util-visit", "npm:5.0.0"],\
@@ -17490,14 +17490,14 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["mdast-util-to-hast", [\
-      ["npm:13.1.0", {\
-        "packageLocation": "./.yarn/cache/mdast-util-to-hast-npm-13.1.0-0d16833522-50886f3fcb.zip/node_modules/mdast-util-to-hast/",\
+      ["npm:13.2.1", {\
+        "packageLocation": "./.yarn/cache/mdast-util-to-hast-npm-13.2.1-c34c4454f4-8fddf5e66e.zip/node_modules/mdast-util-to-hast/",\
         "packageDependencies": [\
           ["@types/hast", "npm:3.0.4"],\
           ["@types/mdast", "npm:4.0.3"],\
           ["@ungap/structured-clone", "npm:1.2.0"],\
           ["devlop", "npm:1.1.0"],\
-          ["mdast-util-to-hast", "npm:13.1.0"],\
+          ["mdast-util-to-hast", "npm:13.2.1"],\
           ["micromark-util-sanitize-uri", "npm:2.0.0"],\
           ["trim-lines", "npm:3.0.1"],\
           ["unist-util-position", "npm:5.0.0"],\
@@ -21511,7 +21511,7 @@ const RAW_RUNTIME_STATE =
           ["devlop", "npm:1.1.0"],\
           ["hast-util-to-jsx-runtime", "npm:2.3.0"],\
           ["html-url-attributes", "npm:3.0.0"],\
-          ["mdast-util-to-hast", "npm:13.1.0"],\
+          ["mdast-util-to-hast", "npm:13.2.1"],\
           ["react", "npm:18.2.0"],\
           ["react-markdown", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:9.0.1"],\
           ["remark-parse", "npm:11.0.0"],\
@@ -22213,7 +22213,7 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["@types/hast", "npm:3.0.4"],\
           ["@types/mdast", "npm:4.0.3"],\
-          ["mdast-util-to-hast", "npm:13.1.0"],\
+          ["mdast-util-to-hast", "npm:13.2.1"],\
           ["remark-rehype", "npm:11.1.0"],\
           ["unified", "npm:11.0.4"],\
           ["vfile", "npm:6.0.1"]\
