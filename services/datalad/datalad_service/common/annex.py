@@ -1,3 +1,4 @@
+import base64
 import hashlib
 import io
 import json
@@ -148,6 +149,11 @@ def parse_rmet_line(remote, rmetLine):
     try:
         remoteContext, remoteData = rmetLine.split('V +')
         slash = '' if remote['url'][-1] == '/' else '/'
+        if remoteData[0] == '!':
+            try:
+                remoteData = base64.b64decode(remoteData[1:]).decode('utf-8')
+            except UnicodeDecodeError:
+                return None
         s3version, path = remoteData.split('#')
         if remote['name'] == get_s3_remote():
             # Presigned via OpenNeuro's credentials
