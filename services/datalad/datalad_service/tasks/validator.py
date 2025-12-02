@@ -59,6 +59,8 @@ async def validate_dataset_deno_call(dataset_path, ref, logger=logger):
             str(config_path),
             '--json',
             dataset_path,
+            '--preferredRemote',
+            's3-PUBLIC',
             '--blacklistModalities',
             'micr',
             '--datasetTypes',
