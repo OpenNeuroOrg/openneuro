@@ -146,27 +146,23 @@ def parse_remote_line(remoteLine):
 
 def parse_rmet_line(remote, rmetLine):
     """Read one rmet line and return a valid URL for this object"""
-    try:
-        remoteContext, remoteData = rmetLine.split('V +')
-        slash = '' if remote['url'][-1] == '/' else '/'
-        if remoteData[0] == '!':
-            try:
-                remoteData = base64.b64decode(remoteData[1:]).decode('utf-8')
-            except UnicodeDecodeError:
-                return None
-        s3version, path = remoteData.split('#')
-        if remote['name'] == get_s3_remote():
-            # Presigned via OpenNeuro's credentials
-            url = presign_remote_url(path, s3version)
-            return url
-        else:
-            # Anonymous access for any other buckets
-            return encode_remote_url(
-                '{}{}{}?versionId={}'.format(remote['url'], slash, path, s3version)
-            )
-    except:
-        raise
-        return None
+    remoteContext, remoteData = rmetLine.split('V +')
+    slash = '' if remote['url'][-1] == '/' else '/'
+    if remoteData[0] == '!':
+        try:
+            remoteData = base64.b64decode(remoteData[1:]).decode('utf-8')
+        except UnicodeDecodeError:
+            return None
+    s3version, path = remoteData.split('#')
+    if remote['name'] == get_s3_remote():
+        # Presigned via OpenNeuro's credentials
+        url = presign_remote_url(path, s3version)
+        return url
+    else:
+        # Anonymous access for any other buckets
+        return encode_remote_url(
+            '{}{}{}?versionId={}'.format(remote['url'], slash, path, s3version)
+        )
 
 
 def read_rmet_file(remote, catFile):
