@@ -165,7 +165,7 @@ async def git_commit(
         raise OpenNeuroGitError(f'Failed to read index: {e}') from e
     # Ensure non-annexed files are smudged, e.g., update end-of-lines
     # but do not "fix" unrelated paths
-    repo.index.add_all(file_paths)
+    repo.index.add_all(file_paths or None)
     return await git_commit_index(repo, author, message, parents)
 
 
