@@ -220,30 +220,59 @@ export const updateContributorsUtil = async (
   let dataciteData = await getDataciteYml(datasetId)
   if (!dataciteData) dataciteData = await emptyDataciteYml({ datasetId })
 
-  const contributorsCopy: RawDataciteContributor[] = newContributors.map(
-    (c) => ({
-      name: c.name,
-      givenName: c.givenName || "",
-      familyName: c.familyName || "",
-      order: c.order ?? null,
-      nameType: "Personal" as const,
-      nameIdentifiers: c.orcid
-        ? [{
-          nameIdentifier: `https://orcid.org/${c.orcid}`,
-          nameIdentifierScheme: "ORCID",
-          schemeUri: "https://orcid.org",
-        }]
-        : [],
-      contributorType: c.contributorType || "Researcher",
-    }),
-  )
+  //
+  // 1. Build contributors (full form, includes `order`)
+  //
+  const contributorsCopy: RawDataciteContributor[] = newContributors.map((
+    c,
+    index,
+  ) => ({
+    name: c.name,
+    givenName: c.givenName || "",
+    familyName: c.familyName || "",
+    nameType: "Personal" as const,
+    nameIdentifiers: c.orcid
+      ? [{
+        nameIdentifier: `https://orcid.org/${
+          c.orcid.replace(/^https?:\/\/orcid\.org\//, "")
+        }`,
+        nameIdentifierScheme: "ORCID",
+        schemeUri: "https://orcid.org",
+      }]
+      : [],
+    contributorType: c.contributorType || "Researcher",
+    order: index + 1,
+  }))
 
   dataciteData.data.attributes.contributors = contributorsCopy
-  dataciteData.data.attributes.creators = contributorsCopy.map((
-    { contributorType: _, ...rest },
-  ) => rest)
 
-  await saveDataciteYmlToRepo(datasetId, userId, dataciteData)
+  //
+  // 2. Build creators (strictly filtered / no empty fields / no order)
+  //
+  type RawDataciteCreator = Omit<
+    RawDataciteContributor,
+    "contributorType" | "order"
+  >
+
+  const creators: RawDataciteCreator[] = contributorsCopy.map((c) => {
+    const creator: RawDataciteCreator = {
+      name: c.name,
+      nameType: "Personal",
+    }
+
+    if (c.givenName?.trim()) creator.givenName = c.givenName
+    if (c.familyName?.trim()) creator.familyName = c.familyName
+    if (c.nameIdentifiers?.length) creator.nameIdentifiers = c.nameIdentifiers
+
+    return creator
+  })
+
+  dataciteData.data.attributes.creators = creators
+
+  //
+  // 3. Save and commit once
+  //
+  const gitRef = await saveDataciteYmlToRepo(datasetId, userId, dataciteData)
 
   return {
     draft: {
@@ -252,5 +281,6 @@ export const updateContributorsUtil = async (
       files: [],
       modified: new Date().toISOString(),
     },
+    gitRef: gitRef.id,
   }
 }
