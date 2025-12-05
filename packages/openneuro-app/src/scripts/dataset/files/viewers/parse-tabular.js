@@ -1,8 +1,12 @@
 const parseTabular = (data, separator) => {
   const rows = data.split("\n")
-  // Remove any whitespace rows (usually trailing)
-  const trimmedRows = rows.filter((row) => !/^\s*$/.test(row))
-  // remove header from rows
+
+  let trimmedRows = rows.filter((row) => !/^\s*$/.test(row))
+
+  if (trimmedRows.length === 0) {
+    return []
+  }
+
   const header = trimmedRows.shift().split(separator)
 
   return trimmedRows.map((row) =>
