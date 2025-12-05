@@ -1,7 +1,7 @@
 const parseTabular = (data, separator) => {
   const rows = data.split("\n")
 
-  let trimmedRows = rows.filter((row) => !/^\s*$/.test(row))
+  const trimmedRows = rows.filter((row) => !/^\s*$/.test(row))
 
   if (trimmedRows.length === 0) {
     return []

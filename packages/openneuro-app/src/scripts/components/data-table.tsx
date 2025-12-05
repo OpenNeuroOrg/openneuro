@@ -88,7 +88,7 @@ function CellFormat(props: any): React.ReactElement | string | number | null {
     return value
   }
 }
-
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const safeStringSort = (a: any, b: any): number => {
   // Coerce to string safely, handle null/undefined by converting to empty string
   const aStr = String(a ?? "").toLowerCase()
@@ -103,7 +103,46 @@ export function DataTable<T extends Record<string, unknown>>({
   data,
   hideColumns = [],
 }: DataTableProps): React.ReactElement {
-  // Empty data check
+  // 🛠️ FIX: Move all Hooks to the top, before the conditional return
+  const [sorting, setSorting] = React.useState<SortingState>([])
+  const columnHelper = createColumnHelper<T>()
+
+  const memoData = React.useMemo(() => data as T[], [data])
+
+  const columns = React.useMemo(
+    () =>
+      // Conditionally generate columns only if data is valid enough to extract keys
+      data && data.length > 0 && data[0]
+        ? Object.keys(data[0] as T)
+          .filter((name) => !hideColumns.includes(name))
+          .map((name) =>
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            columnHelper.accessor(name as any, {
+              header: name,
+              cell: CellFormat,
+              sortingFn: (rowA, rowB, columnId) => {
+                const a = rowA.getValue(columnId)
+                const b = rowB.getValue(columnId)
+                return safeStringSort(a, b)
+              },
+            })
+          )
+        : [],
+    [data, hideColumns],
+  )
+
+  const table = useReactTable<T>({
+    data: memoData,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    state: {
+      sorting,
+    },
+    onSortingChange: setSorting,
+  })
+
+  // The conditional return (empty data check)
   if (!data || data.length === 0 || !data[0]) {
     return (
       <div>
@@ -118,41 +157,6 @@ export function DataTable<T extends Record<string, unknown>>({
       </div>
     )
   }
-
-  const [sorting, setSorting] = React.useState<SortingState>([])
-  const columnHelper = createColumnHelper<T>()
-
-  const columns = React.useMemo(
-    () =>
-      Object.keys(data[0] as T)
-        .filter((name) => !hideColumns.includes(name))
-        .map((name) =>
-          // Type bypass for dynamic key access
-          columnHelper.accessor(name as any, {
-            header: name,
-            cell: CellFormat,
-            sortingFn: (rowA, rowB, columnId) => {
-              const a = rowA.getValue(columnId)
-              const b = rowB.getValue(columnId)
-              return safeStringSort(a, b)
-            },
-          })
-        ),
-    [data, hideColumns],
-  )
-
-  const memoData = React.useMemo(() => data as T[], [data])
-
-  const table = useReactTable<T>({
-    data: memoData,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    state: {
-      sorting,
-    },
-    onSortingChange: setSorting,
-  })
 
   return (
     <table>
