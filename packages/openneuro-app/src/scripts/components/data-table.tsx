@@ -78,14 +78,19 @@ function CellFormat(props): any {
  * Take a general table-like array of objects (one object per row) and render as a simple table with sortable columns
  */
 export function DataTable<T>({
-  data,
+  data = [],
   hideColumns = [],
 }: DataTableProps): React.ReactElement {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const columnHelper = createColumnHelper<T>()
+
   const columns = React.useMemo(
-    () =>
-      Object.keys(data[0])
+    () => {
+      if (!data || data.length === 0) {
+        return [] // Safely return an empty array for columns
+      }
+
+      return Object.keys(data[0])
         .filter((name) => !hideColumns.includes(name))
         .map((name) =>
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -93,7 +98,8 @@ export function DataTable<T>({
             header: name,
             cell: CellFormat,
           })
-        ),
+        )
+    },
     [data, columnHelper, hideColumns],
   )
   const memoData = React.useMemo(() => data, [data])

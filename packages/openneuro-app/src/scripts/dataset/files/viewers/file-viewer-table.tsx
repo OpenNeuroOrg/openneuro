@@ -10,7 +10,7 @@ const TableOverlow = styled.div`
 const FileViewerTable = ({ tableData }): React.ReactElement => {
   return (
     <TableOverlow>
-      <DataTable data={tableData}></DataTable>
+      <DataTable data={tableData.rows}></DataTable>
     </TableOverlow>
   )
 }
