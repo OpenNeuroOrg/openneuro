@@ -34,12 +34,12 @@ const TD = styled.td`
   padding: 3px;
 `
 
-export function extractDateString(dateString) {
+export function extractDateString(dateString: string): Date | false {
   const formats = [
-    "yyyy-MM-dd", // ISO 8601
-    "yyyy-MM-ddTHH:mm:ss", // ISO 8601 with time
-    "MM/dd/yyyy", // US (M/D/YYYY)
-    "dd/MM/yyyy", // European (D/M/YYYY)
+    "yyyy-MM-dd",
+    "yyyy-MM-ddTHH:mm:ss",
+    "MM/dd/yyyy",
+    "dd/MM/yyyy",
   ]
 
   for (const format of formats) {
@@ -57,47 +57,80 @@ export function extractDateString(dateString) {
 }
 
 /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-function CellFormat(props): any {
+function CellFormat(props: any): React.ReactElement | string | number | null {
   const value = props.getValue()
-  let extractedDate
+
+  // Ensure value is not null, undefined, or an empty string before processing.
+  if (
+    value === null || value === undefined ||
+    (typeof value === "string" && value.length === 0)
+  ) {
+    return ""
+  }
+
+  // If array, filter out null/undefined elements before joining
+  if (Array.isArray(value)) {
+    return value.filter((item) => item !== null && item !== undefined).join(
+      ", ",
+    )
+  }
+
+  let extractedDate: Date | false = false
   if (typeof value === "string") {
     extractedDate = extractDateString(value)
   }
+
   if (extractedDate instanceof Date) {
     return format(extractedDate, "yyyy-MM-dd")
   } else if (typeof value === "string" && /^ds[0-9]{6}$/.exec(value)) {
     return <a href={`/datasets/${value}`}>{value}</a>
-  } else if (Array.isArray(value)) {
-    return value.join(",")
   } else {
     return value
   }
+}
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const safeStringSort = (a: any, b: any): number => {
+  // Coerce to string safely, handle null/undefined by converting to empty string
+  const aStr = String(a ?? "").toLowerCase()
+  const bStr = String(b ?? "").toLowerCase()
+  return aStr > bStr ? 1 : aStr < bStr ? -1 : 0
 }
 
 /**
  * Take a general table-like array of objects (one object per row) and render as a simple table with sortable columns
  */
-export function DataTable<T>({
+export function DataTable<T extends Record<string, unknown>>({
   data,
   hideColumns = [],
 }: DataTableProps): React.ReactElement {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const columnHelper = createColumnHelper<T>()
+
+  const memoData = React.useMemo(() => data as T[], [data])
+
   const columns = React.useMemo(
     () =>
-      Object.keys(data[0])
-        .filter((name) => !hideColumns.includes(name))
-        .map((name) =>
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          columnHelper.accessor(name as any, {
-            header: name,
-            cell: CellFormat,
-          })
-        ),
-    [data, columnHelper, hideColumns],
+      // Conditionally generate columns only if data is valid enough to extract keys
+      data && data.length > 0 && data[0]
+        ? Object.keys(data[0] as T)
+          .filter((name) => !hideColumns.includes(name))
+          .map((name) =>
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            columnHelper.accessor(name as any, {
+              header: name,
+              cell: CellFormat,
+              sortingFn: (rowA, rowB, columnId) => {
+                const a = rowA.getValue(columnId)
+                const b = rowB.getValue(columnId)
+                return safeStringSort(a, b)
+              },
+            })
+          )
+        : [],
+    [data, hideColumns],
   )
-  const memoData = React.useMemo(() => data, [data])
-  const table = useReactTable({
+
+  const table = useReactTable<T>({
     data: memoData,
     columns,
     getCoreRowModel: getCoreRowModel(),
@@ -107,6 +140,23 @@ export function DataTable<T>({
     },
     onSortingChange: setSorting,
   })
+
+  // The conditional return (empty data check)
+  if (!data || data.length === 0 || !data[0]) {
+    return (
+      <div>
+        No data available to display.<br />
+        <>
+          Please email issues or questions to{" "}
+          <a href={"mailto:support@openneuro.freshdesk.com"}>
+            support@openneuro.freshdesk.com
+          </a>
+          .
+        </>
+      </div>
+    )
+  }
+
   return (
     <table>
       <thead>
