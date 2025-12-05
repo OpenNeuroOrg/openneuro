@@ -103,7 +103,6 @@ export function DataTable<T extends Record<string, unknown>>({
   data,
   hideColumns = [],
 }: DataTableProps): React.ReactElement {
-  // 🛠️ FIX: Move all Hooks to the top, before the conditional return
   const [sorting, setSorting] = React.useState<SortingState>([])
   const columnHelper = createColumnHelper<T>()
 
