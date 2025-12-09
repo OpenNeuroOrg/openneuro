@@ -858,26 +858,26 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@bids/validator@npm:@jsr/bids__validator@^2.2.2":
-  version: 2.2.2
-  resolution: "@jsr/bids__validator@npm:2.2.2::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__validator%2F2.2.2.tgz"
+"@bids/validator@npm:@jsr/bids__validator@^2.2.4":
+  version: 2.2.4
+  resolution: "@jsr/bids__validator@npm:2.2.4::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__validator%2F2.2.4.tgz"
   dependencies:
     "@bids/nifti-reader-js": "npm:^0.6.9"
-    "@jsr/bids__schema": "npm:~1.1.1"
+    "@jsr/bids__schema": "npm:~1.1.3"
     "@jsr/effigies__cliffy-command": "npm:1.0.0-dev.8"
     "@jsr/effigies__cliffy-table": "npm:1.0.0-dev.5"
-    "@jsr/libs__xml": "npm:^6.0.8"
+    "@jsr/libs__xml": "npm:^7.0.3"
     "@jsr/std__fmt": "npm:^1.0.8"
     "@jsr/std__log": "npm:^0.224.14"
-    "@jsr/std__path": "npm:^1.1.2"
-    "@jsr/std__streams": "npm:^1.0.12"
-    "@jsr/std__yaml": "npm:^1.0.9"
+    "@jsr/std__path": "npm:^1.1.3"
+    "@jsr/std__streams": "npm:^1.0.14"
+    "@jsr/std__yaml": "npm:^1.0.10"
     ajv: "npm:^8.17.1"
     hash-wasm: "npm:^4.12.0"
     hed-validator: "npm:~4.1.4"
     ignore: "npm:^7.0.5"
-    isomorphic-git: "npm:^1.27.1"
-  checksum: 10/6f85d26219041fe05426d6cf62d13d3731b4ee004a376d6cdfb37541c6fde307875bdf777c0432b51619d66c0db9a7f30d8511ee70e2dbb60074e9b616fb809d
+    isomorphic-git: "npm:^1.35.1"
+  checksum: 10/c01b02b61212b20798b1ebf5fa688bd9926fa6feed157936af88cf82c58455bfd38ec2774c9d5728e7a77df5d0f8f11f36cfcc2d4d612a8156c1553c00fc05c1
   languageName: node
   linkType: hard
 
@@ -1783,10 +1783,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jsr/bids__schema@npm:~1.1.1":
-  version: 1.1.2
-  resolution: "@jsr/bids__schema@npm:1.1.2::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__schema%2F1.1.2.tgz"
-  checksum: 10/e46ca17a7a4a76b0d4e7fc669dcd9bcb8a0fe615550db665e894290687860314b542a1e8dbb8151ab2b11d74744b6481aee29136a4fd3818135d573006a1e075
+"@jsr/bids__schema@npm:~1.1.3":
+  version: 1.1.3
+  resolution: "@jsr/bids__schema@npm:1.1.3::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__schema%2F1.1.3.tgz"
+  checksum: 10/7ebb398f8f8470f9c91dfc1ccff0fcd5a04c68d8960e59481a6ac8c7483d2ea146192faadf415796dd29358397811e60d7ce76074f78a37f02de1610b2c5b02d
   languageName: node
   linkType: hard
 
@@ -1840,10 +1840,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jsr/libs__xml@npm:^6.0.8":
-  version: 6.0.8
-  resolution: "@jsr/libs__xml@npm:6.0.8::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Flibs__xml%2F6.0.8.tgz"
-  checksum: 10/40a6b82333aeee27c14a3779f40c84c029ba85c3ad0c02ceb3b1c683a980ecefb0900ad0713baeebb6da16ce3def5fdae403752f077192972b34039ac0ba695c
+"@jsr/libs__xml@npm:^7.0.3":
+  version: 7.0.3
+  resolution: "@jsr/libs__xml@npm:7.0.3::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Flibs__xml%2F7.0.3.tgz"
+  checksum: 10/e7235c7092eba58b7f94061ef3b4c58cd8971b1df6a2485c04b22e6f898a22ebff40133f354d12d894cd78735438b64886bf1d2359767583cf79bf7baa333ef9
   languageName: node
   linkType: hard
 
@@ -1891,7 +1891,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jsr/std__internal@npm:^1.0.10":
+"@jsr/std__internal@npm:^1.0.12":
   version: 1.0.12
   resolution: "@jsr/std__internal@npm:1.0.12::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__internal%2F1.0.12.tgz"
   checksum: 10/14489cb28cf5467811fcee18be529ef5a101c51dd74de510df2c0c4bcea4bc6a4f663bd566ec27a7344178da433fa69fae9aec96eaba570f92fa07969ae3e665
@@ -1925,21 +1925,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jsr/std__path@npm:^1.1.2":
-  version: 1.1.2
-  resolution: "@jsr/std__path@npm:1.1.2::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__path%2F1.1.2.tgz"
+"@jsr/std__path@npm:^1.1.3":
+  version: 1.1.3
+  resolution: "@jsr/std__path@npm:1.1.3::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__path%2F1.1.3.tgz"
   dependencies:
-    "@jsr/std__internal": "npm:^1.0.10"
-  checksum: 10/e674a48454f6b59d3311ca3f34141da1cc9be426b020c2f7d955d1fed2244893482a4ac9821c6830f12b0bb794134f3b11ed05290b246560dc8a6a9a9482724a
+    "@jsr/std__internal": "npm:^1.0.12"
+  checksum: 10/d8e27788c540cd122bb4d1c8b51c1376fee4ec82324352ebb1ee9f2e3c453e1cc41a20da1b5787cdae43efcbd6d09ccf975e8cf113ebc135a8032c11688a5723
   languageName: node
   linkType: hard
 
-"@jsr/std__streams@npm:^1.0.12":
-  version: 1.0.13
-  resolution: "@jsr/std__streams@npm:1.0.13::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__streams%2F1.0.13.tgz"
+"@jsr/std__streams@npm:^1.0.14":
+  version: 1.0.14
+  resolution: "@jsr/std__streams@npm:1.0.14::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__streams%2F1.0.14.tgz"
   dependencies:
     "@jsr/std__bytes": "npm:^1.0.6"
-  checksum: 10/27c0b61c76c6eb6874448610d35290916bd10d1f3033d9774a6eb323c8cc939be890444d366f06d98cf48f98b23f770c36928b2dcf156d25333b754fa707d7c2
+  checksum: 10/c8ff8bf2f9f4046e9bdcb6a741f33ad264e964489af4213e27afcc64c24f88238d6934bb131f707aab77d637aa805211fce738622615acbad3673a5e59a07ea5
   languageName: node
   linkType: hard
 
@@ -1950,7 +1950,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jsr/std__yaml@npm:^1.0.9":
+"@jsr/std__yaml@npm:^1.0.10":
   version: 1.0.10
   resolution: "@jsr/std__yaml@npm:1.0.10::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__yaml%2F1.0.10.tgz"
   checksum: 10/ccb277db0fbc017d25c0df4b710eda416922b2bcdb773c4e78616844db573e6fa5072727896f87c604c6c3c310d6414d0732014416e78b8b65e80a8d12cd856f
@@ -3053,7 +3053,7 @@ __metadata:
   dependencies:
     "@apollo/client": "npm:3.13.8"
     "@artsy/fresnel": "npm:^1.3.1"
-    "@bids/validator": "npm:@jsr/bids__validator@^2.2.2"
+    "@bids/validator": "npm:@jsr/bids__validator@^2.2.4"
     "@emotion/react": "npm:11.11.1"
     "@emotion/styled": "npm:11.11.0"
     "@niivue/niivue": "npm:0.57.0"
@@ -6191,6 +6191,15 @@ __metadata:
   version: 1.1.1
   resolution: "abbrev@npm:1.1.1"
   checksum: 10/2d882941183c66aa665118bafdab82b7a177e9add5eb2776c33e960a4f3c89cff88a1b38aba13a456de01d0dd9d66a8bea7c903268b21ea91dd1097e1e2e8243
+  languageName: node
+  linkType: hard
+
+"abort-controller@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "abort-controller@npm:3.0.0"
+  dependencies:
+    event-target-shim: "npm:^5.0.0"
+  checksum: 10/ed84af329f1828327798229578b4fe03a4dd2596ba304083ebd2252666bdc1d7647d66d0b18704477e1f8aa315f055944aa6e859afebd341f12d0a53c37b4b40
   languageName: node
   linkType: hard
 
@@ -10030,6 +10039,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"event-target-shim@npm:^5.0.0":
+  version: 5.0.1
+  resolution: "event-target-shim@npm:5.0.1"
+  checksum: 10/49ff46c3a7facbad3decb31f597063e761785d7fdb3920d4989d7b08c97a61c2f51183e2f3a03130c9088df88d4b489b1b79ab632219901f184f85158508f4c8
+  languageName: node
+  linkType: hard
+
 "eventemitter3@npm:^3.1.0":
   version: 3.1.2
   resolution: "eventemitter3@npm:3.1.2"
@@ -10044,7 +10060,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"events@npm:^3.0.0":
+"events@npm:^3.0.0, events@npm:^3.3.0":
   version: 3.3.0
   resolution: "events@npm:3.3.0"
   checksum: 10/a3d47e285e28d324d7180f1e493961a2bbb4cad6412090e4dec114f4db1f5b560c7696ee8e758f55e23913ede856e3689cd3aa9ae13c56b5d8314cd3b3ddd1be
@@ -12833,13 +12849,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-git-ref-name-valid@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "is-git-ref-name-valid@npm:1.0.0"
-  checksum: 10/efe1480c58e8c8dc7f57dfb7fa62270b29e4620f6ce46819daf0a72a66a2f4df4f5e5cd75def590cc6ee6faf972aff7fccd96cb1b74019a27fe1cdc9e8d0a2ec
-  languageName: node
-  linkType: hard
-
 "is-glob@npm:^3.1.0":
   version: 3.1.0
   resolution: "is-glob@npm:3.1.0"
@@ -13219,26 +13228,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"isomorphic-git@npm:^1.27.1":
-  version: 1.34.1
-  resolution: "isomorphic-git@npm:1.34.1"
+"isomorphic-git@npm:^1.35.1":
+  version: 1.36.0
+  resolution: "isomorphic-git@npm:1.36.0"
   dependencies:
     async-lock: "npm:^1.4.1"
     clean-git-ref: "npm:^2.0.1"
     crc-32: "npm:^1.2.0"
     diff3: "npm:0.0.3"
     ignore: "npm:^5.1.4"
-    is-git-ref-name-valid: "npm:^1.0.0"
     minimisted: "npm:^2.0.0"
     pako: "npm:^1.0.10"
-    path-browserify: "npm:^1.0.1"
     pify: "npm:^4.0.1"
-    readable-stream: "npm:^3.4.0"
+    readable-stream: "npm:^4.0.0"
     sha.js: "npm:^2.4.12"
     simple-get: "npm:^4.0.1"
   bin:
     isogit: cli.cjs
-  checksum: 10/9bdc3a37928eeb950786739a726186305136f943862d330b94bc72a1078bd4c7dad6df56547cba8fc57876792c53fdf5505ca344242274b0d3a6356e47ee8661
+  checksum: 10/0026ef47857110f1d6f63b0891c098e9a083864a84e094f22b57fffceecbd760e716da60c11546a1e54d40909c1774bf6f664c159c91bcc2951f26943026bc04
   languageName: node
   linkType: hard
 
@@ -18234,7 +18241,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"readable-stream@npm:2 || 3, readable-stream@npm:^3.4.0":
+"readable-stream@npm:2 || 3":
   version: 3.6.2
   resolution: "readable-stream@npm:3.6.2"
   dependencies:
@@ -18268,6 +18275,19 @@ __metadata:
     string_decoder: "npm:~1.1.1"
     util-deprecate: "npm:~1.0.1"
   checksum: 10/d04c677c1705e3fc6283d45859a23f4c05243d0c0f1fc08cb8f995b4d69f0eb7f38ec0ec102f0ee20535c5d999ee27449f40aa2edf6bf30c24d0cc8f8efeb6d7
+  languageName: node
+  linkType: hard
+
+"readable-stream@npm:^4.0.0":
+  version: 4.7.0
+  resolution: "readable-stream@npm:4.7.0"
+  dependencies:
+    abort-controller: "npm:^3.0.0"
+    buffer: "npm:^6.0.3"
+    events: "npm:^3.3.0"
+    process: "npm:^0.11.10"
+    string_decoder: "npm:^1.3.0"
+  checksum: 10/bdf096c8ff59452ce5d08f13da9597f9fcfe400b4facfaa88e74ec057e5ad1fdfa140ffe28e5ed806cf4d2055f0b812806e962bca91dce31bc4cef08e53be3a4
   languageName: node
   linkType: hard
 
@@ -20184,7 +20204,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"string_decoder@npm:^1.0.0, string_decoder@npm:^1.1.1":
+"string_decoder@npm:^1.0.0, string_decoder@npm:^1.1.1, string_decoder@npm:^1.3.0":
   version: 1.3.0
   resolution: "string_decoder@npm:1.3.0"
   dependencies:
