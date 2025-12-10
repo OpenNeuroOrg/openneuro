@@ -16,6 +16,7 @@ import { annexAdd, getAnnexKeys, hashDirLower, readAnnexPath } from "./annex.ts"
 import { GitWorkerContext } from "./types/git-context.ts"
 import { resetWorktree } from "./resetWorktree.ts"
 import { getDefault } from "./getDefault.ts"
+import { transformEol } from "./transformEol.ts"
 
 let context: GitWorkerContext
 let attributesCache: GitAnnexAttributes
@@ -188,8 +189,21 @@ async function add(event: GitWorkerEventAdd) {
     const targetPath = join(context.repoPath, event.data.relativePath)
     // Verify parent directories exist
     await context.fs.promises.mkdir(dirname(targetPath), { recursive: true })
-    // Copy non-annexed files for git index creation
-    await context.fs.promises.copyFile(event.data.path, targetPath)
+    // Apply .gitattributes eol filter
+    const gitAttributes = await getGitAttributes()
+    const attributes = matchGitAttributes(
+      gitAttributes,
+      event.data.relativePath,
+    )
+    if (attributes.text === "auto" || attributes.eol) {
+      logger.info(`EOL\t${event.data.relativePath}`)
+      const fileHandle = await context.fs.promises.open(event.data.path, "r")
+      const targetHandle = await context.fs.promises.open(targetPath, "w")
+      await transformEol(fileHandle, targetHandle)
+    } else {
+      // Copy all other non-annexed files for git index creation
+      await context.fs.promises.copyFile(event.data.path, targetPath)
+    }
     await git.add(options)
     logger.info(`Add\t${event.data.relativePath}`)
   } else {
