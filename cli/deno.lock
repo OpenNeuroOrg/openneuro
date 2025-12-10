@@ -515,7 +515,7 @@
   },
   "workspace": {
     "dependencies": [
-      "jsr:@bids/validator@^2.2.2",
+      "jsr:@bids/validator@^2.2.5",
       "jsr:@cliffy/prompt@^1.0.0-rc.8",
       "jsr:@deno-library/progress@^1.5.1",
       "jsr:@effigies/cliffy-command@1.0.0-dev.8",
