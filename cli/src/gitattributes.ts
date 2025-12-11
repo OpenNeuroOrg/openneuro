@@ -12,6 +12,8 @@ export interface GitAnnexAttributeOptions {
   largefiles?: number
   backend?: GitAnnexBackend
   match: ignore.Ignore
+  text?: "auto"
+  eol?: "lf" | "crlf"
 }
 
 /**
@@ -62,6 +64,10 @@ export function parseGitAttributes(gitattributes: string): GitAnnexAttributes {
         }
       } else if (key === "annex.backend") {
         attributesObject[prefix].backend = value as GitAnnexBackend
+      } else if (key === "text") {
+        attributesObject[prefix].text = value as "auto"
+      } else if (key === "eol") {
+        attributesObject[prefix].eol = value as "lf" | "crlf"
       }
     }
   }
@@ -71,6 +77,8 @@ export function parseGitAttributes(gitattributes: string): GitAnnexAttributes {
 interface MatchingAnnexAttributes {
   backend?: GitAnnexBackend
   largefiles?: number
+  text?: "auto"
+  eol?: "lf" | "crlf"
 }
 
 /**
@@ -88,6 +96,12 @@ export function matchGitAttributes(
       }
       if ("largefiles" in attr) {
         matching.largefiles = attr.largefiles
+      }
+      if ("text" in attr) {
+        matching.text = attr.text as "auto"
+      }
+      if ("eol" in attr) {
+        matching.eol = attr.eol as "lf" | "crlf"
       }
     }
   }
