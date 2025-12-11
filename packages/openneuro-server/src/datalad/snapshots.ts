@@ -222,7 +222,12 @@ export const getSnapshot = (
       datasetId,
     )
   }/datasets/${datasetId}/snapshots/${commitRef}`
-  const cache = new CacheItem(redis, CacheType.snapshot, [datasetId, commitRef])
+  const cache = new CacheItem(
+    redis,
+    CacheType.snapshot,
+    [datasetId, commitRef],
+    432000,
+  )
   return cache.get(() =>
     request
       .get(url)
@@ -281,7 +286,7 @@ export const downloadFiles = (datasetId, tag) => {
   const downloadCache = new CacheItem(redis, CacheType.snapshotDownload, [
     datasetId,
     tag,
-  ])
+  ], 432000)
   // Return an existing cache object if we have one
   return downloadCache.get(async () => {
     // If not, fetch all trees sequentially and cache the result (hopefully some or all trees are cached)
