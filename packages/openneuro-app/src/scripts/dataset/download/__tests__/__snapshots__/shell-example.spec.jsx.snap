@@ -3,7 +3,17 @@
 exports[`dataset/download/ShellExample > renders successfully 1`] = `
 <DocumentFragment>
   <pre
-    class="css-xak41w"
-  />
+    class="css-msttpq"
+    role="figure"
+  >
+    <button
+      aria-label="Copy to clipboard"
+      class="css-cbg4lo"
+    >
+      <i
+        class="fa fa-clipboard"
+      />
+    </button>
+  </pre>
 </DocumentFragment>
 `;
