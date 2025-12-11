@@ -9,7 +9,23 @@ export async function transformEol(
   readHandle: FileHandle,
   writeHandle: FileHandle,
 ) {
+  // 8000 is the same preamble size used by git to detect binary files
+  const preamble = new Uint8Array(8000)
+  const { bytesRead: initialBytes } = await readHandle.read(
+    preamble,
+    0,
+    preamble.length,
+    null,
+  )
+  const firstChunk = preamble.subarray(0, initialBytes)
+  const isBinary = firstChunk.includes(0)
+
   const fileStream = new ReadableStream({
+    start(controller) {
+      if (initialBytes > 0) {
+        controller.enqueue(firstChunk)
+      }
+    },
     async pull(controller) {
       const buffer = new Uint8Array(65536)
       const { bytesRead } = await readHandle.read(
@@ -40,6 +56,10 @@ export async function transformEol(
       await writeHandle.close()
     },
   })
+  if (isBinary) {
+    await fileStream.pipeTo(targetStream)
+    return
+  }
   let lastCharWasCR = false
   const transformStream = new TransformStream({
     transform(chunk, controller) {

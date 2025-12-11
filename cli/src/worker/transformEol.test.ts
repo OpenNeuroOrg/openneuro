@@ -71,6 +71,17 @@ Deno.test("transformEol() basic CRLF to LF", async () => {
   assertEquals(write.content, expected)
 })
 
+Deno.test("transformEol() binary file with null byte", async () => {
+  const input = "line1\r\n\0line2"
+  // Expect no transformation because of the null byte
+  const expected = "line1\r\n\0line2"
+  const read = new MockReadHandle(input) as unknown as FileHandle
+  const write = new MockWriteHandle()
+
+  await transformEol(read, write as unknown as FileHandle)
+  assertEquals(write.content, expected)
+})
+
 Deno.test("transformEol() split CRLF across chunks", async () => {
   const input = "line1\r\nline2"
   const expected = "line1\nline2"
