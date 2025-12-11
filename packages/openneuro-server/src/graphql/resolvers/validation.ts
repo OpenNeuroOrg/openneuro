@@ -14,10 +14,9 @@ export const validation = async (dataset, _, { userInfo }) => {
     redis,
     CacheType.validation,
     [dataset.id, dataset.revision],
-    // This cache is valid forever but may be large, drop inaccessed values weekly
-    604800,
   )
-  return cache.get((doNotCache) => {
+  let validationObject
+  const cacheResult = await cache.get((doNotCache) => {
     return Validation.findOne({
       id: dataset.revision,
       datasetId: dataset.id,
@@ -33,9 +32,11 @@ export const validation = async (dataset, _, { userInfo }) => {
           )
         }
         if (data) {
-          // Return with errors and warning counts appended
+          // Return with errors and warning counts
+          validationObject = data.toObject()
           return {
-            ...data.toObject(),
+            id: validationObject.id,
+            datasetId: validationObject.datasetId,
             errors: data.issues.filter((issue) =>
               issue.severity === "error"
             ).length,
@@ -49,31 +50,41 @@ export const validation = async (dataset, _, { userInfo }) => {
         }
       })
   })
+  if (!cacheResult) return null
+  // Return the cached result along with lazy-loaded issues and codeMessages
+  const result = {
+    ...cacheResult,
+    issues: async () => {
+      if (!validationObject) {
+        validationObject = (await Validation.findOne({
+          id: dataset.revision,
+          datasetId: dataset.id,
+        }, { issues: 1 }).exec()).toObject()
+      }
+      return validationObject.issues
+    },
+    codeMessages: async () => {
+      if (!validationObject) {
+        validationObject = (await Validation.findOne({
+          id: dataset.revision,
+          datasetId: dataset.id,
+        }, { codeMessages: 1 }).exec()).toObject()
+      }
+      return validationObject.codeMessages
+    },
+  }
+  return result
 }
 
 /**
  * Snapshot issues resolver for schema validator
  */
-export const snapshotValidation = async (snapshot) => {
-  const datasetId = snapshot.id.split(":")[0]
-  const validation = await Validation.findOne({
-    id: snapshot.hexsha,
-    datasetId,
-  }).exec()
-  if (validation) {
-    // Return with errors and warning counts appended
-    return {
-      ...validation.toObject(),
-      errors: validation.issues.filter((issue) =>
-        issue.severity === "error"
-      ).length,
-      warnings:
-        validation.issues.filter((issue) => issue.severity === "warning")
-          .length,
-    }
-  } else {
-    return null
+export const snapshotValidation = async (snapshot, _, context) => {
+  const dataset = {
+    id: snapshot.id.split(":")[0],
+    revision: snapshot.hexsha,
   }
+  return validation(dataset, _, context)
 }
 
 export function validationSeveritySort(a, b) {

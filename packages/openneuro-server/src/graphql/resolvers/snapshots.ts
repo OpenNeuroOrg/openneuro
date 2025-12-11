@@ -311,7 +311,7 @@ const Snapshot = {
   analytics: (snapshot) => analytics(snapshot),
   issues: (snapshot) => snapshotIssues(snapshot),
   issuesStatus: (snapshot) => issuesSnapshotStatus(snapshot),
-  validation: (snapshot) => snapshotValidation(snapshot),
+  validation: snapshotValidation,
   contributors: (snapshot) => {
     const datasetId = snapshot.datasetId
     return contributors({
