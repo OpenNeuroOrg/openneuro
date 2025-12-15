@@ -43,8 +43,8 @@ workerCpuRequests: 2
 workerMemoryRequests: 8Gi
 
 # Nginx resource configuration
-webCpuRequests: 0.25
-webMemoryRequests: 512Mi
+webCpuRequests: 0.1
+webMemoryRequests: 128Mi
 
 # GCP zone for this set of workers
 workerZone: us-west1-c
