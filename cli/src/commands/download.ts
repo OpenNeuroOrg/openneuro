@@ -4,7 +4,6 @@ import { readConfig } from "../config.ts"
 import { logger } from "../logger.ts"
 import { getRepoAccess } from "./git-credential.ts"
 import { getLatestSnapshotVersion } from "../graphq.ts"
-import { version } from "node:os"
 
 export const download = new Command()
   .name("download")

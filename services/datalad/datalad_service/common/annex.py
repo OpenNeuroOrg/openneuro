@@ -1,3 +1,4 @@
+import base64
 import hashlib
 import io
 import json
@@ -7,6 +8,7 @@ import os
 import urllib.parse
 import time
 import uuid
+from collections import defaultdict
 
 import aiofiles
 import pygit2
@@ -145,22 +147,23 @@ def parse_remote_line(remoteLine):
 
 def parse_rmet_line(remote, rmetLine):
     """Read one rmet line and return a valid URL for this object"""
-    try:
-        remoteContext, remoteData = rmetLine.split('V +')
-        slash = '' if remote['url'][-1] == '/' else '/'
-        s3version, path = remoteData.split('#')
-        if remote['name'] == get_s3_remote():
-            # Presigned via OpenNeuro's credentials
-            url = presign_remote_url(path, s3version)
-            return url
-        else:
-            # Anonymous access for any other buckets
-            return encode_remote_url(
-                '{}{}{}?versionId={}'.format(remote['url'], slash, path, s3version)
-            )
-    except:
-        raise
-        return None
+    remoteContext, remoteData = rmetLine.split('V +')
+    slash = '' if remote['url'][-1] == '/' else '/'
+    if remoteData[0] == '!':
+        try:
+            remoteData = base64.b64decode(remoteData[1:]).decode('utf-8')
+        except UnicodeDecodeError:
+            return None
+    s3version, path = remoteData.split('#')
+    if remote['name'] == get_s3_remote():
+        # Presigned via OpenNeuro's credentials
+        url = presign_remote_url(path, s3version)
+        return url
+    else:
+        # Anonymous access for any other buckets
+        return encode_remote_url(
+            '{}{}{}?versionId={}'.format(remote['url'], slash, path, s3version)
+        )
 
 
 def read_rmet_file(remote, catFile):
@@ -202,19 +205,19 @@ def get_repo_urls(path, files):
         # Skip searching for URLs if no remote.log is present
         return files
     rmetPaths = []
-    rmetFiles = {}
+    rmetFiles = defaultdict(list)
     for f in files:
         if 'key' in f:
             rmetPath = compute_rmet(f['key'])
             if rmetPath in rmetObjects:
                 # Keep a reference to the files so we can add URLs later
-                rmetFiles[rmetPath] = f
+                rmetFiles[rmetPath].append(f)
                 rmetPaths.append(rmetPath)
             else:
                 # Check for alternate path used by older versions of git-annex
                 rmetPath = compute_rmet(f['key'], legacy=True)
                 if rmetPath in rmetObjects:
-                    rmetFiles[rmetPath] = f
+                    rmetFiles[rmetPath].append(f)
                     rmetPaths.append(rmetPath)
     # Then read those objects with git cat-file --batch
     gitObjects = ''
@@ -271,7 +274,9 @@ def get_repo_urls(path, files):
         for path in rmetPaths:
             url = read_rmet_file(remote, catFile)
             if url:
-                rmetFiles[path]['urls'].append(url)
+                # Add this URL to all files that reference this rmet
+                for file in rmetFiles[path]:
+                    file['urls'].append(url)
     return files
 
 

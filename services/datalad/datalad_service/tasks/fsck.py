@@ -40,6 +40,7 @@ async def git_annex_fsck_local(dataset_path):
         '--json',
         '--json-error-messages',
         '--incremental-schedule=45d',
+        '--numcopies=1',
     ]
     annex_process = await asyncio.create_subprocess_exec(
         *annex_command, cwd=dataset_path, stdout=asyncio.subprocess.PIPE

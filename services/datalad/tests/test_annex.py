@@ -188,6 +188,23 @@ def test_parse_rmet_line_https():
     assert 'Signature=' in url
 
 
+def test_parse_rmet_line_base64():
+    remote = {
+        'name': 's3-PUBLIC',
+        'url': 'https://s3.amazonaws.com/openneuro.org',
+        'uuid': '57894849-d0c8-4c62-8418-3627be18a196',
+    }
+    url = parse_rmet_line(
+        remote,
+        """1590213748.042921433s 57894849-d0c8-4c62-8418-3627be18a196:V +!aVZjRWsxOGUzSjJXUXlzNHpyX0FOYVRQZnBVdWZXNFkjZHMwMDI3NzgvZGF0YXNldF9kZXNjcmlwdGlvbi5qc29u""",
+    )
+    assert (
+        'https://s3.amazonaws.com/a-fake-test-public-bucket/ds002778/dataset_description.json?versionId=iVcEk18e3J2WQys4zr_ANaTPfpUufW4Y&AWSAccessKeyId=aws-id'
+        in url
+    )
+    assert 'Signature=' in url
+
+
 def test_read_rmet_file():
     remote = {
         'name': 's3-PUBLIC',

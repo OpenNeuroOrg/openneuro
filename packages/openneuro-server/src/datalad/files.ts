@@ -89,7 +89,7 @@ export const getFiles = (datasetId, treeish): Promise<[DatasetFile?]> => {
   const cache = new CacheItem(redis, CacheType.commitFiles, [
     datasetId,
     treeish.substring(0, 7),
-  ])
+  ], 432000)
   return cache.get(
     async (doNotCache): Promise<[DatasetFile?]> => {
       const response = await fetch(

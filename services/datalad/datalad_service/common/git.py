@@ -11,6 +11,7 @@ import pygit2
 from charset_normalizer import from_bytes
 
 from datalad_service.common.onchange import on_head
+from datalad_service.common.const import CHUNK_SIZE_BYTES
 
 tag_ref = re.compile('^refs/tags/')
 
@@ -132,6 +133,35 @@ def git_rename_master_to_main(repo):
         repo.references['HEAD'].set_target('refs/heads/main')
 
 
+async def _normalize_line_endings_in_file(full_path, repo_temp_path):
+    """
+    Given a file path, normalize line endings from CRLF to LF.
+    """
+    needs_change = False
+    async with aiofiles.open(full_path, 'rb') as f:
+        while chunk := await f.read(CHUNK_SIZE_BYTES):
+            if b'\r\n' in chunk:
+                needs_change = True
+                break
+
+    if not needs_change:
+        return
+
+    # If changes are needed, stream-edit the file via a temporary file
+    async with aiofiles.tempfile.NamedTemporaryFile(
+        'wb', dir=repo_temp_path, delete=False
+    ) as tmp:
+        temp_path = tmp.name
+        try:
+            async with aiofiles.open(full_path, 'rb') as f:
+                while chunk := await f.read(CHUNK_SIZE_BYTES):
+                    await tmp.write(chunk.replace(b'\r\n', b'\n'))
+            os.rename(temp_path, full_path)
+        except:
+            os.unlink(temp_path)
+            raise
+
+
 async def git_commit(
     repo, file_paths, author=None, message='[OpenNeuro] Recorded changes', parents=None
 ):
@@ -145,6 +175,26 @@ async def git_commit(
                 repo.references['HEAD'].target
             )
         )
+
+    # Get the list of modified files to check for line endings
+    modified_files = {
+        path
+        for path, flags in repo.status().items()
+        if flags != pygit2.GIT_STATUS_CURRENT
+    }
+    # Temporary path for line ending normalization
+    repo_temp_path = repo.path + '/openneuro/tmp'
+    os.makedirs(repo_temp_path, exist_ok=True)
+    # Normalize line endings for any files with the eol attribute
+    for file_path in modified_files:
+        try:
+            eol_attr = repo.get_attr(file_path, 'eol')
+            if eol_attr == 'lf':
+                full_path = os.path.join(repo.workdir, file_path)
+                await _normalize_line_endings_in_file(full_path, repo_temp_path)
+        except (KeyError, ValueError, IOError) as e:
+            logger.warning(f"Could not process line endings for '{file_path}': {e}")
+
     # Refresh index with git-annex specific handling
     annex_command = ['git-annex', 'add'] + file_paths
     try:
@@ -173,10 +223,14 @@ async def git_commit_index(
     committer = pygit2.Signature(COMMITTER_NAME, COMMITTER_EMAIL)
     if not author:
         author = committer
-    if parents is None:
-        parent_commits = [str(repo.head.target)]
-    else:
-        parent_commits = parents
+
+    parent_commits = [repo.head.target] if parents is None else parents
+    if len(parent_commits) == 1 and not any(
+        repo.index.diff_to_tree(repo.get(parent_commits[0]).tree)
+    ):
+        # No changes to commit
+        return
+
     tree = repo.index.write_tree()
     commit = repo.create_commit(
         'refs/heads/main', author, committer, message, tree, parent_commits

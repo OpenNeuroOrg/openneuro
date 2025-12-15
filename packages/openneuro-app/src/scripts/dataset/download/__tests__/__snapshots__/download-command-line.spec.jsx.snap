@@ -3,7 +3,7 @@
 exports[`dataset/download > DownloadSampleCommand component > renders successfully 1`] = `
 <DocumentFragment>
   <pre
-    class="css-xak41w"
+    class="css-msttpq"
     role="figure"
   >
     # Login by following the prompts
@@ -13,6 +13,14 @@ exports[`dataset/download > DownloadSampleCommand component > renders successful
     # Download the repository
     <br />
     deno run -A jsr:@openneuro/cli download --draft ds000001 ds000001-download/
+    <button
+      aria-label="Copy to clipboard"
+      class="css-cbg4lo"
+    >
+      <i
+        class="fa fa-clipboard"
+      />
+    </button>
   </pre>
 </DocumentFragment>
 `;

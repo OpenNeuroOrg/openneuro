@@ -3,7 +3,7 @@ import PropTypes from "prop-types"
 import ShellExample from "./shell-example.jsx"
 
 export const DownloadSampleCommand = ({ datasetId, snapshotTag }) => (
-  <ShellExample role="figure">
+  <ShellExample>
     # Login by following the prompts<br />
     deno run -A jsr:@openneuro/cli login<br />
     # Download the repository<br />

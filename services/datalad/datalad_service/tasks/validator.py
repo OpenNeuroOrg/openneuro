@@ -11,7 +11,7 @@ from datalad_service.broker import broker
 
 logger = logging.getLogger('datalad_service.' + __name__)
 
-DENO_VALIDATOR_VERSION = '2.2.2'
+DENO_VALIDATOR_VERSION = '2.2.5'
 
 DENO_METADATA = {'validator': 'schema', 'version': DENO_VALIDATOR_VERSION}
 
@@ -59,6 +59,8 @@ async def validate_dataset_deno_call(dataset_path, ref, logger=logger):
             str(config_path),
             '--json',
             dataset_path,
+            '--preferredRemote',
+            's3-PUBLIC',
             '--blacklistModalities',
             'micr',
             '--datasetTypes',

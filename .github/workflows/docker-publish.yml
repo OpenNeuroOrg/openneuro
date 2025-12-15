@@ -8,7 +8,7 @@ jobs:
     name: Server
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: login to docker hub
         id: docker-hub
         env:
@@ -28,7 +28,7 @@ jobs:
     name: App
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: login to docker hub
         id: docker-hub
         env:
@@ -48,7 +48,7 @@ jobs:
     name: Indexer
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: login to docker hub
         id: docker-hub
         env:
@@ -68,7 +68,7 @@ jobs:
     name: Datalad Service
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: login to docker hub
         id: docker-hub
         env:
