@@ -37,7 +37,7 @@ export const fsckDataset = async (_, { datasetId }, { user, userInfo }) => {
   }
   try {
     // Lock for 30 minutes to avoid stacking fsck requests
-    await redlock.lock(`openneuro:recheck-lock:${datasetId}`, 1800000)
+    await redlock.lock(`openneuro:fsck-local-lock:${datasetId}`, 1800000)
     const response = await fetch(fsckUrl(datasetId), {
       method: "POST",
       body: JSON.stringify({}),
