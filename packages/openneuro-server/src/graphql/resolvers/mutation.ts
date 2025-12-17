@@ -52,10 +52,9 @@ import {
   updateEventStatus,
 } from "./datasetEvents"
 import { createGitEvent } from "./gitEvents"
-import { updateFileCheck } from "./fileCheck"
+import { fsckDataset, updateFileCheck } from "./fileCheck"
 import { updateContributors } from "../../datalad/contributors"
 import { updateWorkerTask } from "./worker"
-import { fsckDataset } from "./fileCheck"
 
 const Mutation = {
   createDataset,
