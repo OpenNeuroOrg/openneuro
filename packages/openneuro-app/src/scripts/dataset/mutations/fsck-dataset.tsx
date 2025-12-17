@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { gql, useMutation } from "@apollo/client"
 import { Button } from "../../components/button/Button"
 
-const FSCK_DATASET = gql`
+export const FSCK_DATASET = gql`
   mutation fsckDataset($datasetId: ID!) {
     fsckDataset(datasetId: $datasetId)
   }
