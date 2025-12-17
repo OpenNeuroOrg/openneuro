@@ -178,6 +178,8 @@ export const typeDefs = `
     finishUpload(uploadId: ID!): Boolean
     # Drop cached data for a dataset - requires site admin access
     cacheClear(datasetId: ID!): Boolean
+    # Rerun fsck on a dataset if 30 minutes have passed since last request
+    fsckDataset(datasetId: ID!): Boolean
     # Rerun the latest validator on a given commit
     revalidate(datasetId: ID!, ref: String!): Boolean
     # Request a temporary token for git access
