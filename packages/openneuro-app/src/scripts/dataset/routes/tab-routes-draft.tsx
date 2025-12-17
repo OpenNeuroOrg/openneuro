@@ -45,6 +45,7 @@ export const TabRoutesDraft = ({ dataset, hasEdit }) => {
         element={
           <Snapshot
             datasetId={dataset.id}
+            modified={dataset.draft.modified}
             snapshots={dataset.snapshots}
             validation={dataset.draft.validation}
             description={dataset.draft.description}
