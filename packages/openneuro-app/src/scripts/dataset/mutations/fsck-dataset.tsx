@@ -54,7 +54,7 @@ export const FsckDataset = ({ datasetId, disabled }: FsckDatasetProps) => {
             } else {
               setStatus("failure")
             }
-          } catch (e) {
+          } catch (_err) {
             setStatus("failure")
           }
         }}
