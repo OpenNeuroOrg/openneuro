@@ -26,13 +26,13 @@ export const NoErrors = ({ validation, authors, fileCheck, children }) => {
     return children
   } else {
     const correctErrorsMessage =
-      "BIDS validation must be complete and all errors corrected"
+      "BIDS validation must be complete and all errors corrected."
     const noAuthorMessage =
-      '"Authors" must include at least one entry in dataset_description.json'
+      '"Authors" must include at least one entry in dataset_description.json.'
     const fileChecksPendingMessage =
-      "file integrity checks are pending and may take a few minutes to complete. Please wait a few minutes"
+      "File integrity checks are pending and may take a few minutes to complete. Please wait for checks to finish."
     const badFilesMessage =
-      "one or more files in the most recent draft are missing or do not match checksums. Please reupload any files listed below"
+      "One or more files in the most recent draft are missing or do not match checksums. Please reupload any files listed below."
     const includedMessages = []
     if (!noErrors) includedMessages.push(correctErrorsMessage)
     if (!hasAuthor) includedMessages.push(noAuthorMessage)
@@ -40,7 +40,10 @@ export const NoErrors = ({ validation, authors, fileCheck, children }) => {
     if (fileCheckFinish && !noBadFiles) includedMessages.push(badFilesMessage)
     return (
       <span className="text-danger">
-        {`${includedMessages.join(" and ")} to create a version`}
+        <ul>{includedMessages.map((msg, i) => <li key={i}>{msg}</li>)}</ul>
+        {includedMessages.length !== 0 && (
+          <p>The above issues must be corrected to create a version.</p>
+        )}
         {fileCheckFinish && !noBadFiles && (
           <FileCheckList fileCheck={fileCheck} />
         )}
