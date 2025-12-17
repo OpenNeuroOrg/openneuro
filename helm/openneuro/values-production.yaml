@@ -35,16 +35,16 @@ sentryDsn: https://b8eb90670f3386206200aa89e0d91076@o4507748938350592.ingest.us.
 apmServerUrl: https://17ae1d2cfa8f47f486b1b6fda3ed9f43.apm.us-west-2.aws.found.io
 
 # API resource configuration
-apiCpuRequests: 2
-apiMemoryRequests: 2Gi
+apiCpuRequests: 0.5
+apiMemoryRequests: 1.5Gi
 
 # Worker resource configuration
 workerCpuRequests: 2
 workerMemoryRequests: 8Gi
 
 # Nginx resource configuration
-webCpuRequests: 0.25
-webMemoryRequests: 512Mi
+webCpuRequests: 0.1
+webMemoryRequests: 128Mi
 
 # GCP zone for this set of workers
 workerZone: us-west1-c
