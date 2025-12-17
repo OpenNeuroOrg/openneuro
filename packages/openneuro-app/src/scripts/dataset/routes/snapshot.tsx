@@ -31,6 +31,8 @@ export const NoErrors = (
   const currentTime = new Date().getTime()
   const thirtyMinutesAgo = currentTime - thirtyMinutes
   const recheckEnabled = modifiedTime < thirtyMinutesAgo
+  const timeDiff = modifiedTime + thirtyMinutes - currentTime
+  const minutesDiff = Math.round(timeDiff / (1000 * 60))
 
   if (noBadFiles && noErrors && hasAuthor) {
     return children
@@ -54,11 +56,16 @@ export const NoErrors = (
         {includedMessages.length !== 0 && (
           <p>The above issues must be corrected to create a version.</p>
         )}
-        {fileCheckFinish && !noBadFiles && (
+        {!noBadFiles && (
           <span>
-            {recheckEnabled && <FsckDataset datasetId={datasetId} />}
-            <FileCheckList fileCheck={fileCheck} />
+            <FsckDataset datasetId={datasetId} disabled={!recheckEnabled} />
+            {!recheckEnabled && (
+              <p>A recheck can be requested in {minutesDiff} minutes.</p>
+            )}
           </span>
+        )}
+        {fileCheckFinish && !noBadFiles && (
+          <FileCheckList fileCheck={fileCheck} />
         )}
       </span>
     )

@@ -28,7 +28,7 @@ export const fsckUrl = (datasetId) => {
   }/datasets/${datasetId}/fsck`
 }
 
-export const fsckDataset = async (datasetId, _, { user, userInfo }) => {
+export const fsckDataset = async (_, { datasetId }, { user, userInfo }) => {
   // Anonymous users can't trigger fsck
   try {
     await checkDatasetWrite(datasetId, user, userInfo)
