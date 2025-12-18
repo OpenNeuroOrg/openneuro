@@ -32,6 +32,7 @@ from datalad_service.handlers.reexporter import ReexporterResource
 from datalad_service.handlers.reset import ResetResource
 from datalad_service.handlers.remote_import import RemoteImportResource
 from datalad_service.handlers.info import InfoResource
+from datalad_service.handlers.fsck import FsckResource
 from datalad_service.middleware.auth import AuthenticateMiddleware
 from datalad_service.middleware.error import CustomErrorHandlerMiddleware
 
@@ -103,6 +104,7 @@ def create_app():
     dataset_reset_resource = ResetResource(store)
     dataset_remote_import_resource = RemoteImportResource(store)
     dataset_info_resource = InfoResource(store)
+    dataset_fsck_resource = FsckResource(store)
 
     app.add_route('/heartbeat', heartbeat)
 
@@ -115,6 +117,7 @@ def create_app():
     app.add_route('/datasets/{dataset}/description', dataset_description)
     app.add_route('/datasets/{dataset}/validate/{hexsha}', dataset_validation)
     app.add_route('/datasets/{dataset}/reset/{hexsha}', dataset_reset_resource)
+    app.add_route('/datasets/{dataset}/fsck', dataset_fsck_resource)
     app.add_route('/datasets/{dataset}/info', dataset_info_resource)
     app.add_route('/datasets/{dataset}/info/{name}', dataset_info_resource)
     app.add_route('/datasets/{dataset}/files', dataset_files)

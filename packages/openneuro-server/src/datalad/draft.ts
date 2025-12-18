@@ -7,17 +7,30 @@ import { getDatasetWorker } from "../libs/datalad-service"
 import CacheItem, { CacheType } from "../cache/item"
 import { redis } from "../libs/redis"
 
-export const getDraftRevision = async (datasetId) => {
+// Draft info resolver
+type DraftInfo = {
+  ref: string
+  hexsha: string // Duplicate of ref for backwards compatibility
+  tree: string
+  message: string
+  modified: Date
+}
+
+export const getDraftRevision = async (datasetId): Promise<string> => {
+  const { hexsha } = await getDraftInfo(datasetId)
+  return hexsha
+}
+
+export const getDraftInfo = async (datasetId) => {
   const cache = new CacheItem(redis, CacheType.draftRevision, [datasetId], 10)
-  return cache.get(async (_doNotCache): Promise<string> => {
+  return cache.get(async (_doNotCache): Promise<DraftInfo> => {
     const draftUrl = `http://${
       getDatasetWorker(
         datasetId,
       )
     }/datasets/${datasetId}/draft`
     const response = await fetch(draftUrl)
-    const { hexsha } = await response.json()
-    return hexsha
+    return await response.json()
   })
 }
 

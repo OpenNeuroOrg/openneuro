@@ -52,7 +52,7 @@ import {
   updateEventStatus,
 } from "./datasetEvents"
 import { createGitEvent } from "./gitEvents"
-import { updateFileCheck } from "./fileCheck"
+import { fsckDataset, updateFileCheck } from "./fileCheck"
 import { updateContributors } from "../../datalad/contributors"
 import { updateWorkerTask } from "./worker"
 
@@ -91,6 +91,7 @@ const Mutation = {
   finishUpload,
   cacheClear,
   revalidate,
+  fsckDataset,
   prepareRepoAccess,
   reexportRemotes,
   resetDraft,
