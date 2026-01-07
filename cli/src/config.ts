@@ -24,9 +24,9 @@ export function getConfig(): ClientConfig {
   const config = JSON.parse(
     new TextDecoder().decode(Deno.readFileSync(configPath)),
   )
-  const token = config.hasOwn(url) && config[url]
-  const errorReporting = config.hasOwn("errorReporting") &&
-    config["errorReporting"] === "true"
+  const token = Object.hasOwn(config, url) && config[url]
+  const errorReporting = Object.hasOwn(config, "errorReporting") &&
+    config["errorReporting"] === true
   if (url && token) {
     const config: ClientConfig = {
       url,
