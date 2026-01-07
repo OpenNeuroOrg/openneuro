@@ -10,29 +10,41 @@ import FileView from "../files/file-view"
 import styled from "@emotion/styled"
 import { apiPath } from "../files/file"
 import { FileCheckList } from "../fragments/file-check-list"
+import { FsckDataset } from "../mutations/fsck-dataset"
 
 const FormRow = styled.div`
   margin-top: 0;
   margin-bottom: 1.3em;
 `
 
-export const NoErrors = ({ validation, authors, fileCheck, children }) => {
+export const NoErrors = (
+  { datasetId, modified, validation, authors, fileCheck, children },
+) => {
   const noErrors = validation?.errors === 0
   // zero authors will cause DOI minting to fail
   const hasAuthor = authors?.length > 0
   const fileCheckFinish = fileCheck !== null
   const noBadFiles = fileCheck?.annexFsck?.length === 0
+  // Check if modified is 30 minutes old
+  const thirtyMinutes = 1800000
+  const modifiedTime = new Date(modified).getTime()
+  const currentTime = new Date().getTime()
+  const thirtyMinutesAgo = currentTime - thirtyMinutes
+  const recheckEnabled = modifiedTime < thirtyMinutesAgo
+  const timeDiff = modifiedTime + thirtyMinutes - currentTime
+  const minutesDiff = Math.round(timeDiff / (1000 * 60))
+
   if (noBadFiles && noErrors && hasAuthor) {
     return children
   } else {
     const correctErrorsMessage =
-      "BIDS validation must be complete and all errors corrected"
+      "BIDS validation must be complete and all errors corrected."
     const noAuthorMessage =
-      '"Authors" must include at least one entry in dataset_description.json'
+      '"Authors" must include at least one entry in dataset_description.json.'
     const fileChecksPendingMessage =
-      "file integrity checks are pending and may take a few minutes to complete. Please wait a few minutes"
+      "File integrity checks are pending and may take a few minutes to complete. Please wait for checks to finish."
     const badFilesMessage =
-      "one or more files in the most recent draft are missing or do not match checksums. Please reupload any files listed below"
+      "One or more files in the most recent draft are missing or do not match checksums. Please reupload any files listed below."
     const includedMessages = []
     if (!noErrors) includedMessages.push(correctErrorsMessage)
     if (!hasAuthor) includedMessages.push(noAuthorMessage)
@@ -40,7 +52,18 @@ export const NoErrors = ({ validation, authors, fileCheck, children }) => {
     if (fileCheckFinish && !noBadFiles) includedMessages.push(badFilesMessage)
     return (
       <span className="text-danger">
-        {`${includedMessages.join(" and ")} to create a version`}
+        <ul>{includedMessages.map((msg, i) => <li key={i}>{msg}</li>)}</ul>
+        {includedMessages.length !== 0 && (
+          <p>The above issues must be corrected to create a version.</p>
+        )}
+        {!noBadFiles && (
+          <span>
+            <FsckDataset datasetId={datasetId} disabled={!recheckEnabled} />
+            {!recheckEnabled && (
+              <p>A recheck can be requested in {minutesDiff} minutes.</p>
+            )}
+          </span>
+        )}
         {fileCheckFinish && !noBadFiles && (
           <FileCheckList fileCheck={fileCheck} />
         )}
@@ -51,6 +74,7 @@ export const NoErrors = ({ validation, authors, fileCheck, children }) => {
 
 const SnapshotRoute = ({
   datasetId,
+  modified,
   snapshots,
   validation,
   description,
@@ -136,6 +160,8 @@ const SnapshotRoute = ({
           />
         </div>
         <NoErrors
+          datasetId={datasetId}
+          modified={modified}
           validation={validation}
           authors={description.Authors}
           fileCheck={fileCheck}
