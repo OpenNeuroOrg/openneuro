@@ -8,6 +8,7 @@ query downloadDraft($datasetId: ID!, $tree: String) {
       id
       files(tree: $tree) {
         id
+        key
         directory
         filename
         size
@@ -24,6 +25,7 @@ export const DOWNLOAD_SNAPSHOT = gql`
       id
       files(tree: $tree) {
         id
+        key
         directory
         filename
         size
