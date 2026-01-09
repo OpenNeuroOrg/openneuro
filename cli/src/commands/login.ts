@@ -39,8 +39,12 @@ export async function loginAction(options: CommandOptions) {
   }
   if (!token) {
     token = await Secret.prompt(
-      `Enter your API key for OpenNeuro (get an API key from ${url}/keygen).`,
+      `Enter your API key for OpenNeuro (get an API key from ${url}/keygen). Dataset reviewers: paste the URL you received here.`,
     )
+    // If a reviewer URL is provided, extract the token portion
+    if (token.includes("crn/reviewer") || token.includes("api/reviewer")) {
+      token = token.split("/reviewer/")[1]
+    }
   }
   const errorReporting = Object.hasOwn(options, "errorReporting")
     ? options.errorReporting
