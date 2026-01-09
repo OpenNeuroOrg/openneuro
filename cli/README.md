@@ -37,6 +37,8 @@ You can also specify this as an option or environment variable.
 ```shell
 # For scripts
 export OPENNEURO_API_KEY=<api_key>
+# Optionally export an instance to use
+export OPENNEURO_URL=https://openneuro.org
 openneuro login --error-reporting true
 ```
 

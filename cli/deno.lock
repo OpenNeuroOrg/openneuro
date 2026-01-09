@@ -1,6 +1,7 @@
 {
   "version": "5",
   "specifiers": {
+    "jsr:@404wolf/xdg-portable@0.1": "0.1.0",
     "jsr:@bids/schema@~1.1.3": "1.1.3",
     "jsr:@bids/validator@^2.2.5": "2.2.5",
     "jsr:@cliffy/ansi@1.0.0-rc.8": "1.0.0-rc.8",
@@ -35,6 +36,7 @@
     "jsr:@std/io@~0.224.9": "0.224.9",
     "jsr:@std/io@~0.225.2": "0.225.2",
     "jsr:@std/log@~0.224.14": "0.224.14",
+    "jsr:@std/path@^1.0.8": "1.1.3",
     "jsr:@std/path@^1.1.2": "1.1.3",
     "jsr:@std/path@^1.1.3": "1.1.3",
     "jsr:@std/path@~1.0.6": "1.0.9",
@@ -56,6 +58,12 @@
     "npm:isomorphic-git@^1.35.1": "1.36.0"
   },
   "jsr": {
+    "@404wolf/xdg-portable@0.1.0": {
+      "integrity": "3a54d193601165deede0f84ab0a3e731ad8a1707ac4efa93c2a3db51ff270247",
+      "dependencies": [
+        "jsr:@std/path@^1.0.8"
+      ]
+    },
     "@bids/schema@1.1.3": {
       "integrity": "cdac75e809079c7defa3c31df79889c3a793efffcba0ecfaf2415d2d522e8aa4"
     },
@@ -682,6 +690,7 @@
   },
   "workspace": {
     "dependencies": [
+      "jsr:@404wolf/xdg-portable@0.1",
       "jsr:@bids/validator@^2.2.5",
       "jsr:@cliffy/prompt@^1.0.0-rc.8",
       "jsr:@deno-library/progress@^1.5.1",
