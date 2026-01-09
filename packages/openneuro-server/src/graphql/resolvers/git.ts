@@ -22,7 +22,7 @@ export async function prepareRepoAccess(
       token: generateRepoToken(userInfo, datasetId, false),
       endpoint: getDatasetEndpoint(datasetId),
     }
-  } catch (err) {
+  } catch {
     await checkDatasetRead(datasetId, user, userInfo)
     return {
       token: generateRepoToken(userInfo, datasetId),
