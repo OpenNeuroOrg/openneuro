@@ -1,4 +1,4 @@
-import { checkDatasetWrite } from "../permissions.js"
+import { checkDatasetRead, checkDatasetWrite } from "../permissions.js"
 import { generateRepoToken } from "../../libs/authentication/jwt"
 import { getDatasetEndpoint } from "../../libs/datalad-service.js"
 
@@ -16,9 +16,17 @@ export async function prepareRepoAccess(
   { datasetId }: { datasetId: string },
   { user, userInfo }: { user: string; userInfo: Record<string, unknown> },
 ): Promise<{ token: string; endpoint: number }> {
-  await checkDatasetWrite(datasetId, user, userInfo)
-  return {
-    token: generateRepoToken(userInfo, datasetId),
-    endpoint: getDatasetEndpoint(datasetId),
+  try {
+    await checkDatasetWrite(datasetId, user, userInfo)
+    return {
+      token: generateRepoToken(userInfo, datasetId, false),
+      endpoint: getDatasetEndpoint(datasetId),
+    }
+  } catch {
+    await checkDatasetRead(datasetId, user, userInfo)
+    return {
+      token: generateRepoToken(userInfo, datasetId),
+      endpoint: getDatasetEndpoint(datasetId),
+    }
   }
 }

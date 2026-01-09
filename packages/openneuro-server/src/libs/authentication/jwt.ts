@@ -31,6 +31,11 @@ export const buildToken = (
     name: user.name,
     admin: user.admin,
   }
+  // Give anonymous reviewers a generic name/email for git operations
+  if (user.reviewer) {
+    fields.name = "Anonymous Reviewer"
+    fields.email = "reviewer@openneuro.org"
+  }
   // Allow extensions of the base token format
   if (options) {
     if (options && "scopes" in options) {
@@ -98,11 +103,15 @@ export function generateReviewerToken(
 export function generateRepoToken(
   user,
   datasetId,
+  readonly = true,
   expiresIn = 7 * 60 * 60 * 24,
 ) {
   const options = {
-    scopes: ["dataset:git"],
+    scopes: ["dataset:git:read"],
     dataset: datasetId,
+  }
+  if (!readonly) {
+    options.scopes.push("dataset:git:write")
   }
   return buildToken(config, user, expiresIn, options)
 }

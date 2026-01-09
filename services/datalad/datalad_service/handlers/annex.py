@@ -72,7 +72,7 @@ class GitAnnexResource:
 
     async def on_post(self, req, resp, worker, dataset, key):
         resp.set_header('WWW-Authenticate', 'Basic realm="dataset git repo"')
-        if not _check_git_access(req, dataset):
+        if not _check_git_access(req, dataset, write=True):
             return _handle_failed_access(req, resp)
         dataset_path = self.store.get_dataset_path(dataset)
         annex_object_path = os.path.join(dataset_path, key_to_path(key))
@@ -88,7 +88,7 @@ class GitAnnexResource:
 
     async def on_delete(self, req, resp, worker, dataset, key):
         resp.set_header('WWW-Authenticate', 'Basic realm="dataset git repo"')
-        if not _check_git_access(req, dataset):
+        if not _check_git_access(req, dataset, write=True):
             return _handle_failed_access(req, resp)
         dataset_path = self.store.get_dataset_path(dataset)
         annex_object_path = os.path.join(dataset_path, key_to_path(key))

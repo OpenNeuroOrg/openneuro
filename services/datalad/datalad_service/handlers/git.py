@@ -31,11 +31,17 @@ def _parse_commit(chunk):
     return references
 
 
-def _check_git_access(req, dataset):
+def _check_git_access(req, dataset, write=False):
     """Validate HTTP token has access to the requested dataset."""
     user = 'user' in req.context and req.context['user'] or None
     # Check that this request includes the correct token
-    if user != None and 'dataset:git' in user['scopes'] and user['dataset'] == dataset:
+    if (
+        user != None
+        and 'dataset:git:read' in user['scopes']
+        and user['dataset'] == dataset
+    ):
+        if write and 'dataset:git:write' not in user['scopes']:
+            return False
         return True
     else:
         return False
@@ -106,7 +112,7 @@ class GitReceiveResource:
         resp.set_header('WWW-Authenticate', 'Basic realm="dataset git repo"')
         resp.content_type = 'application/x-git-receive-pack-result'
         refs_updated = []
-        if not _check_git_access(req, dataset):
+        if not _check_git_access(req, dataset, write=True):
             return _handle_failed_access(req, resp)
         if dataset:
             dataset_path = self.store.get_dataset_path(dataset)

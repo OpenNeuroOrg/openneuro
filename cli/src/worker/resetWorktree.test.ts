@@ -12,8 +12,6 @@ Deno.test("resetWorktree()", async (t) => {
     testDir,
     "http://localhost",
     "test",
-    "test",
-    "test",
   )
   await git.init({ ...context.config(), defaultBranch: "main" })
   await context.fs.promises.writeFile(join(testDir, "test.txt"), "test")
