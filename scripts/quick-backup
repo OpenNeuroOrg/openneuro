@@ -1,0 +1,11 @@
+#!/bin/bash
+# This script creates a complete backup of a dataset that can be used for quick recovery.
+# It takes advantage of hard-linking behavior in git and rsync to do a fast backup,
+# and finishes off with a full sync to ensure the dataset is an exact clone.
+
+DS="$1"
+BAK="${DS}.bak"
+
+git clone "${DS}" "${BAK}"
+rsync -a --ignore-existing --link-dest="../${DS}" "${DS}/." "${BAK}/."
+rsync -a --delete "${DS}/." "${BAK}/."
