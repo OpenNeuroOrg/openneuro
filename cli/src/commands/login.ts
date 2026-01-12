@@ -4,6 +4,8 @@
 import { Command } from "@cliffy/command"
 import type { CommandOptions } from "@cliffy/command"
 import { Confirm, Secret, Select } from "@cliffy/prompt"
+import * as path from "@std/path"
+import { getConfigPath } from "../config.ts"
 
 const messages = {
   url:
@@ -14,15 +16,18 @@ const messages = {
 }
 
 export async function loginAction(options: CommandOptions) {
-  const url = options.url ? options.url : await Select.prompt({
-    message: "Choose an OpenNeuro instance to use.",
-    options: [
-      "https://openneuro.org",
-      "https://staging.openneuro.org",
-      "http://localhost:9876",
-    ],
-  })
-  localStorage.setItem("url", url)
+  const configPath = getConfigPath()
+  Deno.mkdirSync(path.dirname(configPath), { recursive: true })
+  const config: { [key: string]: string } = {}
+  try {
+    Object.assign(
+      config,
+      JSON.parse(new TextDecoder().decode(await Deno.readFile(configPath))),
+    )
+  } catch {
+    // If the file doesn't exist or is invalid, start with an empty config
+  }
+  const url = options.openneuroUrl || "https://openneuro.org"
   let token
   // Environment variable
   if (options.openneuroApiKey) {
@@ -37,11 +42,15 @@ export async function loginAction(options: CommandOptions) {
       `Enter your API key for OpenNeuro (get an API key from ${url}/keygen).`,
     )
   }
-  localStorage.setItem("token", token)
   const errorReporting = Object.hasOwn(options, "errorReporting")
     ? options.errorReporting
     : await Confirm.prompt(messages.errorReporting)
-  localStorage.setItem("errorReporting", errorReporting.toString())
+  config["errorReporting"] = errorReporting
+  config[url] = token
+  await Deno.writeFile(
+    configPath,
+    new TextEncoder().encode(JSON.stringify(config)),
+  )
 }
 
 export const login = new Command()

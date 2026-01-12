@@ -68,7 +68,7 @@ const downloadTree = async (
           toastId,
         },
         downloadPath,
-        file.id,
+        file.key,
       )
     } else {
       // Regular file
