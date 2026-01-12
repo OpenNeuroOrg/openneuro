@@ -577,8 +577,6 @@ self.onmessage = (event: GitWorkerEvent) => {
       event.data.repoPath,
       event.data.repoEndpoint,
       event.data.authorization,
-      event.data.name,
-      event.data.email,
     )
     setupLogging(event.data.logLevel)
   } else if (event.data.command === "clone") {

@@ -30,10 +30,6 @@ export class GitWorkerContext {
     public repoEndpoint: string,
     // OpenNeuro git access short lived API key
     public authorization: string,
-    // Author name
-    public name: string,
-    // Author email
-    public email: string,
   ) {}
 
   /**
