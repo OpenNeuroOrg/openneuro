@@ -204,7 +204,7 @@ def get_repo_urls(path, files):
     if 'remote.log' not in rmetObjects:
         # Skip searching for URLs if no remote.log is present
         return files
-    rmetPaths = []
+    rmetPaths = set()
     rmetFiles = defaultdict(list)
     for f in files:
         if 'key' in f:
@@ -212,13 +212,13 @@ def get_repo_urls(path, files):
             if rmetPath in rmetObjects:
                 # Keep a reference to the files so we can add URLs later
                 rmetFiles[rmetPath].append(f)
-                rmetPaths.append(rmetPath)
+                rmetPaths.add(rmetPath)
             else:
                 # Check for alternate path used by older versions of git-annex
                 rmetPath = compute_rmet(f['key'], legacy=True)
                 if rmetPath in rmetObjects:
                     rmetFiles[rmetPath].append(f)
-                    rmetPaths.append(rmetPath)
+                    rmetPaths.add(rmetPath)
     # Then read those objects with git cat-file --batch
     gitObjects = ''
     if 'trust.log' in rmetObjects:
