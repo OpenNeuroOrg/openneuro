@@ -858,12 +858,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@bids/validator@npm:@jsr/bids__validator@^2.2.5":
-  version: 2.2.5
-  resolution: "@jsr/bids__validator@npm:2.2.5::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__validator%2F2.2.5.tgz"
+"@bids/validator@npm:@jsr/bids__validator@^2.2.7":
+  version: 2.2.7
+  resolution: "@jsr/bids__validator@npm:2.2.7::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__validator%2F2.2.7.tgz"
   dependencies:
     "@bids/nifti-reader-js": "npm:^0.6.9"
     "@jsr/bids__schema": "npm:~1.1.3"
+    "@jsr/bradenmacdonald__s3-lite-client": "npm:^0.9.4"
     "@jsr/effigies__cliffy-command": "npm:1.0.0-dev.8"
     "@jsr/effigies__cliffy-table": "npm:1.0.0-dev.5"
     "@jsr/libs__xml": "npm:^7.0.3"
@@ -877,7 +878,8 @@ __metadata:
     hed-validator: "npm:~4.1.4"
     ignore: "npm:^7.0.5"
     isomorphic-git: "npm:^1.35.1"
-  checksum: 10/355531009f29793e1e2ed591189315c0df26b58ff59fd488c8d87f4f28fd0805823ba7c1dfe792687d16c78ee27dc44971391dd72875266f50a46cc671d107f8
+    marked: "npm:^15.0.4"
+  checksum: 10/b858063049d9477828725a3139dbd74c6397daf9af7c4d99773602bdc077baffeb6755468744a780c48aedf43a3e72a2abeec14ae470269d770e3549f93fbfd9
   languageName: node
   linkType: hard
 
@@ -1787,6 +1789,13 @@ __metadata:
   version: 1.1.3
   resolution: "@jsr/bids__schema@npm:1.1.3::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__schema%2F1.1.3.tgz"
   checksum: 10/7ebb398f8f8470f9c91dfc1ccff0fcd5a04c68d8960e59481a6ac8c7483d2ea146192faadf415796dd29358397811e60d7ce76074f78a37f02de1610b2c5b02d
+  languageName: node
+  linkType: hard
+
+"@jsr/bradenmacdonald__s3-lite-client@npm:^0.9.4":
+  version: 0.9.4
+  resolution: "@jsr/bradenmacdonald__s3-lite-client@npm:0.9.4::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbradenmacdonald__s3-lite-client%2F0.9.4.tgz"
+  checksum: 10/965bfa53566675075e67964337119c54f4cfa903e3c0071ca8b0cdf94e65704a2aa6b7b894bfa2187b9b95eb96c9aa25f2bedbc9a05128f7e4f2f2bd8948ef85
   languageName: node
   linkType: hard
 
@@ -3053,7 +3062,7 @@ __metadata:
   dependencies:
     "@apollo/client": "npm:3.13.8"
     "@artsy/fresnel": "npm:^1.3.1"
-    "@bids/validator": "npm:@jsr/bids__validator@^2.2.5"
+    "@bids/validator": "npm:@jsr/bids__validator@^2.2.7"
     "@emotion/react": "npm:11.11.1"
     "@emotion/styled": "npm:11.11.0"
     "@niivue/niivue": "npm:0.57.0"
@@ -14310,6 +14319,15 @@ __metadata:
   version: 3.0.3
   resolution: "markdown-table@npm:3.0.3"
   checksum: 10/ee6e661935c85734620d2fd10e237a60ae2992ef861713b71aa66135a5d5ae957cf06ce5e15fedf3ed1fce839dd7af1f9e87c5729186490f69fa9469e8e5c3e8
+  languageName: node
+  linkType: hard
+
+"marked@npm:^15.0.4":
+  version: 15.0.12
+  resolution: "marked@npm:15.0.12"
+  bin:
+    marked: bin/marked.js
+  checksum: 10/deeb619405c0c46af00c99b18b3365450abeb309104b24e3658f46142344f6b7c4117608c3b5834084d8738e92f81240c19f596e6ee369260f96e52b3457eaee
   languageName: node
   linkType: hard
 
