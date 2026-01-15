@@ -56,5 +56,36 @@ describe("FileTreeUnloadedDirectory component", () => {
         filename: "sub-01:c",
       }])
     })
+    it("handles snapshot with undefined files array", () => {
+      const dir = { filename: "sub-01", directory: true }
+      const c = { id: "91011", filename: "c", directory: false }
+      const defaultObj = { snapshot: {} } // files array is undefined
+      const updatedObj = { snapshot: { files: [c] } }
+
+      expect(
+        mergeNewFiles(dir, "1.0.0")(defaultObj, { fetchMoreResult: updatedObj })
+          .snapshot.files,
+      ).toEqual([{
+        ...c,
+        id: "sub-01:91011",
+        filename: "sub-01:c",
+      }])
+    })
+
+    it("handles draft with undefined files array", () => {
+      const dir = { filename: "sub-01", directory: true }
+      const c = { id: "91011", filename: "c", directory: false }
+      const defaultObj = { dataset: { draft: {} } } // files array is undefined
+      const updatedObj = { dataset: { draft: { files: [c] } } }
+
+      expect(
+        mergeNewFiles(dir)(defaultObj, { fetchMoreResult: updatedObj })
+          .dataset.draft.files,
+      ).toEqual([{
+        ...c,
+        id: "sub-01:91011",
+        filename: "sub-01:c",
+      }])
+    })
   })
 })
