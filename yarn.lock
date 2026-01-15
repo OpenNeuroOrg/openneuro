@@ -858,9 +858,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@bids/validator@npm:@jsr/bids__validator@^2.2.9":
-  version: 2.2.9
-  resolution: "@jsr/bids__validator@npm:2.2.9::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__validator%2F2.2.9.tgz"
+"@bids/validator@npm:@jsr/bids__validator@^2.2.10":
+  version: 2.2.10
+  resolution: "@jsr/bids__validator@npm:2.2.10::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__validator%2F2.2.10.tgz"
   dependencies:
     "@bids/nifti-reader-js": "npm:^0.6.9"
     "@jsr/bids__schema": "npm:~1.1.3"
@@ -879,7 +879,7 @@ __metadata:
     ignore: "npm:^7.0.5"
     isomorphic-git: "npm:^1.35.1"
     marked: "npm:^15.0.4"
-  checksum: 10/5300262a5f68cd0a76517bc90dd589ee3acacfdcfb6f7b8c863a8db34efa06d8d79188fb8e3a76c5a2a1630a245de20393762c576b7c10730ce053c0a2ff016c
+  checksum: 10/42a5d1f7ba10f280df5bb1f7c32dcab8a9a7218818ab6b985574d0b298b2ffc2dbba4e923f2a5274587dae2978ecf65b2080064b981823336e2a4912b82a5d06
   languageName: node
   linkType: hard
 
@@ -2948,7 +2948,7 @@ __metadata:
   dependencies:
     "@apollo/client": "npm:3.13.8"
     "@artsy/fresnel": "npm:^1.3.1"
-    "@bids/validator": "npm:@jsr/bids__validator@^2.2.9"
+    "@bids/validator": "npm:@jsr/bids__validator@^2.2.10"
     "@emotion/react": "npm:11.11.1"
     "@emotion/styled": "npm:11.11.0"
     "@niivue/niivue": "npm:0.57.0"
