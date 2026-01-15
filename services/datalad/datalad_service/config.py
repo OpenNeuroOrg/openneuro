@@ -36,6 +36,8 @@ CRN_SERVER_URL = os.getenv('CRN_SERVER_URL')
 REDIS_HOST = os.getenv('REDIS_HOST')
 REDIS_PORT = os.getenv('REDIS_PORT')
 
+SENTRY_DSN = os.getenv('SENTRY_DSN')
+
 
 def get_jwt_secret():
     """Returns the JWT_SECRET from environment variables."""
