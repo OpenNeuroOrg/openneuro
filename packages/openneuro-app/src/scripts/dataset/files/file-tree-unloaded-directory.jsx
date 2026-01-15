@@ -56,6 +56,17 @@ export const mergeNewFiles =
     // Deep clone the old dataset object
     const path = directory.filename
     const newDatasetObj = JSON.parse(JSON.stringify(past))
+
+    if (snapshotTag) {
+      if (!newDatasetObj.snapshot.files) {
+        newDatasetObj.snapshot.files = []
+      }
+    } else {
+      if (!newDatasetObj.dataset.draft.files) {
+        newDatasetObj.dataset.draft.files = []
+      }
+    }
+
     const newFiles = snapshotTag
       ? newDatasetObj.snapshot.files
       : newDatasetObj.dataset.draft.files
