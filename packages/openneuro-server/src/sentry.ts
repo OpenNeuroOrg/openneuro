@@ -21,4 +21,8 @@ Sentry.init({
     }
     return event
   },
+  ignoreErrors: [
+    "You do not have access to read this dataset.",
+    "You do not have access to modify this dataset.",
+  ],
 })
