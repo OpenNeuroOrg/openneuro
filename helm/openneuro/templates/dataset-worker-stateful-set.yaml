@@ -67,12 +67,6 @@ spec:
         - name: ssh-key
           mountPath: /datalad-key
           subPath: datalad-key
-        livenessProbe:
-          initialDelaySeconds: 30
-          periodSeconds: 30
-          httpGet:
-            path: '/heartbeat'
-            port: 80
       - name: {{ .Release.Name }}-dataset-taskiq-worker
         image: 'openneuro/datalad-service:v{{ .Chart.AppVersion }}'
         command: ['/srv/.venv/bin/taskiq', 'worker', 'datalad_service.broker:broker', '--tasks-pattern', 'datalad_service/tasks/*.py', '--fs-discover', '--max-async-tasks', '2', '--use-process-pool']
