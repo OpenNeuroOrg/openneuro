@@ -41,7 +41,7 @@ spec:
         resources:
           requests:
             cpu: {{ .Values.workerCpuRequests }}
-            memory: 8Gi
+            memory: 16Gi
         readinessProbe:
           periodSeconds: 5
           initialDelaySeconds: 15
@@ -79,7 +79,7 @@ spec:
         resources:
           requests:
             cpu: {{ .Values.workerCpuRequests }}
-            memory: 12Gi
+            memory: 24Gi
         envFrom:
         - configMapRef:
             name: {{ .Release.Name }}-configmap
