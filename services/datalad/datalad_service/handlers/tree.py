@@ -16,7 +16,7 @@ class TreeResource:
         # Return a list of file objects
         # {name, path, size}
         try:
-            files = get_tree(self.store, dataset, tree)
+            files = await get_tree(self.store, dataset, tree)
             files.sort(key=dataset_sort)
             resp.status = falcon.HTTP_OK
             resp.media = {'files': files}

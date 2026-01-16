@@ -1,3 +1,4 @@
+import asyncio
 import base64
 import hashlib
 import io
@@ -188,20 +189,26 @@ def encode_remote_url(url):
     return urllib.parse.quote_plus(url, safe='/:?=')
 
 
-def get_repo_urls(path, files):
+async def get_repo_urls(path, files):
     """For each file provided, obtain the rmet data and append URLs if possible."""
     # First obtain the git-annex branch objects
-    gitAnnexBranch = subprocess.Popen(
-        ['git', 'ls-tree', '-l', '-r', 'git-annex'],
+    gitAnnexBranch = await asyncio.create_subprocess_exec(
+        'git',
+        'ls-tree',
+        '-l',
+        '-r',
+        'git-annex',
         cwd=path,
-        stdout=subprocess.PIPE,
-        encoding='utf-8',
+        stdout=asyncio.subprocess.PIPE,
     )
     rmetObjects = {}
-    with gitAnnexBranch:
-        for line in gitAnnexBranch.stdout:
-            filename, mode, obj_type, obj_hash, size = parse_ls_tree_line(line.rstrip())
-            rmetObjects[filename] = obj_hash
+    async for line in gitAnnexBranch.stdout:
+        filename, mode, obj_type, obj_hash, size = parse_ls_tree_line(
+            line.decode('utf-8').rstrip()
+        )
+        rmetObjects[filename] = obj_hash
+    await gitAnnexBranch.wait()
+
     if 'remote.log' not in rmetObjects:
         # Skip searching for URLs if no remote.log is present
         return files
@@ -223,16 +230,17 @@ def get_repo_urls(path, files):
         gitObjects += rmetObjects['trust.log'] + '\n'
     gitObjects += rmetObjects['remote.log'] + '\n'
     gitObjects += '\n'.join(rmetObjects[rmetPath] for rmetPath in rmetFiles)
-    catFileProcess = subprocess.run(
-        ['git', 'cat-file', '--batch=:::%(objectname)', '--buffer'],
+    catFileProcess = await asyncio.create_subprocess_exec(
+        'git',
+        'cat-file',
+        '--batch=:::%(objectname)',
+        '--buffer',
         cwd=path,
-        stdout=subprocess.PIPE,
-        input=gitObjects,
-        encoding='utf-8',
-        bufsize=0,
-        text=True,
+        stdin=asyncio.subprocess.PIPE,
+        stdout=asyncio.subprocess.PIPE,
     )
-    catFile = io.StringIO(catFileProcess.stdout)
+    stdout, _ = await catFileProcess.communicate(input=gitObjects.encode('utf-8'))
+    catFile = io.StringIO(stdout.decode('utf-8'))
     # Read in trust.log and remote.log first
     trustLog = {}
     if 'trust.log' in rmetObjects:
@@ -278,35 +286,41 @@ def get_repo_urls(path, files):
     return files
 
 
-def get_repo_files(dataset, dataset_path, tree):
+async def get_repo_files(dataset, dataset_path, tree):
     """Read all files in a repo at a given branch, tag, or commit hash."""
-    gitProcess = subprocess.Popen(
-        ['git', 'ls-tree', '-l', tree],
+    gitProcess = await asyncio.create_subprocess_exec(
+        'git',
+        'ls-tree',
+        '-l',
+        tree,
         cwd=dataset_path,
-        stdout=subprocess.PIPE,
-        encoding='utf-8',
+        stdout=asyncio.subprocess.PIPE,
     )
     files = []
     symlinkFilenames = []
     symlinkObjects = []
-    with gitProcess:
-        for line in gitProcess.stdout:
-            gitTreeLine = line.rstrip()
-            read_ls_tree_line(gitTreeLine, files, symlinkFilenames, symlinkObjects)
+    async for line in gitProcess.stdout:
+        gitTreeLine = line.decode('utf-8').rstrip()
+        read_ls_tree_line(gitTreeLine, files, symlinkFilenames, symlinkObjects)
+    await gitProcess.wait()
+
     # After regular files, process all symlinks with one git cat-file --batch call
     # This is about 100x faster than one call per file for annexed file heavy datasets
     catFileInput = '\n'.join(symlinkObjects)
-    catFileProcess = subprocess.run(
-        ['git', 'cat-file', '--batch', '--buffer'],
+    catFileProcess = await asyncio.create_subprocess_exec(
+        'git',
+        'cat-file',
+        '--batch',
+        '--buffer',
         cwd=dataset_path,
-        stdout=subprocess.PIPE,
-        input=catFileInput,
-        encoding='utf-8',
+        stdin=asyncio.subprocess.PIPE,
+        stdout=asyncio.subprocess.PIPE,
     )
+    stdout, _ = await catFileProcess.communicate(input=catFileInput.encode('utf-8'))
     # Output looks like this:
     # dc9dde956f6f28e425a412a4123526e330668e7e blob 140
     # ../../.git/annex/objects/Q0/VP/MD5E-s1618574--43762c4310549dcc8c5c25567f42722d.nii.gz/MD5E-s1618574--43762c4310549dcc8c5c25567f42722d.nii.gz
-    for index, line in enumerate(catFileProcess.stdout.splitlines()):
+    for index, line in enumerate(stdout.decode('utf-8').splitlines()):
         # Skip metadata (even) lines
         if index % 2 == 1:
             key = line.rstrip().split('/')[-1]
@@ -326,7 +340,7 @@ def get_repo_files(dataset, dataset_path, tree):
                 }
             )
     # Now find URLs for each file if available
-    files = get_repo_urls(dataset_path, files)
+    files = await get_repo_urls(dataset_path, files)
     # Provide fallbacks for any URLs that did not match rmet exports
     for f in files:
         if not f['directory'] and len(f['urls']) == 0:
