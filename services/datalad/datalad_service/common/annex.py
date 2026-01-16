@@ -198,9 +198,10 @@ def get_repo_urls(path, files):
         encoding='utf-8',
     )
     rmetObjects = {}
-    for line in gitAnnexBranch.stdout:
-        filename, mode, obj_type, obj_hash, size = parse_ls_tree_line(line.rstrip())
-        rmetObjects[filename] = obj_hash
+    with gitAnnexBranch:
+        for line in gitAnnexBranch.stdout:
+            filename, mode, obj_type, obj_hash, size = parse_ls_tree_line(line.rstrip())
+            rmetObjects[filename] = obj_hash
     if 'remote.log' not in rmetObjects:
         # Skip searching for URLs if no remote.log is present
         return files
@@ -288,9 +289,10 @@ def get_repo_files(dataset, dataset_path, tree):
     files = []
     symlinkFilenames = []
     symlinkObjects = []
-    for line in gitProcess.stdout:
-        gitTreeLine = line.rstrip()
-        read_ls_tree_line(gitTreeLine, files, symlinkFilenames, symlinkObjects)
+    with gitProcess:
+        for line in gitProcess.stdout:
+            gitTreeLine = line.rstrip()
+            read_ls_tree_line(gitTreeLine, files, symlinkFilenames, symlinkObjects)
     # After regular files, process all symlinks with one git cat-file --batch call
     # This is about 100x faster than one call per file for annexed file heavy datasets
     catFileInput = '\n'.join(symlinkObjects)
