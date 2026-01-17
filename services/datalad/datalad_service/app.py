@@ -69,6 +69,15 @@ class PathConverter(falcon.routing.converters.BaseConverter):
         return value.replace(':', '/')
 
 
+class DatasetIDConverter(falcon.routing.converters.BaseConverter):
+    """Limit dataset ID to ds###### format."""
+
+    def convert(self, value):
+        if len(value) != 8 or not value.startswith('ds') or not value[2:].isdigit():
+            return None
+        return value
+
+
 def create_app():
     if not datalad_service.config.DATALAD_DATASET_PATH:
         raise Exception(
@@ -79,6 +88,7 @@ def create_app():
 
     app = falcon.asgi.App(middleware=middleware)
     app.router_options.converters['path'] = PathConverter
+    app.router_options.converters['dataset'] = DatasetIDConverter
 
     store = DataladStore(datalad_service.config.DATALAD_DATASET_PATH)
 
@@ -110,54 +120,64 @@ def create_app():
     app.add_route('/heartbeat', heartbeat)
 
     app.add_route('/datasets', datasets)
-    app.add_route('/datasets/{dataset}', datasets)
+    app.add_route('/datasets/{dataset:dataset}', datasets)
 
-    app.add_route('/datasets/{dataset}/draft', dataset_draft)
-    app.add_route('/datasets/{dataset}/history', dataset_history)
-    app.add_route('/datasets/{dataset}/drop', dataset_drop)
-    app.add_route('/datasets/{dataset}/description', dataset_description)
-    app.add_route('/datasets/{dataset}/validate/{hexsha}', dataset_validation)
-    app.add_route('/datasets/{dataset}/reset/{hexsha}', dataset_reset_resource)
-    app.add_route('/datasets/{dataset}/fsck', dataset_fsck_resource)
-    app.add_route('/datasets/{dataset}/info', dataset_info_resource)
-    app.add_route('/datasets/{dataset}/info/{name}', dataset_info_resource)
-    app.add_route('/datasets/{dataset}/files', dataset_files)
-    app.add_route('/datasets/{dataset}/files/{filename:path}', dataset_files)
-    app.add_route('/datasets/{dataset}/tree/{tree}', dataset_tree)
-    app.add_route('/datasets/{dataset}/objects/{obj}', dataset_objects)
+    app.add_route('/datasets/{dataset:dataset}/draft', dataset_draft)
+    app.add_route('/datasets/{dataset:dataset}/history', dataset_history)
+    app.add_route('/datasets/{dataset:dataset}/drop', dataset_drop)
+    app.add_route('/datasets/{dataset:dataset}/description', dataset_description)
+    app.add_route('/datasets/{dataset:dataset}/validate/{hexsha}', dataset_validation)
+    app.add_route('/datasets/{dataset:dataset}/reset/{hexsha}', dataset_reset_resource)
+    app.add_route('/datasets/{dataset:dataset}/fsck', dataset_fsck_resource)
+    app.add_route('/datasets/{dataset:dataset}/info', dataset_info_resource)
+    app.add_route('/datasets/{dataset:dataset}/info/{name}', dataset_info_resource)
+    app.add_route('/datasets/{dataset:dataset}/files', dataset_files)
+    app.add_route('/datasets/{dataset:dataset}/files/{filename:path}', dataset_files)
+    app.add_route('/datasets/{dataset:dataset}/tree/{tree}', dataset_tree)
+    app.add_route('/datasets/{dataset:dataset}/objects/{obj}', dataset_objects)
 
-    app.add_route('/datasets/{dataset}/snapshots', dataset_snapshots)
-    app.add_route('/datasets/{dataset}/snapshots/{snapshot}', dataset_snapshots)
-    app.add_route('/datasets/{dataset}/snapshots/{snapshot}/files', dataset_files)
+    app.add_route('/datasets/{dataset:dataset}/snapshots', dataset_snapshots)
+    app.add_route('/datasets/{dataset:dataset}/snapshots/{snapshot}', dataset_snapshots)
     app.add_route(
-        '/datasets/{dataset}/snapshots/{snapshot}/files/{filename:path}', dataset_files
+        '/datasets/{dataset:dataset}/snapshots/{snapshot}/files', dataset_files
     )
     app.add_route(
-        '/datasets/{dataset}/snapshots/{snapshot}/annex-key/{annex_key}',
+        '/datasets/{dataset:dataset}/snapshots/{snapshot}/files/{filename:path}',
+        dataset_files,
+    )
+    app.add_route(
+        '/datasets/{dataset:dataset}/snapshots/{snapshot}/annex-key/{annex_key}',
         dataset_annex_objects,
     )
 
-    app.add_route('/datasets/{dataset}/publish', dataset_publish)
-    app.add_route('/datasets/{dataset}/reexport-remotes', dataset_reexporter_resources)
-
-    app.add_route('/datasets/{dataset}/upload/{upload}', dataset_upload)
+    app.add_route('/datasets/{dataset:dataset}/publish', dataset_publish)
     app.add_route(
-        '/uploads/{worker}/{dataset}/{upload}/{filename:path}', dataset_upload_file
+        '/datasets/{dataset:dataset}/reexport-remotes', dataset_reexporter_resources
     )
 
-    app.add_route('/git/{worker}/{dataset}/info/refs', dataset_git_refs_resource)
+    app.add_route('/datasets/{dataset:dataset}/upload/{upload}', dataset_upload)
     app.add_route(
-        '/git/{worker}/{dataset}/git-receive-pack', dataset_git_receive_resource
+        '/uploads/{worker}/{dataset:dataset}/{upload}/{filename:path}',
+        dataset_upload_file,
+    )
+
+    app.add_route(
+        '/git/{worker}/{dataset:dataset}/info/refs', dataset_git_refs_resource
     )
     app.add_route(
-        '/git/{worker}/{dataset}/git-upload-pack', dataset_git_upload_resource
+        '/git/{worker}/{dataset:dataset}/git-receive-pack', dataset_git_receive_resource
     )
-    app.add_route('/git/{worker}/{dataset}/annex/{key}', dataset_git_annex_resource)
+    app.add_route(
+        '/git/{worker}/{dataset:dataset}/git-upload-pack', dataset_git_upload_resource
+    )
+    app.add_route(
+        '/git/{worker}/{dataset:dataset}/annex/{key}', dataset_git_annex_resource
+    )
     # Serving keys internally as well (read only)
-    app.add_route('/datasets/{dataset}/annex/{key}', dataset_git_annex_resource)
+    app.add_route('/datasets/{dataset:dataset}/annex/{key}', dataset_git_annex_resource)
 
     app.add_route(
-        '/datasets/{dataset}/import/{import_id}', dataset_remote_import_resource
+        '/datasets/{dataset:dataset}/import/{import_id}', dataset_remote_import_resource
     )
 
     return app
