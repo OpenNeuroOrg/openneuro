@@ -28,6 +28,13 @@ spec:
                 name: {{ .Release.Name }}-api
                 port:
                   number: 8111
+          - path: /api/*
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: {{ .Release.Name }}-api
+                port:
+                  number: 8111
           - path: /sitemap.xml
             pathType: ImplementationSpecific
             backend:
