@@ -18,8 +18,10 @@ export function getConfigPath(): string {
 /**
  * Get credentials from local storage
  */
-export function getConfig(): ClientConfig {
-  const url = Deno.env.get("OPENNEURO_URL") || "https://openneuro.org"
+export function getConfig(
+  instance: string = "https://openneuro.org",
+): ClientConfig {
+  const url = Deno.env.get("OPENNEURO_URL") || instance
   const configPath = getConfigPath()
   const config = JSON.parse(
     new TextDecoder().decode(Deno.readFileSync(configPath)),

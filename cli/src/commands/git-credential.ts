@@ -21,8 +21,8 @@ interface GraphQLError {
   }
 }
 
-export async function getRepoAccess(datasetId?: string) {
-  const config = getConfig()
+export async function getRepoAccess(instance: string, datasetId?: string) {
+  const config = getConfig(instance)
   const req = await fetch(`${config.url}/crn/graphql`, {
     method: "POST",
     headers: {
@@ -52,6 +52,7 @@ export async function getRepoAccess(datasetId?: string) {
  * Provide a git-credential helper for OpenNeuro
  */
 export async function gitCredentialAction(
+  instance: string,
   stdinReadable: ReadableStream<Uint8Array> = Deno.stdin.readable,
   tokenGetter = getRepoAccess,
 ) {
@@ -67,7 +68,7 @@ export async function gitCredentialAction(
   }
   if ("path" in credential && credential.path) {
     const datasetId = credential.path.split("/").pop()
-    const { token } = await tokenGetter(datasetId)
+    const { token } = await tokenGetter(instance, datasetId)
     const output: Record<string, string> = {
       username: "@openneuro/cli",
       password: token,
@@ -88,10 +89,13 @@ export const gitCredential = new Command()
   .description(
     "A git credentials helper for easier datalad or git-annex access to datasets.",
   )
+  .globalOption("-u, --url <url>", "OpenNeuro instance URL to use.", {
+    default: "https://openneuro.org",
+  })
   // Credentials here are short lived so store is not useful
   .command("store")
   .action(() => {})
   .command("get")
-  .action(async () => {
-    console.log(await gitCredentialAction())
+  .action(async (options) => {
+    console.log(await gitCredentialAction(options.url))
   })
