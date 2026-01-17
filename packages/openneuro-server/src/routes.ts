@@ -187,6 +187,11 @@ const routes = [
     url: "/sitemap",
     handler: sitemapHandler,
   },
+  // git redirect routes
+  { method: "get", url: "/git/:datasetId", handler: datalad.gitRepo },
+  { method: "post", url: "/git/:datasetId", handler: datalad.gitRepo },
+  { method: "get", url: "/git/:datasetId/*", handler: datalad.gitRepo },
+  { method: "post", url: "/git/:datasetId/*", handler: datalad.gitRepo },
 ]
 
 // initialize routes -------------------------------
