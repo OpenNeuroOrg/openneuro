@@ -289,6 +289,8 @@
 git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>credential.https://openneuro.org.useHttpPath<span class="w"> </span><span class="nb">true</span>
 <span class="c1"># Point git at the @openneuro/cli tool (this must be an absolute path)</span>
 git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>credential.https://openneuro.org.helper<span class="w"> </span><span class="s2">&quot;/path/to/deno -A jsr:@openneuro/cli git-credential&quot;</span>
+<span class="c1"># For OpenNeuro instances other than https://openneuro.org</span>
+git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>credential.https://staging.openneuro.org.helper<span class="w"> </span><span class="s2">&quot;/path/to/deno -A jsr:@openneuro/cli git-credential --url https://staging.openneuro.org&quot;</span>
 </pre></div>
 </div>
 <p>If you are using <a class="reference external" href="https://github.com/git-ecosystem/git-credential-manager">Git Credential Manager</a> add the provider entry to avoid duplicating entries.</p>

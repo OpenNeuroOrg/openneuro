@@ -45,6 +45,8 @@ Once you have logged in with `deno run -A jsr:@openneuro/cli`, you can configure
 git config --global credential.https://openneuro.org.useHttpPath true
 # Point git at the @openneuro/cli tool (this must be an absolute path)
 git config --global credential.https://openneuro.org.helper "/path/to/deno -A jsr:@openneuro/cli git-credential"
+# For OpenNeuro instances other than https://openneuro.org
+git config --global credential.https://staging.openneuro.org.helper "/path/to/deno -A jsr:@openneuro/cli git-credential --url https://staging.openneuro.org"
 ```
 
 If you are using [Git Credential Manager](https://github.com/git-ecosystem/git-credential-manager) add the provider entry to avoid duplicating entries.
