@@ -13,6 +13,7 @@ Deno.test("git-credential parses stdin correctly", async () => {
     },
   })
   const output = await gitCredentialAction(
+    "staging.openneuro.org",
     stdin,
     async () => ({ token: "token", endpoint: 2 }),
   )
