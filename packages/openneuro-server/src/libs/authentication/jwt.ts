@@ -1,6 +1,7 @@
 import passport from "passport"
 import refresh from "passport-oauth2-refresh"
 import jwt from "jsonwebtoken"
+import * as Sentry from "@sentry/node"
 import { decrypt } from "./crypto"
 import User from "../../models/user"
 import config from "../../config"
@@ -187,7 +188,18 @@ export const authenticate = (req, res, next) => {
       }
     }
     passport.authenticate("jwt", { session: false }, (err, user) => {
-      req.login(user, { session: false }, () => next())
+      req.login(user, { session: false }, () => {
+        if (user) {
+          Sentry.setUser({
+            id: user.id,
+            ip_address: req.headers["x-forwarded-for"] as string,
+          })
+        }
+        Sentry.setContext("request_headers", {
+          "x-forwarded-for": req.headers["x-forwarded-for"],
+        })
+        next()
+      })
     })(req, res, next)
   }
   authenticateAsync()
