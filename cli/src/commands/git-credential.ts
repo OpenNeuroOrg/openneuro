@@ -21,7 +21,7 @@ interface GraphQLError {
   }
 }
 
-export async function getRepoAccess(instance: string, datasetId?: string) {
+export async function getRepoAccess(datasetId?: string, instance?: string) {
   const config = getConfig(instance)
   const req = await fetch(`${config.url}/crn/graphql`, {
     method: "POST",
@@ -68,7 +68,7 @@ export async function gitCredentialAction(
   }
   if ("path" in credential && credential.path) {
     const datasetId = credential.path.split("/").pop()
-    const { token } = await tokenGetter(instance, datasetId)
+    const { token } = await tokenGetter(datasetId, instance)
     const output: Record<string, string> = {
       username: "@openneuro/cli",
       password: token,
