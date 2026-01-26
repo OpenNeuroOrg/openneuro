@@ -25,4 +25,5 @@ Sentry.init({
     "You do not have access to read this dataset.",
     "You do not have access to modify this dataset.",
   ],
+  sendDefaultPii: true,
 })

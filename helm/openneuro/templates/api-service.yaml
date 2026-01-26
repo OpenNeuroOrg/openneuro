@@ -8,6 +8,8 @@ metadata:
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
 spec:
+  externalTrafficPolicy: Local
+  type: LoadBalancer
   ports:
   - port: 8111
     protocol: TCP
