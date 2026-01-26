@@ -83,7 +83,8 @@ export const response = () => {
         // Obtain the filename (no extensions) in url value
         const datasetId = url.substring(url.lastIndexOf("/") + 1, url.length)
         state.url = url
-        const { token } = await getRepoAccess(datasetId)
+        const instanceUrl = new URL(url).origin
+        const { token } = await getRepoAccess(instanceUrl, datasetId)
         state.token = token
       } catch (_err) {
         state.url = ""
