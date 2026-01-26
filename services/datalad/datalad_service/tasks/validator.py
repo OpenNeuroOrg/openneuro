@@ -8,6 +8,7 @@ import requests
 
 from datalad_service.config import GRAPHQL_ENDPOINT
 from datalad_service.broker import broker
+from datalad_service.common.redis import redis_client
 
 logger = logging.getLogger('datalad_service.' + __name__)
 
@@ -117,26 +118,37 @@ def issues_mutation(dataset_id, ref, issues, validator_metadata):
 
 @broker.task
 async def validate_dataset(dataset_id, dataset_path, ref, cookies=None, user=''):
-    # New schema validator second in case of issues
-    validator_output_deno = await validate_dataset_deno_call(dataset_path, ref)
-    if validator_output_deno:
-        if 'issues' in validator_output_deno:
-            r = requests.post(
-                url=GRAPHQL_ENDPOINT,
-                json=issues_mutation(
-                    dataset_id, ref, validator_output_deno['issues'], DENO_METADATA
-                ),
-                cookies=cookies,
-            )
-            if r.status_code != 200 or 'errors' in r.json():
-                raise Exception(r.text)
-        if 'summary' in validator_output_deno:
-            r = requests.post(
-                url=GRAPHQL_ENDPOINT,
-                json=summary_mutation(
-                    dataset_id, ref, validator_output_deno, DENO_METADATA
-                ),
-                cookies=cookies,
-            )
-            if r.status_code != 200 or 'errors' in r.json():
-                raise Exception(r.text)
+    async with redis_client() as client:
+        lock = client.lock(f'validator-lock:{dataset_id}:{ref}', timeout=60 * 60 * 4)
+        if await lock.acquire(blocking=False):
+            try:
+                # New schema validator second in case of issues
+                validator_output_deno = await validate_dataset_deno_call(
+                    dataset_path, ref
+                )
+                if validator_output_deno:
+                    if 'issues' in validator_output_deno:
+                        r = requests.post(
+                            url=GRAPHQL_ENDPOINT,
+                            json=issues_mutation(
+                                dataset_id,
+                                ref,
+                                validator_output_deno['issues'],
+                                DENO_METADATA,
+                            ),
+                            cookies=cookies,
+                        )
+                        if r.status_code != 200 or 'errors' in r.json():
+                            raise Exception(r.text)
+                    if 'summary' in validator_output_deno:
+                        r = requests.post(
+                            url=GRAPHQL_ENDPOINT,
+                            json=summary_mutation(
+                                dataset_id, ref, validator_output_deno, DENO_METADATA
+                            ),
+                            cookies=cookies,
+                        )
+                        if r.status_code != 200 or 'errors' in r.json():
+                            raise Exception(r.text)
+            finally:
+                await lock.release()
