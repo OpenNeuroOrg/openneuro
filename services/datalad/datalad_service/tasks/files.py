@@ -41,10 +41,10 @@ async def commit_files(store, dataset, files, name=None, email=None, cookies=Non
     return ref
 
 
-def get_tree(store, dataset, tree):
+async def get_tree(store, dataset, tree):
     """Get the working tree, optionally a branch tree."""
     dataset_path = store.get_dataset_path(dataset)
-    return get_repo_files(dataset, dataset_path, tree)
+    return await get_repo_files(dataset, dataset_path, tree)
 
 
 async def remove_files(store, dataset, paths, name=None, email=None, cookies=None):
