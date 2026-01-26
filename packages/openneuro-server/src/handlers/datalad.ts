@@ -2,7 +2,7 @@ import request from "superagent"
 import { Readable } from "node:stream"
 import mime from "mime-types"
 import { getFiles } from "../datalad/files"
-import { getDatasetWorker } from "../libs/datalad-service"
+import { getDatasetEndpoint, getDatasetWorker } from "../libs/datalad-service"
 import { getDraftRevision } from "../datalad/draft"
 
 /**
@@ -102,4 +102,17 @@ export const getObject = (req, res) => {
       error: "Key must be a git object hash or git-annex key",
     })
   }
+}
+
+/**
+ * Redirect to the appropriate git endpoint for a dataset
+ */
+export function gitRepo(req, res) {
+  const { datasetId } = req.params
+  const worker = getDatasetEndpoint(datasetId)
+  const newUrl = req.originalUrl.replace(
+    `${req.baseUrl}/git/`,
+    `/git/${worker}/`,
+  )
+  return res.redirect(301, newUrl)
 }

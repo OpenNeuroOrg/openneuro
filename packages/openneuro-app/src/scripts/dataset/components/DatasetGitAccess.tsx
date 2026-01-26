@@ -24,7 +24,7 @@ export const DatasetGitAccess = ({
   hasEdit,
 }: DatasetGitAccessProps) => {
   const workerId = worker?.split("-").pop()
-  const url = `${configUrl}/git/${workerId}/${datasetId}`
+  const url = `${configUrl}/api/git/${datasetId}`
   const readURL = `https://github.com/${configGithub}/${datasetId}.git`
   return (
     <div className="dataset-git-access">
