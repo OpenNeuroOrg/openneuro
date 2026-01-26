@@ -2,7 +2,7 @@ import config from "../../config"
 import { generateDataladCookie } from "../../libs/authentication/jwt"
 import { getDatasetWorker } from "../../libs/datalad-service"
 import Validation from "../../models/validation"
-import { redis, redlock } from "../../libs/redis"
+import { redis } from "../../libs/redis"
 import CacheItem from "../../cache/item"
 import { CacheType } from "../../cache/types"
 
@@ -134,8 +134,6 @@ export const validationUrl = (datasetId, ref) => {
  */
 export const revalidate = async (obj, { datasetId, ref }, { userInfo }) => {
   try {
-    // Lock for five minutes to avoid stacking up multiple validation requests
-    await redlock.lock(`openneuro:revalidate-lock:${datasetId}:${ref}`, 300000)
     const response = await fetch(validationUrl(datasetId, ref), {
       method: "POST",
       body: JSON.stringify({}),

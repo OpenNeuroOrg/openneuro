@@ -18,7 +18,7 @@ export const issues = async (dataset, _, { userInfo }) => {
     .exec()
     .then((data) => {
       if (!data && userInfo) {
-        // If no results were found, acquire a lock and run validation
+        // If no results were found, request to run validation
         revalidate(
           null,
           { datasetId: dataset.id, ref: dataset.revision },
