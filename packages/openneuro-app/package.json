@@ -22,7 +22,7 @@
     "@emotion/styled": "11.11.0",
     "@niivue/niivue": "0.57.0",
     "@openneuro/components": "^4.33.4",
-    "@sentry/react": "^8.25.0",
+    "@sentry/react": "^10.37.0",
     "@tanstack/react-table": "^8.9.3",
     "buffer": "^6.0.3",
     "bytes": "^3.0.0",
