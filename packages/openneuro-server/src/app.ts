@@ -39,6 +39,8 @@ interface OpenNeuroRequestContext {
 export async function expressApolloSetup() {
   const app = express()
 
+  app.set("trust proxy", true)
+
   setupPassportAuth()
 
   app.use(passport.initialize())
