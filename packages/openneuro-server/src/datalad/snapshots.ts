@@ -100,7 +100,9 @@ const postSnapshot = async (
  * @param {string} datasetId Dataset accession number
  * @returns {Promise<import('../models/snapshot').SnapshotDocument[]>}
  */
-export const getSnapshots = (datasetId): Promise<SnapshotDocument[]> => {
+export const getSnapshots = async (datasetId): Promise<SnapshotDocument[]> => {
+  const dataset = await Dataset.findOne({ id: datasetId })
+  if (!dataset) return null
   const url = `${getDatasetWorker(datasetId)}/datasets/${datasetId}/snapshots`
   return request
     .get(url)
