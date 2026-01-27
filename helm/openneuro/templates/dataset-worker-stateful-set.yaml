@@ -41,7 +41,7 @@ spec:
         resources:
           requests:
             cpu: {{ .Values.workerCpuRequests }}
-            memory: 16Gi
+            memory: 8Gi
         readinessProbe:
           periodSeconds: 5
           initialDelaySeconds: 15
@@ -50,7 +50,7 @@ spec:
             port: 80
         livenessProbe:
           periodSeconds: 60
-          timeoutSeconds: 10
+          timeoutSeconds: 20
           httpGet:
             path: /heartbeat
             port: 80
