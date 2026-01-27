@@ -2,6 +2,7 @@ import passport from "passport"
 import refresh from "passport-oauth2-refresh"
 import jwt from "jsonwebtoken"
 import * as Sentry from "@sentry/node"
+import type { Request } from "express"
 import { decrypt } from "./crypto"
 import User from "../../models/user"
 import config from "../../config"
@@ -175,6 +176,19 @@ const refreshToken = async (jwt) => {
 // Shared options for Express response.cookie()
 const cookieOptions = { sameSite: "Lax" }
 
+// Obtain client IP address from request, considering possible proxies
+function getClientIp(req: Request): string | undefined {
+  const forwardedForHeader = req.headers["x-forwarded-for"]
+  if (forwardedForHeader) {
+    const ips = Array.isArray(forwardedForHeader)
+      ? forwardedForHeader
+      : forwardedForHeader.split(",")
+    const clientIp = ips[0].trim()
+    return clientIp
+  }
+  return req.socket.remoteAddress || undefined
+}
+
 // attach user obj to request based on jwt
 // if user does not exist, continue
 export const authenticate = (req, res, next) => {
@@ -192,7 +206,7 @@ export const authenticate = (req, res, next) => {
         if (user) {
           Sentry.setUser({
             id: user.id,
-            ip_address: req.headers["x-forwarded-for"] as string,
+            ip_address: getClientIp(req),
           })
         }
         Sentry.setContext("request_headers", {
