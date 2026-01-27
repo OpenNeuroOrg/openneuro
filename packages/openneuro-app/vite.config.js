@@ -32,7 +32,13 @@ export default defineConfig({
   build: {
     sourcemap: true,
     rollupOptions: {
-      external: ["/crn/config.js"],
+      external: [
+        "/crn/config.js",
+        "supports-hyperlinks",
+        "ansi-escapes",
+        "@jsr/effigies__cliffy-command",
+        "@jsr/effigies__cliffy-table",
+      ],
     },
   },
   optimizeDeps: {

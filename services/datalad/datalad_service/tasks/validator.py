@@ -12,7 +12,7 @@ from datalad_service.common.redis import redis_client
 
 logger = logging.getLogger('datalad_service.' + __name__)
 
-DENO_VALIDATOR_VERSION = '2.2.10'
+DENO_VALIDATOR_VERSION = '2.2.8'
 
 DENO_METADATA = {'validator': 'schema', 'version': DENO_VALIDATOR_VERSION}
 
