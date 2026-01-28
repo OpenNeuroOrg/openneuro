@@ -30,10 +30,8 @@ class SnapshotResource:
         if not os.path.exists(self.store.get_dataset_path(dataset)):
             resp.status = falcon.HTTP_NOT_FOUND
         elif snapshot:
-            files = await get_tree(self.store, dataset, snapshot)
             try:
                 response = get_snapshot(self.store, dataset, snapshot)
-                response['files'] = files
                 resp.media = response
                 resp.status = falcon.HTTP_OK
             except KeyError:

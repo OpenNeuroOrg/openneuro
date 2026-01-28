@@ -103,13 +103,16 @@ const postSnapshot = async (
 export const getSnapshots = async (datasetId): Promise<SnapshotDocument[]> => {
   const dataset = await Dataset.findOne({ id: datasetId })
   if (!dataset) return null
-  const url = `${getDatasetWorker(datasetId)}/datasets/${datasetId}/snapshots`
-  return request
-    .get(url)
-    .set("Accept", "application/json")
-    .then(({ body: { snapshots } }) => {
-      return snapshots.sort(snapshotCreationComparison)
-    })
+  const cache = new CacheItem(redis, CacheType.snapshot, [datasetId], 432000)
+  return cache.get(() => {
+    const url = `${getDatasetWorker(datasetId)}/datasets/${datasetId}/snapshots`
+    return request
+      .get(url)
+      .set("Accept", "application/json")
+      .then(({ body: { snapshots } }) => {
+        return snapshots.sort(snapshotCreationComparison)
+      })
+  })
 }
 
 const announceNewSnapshot = async (snapshot, datasetId, user) => {
@@ -175,6 +178,11 @@ export const createSnapshot = async (
       updateDatasetName(datasetId),
     ])
 
+    const snapshotListCache = new CacheItem(redis, CacheType.snapshot, [
+      datasetId,
+    ])
+    await snapshotListCache.drop()
+
     // Version is created here and event is updated
     await updateEvent(event)
 
@@ -205,6 +213,10 @@ export const deleteSnapshot = (datasetId, tag) => {
       tag,
     ])
     await snapshotCache.drop()
+    const snapshotListCache = new CacheItem(redis, CacheType.snapshot, [
+      datasetId,
+    ])
+    await snapshotListCache.drop()
     return body
   })
 }
