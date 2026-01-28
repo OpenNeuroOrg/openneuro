@@ -3,6 +3,7 @@ import socket
 import falcon
 import falcon.asgi
 import sentry_sdk
+from sentry_sdk.integrations.falcon import FalconIntegration
 
 import datalad_service.config
 import datalad_service.version
@@ -46,6 +47,9 @@ def before_send(event):
 
 sentry_sdk.init(
     dsn='https://c9553a03ec26c23e98964e08219b4673@o4507748938350592.ingest.us.sentry.io/4507749177622528',
+    integrations=[
+        FalconIntegration(),
+    ],
     # Set traces_sample_rate to 1.0 to capture 100%
     # of transactions for performance monitoring.
     traces_sample_rate=1.0,
