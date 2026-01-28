@@ -13,6 +13,26 @@ import { createDatasetAffirmed } from "./create-dataset.ts"
 import { CreateDatasetAffirmedError } from "../error.ts"
 import validatorConfig from "../validator-config.json" with { type: "json" }
 
+/**
+ * Check if a path contains a hidden directory or file (starting with .)
+ * Matches paths like "derivatives/.git/..." or "derivatives/.datalad/..." in submodules
+ */
+export const hiddenPathPattern = /[\/\\]\./
+
+/**
+ * Determine if a file should be included in the upload based on its relative path
+ * @param relativePath Path relative to the dataset root
+ * @returns true if the file should be uploaded
+ */
+export function shouldIncludeFile(relativePath: string): boolean {
+  // Skip hidden files/dirs in submodules (e.g., derivatives/.git/, derivatives/.datalad/)
+  const hasHiddenComponent = hiddenPathPattern.test(relativePath)
+  return (
+    relativePath === ".bidsignore" ||
+    (!relativePath.startsWith(".") && !hasHiddenComponent)
+  )
+}
+
 async function getRepoDir(url: URL): Promise<string> {
   const LOCAL_STORAGE_KEY = `openneuro_cli_${url.hostname}_`
   const repoDir = localStorage.getItem(LOCAL_STORAGE_KEY)
@@ -42,10 +62,7 @@ export async function addGitFiles(
     })
   ) {
     const relativePath = relative(dataset_directory_abs, walkEntry.path)
-    if (
-      relativePath === ".bidsignore" ||
-      !relativePath.startsWith(".")
-    ) {
+    if (shouldIncludeFile(relativePath)) {
       worker.postMessage({
         "command": "add",
         "path": walkEntry.path,
