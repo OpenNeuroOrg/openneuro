@@ -4,7 +4,8 @@ import config from "./config"
 import { version } from "./lerna.json"
 
 Sentry.init({
-  dsn: config.sentry.DSN,
+  dsn:
+    "https://baebfdeb279ddb0c39c876feefd464c8@o4507748938350592.ingest.us.sentry.io/4507750879461376",
   environment: config.sentry.ENVIRONMENT,
   integrations: [
     nodeProfilingIntegration(),
