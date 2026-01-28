@@ -42,7 +42,13 @@ export const brainInitiative = async (
           }
         }
         // Check for grant ids too - filter to only alphanumeric to improve matching across format differences
-        const identifier = metadata.grantIdentifier.replace(/[^a-zA-Z0-9]/g, "")
+        const identifier = metadata?.grantIdentifier?.replace(
+          /[^a-zA-Z0-9]/g,
+          "",
+        )
+        if (!identifier) {
+          return false
+        }
         for (const grant of brainInitiativeGrants) {
           if (
             identifier.includes(grant)
