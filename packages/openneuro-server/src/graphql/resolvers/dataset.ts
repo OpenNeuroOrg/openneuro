@@ -24,6 +24,7 @@ import { derivatives } from "./derivatives"
 import { promiseTimeout } from "../../utils/promiseTimeout"
 import { datasetEvents } from "./datasetEvents"
 import semver from "semver"
+import { getDraftInfo } from "../../datalad/draft"
 
 export const dataset = async (obj, { id }, { user, userInfo }) => {
   await checkDatasetRead(id, user, userInfo)
@@ -280,7 +281,7 @@ const worker = (obj) => getDatasetWorker(obj.id)
 const Dataset = {
   uploader: (ds, _, context) => user(ds, { id: ds.uploader }, context),
   draft: async (obj) => {
-    const draftHead = await datalad.getDraftHead(obj.id)
+    const draftHead = await getDraftInfo(obj.id)
     return {
       id: obj.id,
       revision: draftHead.ref,

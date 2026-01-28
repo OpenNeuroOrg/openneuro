@@ -14,7 +14,7 @@ import * as subscriptions from "../handlers/subscriptions"
 import { generateDataladCookie } from "../libs/authentication/jwt"
 import { redis } from "../libs/redis"
 import CacheItem, { CacheType } from "../cache/item"
-import { updateDatasetRevision } from "./draft"
+import { getDraftRevision, updateDatasetRevision } from "./draft"
 import { encodeFilePath, filesUrl, fileUrl, getFileName } from "./files"
 import { getAccessionNumber } from "../libs/dataset"
 import Dataset from "../models/dataset"
@@ -80,28 +80,6 @@ export const createDataset = async (
   }
 }
 
-interface WorkerDraftFields {
-  // Commit id hash
-  ref: string
-  // Commit tree ref
-  tree: string
-  // Commit message
-  message: string
-  // Commit author time
-  modified: string
-}
-
-/**
- * Return the latest commit
- * @param {string} id Dataset accession number
- */
-export const getDraftHead = async (id): Promise<WorkerDraftFields> => {
-  const draftRes = await request
-    .get(`${getDatasetWorker(id)}/datasets/${id}/draft`)
-    .set("Accept", "application/json")
-  return draftRes.body
-}
-
 /**
  * Fetch dataset document and related fields
  */
@@ -109,7 +87,7 @@ export const getDataset = async (id) => {
   const dataset = await Dataset.findOne({ id }).lean()
   return {
     ...dataset,
-    revision: (await getDraftHead(id)).ref,
+    revision: getDraftRevision(id),
   }
 }
 
