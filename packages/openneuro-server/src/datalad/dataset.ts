@@ -503,7 +503,6 @@ export async function updatePublic(datasetId, publicFlag, user) {
   await Dataset.updateOne(
     { id: datasetId },
     { public: publicFlag, publishDate: new Date() },
-    { upsert: true },
   ).exec()
   await updateEvent(event)
 }
