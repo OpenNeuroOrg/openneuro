@@ -17,9 +17,6 @@ export const trackAnalytics = async (datasetId, tag, type) => {
           views: 1,
         },
       },
-      {
-        upsert: true,
-      },
     ).exec()
   } else if (type === "downloads") {
     return Dataset.updateOne(
@@ -30,9 +27,6 @@ export const trackAnalytics = async (datasetId, tag, type) => {
         $inc: {
           downloads: 1,
         },
-      },
-      {
-        upsert: true,
       },
     ).exec()
   }
