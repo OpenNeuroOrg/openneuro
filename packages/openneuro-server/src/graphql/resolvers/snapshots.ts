@@ -14,11 +14,11 @@ import DeprecatedSnapshot from "../../models/deprecatedSnapshot"
 import { redis } from "../../libs/redis"
 import CacheItem, { CacheType } from "../../cache/item"
 import { normalizeDOI } from "../../libs/doi/normalize"
-import { getDraftHead } from "../../datalad/dataset"
 import { downloadFiles } from "../../datalad/snapshots"
 import { snapshotValidation } from "./validation"
 import { advancedDatasetSearchConnection } from "./dataset-search"
 import { contributors } from "../../datalad/contributors"
+import { getDraftInfo } from "../../datalad/draft"
 
 export const snapshots = (obj) => {
   return datalad.getSnapshots(obj.id)
@@ -279,7 +279,7 @@ export const latestSnapshot = async (obj, _, context) => {
     // In the case where there are no real snapshots, return most recent commit as snapshot
     return await snapshot(
       obj,
-      { datasetId: obj.id, tag: (await getDraftHead(obj.id)).ref },
+      { datasetId: obj.id, tag: (await getDraftInfo(obj.id)).ref },
       context,
     )
   }
