@@ -3,7 +3,8 @@ import { config } from "./config"
 import { version } from "../lerna.json"
 
 Sentry.init({
-  dsn: config.sentry.dsn,
+  dsn:
+    "https://988df6d6043a386440f614f1e936f73e@o4507748938350592.ingest.us.sentry.io/4507748943724544",
   integrations: [
     Sentry.browserTracingIntegration(),
     Sentry.replayIntegration(),
