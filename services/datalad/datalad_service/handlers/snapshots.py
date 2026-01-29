@@ -11,7 +11,6 @@ from datalad_service.tasks.snapshots import (
     get_snapshots,
     SnapshotExistsException,
 )
-from datalad_service.tasks.files import get_tree
 from datalad_service.tasks.publish import (
     export_dataset,
     monitor_remote_configs,
