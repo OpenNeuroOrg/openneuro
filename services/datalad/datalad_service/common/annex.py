@@ -202,12 +202,16 @@ async def get_repo_urls(path, files):
         stdout=asyncio.subprocess.PIPE,
     )
     rmetObjects = {}
-    async for line in gitAnnexBranch.stdout:
-        filename, mode, obj_type, obj_hash, size = parse_ls_tree_line(
-            line.decode('utf-8').rstrip()
-        )
-        rmetObjects[filename] = obj_hash
-    await gitAnnexBranch.wait()
+    try:
+        async for line in gitAnnexBranch.stdout:
+            filename, mode, obj_type, obj_hash, size = parse_ls_tree_line(
+                line.decode('utf-8').rstrip()
+            )
+            rmetObjects[filename] = obj_hash
+    finally:
+        if gitAnnexBranch.returncode is None:
+            gitAnnexBranch.terminate()
+        await gitAnnexBranch.wait()
 
     if 'remote.log' not in rmetObjects:
         # Skip searching for URLs if no remote.log is present
@@ -299,10 +303,14 @@ async def get_repo_files(dataset, dataset_path, tree):
     files = []
     symlinkFilenames = []
     symlinkObjects = []
-    async for line in gitProcess.stdout:
-        gitTreeLine = line.decode('utf-8').rstrip()
-        read_ls_tree_line(gitTreeLine, files, symlinkFilenames, symlinkObjects)
-    await gitProcess.wait()
+    try:
+        async for line in gitProcess.stdout:
+            gitTreeLine = line.decode('utf-8').rstrip()
+            read_ls_tree_line(gitTreeLine, files, symlinkFilenames, symlinkObjects)
+    finally:
+        if gitProcess.returncode is None:
+            gitProcess.terminate()
+        await gitProcess.wait()
 
     # After regular files, process all symlinks with one git cat-file --batch call
     # This is about 100x faster than one call per file for annexed file heavy datasets
