@@ -11908,10 +11908,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["fast-xml-parser", [\
-      ["npm:5.3.0", {\
-        "packageLocation": "./.yarn/cache/fast-xml-parser-npm-5.3.0-9b3beb9b53-3773f08722.zip/node_modules/fast-xml-parser/",\
+      ["npm:5.3.4", {\
+        "packageLocation": "./.yarn/cache/fast-xml-parser-npm-5.3.4-4e8767c471-0d7e6872fe.zip/node_modules/fast-xml-parser/",\
         "packageDependencies": [\
-          ["fast-xml-parser", "npm:5.3.0"],\
+          ["fast-xml-parser", "npm:5.3.4"],\
           ["strnum", "npm:2.1.1"]\
         ],\
         "linkType": "HARD"\
@@ -13519,7 +13519,7 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/hed-validator-npm-4.1.4-50f16ffc27-5a28a26b1f.zip/node_modules/hed-validator/",\
         "packageDependencies": [\
           ["core-js-pure", "npm:3.43.0"],\
-          ["fast-xml-parser", "npm:5.3.0"],\
+          ["fast-xml-parser", "npm:5.3.4"],\
           ["hed-validator", "npm:4.1.4"],\
           ["lodash", "npm:4.17.21"],\
           ["pluralize", "npm:8.0.0"],\
