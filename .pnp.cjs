@@ -7632,13 +7632,6 @@ const RAW_RUNTIME_STATE =
           ["acorn", "npm:8.15.0"]\
         ],\
         "linkType": "HARD"\
-      }],\
-      ["npm:8.8.1", {\
-        "packageLocation": "./.yarn/cache/acorn-npm-8.8.1-20e4aea981-c77a64b3b6.zip/node_modules/acorn/",\
-        "packageDependencies": [\
-          ["acorn", "npm:8.8.1"]\
-        ],\
-        "linkType": "HARD"\
       }]\
     ]],\
     ["acorn-import-attributes", [\
@@ -7686,13 +7679,6 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["acorn-walk", [\
-      ["npm:8.2.0", {\
-        "packageLocation": "./.yarn/cache/acorn-walk-npm-8.2.0-2f2cac3177-e69f7234f2.zip/node_modules/acorn-walk/",\
-        "packageDependencies": [\
-          ["acorn-walk", "npm:8.2.0"]\
-        ],\
-        "linkType": "HARD"\
-      }],\
       ["npm:8.3.4", {\
         "packageLocation": "./.yarn/cache/acorn-walk-npm-8.3.4-a75fa85ead-871386764e.zip/node_modules/acorn-walk/",\
         "packageDependencies": [\
@@ -10483,7 +10469,7 @@ const RAW_RUNTIME_STATE =
           ["degenerator", "npm:3.0.1"],\
           ["escodegen", "npm:1.14.3"],\
           ["esprima", "npm:4.0.1"],\
-          ["vm2", "npm:3.9.18"]\
+          ["vm2", "npm:3.10.3"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -24718,12 +24704,12 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["vm2", [\
-      ["npm:3.9.18", {\
-        "packageLocation": "./.yarn/cache/vm2-npm-3.9.18-6be67ad55d-749d62d609.zip/node_modules/vm2/",\
+      ["npm:3.10.3", {\
+        "packageLocation": "./.yarn/cache/vm2-npm-3.10.3-675892c0ac-015edd8add.zip/node_modules/vm2/",\
         "packageDependencies": [\
-          ["acorn", "npm:8.8.1"],\
-          ["acorn-walk", "npm:8.2.0"],\
-          ["vm2", "npm:3.9.18"]\
+          ["acorn", "npm:8.15.0"],\
+          ["acorn-walk", "npm:8.3.4"],\
+          ["vm2", "npm:3.10.3"]\
         ],\
         "linkType": "HARD"\
       }]\
