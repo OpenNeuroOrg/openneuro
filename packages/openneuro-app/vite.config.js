@@ -36,8 +36,6 @@ export default defineConfig({
         "/crn/config.js",
         // Dependencies that are only accessed in formatting terminal output
         "supports-hyperlinks",
-        "ansi-escapes",
-        "@jsr/effigies__cliffy-table",
       ],
     },
   },
