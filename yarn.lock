@@ -876,9 +876,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@bids/validator@npm:@jsr/bids__validator@^2.3.1":
-  version: 2.3.1
-  resolution: "@jsr/bids__validator@npm:2.3.1::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__validator%2F2.3.1.tgz"
+"@bids/validator@npm:@jsr/bids__validator@^2.3.2":
+  version: 2.3.2
+  resolution: "@jsr/bids__validator@npm:2.3.2::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__validator%2F2.3.2.tgz"
   dependencies:
     "@bids/nifti-reader-js": "npm:^0.6.9"
     "@jsr/bids__schema": "npm:~1.1.6"
@@ -886,6 +886,7 @@ __metadata:
     "@jsr/effigies__cliffy-command": "npm:1.0.0-dev.8"
     "@jsr/effigies__cliffy-table": "npm:1.0.0-dev.5"
     "@jsr/libs__xml": "npm:^7.0.3"
+    "@jsr/std__async": "npm:^1.1.0"
     "@jsr/std__fmt": "npm:^1.0.8"
     "@jsr/std__log": "npm:^0.224.14"
     "@jsr/std__path": "npm:^1.1.4"
@@ -899,7 +900,7 @@ __metadata:
     isomorphic-git: "npm:^1.36.1"
     marked: "npm:^15.0.12"
     supports-hyperlinks: "npm:^4.4.0"
-  checksum: 10/e5179c69c2a9d5aa8a09662f9e01889b22a899d5a4225a9ca16bdc192211cbef80555edc7f247d3d3befd6ce0e9058fd90ebb68a8a43a839da757410ecda5eea
+  checksum: 10/f88f388163731afb8098e40949eaeb64e065370017c7df4e35bf70575e6fbd3cb53e4953dcdff6d124c6da6f10e091bfc3a8ee9e91e448e1739b7a3b24be1374
   languageName: node
   linkType: hard
 
@@ -2122,6 +2123,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@jsr/std__async@npm:^1.1.0":
+  version: 1.1.1
+  resolution: "@jsr/std__async@npm:1.1.1::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__async%2F1.1.1.tgz"
+  checksum: 10/be4f66571d2c5ff3c21f49effbec0366ca4ce71481ec290bdbd756f9d7e80cce47a83894a4e3374f80f329d46a68668d0b07a16c5f8fb10df3a68e02639402aa
+  languageName: node
+  linkType: hard
+
 "@jsr/std__bytes@npm:^1.0.5":
   version: 1.0.5
   resolution: "@jsr/std__bytes@npm:1.0.5::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__bytes%2F1.0.5.tgz"
@@ -2968,7 +2976,7 @@ __metadata:
   dependencies:
     "@apollo/client": "npm:3.13.8"
     "@artsy/fresnel": "npm:^1.3.1"
-    "@bids/validator": "npm:@jsr/bids__validator@^2.3.1"
+    "@bids/validator": "npm:@jsr/bids__validator@^2.3.2"
     "@emotion/react": "npm:11.11.1"
     "@emotion/styled": "npm:11.11.0"
     "@niivue/niivue": "npm:0.57.0"

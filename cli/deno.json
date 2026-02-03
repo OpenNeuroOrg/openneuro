@@ -18,7 +18,7 @@
   },
   "imports": {
     "@404wolf/xdg-portable": "jsr:@404wolf/xdg-portable@^0.1.0",
-    "@bids/validator": "jsr:@bids/validator@^2.3.1",
+    "@bids/validator": "jsr:@bids/validator@^2.3.2",
     "@cliffy/command": "jsr:@effigies/cliffy-command@1.0.0-dev.8",
     "@cliffy/prompt": "jsr:@cliffy/prompt@^1.0.0-rc.8",
     "@deno-library/progress": "jsr:@deno-library/progress@^1.5.1",
