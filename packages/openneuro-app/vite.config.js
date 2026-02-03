@@ -34,8 +34,6 @@ export default defineConfig({
     rollupOptions: {
       external: [
         "/crn/config.js",
-        // Dependencies that are only accessed in formatting terminal output
-        "supports-hyperlinks",
       ],
     },
   },
