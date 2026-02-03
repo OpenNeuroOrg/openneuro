@@ -2843,16 +2843,17 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["@jsr/bids__validator", [\
-      ["npm:2.3.1::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__validator%2F2.3.1.tgz", {\
-        "packageLocation": "./.yarn/cache/@jsr-bids__validator-npm-2.3.1-076050b42a-e5179c69c2.zip/node_modules/@jsr/bids__validator/",\
+      ["npm:2.3.2::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__validator%2F2.3.2.tgz", {\
+        "packageLocation": "./.yarn/cache/@jsr-bids__validator-npm-2.3.2-8490acdb95-f88f388163.zip/node_modules/@jsr/bids__validator/",\
         "packageDependencies": [\
           ["@bids/nifti-reader-js", "npm:0.6.9"],\
           ["@jsr/bids__schema", "npm:1.1.6::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__schema%2F1.1.6.tgz"],\
-          ["@jsr/bids__validator", "npm:2.3.1::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__validator%2F2.3.1.tgz"],\
+          ["@jsr/bids__validator", "npm:2.3.2::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__validator%2F2.3.2.tgz"],\
           ["@jsr/bradenmacdonald__s3-lite-client", "npm:0.9.4::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbradenmacdonald__s3-lite-client%2F0.9.4.tgz"],\
           ["@jsr/effigies__cliffy-command", "npm:1.0.0-dev.8::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Feffigies__cliffy-command%2F1.0.0-dev.8.tgz"],\
           ["@jsr/effigies__cliffy-table", "npm:1.0.0-dev.5::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Feffigies__cliffy-table%2F1.0.0-dev.5.tgz"],\
           ["@jsr/libs__xml", "npm:7.0.3::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Flibs__xml%2F7.0.3.tgz"],\
+          ["@jsr/std__async", "npm:1.1.1::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__async%2F1.1.1.tgz"],\
           ["@jsr/std__fmt", "npm:1.0.8::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__fmt%2F1.0.8.tgz"],\
           ["@jsr/std__log", "npm:0.224.14::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__log%2F0.224.14.tgz"],\
           ["@jsr/std__path", "npm:1.1.4::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__path%2F1.1.4.tgz"],\
@@ -2939,6 +2940,15 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/@jsr-libs__xml-npm-7.0.3-fb222bd731-e7235c7092.zip/node_modules/@jsr/libs__xml/",\
         "packageDependencies": [\
           ["@jsr/libs__xml", "npm:7.0.3::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Flibs__xml%2F7.0.3.tgz"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@jsr/std__async", [\
+      ["npm:1.1.1::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__async%2F1.1.1.tgz", {\
+        "packageLocation": "./.yarn/cache/@jsr-std__async-npm-1.1.1-439b2e770e-be4f66571d.zip/node_modules/@jsr/std__async/",\
+        "packageDependencies": [\
+          ["@jsr/std__async", "npm:1.1.1::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fstd__async%2F1.1.1.tgz"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -3925,7 +3935,7 @@ const RAW_RUNTIME_STATE =
           ["@artsy/fresnel", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:1.9.0"],\
           ["@bids/validator", [\
             "@jsr/bids__validator",\
-            "npm:2.3.1::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__validator%2F2.3.1.tgz"\
+            "npm:2.3.2::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__validator%2F2.3.2.tgz"\
           ]],\
           ["@emotion/react", "virtual:dfc8861fb483e7f9493811b738b55fee97a3c3e2cb836e82763f82cb601d9955d5ee09c520fd30825cc5220c166a2003feb13430de5559fb2a330912125de5c2#npm:11.11.1"],\
           ["@emotion/styled", "virtual:dfc8861fb483e7f9493811b738b55fee97a3c3e2cb836e82763f82cb601d9955d5ee09c520fd30825cc5220c166a2003feb13430de5559fb2a330912125de5c2#npm:11.11.0"],\
