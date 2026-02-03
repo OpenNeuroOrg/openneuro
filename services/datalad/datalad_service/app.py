@@ -1,9 +1,10 @@
 import socket
+import sys
 
 import falcon
 import falcon.asgi
 import sentry_sdk
-from sentry_sdk.integrations.falcon import FalconIntegration
+from sentry_sdk.integrations.asgi import SentryAsgiMiddleware
 
 import datalad_service.config
 import datalad_service.version
@@ -47,9 +48,6 @@ def before_send(event):
 
 sentry_sdk.init(
     dsn='https://c9553a03ec26c23e98964e08219b4673@o4507748938350592.ingest.us.sentry.io/4507749177622528',
-    integrations=[
-        FalconIntegration(),
-    ],
     # Set traces_sample_rate to 1.0 to capture 100%
     # of transactions for performance monitoring.
     traces_sample_rate=1.0,
@@ -184,4 +182,6 @@ def create_app():
         '/datasets/{dataset:dataset}/import/{import_id}', dataset_remote_import_resource
     )
 
-    return app
+    if 'pytest' in sys.modules:
+        return app  # Do not wrap in Sentry middleware during tests
+    return SentryAsgiMiddleware(app)
