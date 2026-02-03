@@ -2,5 +2,5 @@
   "lerna": "2.9.1",
   "packages": ["packages/*"],
   "npmClient": "yarn",
-  "version": "4.45.1"
+  "version": "4.45.2"
 }
