@@ -60,6 +60,10 @@ export default defineConfig({
       },
       // Workaround for bids-validator -> hed-validator -> xml2js -> sax -> Stream shim
       { find: "stream", replacement: "stream-browserify" },
+      {
+        find: "supports-hyperlinks",
+        replacement: "./src/deps/support-hyperlinks-stub.js",
+      },
     ],
   },
   plugins: [workaroundAssetImportMetaUrlPluginBug(), nodePolyfills()],
