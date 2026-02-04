@@ -124,7 +124,7 @@ export async function uploadAction(
   })
 
   const repoPath = join(repoDir, datasetId)
-  const { token, endpoint } = await getRepoAccess(datasetId)
+  const { token, endpoint } = await getRepoAccess(clientConfig.url, datasetId)
   await Deno.mkdir(repoPath, { recursive: true })
   // Configure worker
   worker.postMessage({

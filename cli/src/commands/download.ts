@@ -28,7 +28,7 @@ export async function downloadAction(
 ) {
   const datasetId = accession_number
   const clientConfig = readConfig()
-  const { token, endpoint } = await getRepoAccess(datasetId)
+  const { token, endpoint } = await getRepoAccess(clientConfig.url, datasetId)
 
   // Create the git worker
   const worker = new Worker(new URL("../worker/git.ts", import.meta.url).href, {
