@@ -171,16 +171,16 @@ def read_rmet_file(remote, catFile):
     # First line is git metadata
     line = catFile.readline().rstrip()
     url = None
-    if line[0:3] == ':::':
+    if line.startswith(b':::'):
         while True:
             # Examine each remote entry in the rmet file
             nextLine = catFile.readline().rstrip()
-            if nextLine == '':
+            if nextLine == b'':
                 break
             else:
                 # If we find expected remote, return the URL
-                if remote['uuid'] in nextLine:
-                    url = parse_rmet_line(remote, nextLine)
+                if remote['uuid'].encode('utf-8') in nextLine:
+                    url = parse_rmet_line(remote, nextLine.decode('utf-8'))
     return url
 
 
@@ -239,26 +239,26 @@ async def get_repo_urls(path, files):
         stdout=asyncio.subprocess.PIPE,
     )
     stdout, _ = await catFileProcess.communicate(input=gitObjects.encode('utf-8'))
-    catFile = io.StringIO(stdout.decode('utf-8'))
+    catFile = io.BytesIO(stdout)
     # Read in trust.log and remote.log first
     trustLog = {}
     if 'trust.log' in rmetObjects:
         trustLogMetadata = catFile.readline().rstrip()
         while True:
             line = catFile.readline().rstrip()
-            if line == '':
+            if line == b'':
                 break
             else:
-                uuid, trust, timestamp = line.split(' ')
+                uuid, trust, timestamp = line.decode('utf-8').split(' ')
                 trustLog[uuid] = trust
     remoteLogMetadata = catFile.readline().rstrip()
     remote = None
     while True:
         line = catFile.readline().rstrip()
-        if line == '':
+        if line == b'':
             break
         else:
-            matchedRemote = parse_remote_line(line)
+            matchedRemote = parse_remote_line(line.decode('utf-8'))
             # X remotes are dead
             if (
                 matchedRemote
@@ -319,10 +319,10 @@ async def get_repo_files(dataset, dataset_path, tree):
     # Output looks like this:
     # dc9dde956f6f28e425a412a4123526e330668e7e blob 140
     # ../../.git/annex/objects/Q0/VP/MD5E-s1618574--43762c4310549dcc8c5c25567f42722d.nii.gz/MD5E-s1618574--43762c4310549dcc8c5c25567f42722d.nii.gz
-    for index, line in enumerate(stdout.decode('utf-8').splitlines()):
+    for index, line in enumerate(stdout.splitlines()):
         # Skip metadata (even) lines
         if index % 2 == 1:
-            key = line.rstrip().split('/')[-1]
+            key = line.rstrip().split(b'/')[-1].decode('utf-8')
             # Get the size from key
             size = int(key.split('-', 2)[1].lstrip('s'))
             filename = symlinkFilenames[(index - 1) // 2]
