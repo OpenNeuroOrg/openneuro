@@ -32,7 +32,7 @@
     "@std/testing": "jsr:@std/testing@^1.0.15",
     "@wok/djwt": "jsr:@wok/djwt@^3.0.2",
     "ignore": "npm:ignore@^5.3.0",
-    "isomorphic-git": "npm:isomorphic-git@1.27.1",
+    "isomorphic-git": "npm:isomorphic-git@1.36.3",
     "hash-wasm": "npm:hash-wasm@^4.12.0"
   }
 }

@@ -1,4 +1,4 @@
-import http from "isomorphic-git/http/node/index.js"
+import http from "isomorphic-git/http/node"
 import { decode } from "@wok/djwt"
 import fs from "node:fs"
 import type { LevelName } from "@std/log/levels"
