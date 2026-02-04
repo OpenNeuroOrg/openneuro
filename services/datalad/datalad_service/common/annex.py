@@ -196,7 +196,6 @@ async def get_repo_urls(path, files):
         'git',
         'ls-tree',
         '-l',
-        '-r',
         'git-annex',
         cwd=path,
         stdout=asyncio.subprocess.PIPE,
