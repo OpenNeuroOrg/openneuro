@@ -211,7 +211,7 @@ def test_read_rmet_file():
         'url': 'http://openneuro.org.s3.amazonaws.com/',
         'uuid': '57894849-d0c8-4c62-8418-3627be18a196',
     }
-    catFile = io.StringIO(""":::99fe93bfea62c16a10488593da870df25d09be81
+    catFile = io.BytesIO(b""":::99fe93bfea62c16a10488593da870df25d09be81
     1590213748.042921433s 57894849-d0c8-4c62-8418-3627be18a196:V +iVcEk18e3J2WQys4zr_ANaTPfpUufW4Y#ds002778/dataset_description.json""")
     url = read_rmet_file(remote, catFile)
     assert (
