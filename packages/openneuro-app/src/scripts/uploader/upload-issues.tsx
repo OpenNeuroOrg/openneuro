@@ -3,7 +3,6 @@ import pluralize from "pluralize"
 import { Loading } from "../components/loading/Loading"
 import { ValidationResultsDisplay } from "../validation/validation-results"
 import UploaderContext from "./uploader-context.js"
-import { validation } from "../workers/schema.js"
 import type { ValidationResult } from "@bids/validator/main"
 import { DatasetIssues } from "@bids/validator/issues"
 
@@ -80,12 +79,17 @@ class UploadValidator
   extends React.Component<UploadValidatorProps, UploadValidatorState> {
   constructor(props) {
     super(props)
+    const schemaValidator = import("../workers/schema.js")
     this.state = {
       validating: true,
       issues: new DatasetIssues(),
       summary: {},
     }
-    validation(Array.from(this.props.files)).then(this.done)
+    schemaValidator.then((schemaValidatorModule) => {
+      schemaValidatorModule.validation(Array.from(this.props.files)).then(
+        this.done,
+      )
+    })
   }
 
   /**
