@@ -82,7 +82,7 @@ export const getFile = async (req, res) => {
 }
 
 /**
- * Get a file from a dataset
+ * Request a git object from a dataset
  */
 export const getObject = (req, res) => {
   const { datasetId, key } = req.params
