@@ -126,12 +126,9 @@ def read_ls_tree_line(gitTreeLine, files, symlinkFilenames, symlinkObjects):
             )
 
 
-def compute_rmet(key, legacy=False):
+def compute_rmet(key):
     if len(key) == 40:
-        if legacy:
-            key = f'SHA1--{key}'
-        else:
-            key = f'GIT--{key}'
+        key = f'GIT--{key}'
     keyHash = hashlib.md5(key.encode()).hexdigest()
     return f'{keyHash[0:3]}/{keyHash[3:6]}/{key}.log.rmet'
 
@@ -196,7 +193,6 @@ async def get_repo_urls(path, files):
     for f in files:
         if 'key' in f:
             rmet_queries.add(compute_rmet(f['key']))
-            rmet_queries.add(compute_rmet(f['key'], legacy=True))
 
     query_list = list(rmet_queries)
     batch_input = '\n'.join(f'git-annex:{p}' for p in query_list)
@@ -228,11 +224,6 @@ async def get_repo_urls(path, files):
             if rmetPath in rmetObjects:
                 # Keep a reference to the files so we can add URLs later
                 rmetFiles[rmetPath].append(f)
-            else:
-                # Check for alternate path used by older versions of git-annex
-                rmetPath = compute_rmet(f['key'], legacy=True)
-                if rmetPath in rmetObjects:
-                    rmetFiles[rmetPath].append(f)
     # Then read those objects with git cat-file --batch
     gitObjects = ''
     if 'trust.log' in rmetObjects:

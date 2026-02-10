@@ -117,14 +117,6 @@ def test_compute_rmet_git():
     )
 
 
-def test_compute_rmet_git_legacy():
-    # Test a git SHA1 key
-    assert (
-        compute_rmet('99fe93bfea62c16a10488593da870df25d09be81', legacy=True)
-        == '9e2/03e/SHA1--99fe93bfea62c16a10488593da870df25d09be81.log.rmet'
-    )
-
-
 def test_compute_rmet_annex():
     # Test a git annex MD5E key
     assert (
