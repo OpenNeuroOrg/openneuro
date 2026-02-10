@@ -192,21 +192,31 @@ def encode_remote_url(url):
 async def get_repo_urls(path, files):
     """For each file provided, obtain the rmet data and append URLs if possible."""
     # First obtain the git-annex branch objects
-    gitAnnexBranch = await asyncio.create_subprocess_exec(
+    rmet_queries = set(['remote.log', 'trust.log'])
+    for f in files:
+        if 'key' in f:
+            rmet_queries.add(compute_rmet(f['key']))
+            rmet_queries.add(compute_rmet(f['key'], legacy=True))
+
+    query_list = list(rmet_queries)
+    batch_input = '\n'.join(f'git-annex:{p}' for p in query_list)
+
+    process = await asyncio.create_subprocess_exec(
         'git',
-        'ls-tree',
-        '-l',
-        'git-annex',
+        'cat-file',
+        '--batch-check',
         cwd=path,
+        stdin=asyncio.subprocess.PIPE,
         stdout=asyncio.subprocess.PIPE,
     )
+    stdout, _ = await process.communicate(input=batch_input.encode('utf-8'))
+
     rmetObjects = {}
-    async for line in gitAnnexBranch.stdout:
-        filename, mode, obj_type, obj_hash, size = parse_ls_tree_line(
-            line.decode('utf-8').rstrip()
-        )
-        rmetObjects[filename] = obj_hash
-    await gitAnnexBranch.wait()
+    for i, line in enumerate(stdout.decode('utf-8').splitlines()):
+        parts = line.split()
+        if parts[-1] == 'missing':
+            continue
+        rmetObjects[query_list[i]] = parts[0]
 
     if 'remote.log' not in rmetObjects:
         # Skip searching for URLs if no remote.log is present
