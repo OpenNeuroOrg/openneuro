@@ -5,7 +5,7 @@ description: OpenNeuro production deployment chart
 home: https://openneuro.org
 sources:
   - https://github.com/openNeuroOrg/openneuro
-appVersion: 4.45.3
+appVersion: 4.45.4
 dependencies:
   - name: redis
     version: 22.0.7
