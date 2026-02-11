@@ -16,7 +16,7 @@
   "author": "Squishymedia",
   "dependencies": {
     "@apollo/client": "3.13.8",
-    "@apollo/server": "4.12.1",
+    "@apollo/server": "~4.13.0",
     "@apollo/utils.keyvadapter": "3.0.0",
     "@elastic/elasticsearch": "8.13.1",
     "@graphql-tools/schema": "^10.0.0",
