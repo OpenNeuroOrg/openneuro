@@ -56,9 +56,12 @@ def load_env_config() -> AWSConfig:
 
 
 def get_latest_tag(repo: pygit2.Repository) -> pygit2.Reference:
-    for ref_name in sorted(repo.references, reverse=True):
-        if ref_name.startswith("refs/tags/"):
-            return repo.references[ref_name]
+    for ref_name in sorted(
+        (r for r in repo.references if r.startswith("refs/tags/")),
+        key=lambda x, repo=repo: repo.references[x].peel().commit_time,
+        reverse=True,
+    ):
+        return repo.references[ref_name]
     else:
         raise ValueError("No tags found in the repository.")
 
