@@ -8,6 +8,8 @@ updates:
       actions-infrastructure:
         patterns:
           - "actions/*"
+    cooldown:
+      default-days: 7
   - package-ecosystem: "uv"
     directory: "/services/datalad"
     schedule:
@@ -16,3 +18,5 @@ updates:
       datalad:
         patterns:
           - "*"
+    cooldown:
+      default-days: 7
