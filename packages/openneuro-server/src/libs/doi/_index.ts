@@ -16,18 +16,18 @@ export function formatDoi(datasetId: string, tag: string): string {
     return doi
 }
 
+/* Create or update doi via datacite api. Save a local copy of the metadata if we can help it. */
 export async function updateDoi(datasetId: string, tag: string, registerNew: boolean) {
   const dataciteYml = getDataciteYml(datasetId, tag)
   const doi = formatDoi(datasetId, tag)
   const url =
-    `https://openneuro.org/datasets/${datasetId}/versions/${tag}`
+    `${config.url}/datasets/${datasetId}/versions/${tag}`
 
-  // Should these updates be moved into datacite utils by default? 
   const fields = {
     doi: async () => Promise.resolve(formatDoi(datasetId, tag)),
     url: async () => Promise.resolve(`${config.url}/datasets/${datasetId}/versions/${tag}`),
     year: async () => registerNew ? (new Date()).getFullYear() : datalad.getSnapshot(datasetId, tag).then(snapshot => snapshot.created.getFullYear()),
-    // how best to get draft title?
+    // datasetName in src/graphql/resolvers/dataset.ts, is there a more direct way to get dataset name?
     // title: async () => registerNew ? 'noname' : datasetName({id: datasetId, tag}) 
     title: () => Promise.resolve('noname')
   }
@@ -56,6 +56,13 @@ export async function updateDoi(datasetId: string, tag: string, registerNew: boo
   */
 }
 
+/* 
+ * A stub to seperate out the logic that populates a json object representing a datacite.yml.
+ * For use by updateDoi and verifyDataciteRemote which I imagined being used by a script to check
+ * and update existing records on datacite.
+ *
+ * Prime canidate to be moved to src/utils/datacite-utils.ts
+ */
 function collectDataciteMetadata(datasetId: string, tag: string): DataciteAttrs {
   /*
     Determine if new or existing tag. If new get latest head/revision thats being used to create snapshot
@@ -66,7 +73,7 @@ function collectDataciteMetadata(datasetId: string, tag: string): DataciteAttrs 
       readme file
       year
   const doi = formatDoi(datasetId, tag)
-  const url = `https://openneuro.org/datasets/${datasetId}/versions/${tag}`
+  const url = `${config.url}/datasets/${datasetId}/versions/${tag}`
   const year = datalad.getSnapshot(datasetId, tag).then(snapshot => snapshot ? snapshot.created.getFullYear() : (new Date()).getFullYear())
   let rights = license ? license : ''
   rights = 'License' in dataset_description  ? dataset_description['License'] : rights
@@ -93,7 +100,6 @@ function verifyDataciteRemote(datasetId: string, tag: string, dataciteYml: Datac
   })
 }
 
-
 async function updateDataciteRemote(datasetId: string, tag: string, dataciteYml: RawDataciteAttributes): boolean {
   const body: datacite.PutDoisIdBodyParam = {
     'data': {
@@ -106,6 +112,12 @@ async function updateDataciteRemote(datasetId: string, tag: string, dataciteYml:
   return await datacite.PutDoisId(body, metadata).then(response => true).catch(error => false)
 }
 
+/* 
+ * Generate the expected datacite metadata and compare it to the `dataciteYml` in the repository.
+ * I doubt this will be of use if we are generating and saving datacite.yml on tag creation.
+ * Fixing the datacite.yml on an existing tag, would require another commit. Probably don't want to be
+ * be moving the commit the tag points to.
+ */
 function verifyDataciteLocal(datasetId: string, tag: string) {
   const attrsFromDataset = collectDataciteMetadata(datasetId, tag)
   const dataciteYml = getDataciteYml(datasetId, tag)
