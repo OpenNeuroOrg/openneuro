@@ -52,6 +52,7 @@
     "universal-cookie": "^4.0.4"
   },
   "devDependencies": {
+    "@codecov/vite-plugin": "^1.9.1",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "6.4.2",
     "@testing-library/react": "^14.2.1",
