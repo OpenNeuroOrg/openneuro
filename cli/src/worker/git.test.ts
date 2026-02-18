@@ -128,5 +128,5 @@ LICENSE annex.largefiles=nothing`),
       assertArrayIncludes(expectedFiles, [relativePath])
     }
   }
-  assertEquals(gitObjects, 10)
+  assertEquals(gitObjects, 15)
 })
