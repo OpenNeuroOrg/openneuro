@@ -23,6 +23,10 @@ import { getDatasetWorker } from "../libs/datalad-service"
 import { join } from "path"
 import { createEvent, updateEvent } from "../libs/events"
 import { queueIndexDataset } from "../queues/producer-methods"
+import {
+  getDataciteYml,
+  updateContributorsUtil,
+} from "../utils/datacite-utils"
 
 const lockSnapshot = (datasetId, tag) => {
   return redlock.lock(
@@ -46,14 +50,12 @@ const createSnapshotMetadata = (datasetId, tag, hexsha, created) => {
   )
 }
 
-const createIfNotExistsDoi = async (
+const registerDoi = async (
   datasetId,
   tag,
   descriptionFieldUpdates,
 ) => {
   if (config.doi.username && config.doi.password) {
-    // Mint a DOI
-    // Get the newest description
     try {
       const oldDesc = await description({ id: datasetId, revision: "HEAD" })
       const snapshotDoi = await doiLib.registerSnapshotDoi(
@@ -146,12 +148,13 @@ export const createSnapshot = async (
   const snapshotLock = await lockSnapshot(datasetId, tag)
 
   try {
+    updateContributorsUtil(datasetId, [], user.id)
     // Create a version attempt event
     const event = await createEvent(datasetId, user.id, {
       type: "versioned",
       version: tag,
     })
-    await createIfNotExistsDoi(datasetId, tag, descriptionFieldUpdates)
+    await registerDoi(datasetId, tag, descriptionFieldUpdates)
 
     const createSnapshotUrl = `${
       getDatasetWorker(

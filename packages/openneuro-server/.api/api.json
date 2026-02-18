@@ -1,0 +1,11 @@
+{
+  "version": "1.0",
+  "apis": [
+    {
+      "identifier": "datacite",
+      "source": "@datacite/v1.6#7qekca2q9mh9e0wtm",
+      "integrity": "sha512-PHYZ620oywsZ7VBLRczl9AXAm/6YwBRfO5vAzlEoslW7SQ3nD15DZ33IXjxiX+Cc3ZlkaynTz9I6bjnY6rmVHA==",
+      "installerVersion": "6.1.3"
+    }
+  ]
+}
