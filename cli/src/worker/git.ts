@@ -58,6 +58,15 @@ async function update(event: GitWorkerEventClone) {
     )
     // Make sure the default branch checkout is updated
     const defaultBranch = await getDefault(context)
+    // Merge remote default branch changes
+    await git.merge(
+      {
+        ...context.config(),
+        author: context.author,
+        ours: defaultBranch,
+        theirs: `origin/${defaultBranch}`,
+      },
+    )
     const ref = version || defaultBranch
     logger.info(`Checking out ${ref} branch.`)
     await git.checkout({
