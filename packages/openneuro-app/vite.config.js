@@ -1,5 +1,6 @@
 import { defineConfig } from "vite"
 import { nodePolyfills } from "vite-plugin-node-polyfills"
+import { codecovVitePlugin } from "@codecov/vite-plugin"
 
 /**
  * Vite plugin to hack a bug injected by the default assetImportMetaUrlPlugin
@@ -32,9 +33,7 @@ export default defineConfig({
   build: {
     sourcemap: true,
     rollupOptions: {
-      external: [
-        "/crn/config.js",
-      ],
+      external: ["/crn/config.js"],
     },
   },
   optimizeDeps: {
@@ -62,5 +61,15 @@ export default defineConfig({
       },
     ],
   },
-  plugins: [workaroundAssetImportMetaUrlPluginBug(), nodePolyfills()],
+  plugins: [
+    workaroundAssetImportMetaUrlPluginBug(),
+    nodePolyfills(),
+    /** @type {any} */ (
+      codecovVitePlugin({
+        enableBundleAnalysis: process.env.CODECOV_TOKEN !== undefined,
+        bundleName: "@openneuro/app",
+        uploadToken: process.env.CODECOV_TOKEN,
+      })
+    ),
+  ],
 })

@@ -1,0 +1,27 @@
+name: TypeScript tests and coverage
+
+on:
+  push: { branches: [master] }
+  pull_request: { branches: [master] }
+defaults:
+  run:
+    working-directory: ./services/datalad
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [22.x, 24.x]
+    steps:
+      - uses: actions/checkout@v6
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'yarn'
+      - run: yarn install
+      - name: Run production vite build
+        working-directory: ./packages/openneuro-app
+        run: yarn build
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
