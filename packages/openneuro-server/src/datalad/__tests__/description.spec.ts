@@ -101,10 +101,10 @@ describe("datalad dataset descriptions", () => {
       const repaired = repairDescriptionTypes(description)
       expect(repaired.DatasetType).toEqual("raw")
     })
-    it("sets BIDSVersion to '1.8.0' if missing", () => {
+    it("sets BIDSVersion to '1.11.0' if missing", () => {
       const description = {}
       const repaired = repairDescriptionTypes(description)
-      expect(repaired.BIDSVersion).toEqual("1.8.0")
+      expect(repaired.BIDSVersion).toEqual("1.11.0")
     })
   })
   describe("getDescriptionObject()", () => {

@@ -96,12 +96,16 @@ export const repairDescriptionTypes = (description) => {
       }
       // If it's already a string, no change needed.
     }
-    // If the field doesn't exist, we don't add it.
+    // If the field doesn't exist, we don't add it (except Name)
   }
 
   // Ensure BIDSVersion is present if missing (common default)
-  if (!Object.hasOwn(newDescription, "BIDSVersion")) {
-    newDescription.BIDSVersion = "1.8.0" // Or your desired default BIDS version
+  if (!newDescription.BIDSVersion) {
+    newDescription.BIDSVersion = "1.11.0"
+  }
+  // Ensure Name is present if missing
+  if (!newDescription.Name) {
+    newDescription.Name = "Unnamed Dataset"
   }
 
   return newDescription
