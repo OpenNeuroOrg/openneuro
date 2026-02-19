@@ -1,6 +1,6 @@
 import React from "react"
 import Helmet from "react-helmet"
-import { frontPage } from "./front-page/front-page-content"
+import { frontPage } from "../common/content/front-page-content"
 import loginUrls from "../authentication/loginUrls"
 import { Button } from "../components/button/Button"
 import orcidIcon from "../../assets/orcid_24x24.png"

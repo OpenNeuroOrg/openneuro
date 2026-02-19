@@ -2,7 +2,7 @@ import React from "react"
 import type { ReactElement } from "react"
 import { Attribution } from "../common/content/image-attribution"
 import Helmet from "react-helmet"
-import { frontPage } from "./front-page/front-page-content"
+import { frontPage } from "../common/content/front-page-content"
 import styled from "@emotion/styled"
 
 const ImageAttributionStyle = styled.div`

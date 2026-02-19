@@ -2,7 +2,7 @@ import React from "react"
 import type { ReactElement } from "react"
 import { Terms } from "../common/content/terms"
 import Helmet from "react-helmet"
-import { frontPage } from "./front-page/front-page-content"
+import { frontPage } from "../common/content/front-page-content"
 import { DownloadAgreement } from "../common/content/download-agreement"
 import styled from "@emotion/styled"
 

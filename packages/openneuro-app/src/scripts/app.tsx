@@ -1,7 +1,7 @@
 import React from "react"
 import type { FC, ReactNode } from "react"
 import Helmet from "react-helmet"
-import { frontPage } from "./pages/front-page/front-page-content"
+import { frontPage } from "./common/content/front-page-content"
 import type { Cookies } from "react-cookie"
 import { CookiesProvider } from "react-cookie"
 import { ToastContainer } from "react-toastify"
