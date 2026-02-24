@@ -8240,7 +8240,7 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/asn1.js-npm-4.10.1-e813eef12f-5a02104b9b.zip/node_modules/asn1.js/",\
         "packageDependencies": [\
           ["asn1.js", "npm:4.10.1"],\
-          ["bn.js", "npm:4.12.2"],\
+          ["bn.js", "npm:4.12.3"],\
           ["inherits", "npm:2.0.4"],\
           ["minimalistic-assert", "npm:1.0.1"]\
         ],\
@@ -8597,10 +8597,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["bn.js", [\
-      ["npm:4.12.2", {\
-        "packageLocation": "./.yarn/cache/bn.js-npm-4.12.2-c97b742b8d-5803983405.zip/node_modules/bn.js/",\
+      ["npm:4.12.3", {\
+        "packageLocation": "./.yarn/cache/bn.js-npm-4.12.3-60404d953d-57ed5a055f.zip/node_modules/bn.js/",\
         "packageDependencies": [\
-          ["bn.js", "npm:4.12.2"]\
+          ["bn.js", "npm:4.12.3"]\
         ],\
         "linkType": "HARD"\
       }],\
@@ -10045,7 +10045,7 @@ const RAW_RUNTIME_STATE =
       ["npm:4.0.4", {\
         "packageLocation": "./.yarn/cache/create-ecdh-npm-4.0.4-1048ce2035-0dd7fca971.zip/node_modules/create-ecdh/",\
         "packageDependencies": [\
-          ["bn.js", "npm:4.12.2"],\
+          ["bn.js", "npm:4.12.3"],\
           ["create-ecdh", "npm:4.0.4"],\
           ["elliptic", "npm:6.6.1"]\
         ],\
@@ -10802,7 +10802,7 @@ const RAW_RUNTIME_STATE =
       ["npm:5.0.3", {\
         "packageLocation": "./.yarn/cache/diffie-hellman-npm-5.0.3-cbef8f3171-2ff28231f9.zip/node_modules/diffie-hellman/",\
         "packageDependencies": [\
-          ["bn.js", "npm:4.12.2"],\
+          ["bn.js", "npm:4.12.3"],\
           ["diffie-hellman", "npm:5.0.3"],\
           ["miller-rabin", "npm:4.0.1"],\
           ["randombytes", "npm:2.1.0"]\
@@ -11113,7 +11113,7 @@ const RAW_RUNTIME_STATE =
       ["npm:6.6.1", {\
         "packageLocation": "./.yarn/cache/elliptic-npm-6.6.1-87bb857cbc-dc678c9feb.zip/node_modules/elliptic/",\
         "packageDependencies": [\
-          ["bn.js", "npm:4.12.2"],\
+          ["bn.js", "npm:4.12.3"],\
           ["brorand", "npm:1.1.0"],\
           ["elliptic", "npm:6.6.1"],\
           ["hash.js", "npm:1.1.7"],\
@@ -17042,7 +17042,7 @@ const RAW_RUNTIME_STATE =
       ["npm:4.0.1", {\
         "packageLocation": "./.yarn/cache/miller-rabin-npm-4.0.1-3426ac0bf7-2a38ba9d1e.zip/node_modules/miller-rabin/",\
         "packageDependencies": [\
-          ["bn.js", "npm:4.12.2"],\
+          ["bn.js", "npm:4.12.3"],\
           ["brorand", "npm:1.1.0"],\
           ["miller-rabin", "npm:4.0.1"]\
         ],\
@@ -19944,7 +19944,7 @@ const RAW_RUNTIME_STATE =
       ["npm:4.0.3", {\
         "packageLocation": "./.yarn/cache/public-encrypt-npm-4.0.3-b25e19fada-059d64da8b.zip/node_modules/public-encrypt/",\
         "packageDependencies": [\
-          ["bn.js", "npm:4.12.2"],\
+          ["bn.js", "npm:4.12.3"],\
           ["browserify-rsa", "npm:4.1.1"],\
           ["create-hash", "npm:1.2.0"],\
           ["parse-asn1", "npm:5.1.9"],\
