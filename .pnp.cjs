@@ -2015,7 +2015,7 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/@eslint-eslintrc-npm-3.1.0-3837a202e2-02bf892d13.zip/node_modules/@eslint/eslintrc/",\
         "packageDependencies": [\
           ["@eslint/eslintrc", "npm:3.1.0"],\
-          ["ajv", "npm:6.12.6"],\
+          ["ajv", "npm:6.14.0"],\
           ["debug", "virtual:3837a202e2f100c9259f49e0d610856d919fb02a54d6397a0f9765b8b1b52dea715f884a6c583b5fe84dff97ba9428d67e0d0225d3858e9ef42da3d22877f3a2#npm:4.3.3"],\
           ["espree", "npm:10.2.0"],\
           ["globals", "npm:14.0.0"],\
@@ -7927,10 +7927,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["ajv", [\
-      ["npm:6.12.6", {\
-        "packageLocation": "./.yarn/cache/ajv-npm-6.12.6-4b5105e2b2-48d6ad2113.zip/node_modules/ajv/",\
+      ["npm:6.14.0", {\
+        "packageLocation": "./.yarn/cache/ajv-npm-6.14.0-41f32f2ba8-c71f14dd2b.zip/node_modules/ajv/",\
         "packageDependencies": [\
-          ["ajv", "npm:6.12.6"],\
+          ["ajv", "npm:6.14.0"],\
           ["fast-deep-equal", "npm:3.1.3"],\
           ["fast-json-stable-stringify", "npm:2.1.0"],\
           ["json-schema-traverse", "npm:0.4.1"],\
@@ -11548,7 +11548,7 @@ const RAW_RUNTIME_STATE =
           ["@types/estree", "npm:1.0.6"],\
           ["@types/jiti", null],\
           ["@types/json-schema", "npm:7.0.15"],\
-          ["ajv", "npm:6.12.6"],\
+          ["ajv", "npm:6.14.0"],\
           ["chalk", "npm:4.1.2"],\
           ["cross-spawn", "npm:7.0.3"],\
           ["debug", "virtual:3837a202e2f100c9259f49e0d610856d919fb02a54d6397a0f9765b8b1b52dea715f884a6c583b5fe84dff97ba9428d67e0d0225d3858e9ef42da3d22877f3a2#npm:4.3.3"],\
@@ -13365,7 +13365,7 @@ const RAW_RUNTIME_STATE =
       ["npm:5.1.5", {\
         "packageLocation": "./.yarn/cache/har-validator-npm-5.1.5-bd9ac162f5-b998a7269c.zip/node_modules/har-validator/",\
         "packageDependencies": [\
-          ["ajv", "npm:6.12.6"],\
+          ["ajv", "npm:6.14.0"],\
           ["har-schema", "npm:2.0.0"],\
           ["har-validator", "npm:5.1.5"]\
         ],\
