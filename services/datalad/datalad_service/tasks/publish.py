@@ -1,9 +1,11 @@
 import asyncio
+import contextvars
 import logging
 import os.path
 import re
 import subprocess
 from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
+from functools import partial
 
 import pygit2
 import boto3
@@ -37,8 +39,7 @@ from datalad_service.tasks.fsck import git_annex_fsck_remote
 
 logger = logging.getLogger('datalad_service.' + __name__)
 
-
-delete_executor = ProcessPoolExecutor(4)
+delete_executor = ThreadPoolExecutor()
 tags_executor = ThreadPoolExecutor()
 
 
@@ -209,9 +210,17 @@ def check_remote_has_version(dataset_path, remote, tag):
 
 
 def delete_s3_sibling(dataset_id):
-    """Run S3 sibling deletion in another process to avoid blocking any callers"""
-    delete_executor.submit(delete_s3_sibling_executor, dataset_id)
-    delete_executor.submit(delete_s3_sibling_executor, dataset_id, True)
+    """Run S3 sibling deletion in a background thread to avoid blocking any callers"""
+    for backup in [False, True]:
+        future = delete_executor.submit(delete_s3_sibling_executor, dataset_id, backup)
+        future.add_done_callback(partial(log_s3_delete_exception, backup))
+
+
+def log_s3_delete_exception(backup, future):
+    if future.exception():
+        logger.error(
+            f'S3 sibling deletion failed (backup={backup}): {future.exception()}'
+        )
 
 
 def delete_s3_sibling_executor(dataset_id, backup=False):
