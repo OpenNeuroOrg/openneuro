@@ -157,10 +157,16 @@ async def export_dataset(
         # Push the most recent tag
         if tags:
             new_tag = tags[-1].name
-            await s3_export(dataset_path, get_s3_remote(), new_tag)
+            try:
+                await s3_export(dataset_path, get_s3_remote(), new_tag)
+            except subprocess.CalledProcessError as e:
+                logger.warning(f'S3 export failed for {dataset_id}@{new_tag}: {e}')
             if not public_dataset:
                 await set_s3_access_tag(dataset_id, 'private')
-            await s3_backup_push(dataset_path)
+            try:
+                await s3_backup_push(dataset_path)
+            except subprocess.CalledProcessError as e:
+                logger.warning(f'S3 backup push failed for {dataset_id}: {e}')
             # Once all S3 tags are exported, update GitHub
             if github_enabled and public_dataset:
                 # Perform all GitHub export steps
