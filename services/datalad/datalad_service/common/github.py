@@ -26,16 +26,16 @@ def github_export(dataset_id, dataset_path, tag):
     Publish GitHub repo and tags.
     """
     subprocess.check_call(
-        ['git', 'push', 'github', f'{tag}:refs/heads/main'], cwd=dataset_path
+        [
+            'git',
+            'push',
+            'github',
+            f'{tag}:refs/heads/main',
+            'git-annex:refs/heads/git-annex',
+            '--tags',
+        ],
+        cwd=dataset_path,
     )
-    subprocess.check_call(
-        ['git', 'push', 'github', f'{tag}:refs/heads/master'], cwd=dataset_path
-    )
-    subprocess.check_call(
-        ['git', 'push', 'github', 'git-annex:refs/heads/git-annex'], cwd=dataset_path
-    )
-    # Update tags
-    subprocess.check_call(['git', 'push', '--tags', 'github'], cwd=dataset_path)
     # Make sure the default branch is correct
     description = read_dataset_description(dataset_path, tag)
     if description:

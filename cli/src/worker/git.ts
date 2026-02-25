@@ -17,6 +17,7 @@ import { GitWorkerContext } from "./types/git-context.ts"
 import { resetWorktree } from "./resetWorktree.ts"
 import { getDefault } from "./getDefault.ts"
 import { transformEol } from "./transformEol.ts"
+import { CommitBuilder } from "./commitBuilder.ts"
 
 let context: GitWorkerContext
 let attributesCache: GitAnnexAttributes
@@ -57,6 +58,15 @@ async function update(event: GitWorkerEventClone) {
     )
     // Make sure the default branch checkout is updated
     const defaultBranch = await getDefault(context)
+    // Merge remote default branch changes
+    await git.merge(
+      {
+        ...context.config(),
+        author: context.author,
+        ours: defaultBranch,
+        theirs: `origin/${defaultBranch}`,
+      },
+    )
     const ref = version || defaultBranch
     logger.info(`Checking out ${ref} branch.`)
     await git.checkout({
@@ -224,38 +234,6 @@ async function add(event: GitWorkerEventAdd) {
 }
 
 /**
- * Create the empty git-annex branch if needed
- */
-async function createAnnexBranch() {
-  const now = new Date()
-  const timestamp = Math.floor(now.getTime() / 1000)
-  const timezoneOffset = now.getTimezoneOffset()
-  const commit = {
-    message: "[OpenNeuro CLI] branch created",
-    tree: "4b825dc642cb6eb9a060e54bf8d69288fbee4904",
-    parent: [],
-    author: {
-      ...context.author,
-      timestamp,
-      timezoneOffset,
-    },
-    committer: {
-      ...context.author,
-      timestamp,
-      timezoneOffset,
-    },
-  }
-  const object = await git.writeCommit({ ...context.config(), commit })
-  await git.branch({
-    ...context.config(),
-    ref: "git-annex",
-    checkout: true,
-    // Commit added above
-    object,
-  })
-}
-
-/**
  * Generate a commit for remote.log updates if needed
  */
 async function remoteSetup(event: GitWorkerEventRemoteSetup) {
@@ -272,112 +250,77 @@ async function commitAnnexBranch(version?: string) {
   let uuidLog = ""
   try {
     uuidLog = await readAnnexPath("uuid.log", context)
-  } catch (err) {
-    if (err instanceof Error && err.name !== "NotFoundError") {
-      throw err
-    }
-  }
-  try {
-    try {
-      await git.checkout({
-        ...context.config(),
-        ref: "git-annex",
-      })
-    } catch (err) {
-      // Create the branch if it doesn't exist
-      if (err instanceof Error && err.name === "NotFoundError") {
-        await createAnnexBranch()
-      }
-    }
     for (const line of uuidLog.split(/\n/)) {
       if (line.includes(expectedRemote)) {
         const endUuid = line.indexOf(" ")
         uuid = line.slice(0, endUuid)
       }
     }
-    if (uuid) {
-      // Add a remote.log entry if one does not exist
-      let remoteLog = ""
-      const newRemoteLog =
-        `${uuid} autoenable=true name=openneuro type=external externaltype=openneuro encryption=none url=${context.repoEndpoint}\n`
-      try {
-        remoteLog = await context.fs.promises.readFile(
-          join(context.repoPath, "remote.log"),
-          { encoding: "utf8" },
-        )
-      } catch (_err) {
-        // Continue if the error is remote.log is not found, otherwise throw it here
-        if (
-          !(_err instanceof Error && "code" in _err && _err.code === "ENOENT")
-        ) {
-          throw _err
-        }
-      } finally {
-        // Add this remote if it's not already in remote.log
-        if (!remoteLog.includes(uuid)) {
-          // Continue if there's any errors and create remote.log
-          await context.fs.promises.writeFile(
-            join(context.repoPath, "remote.log"),
-            newRemoteLog + remoteLog,
-          )
-          await git.add({ ...context.config(), filepath: "remote.log" })
-        }
-      }
-      // Add logs for each annexed file
-      const annexKeys = await getAnnexKeys("HEAD", logger, context)
-      for (const [key, _path] of Object.entries(annexKeys)) {
-        const hashDir = join(...await hashDirLower(key))
-        const annexBranchPath = join(hashDir, `${key}.log`)
-        let log
-        try {
-          log = await readAnnexPath(annexBranchPath, context)
-        } catch (err) {
-          if (err instanceof Error && err.name === "NotFoundError") {
-            logger.debug(`Annex branch object "${annexBranchPath}" not found`)
-          } else {
-            throw err
-          }
-        }
-        if (log && log.includes(uuid)) {
-          continue
-        } else {
-          const timestamp = (performance.timeOrigin + performance.now()) /
-            1000.0
-          const newAnnexLog = `${timestamp}s 1 ${uuid}\n${log ? log : ""}`
-          await context.fs.promises.mkdir(join(context.repoPath, hashDir), {
-            recursive: true,
-          })
-          await context.fs.promises.writeFile(
-            join(context.repoPath, annexBranchPath),
-            newAnnexLog,
-          )
-          await git.add({ ...context.config(), filepath: annexBranchPath })
-        }
-      }
-      // Show a better commit message for when only the remote is updated
-      if (Object.keys(annexKeys).length === 0) {
-        // Only generate a commit if needed
-        if (!remoteLog.includes(uuid)) {
-          await git.commit({
-            ...context.config(),
-            message: "[OpenNeuro CLI] Configured remote",
-            author: context.author,
-          })
-        }
+  } catch (err) {
+    if (err instanceof Error && err.name !== "NotFoundError") {
+      throw err
+    }
+  }
+
+  // If no UUID was found for this repo, generate one and add it to the remote.log
+  if (!uuid) {
+    uuid = crypto.randomUUID()
+    logger.info(`Generated new UUID for this repository: ${uuid}`)
+  }
+
+  // Begin building commit for git-annex branch updates
+  const builder = new CommitBuilder(context)
+  let changes = false
+  // Add a remote.log entry if one does not exist
+  let remoteLog = ""
+  const newRemoteLog =
+    `${uuid} autoenable=true name=openneuro type=external externaltype=openneuro encryption=none url=${context.repoEndpoint}\n`
+  try {
+    remoteLog = await readAnnexPath("remote.log", context)
+  } catch (_err) {
+    // Continue if the error is remote.log is not found
+  }
+  // Add this remote if it's not already in remote.log
+  if (!remoteLog.includes(uuid)) {
+    builder.add("remote.log", newRemoteLog + remoteLog)
+    changes = true
+  }
+  // Add logs for each annexed file
+  const annexKeys = await getAnnexKeys("HEAD", logger, context)
+  for (const [key, _path] of Object.entries(annexKeys)) {
+    const hashDir = join(...await hashDirLower(key))
+    const annexBranchPath = join(hashDir, `${key}.log`)
+    let log
+    try {
+      log = await readAnnexPath(annexBranchPath, context)
+    } catch (err) {
+      if (err instanceof Error && err.name === "NotFoundError") {
+        logger.debug(`Annex branch object "${annexBranchPath}" not found`)
       } else {
-        await git.commit({
-          ...context.config(),
-          message: "[OpenNeuro CLI] Added annexed objects",
-          author: context.author,
-        })
+        throw err
       }
     }
-  } finally {
-    const defaultBranch = version || await getDefault(context)
-    await git.checkout({
-      ...context.config(),
-      ref: defaultBranch,
-    })
+    if (log && log.includes(uuid)) {
+      continue
+    } else {
+      const timestamp = (performance.timeOrigin + performance.now()) /
+        1000.0
+      const newAnnexLog = `${timestamp}s 1 ${uuid}\n${log ? log : ""}`
+      builder.add(annexBranchPath, newAnnexLog)
+      changes = true
+    }
+    // Skip commit if no changes are needed for either remote.log or new annexed objects
+    if (changes) {
+      // Show a better commit message for when only the remote is updated
+      if (Object.keys(annexKeys).length === 0) {
+        await builder.commit("git-annex", "[OpenNeuro CLI] Configured remote")
+      } else {
+        await builder.commit(
+          "git-annex",
+          "[OpenNeuro CLI] Added annexed objects",
+        )
+      }
+    }
   }
 }
 
