@@ -3,7 +3,7 @@ import logging
 import os.path
 import re
 import subprocess
-from concurrent.futures import ProcessPoolExecutor
+from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
 
 import pygit2
 import boto3
@@ -39,6 +39,7 @@ logger = logging.getLogger('datalad_service.' + __name__)
 
 
 delete_executor = ProcessPoolExecutor(4)
+tags_executor = ThreadPoolExecutor()
 
 
 def github_sibling(dataset_path, dataset_id):
@@ -308,9 +309,29 @@ async def set_remote_public(dataset):
     await set_s3_access_tag(dataset, 'public')
 
 
-@broker.task
-async def set_s3_access_tag(dataset, value='private'):
-    """Set access tag on all versions of all files."""
+def update_object_tag(client, s3_bucket, key, version_id, value):
+    try:
+        response = client.get_object_tagging(
+            Bucket=s3_bucket, Key=key, VersionId=version_id
+        )
+        tag_set = response.get('TagSet', [])
+    except client.exceptions.ClientError as e:
+        if e.response['Error']['Code'] == 'NoSuchTagSet':
+            tag_set = []
+        else:
+            raise
+    # Remove any existing access tag and add the new one
+    new_tags = [tag for tag in tag_set if tag['Key'] != 'access']
+    new_tags.append({'Key': 'access', 'Value': value})
+    client.put_object_tagging(
+        Bucket=s3_bucket,
+        Key=key,
+        VersionId=version_id,
+        Tagging={'TagSet': new_tags},
+    )
+
+
+def set_s3_access_tag_worker(dataset, value):
     client = boto3.client(
         's3',
         aws_access_key_id=AWS_ACCESS_KEY_ID,
@@ -318,26 +339,25 @@ async def set_s3_access_tag(dataset, value='private'):
     )
     s3_bucket = get_s3_bucket()
     paginator = client.get_paginator('list_object_versions')
+    futures = []
     for page in paginator.paginate(Bucket=s3_bucket, Prefix=f'{dataset}/'):
         for version in page.get('Versions', []):
             key = version['Key']
             version_id = version['VersionId']
-            try:
-                response = client.get_object_tagging(
-                    Bucket=s3_bucket, Key=key, VersionId=version_id
+            futures.append(
+                tags_executor.submit(
+                    update_object_tag, client, s3_bucket, key, version_id, value
                 )
-                tag_set = response.get('TagSet', [])
-            except client.exceptions.ClientError as e:
-                if e.response['Error']['Code'] == 'NoSuchTagSet':
-                    tag_set = []
-                else:
-                    raise
-            # Remove any existing access tag and add the new one
-            new_tags = [tag for tag in tag_set if tag['Key'] != 'access']
-            new_tags.append({'Key': 'access', 'Value': value})
-            client.put_object_tagging(
-                Bucket=s3_bucket,
-                Key=key,
-                VersionId=version_id,
-                Tagging={'TagSet': new_tags},
             )
+    # Make sure exceptions from the tag updates are raised
+    for future in futures:
+        future.result()
+
+
+@broker.task
+async def set_s3_access_tag(dataset, value='private'):
+    """Set access tag on all versions of all files."""
+    loop = asyncio.get_running_loop()
+    # Use the default executor for the orchestration task to avoid deadlocking
+    # the tags_executor which is used for the sub-tasks.
+    await loop.run_in_executor(None, set_s3_access_tag_worker, dataset, value)
