@@ -79,11 +79,11 @@ export const response = () => {
   return async (line: string) => {
     if (line.startsWith("VALUE ")) {
       try {
-        const url = line.split("VALUE ")[1]
+        const url = new URL(line.split("VALUE ")[1])
         // Obtain the filename (no extensions) in url value
-        const datasetId = url.substring(url.lastIndexOf("/") + 1, url.length)
-        state.url = url
-        const { token } = await getRepoAccess(datasetId)
+        const datasetId = url.pathname.split("/").pop()
+        state.url = url.toString()
+        const { token } = await getRepoAccess(datasetId, url.origin)
         state.token = token
       } catch (_err) {
         state.url = ""
