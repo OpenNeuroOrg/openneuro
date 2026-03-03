@@ -3,7 +3,7 @@ import BadAnnexObject from "../../models/badAnnexObject"
 export const filterRemovedAnnexObjects =
   (datasetId, userInfo) => async (files) => {
     const removedAnnexObjectKeys = (
-      await BadAnnexObject.find({ datasetId }).exec()
+      await BadAnnexObject.find({ datasetId, removed: true }).exec()
     ).map(({ annexKey }) => annexKey)
     // keep files that haven't had their annex objects removed
     return userInfo?.admin
