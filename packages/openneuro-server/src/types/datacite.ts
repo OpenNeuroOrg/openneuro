@@ -79,7 +79,20 @@ export interface RawDataciteAttributes {
   descriptions?: {
     description: string
     descriptionType: string
-  }[]
+  }[],
+  titles?: {
+    title: string
+  }[],
+  rightsList?: {
+    rights: string
+  },
+  subjects?: {
+    subject: string
+  }[],
+  fundingReferences?: {
+  }[],
+  publisher?: string
+  url?: string,
 }
 /**
  * The top-level interface for the entire datacite.yml file structure.
