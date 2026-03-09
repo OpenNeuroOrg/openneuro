@@ -1,6 +1,6 @@
 import config from "../../config"
 import Reviewer from "../../models/reviewer"
-import { checkDatasetAdmin } from "../permissions.js"
+import { checkDatasetAdmin } from "../permissions"
 import { generateReviewerToken } from "../../libs/authentication/jwt"
 
 /**

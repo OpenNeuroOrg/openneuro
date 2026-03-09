@@ -1,6 +1,6 @@
 import Issue from "../../models/issue"
 import { datasetType } from "./datasetType"
-import { revalidate } from "./validation.js"
+import { revalidate } from "./validation"
 
 /**
  * Issues resolver

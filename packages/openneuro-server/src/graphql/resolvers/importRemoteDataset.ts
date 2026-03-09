@@ -1,5 +1,5 @@
 import IngestDataset from "../../models/ingestDataset"
-import { checkDatasetWrite } from "../permissions.js"
+import { checkDatasetWrite } from "../permissions"
 import { getDatasetWorker } from "../../libs/datalad-service"
 import { generateDataladCookie } from "../../libs/authentication/jwt"
 import notifications from "../../libs/notifications"

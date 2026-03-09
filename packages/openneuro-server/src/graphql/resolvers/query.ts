@@ -1,9 +1,9 @@
 /**
  * Top level query
  */
-import { dataset, datasets } from "./dataset.js"
-import { participantCount, snapshot } from "./snapshots.js"
-import { user, users } from "./user.js"
+import { dataset, datasets } from "./dataset"
+import { participantCount, snapshot } from "./snapshots"
+import { user, users } from "./user"
 import { flaggedFiles } from "./flaggedFiles"
 import { publicMetadata } from "./metadata"
 

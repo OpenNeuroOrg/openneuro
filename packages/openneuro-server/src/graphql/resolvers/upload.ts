@@ -1,8 +1,8 @@
 import Upload from "../../models/upload"
-import { checkDatasetWrite } from "../permissions.js"
+import { checkDatasetWrite } from "../permissions"
 import { generateUploadToken } from "../../libs/authentication/jwt"
-import { finishUploadRequest } from "../../datalad/upload.js"
-import { getDatasetEndpoint } from "../../libs/datalad-service.js"
+import { finishUploadRequest } from "../../datalad/upload"
+import { getDatasetEndpoint } from "../../libs/datalad-service"
 
 /**
  * Track initial state for a new upload

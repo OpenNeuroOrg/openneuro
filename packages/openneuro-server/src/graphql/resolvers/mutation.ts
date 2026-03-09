@@ -9,30 +9,30 @@ import {
   removeAnnexObject,
   trackAnalytics,
   updatePublic,
-} from "./dataset.js"
+} from "./dataset"
 import {
   createSnapshot,
   deleteSnapshot,
   deprecateSnapshot,
   undoDeprecateSnapshot,
-} from "./snapshots.js"
-import { removeUser, setAdmin, setBlocked, updateUser } from "./user.js"
+} from "./snapshots"
+import { removeUser, setAdmin, setBlocked, updateUser } from "./user"
 import { updateSummary } from "./summary"
-import { revalidate, updateValidation } from "./validation.js"
+import { revalidate, updateValidation } from "./validation"
 import {
   removePermissions,
   updateOrcidPermissions,
   updatePermissions,
 } from "./permissions"
-import { followDataset } from "./follow.js"
-import { starDataset } from "./stars.js"
-import { publishDataset } from "./publish.js"
-import { updateDescription, updateDescriptionList } from "./description.js"
-import { updateReadme } from "./readme.js"
-import { addComment, deleteComment, editComment } from "./comment.js"
+import { followDataset } from "./follow"
+import { starDataset } from "./stars"
+import { publishDataset } from "./publish"
+import { updateDescription, updateDescriptionList } from "./description"
+import { updateReadme } from "./readme"
+import { addComment, deleteComment, editComment } from "./comment"
 import { subscribeToNewsletter } from "./newsletter"
 import { addMetadata } from "./metadata"
-import { finishUpload, prepareUpload } from "./upload.js"
+import { finishUpload, prepareUpload } from "./upload"
 import { prepareRepoAccess } from "./git"
 import { cacheClear } from "./cache"
 import { reexportRemotes } from "./reexporter"

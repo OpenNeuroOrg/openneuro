@@ -1,6 +1,6 @@
-import { checkDatasetRead, checkDatasetWrite } from "../permissions.js"
+import { checkDatasetRead, checkDatasetWrite } from "../permissions"
 import { generateRepoToken } from "../../libs/authentication/jwt"
-import { getDatasetEndpoint } from "../../libs/datalad-service.js"
+import { getDatasetEndpoint } from "../../libs/datalad-service"
 
 /**
  * Generate a short lived token for git operations

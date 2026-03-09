@@ -1,12 +1,12 @@
 import { GraphQLDate, GraphQLDateTime, GraphQLTime } from "graphql-iso-date"
 import GraphQLBigInt from "graphql-bigint"
-import Query from "./query.js"
-import Mutation from "./mutation.js"
-import Dataset from "./dataset.js"
-import Draft from "./draft.js"
-import Snapshot from "./snapshots.js"
-import User from "./user.js"
-import Comment from "./comment.js"
+import Query from "./query"
+import Mutation from "./mutation"
+import Dataset from "./dataset"
+import Draft from "./draft"
+import Snapshot from "./snapshots"
+import User from "./user"
+import Comment from "./comment"
 
 export default {
   // Scalars

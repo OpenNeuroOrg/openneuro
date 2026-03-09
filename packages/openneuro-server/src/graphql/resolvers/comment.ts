@@ -1,6 +1,6 @@
 import Comment from "../../models/comment"
 import notifications from "../../libs/notifications"
-import { user } from "./user.js"
+import { user } from "./user"
 import { checkAdmin } from "../permissions"
 
 export const comment = (obj, { id }) => {

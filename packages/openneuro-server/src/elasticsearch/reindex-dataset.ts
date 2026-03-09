@@ -10,8 +10,8 @@ import { HttpLink } from "@apollo/client/link/http"
  * Setup SchemaLink based client for querying
  */
 export const schemaLinkClient = (): ApolloClient<NormalizedCacheObject> => {
-  const accessToken = indexingToken(config.auth.jwt.secret)
   const authLink = setContext((_, { headers }) => {
+    const accessToken = indexingToken(config.auth.jwt.secret)
     return {
       headers: {
         ...headers,

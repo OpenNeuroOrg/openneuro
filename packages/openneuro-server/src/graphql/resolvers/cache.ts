@@ -1,4 +1,4 @@
-import { redis } from "../../libs/redis.js"
+import { redis } from "../../libs/redis"
 
 /**
  * Clear all cache entries for a given datasetId

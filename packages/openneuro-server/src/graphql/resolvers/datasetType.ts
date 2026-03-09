@@ -1,5 +1,5 @@
 import Dataset from "../../models/dataset"
-import { description } from "./description.js"
+import { description } from "./description"
 
 /**
  * Return "schema" or "legacy" depending on the validator preferred for a dataset
