@@ -36,6 +36,14 @@ const FourOFourPage: FC<FourOFourPageProps> = ({
     <Container styleContext={theme} data-testid="404-page">
       <h3>404: The page you are looking for does not exist.</h3>
       {message && <p>{message}</p>}
+      {message.includes("data retention policy") && (
+        <p>
+          See our documentation for the{" "}
+          <a href="https://docs.openneuro.org/policy/data_retention.html">
+            full data retention policy
+          </a>.
+        </p>
+      )}
       <p>
         Click <Link to={redirectRoute}>here</Link> to go to
         {" " + redirectRouteName}.
