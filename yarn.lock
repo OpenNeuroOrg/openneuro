@@ -20170,9 +20170,9 @@ __metadata:
   linkType: hard
 
 "underscore@npm:^1.8.3":
-  version: 1.13.1
-  resolution: "underscore@npm:1.13.1"
-  checksum: 10/71bec536cb8068edc94f55560e0512e7b5d892631eabc9078925fb0685dc1b183c1783d0936a9ba327a82c83380b1a1d53f385a91f739c3ee63ffedb8e5e40e2
+  version: 1.13.8
+  resolution: "underscore@npm:1.13.8"
+  checksum: 10/b50ac5806d059cc180b1bd9adea6f7ed500021f4dc782dfc75d66a90337f6f0506623c1b37863f4a9bf64ffbeb5769b638a54b7f2f5966816189955815953139
   languageName: node
   linkType: hard
 
