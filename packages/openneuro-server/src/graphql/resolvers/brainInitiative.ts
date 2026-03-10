@@ -36,9 +36,14 @@ export const brainInitiative = async (
         // Fetch snapshot if metadata didn't match
         const snapshot = await latestSnapshot(dataset, null, context)
         const snapshotDescription = await description(snapshot)
-        for (const funding of snapshotDescription.Funding) {
-          if (funding.match(brainInitiativeMatch)) {
-            return true
+        if (
+          snapshotDescription?.Funding &&
+          Array.isArray(snapshotDescription.Funding)
+        ) {
+          for (const funding of snapshotDescription.Funding) {
+            if (funding.match(brainInitiativeMatch)) {
+              return true
+            }
           }
         }
         // Check for grant ids too - filter to only alphanumeric to improve matching across format differences
@@ -55,9 +60,14 @@ export const brainInitiative = async (
           ) {
             return true
           }
-          for (const funding of snapshotDescription.Funding) {
-            if (funding.replace(/[^a-zA-Z0-9]/g, "").includes(grant)) {
-              return true
+          if (
+            snapshotDescription?.Funding &&
+            Array.isArray(snapshotDescription.Funding)
+          ) {
+            for (const funding of snapshotDescription.Funding) {
+              if (funding.replace(/[^a-zA-Z0-9]/g, "").includes(grant)) {
+                return true
+              }
             }
           }
         }
