@@ -21,6 +21,7 @@ const fields = (hasEdit) => {
           { value: "subject privacy" },
           { value: "duplicate dataset" },
           { value: "abuse of service", admin: true },
+          { value: "data retention policy", admin: true },
         ],
         showOptionOther: true,
         required: false,
