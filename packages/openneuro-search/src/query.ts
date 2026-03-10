@@ -36,6 +36,13 @@ export const INDEX_DATASET_FRAGMENT = gql`
     latestSnapshot {
       id
       tag
+      contributors {
+        orcid
+        name
+        givenName
+        familyName
+        contributorType
+      }
       description {
         Name
         Authors
