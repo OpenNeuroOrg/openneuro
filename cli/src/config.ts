@@ -23,9 +23,14 @@ export function getConfig(
 ): ClientConfig {
   const url = Deno.env.get("OPENNEURO_URL") || instance
   const configPath = getConfigPath()
-  const config = JSON.parse(
-    new TextDecoder().decode(Deno.readFileSync(configPath)),
-  )
+  let config
+  try {
+    config = JSON.parse(
+      new TextDecoder().decode(Deno.readFileSync(configPath)),
+    )
+  } catch (err) {
+    throw new LoginError("Error reading config file. Rerun `openneuro login`.")
+  }
   const token = Object.hasOwn(config, url) && config[url]
   const errorReporting = Object.hasOwn(config, "errorReporting") &&
     config["errorReporting"] === true
