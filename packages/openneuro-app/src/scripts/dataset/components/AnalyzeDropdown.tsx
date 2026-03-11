@@ -5,6 +5,7 @@ import styled from "@emotion/styled"
 import BrainlifeIcon from "../../../assets/external/brainlife.png"
 import NemarIcon from "../../../assets/external/nemar.png"
 import CbrainIcon from "../../../assets/external/cbrain.png"
+import NeurodeskIcon from "../../../assets/external/neurodesk.png"
 
 export interface CloneDropdownProps {
   datasetId: string
@@ -24,6 +25,8 @@ export const AnalyzeDropdown: React.FC<CloneDropdownProps> = (
     `https://nemar.org/dataexplorer/detail?dataset_id=${datasetId}`
   const cbrainUrl =
     `https://portal.cbrain.mcgill.ca/openneuro/${datasetId}/versions/${snapshotVersion}`
+  const neurodeskUrl =
+    `https://play-america.neurodesk.org/hub/user-redirect/lab/tree/data/openneuro/${datasetId}`
   return (
     <AnalyzeDiv className="clone-dropdown">
       <Dropdown
@@ -90,6 +93,19 @@ export const AnalyzeDropdown: React.FC<CloneDropdownProps> = (
           <p>
             CBRAIN is a web-based distributed computing platform for
             collaborative neuroimaging research.
+          </p>
+          <hr />
+          <img
+            src={NeurodeskIcon}
+            height="16"
+            width="16"
+          />{" "}
+          <a href={neurodeskUrl} target="_blank">
+            View on Neurodesk
+          </a>
+          <p>
+            Neurodesk provides browser-based access to a neuroimaging analysis
+            environment with this dataset mounted.
           </p>
         </div>
       </Dropdown>

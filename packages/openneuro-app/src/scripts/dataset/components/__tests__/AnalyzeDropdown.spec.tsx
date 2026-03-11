@@ -15,5 +15,11 @@ describe("AnalyzeDropdown component", () => {
     expect(menu).toHaveClass("collapsed")
     fireEvent.click(button)
     expect(menu).toHaveClass("expanded")
+    expect(
+      screen.getByRole("link", { name: "View on Neurodesk" }),
+    ).toHaveAttribute(
+      "href",
+      "https://play-america.neurodesk.org/hub/user-redirect/lab/tree/data/openneuro/ds000031",
+    )
   })
 })
