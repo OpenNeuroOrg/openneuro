@@ -348,6 +348,22 @@ exports[`SnapshotContainer component > renders successfully 1`] = `
                     <p>
                       CBRAIN is a web-based distributed computing platform for collaborative neuroimaging research.
                     </p>
+                    <hr />
+                    <img
+                      height="16"
+                      src="/packages/openneuro-app/src/assets/external/neurodesk.png"
+                      width="16"
+                    />
+                     
+                    <a
+                      href="https://play-america.neurodesk.org/hub/user-redirect/lab/tree/data/openneuro/ds001032"
+                      target="_blank"
+                    >
+                      View on Neurodesk
+                    </a>
+                    <p>
+                      Neurodesk provides browser-based access to a neuroimaging analysis environment with this dataset mounted.
+                    </p>
                   </div>
                 </div>
               </div>
