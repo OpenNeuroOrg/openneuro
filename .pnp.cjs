@@ -17619,7 +17619,7 @@ const RAW_RUNTIME_STATE =
           ["semver", "npm:7.6.0"],\
           ["tar-stream", "npm:3.1.7"],\
           ["tslib", "npm:2.6.2"],\
-          ["yauzl", "npm:3.1.3"]\
+          ["yauzl", "npm:3.2.1"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -25484,12 +25484,12 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["yauzl", [\
-      ["npm:3.1.3", {\
-        "packageLocation": "./.yarn/cache/yauzl-npm-3.1.3-857924a78f-0999730880.zip/node_modules/yauzl/",\
+      ["npm:3.2.1", {\
+        "packageLocation": "./.yarn/cache/yauzl-npm-3.2.1-642a411ad7-15dfae75fb.zip/node_modules/yauzl/",\
         "packageDependencies": [\
           ["buffer-crc32", "npm:0.2.13"],\
           ["pend", "npm:1.2.0"],\
-          ["yauzl", "npm:3.1.3"]\
+          ["yauzl", "npm:3.2.1"]\
         ],\
         "linkType": "HARD"\
       }]\
