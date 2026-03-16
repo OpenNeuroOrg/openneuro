@@ -36,7 +36,7 @@
     "graphql-compose": "9.0.10",
     "graphql-iso-date": "^3.6.1",
     "graphql-tools": "9.0.0",
-    "immutable": "^3.8.2",
+    "immutable": "^4.3.8",
     "ioredis": "^5.6.1",
     "js-yaml": "^4.1.0",
     "jsdom": "24.0.0",
