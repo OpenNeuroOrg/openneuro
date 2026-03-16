@@ -3,6 +3,7 @@ import gzip
 import logging
 
 import falcon
+import sentry_sdk
 
 from datalad_service.common.events import log_git_event
 from datalad_service.common.const import CHUNK_SIZE_BYTES
@@ -122,7 +123,6 @@ class GitReceiveResource:
                 dataset_path,
                 stdin=asyncio.subprocess.PIPE,
                 stdout=asyncio.subprocess.PIPE,
-                stderr=asyncio.subprocess.PIPE,
             )
             # TODO - Handle gzip elsewhere but needed for compatibility with all git clients
             if req.get_header('content-encoding') == 'gzip':
@@ -139,15 +139,26 @@ class GitReceiveResource:
                     if not chunk:
                         break
                     process.stdin.write(chunk)
+            await process.stdin.drain()
             process.stdin.close()
             resp.stream = process.stdout
             resp.status = falcon.HTTP_OK
 
             # After this request finishes successfully, log it to the OpenNeuro API
             async def schedule_git_event():
-                await on_head(dataset_path)
-                for new_commit, new_ref in refs_updated:
-                    log_git_event(dataset, new_commit, new_ref, req.context['token'])
+                try:
+                    await on_head(dataset_path)
+                    for new_commit, new_ref in refs_updated:
+                        log_git_event(
+                            dataset, new_commit, new_ref, req.context['token']
+                        )
+                except Exception as e:
+                    sentry_id = sentry_sdk.capture_exception(e)
+                    self.logger.exception(
+                        'Error in post-push git event handling for dataset %s (sentry %s)',
+                        dataset,
+                        sentry_id,
+                    )
 
             resp.schedule(schedule_git_event)
         else:
@@ -176,7 +187,6 @@ class GitUploadResource:
                 dataset_path,
                 stdin=asyncio.subprocess.PIPE,
                 stdout=asyncio.subprocess.PIPE,
-                stderr=asyncio.subprocess.PIPE,
             )
             # TODO - Handle gzip elsewhere but needed for compatibility with all git clients
             if req.get_header('content-encoding') == 'gzip':
@@ -188,6 +198,7 @@ class GitUploadResource:
                         break
                     process.stdin.write(chunk)
 
+            await process.stdin.drain()
             process.stdin.close()
             resp.stream = process.stdout
             resp.status = falcon.HTTP_OK
