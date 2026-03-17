@@ -49,11 +49,11 @@ export const draftRetentionDeletion = ({
 		<h2>Hi, ${name}</h2>
 
 		<p>
-			The draft data for your dataset <b>${datasetId}</b> has been automatically removed because it has not been updated or published as a snapshot within the retention period.
+			The draft data for your dataset <b>${datasetId}</b> has not been updated in some time and may be automatically removed at any time.
 		</p>
 
 		<p>
-			If you wish to continue working on this dataset, you will need to re-upload your files.
+			Once data has been removed to continue working on this dataset, you will need to re-upload your files.
 		</p>
 
 		<p>
