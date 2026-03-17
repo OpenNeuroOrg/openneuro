@@ -24,20 +24,23 @@ async function enqueueAllDatasetChecks(): Promise<void> {
  */
 async function claimDailyRun(): Promise<boolean> {
   const threshold = new Date(Date.now() - DAY_MS)
-  const claimed = await SchedulerState.findOneAndUpdate(
+  const result = await SchedulerState.findOneAndUpdate(
     {
       key: SCHEDULER_KEY,
       $or: [{ lastRun: null }, { lastRun: { $lt: threshold } }],
     },
     { $set: { lastRun: new Date() } },
-    { upsert: true, new: false },
+    { upsert: true, new: false, rawResult: true },
   ).catch((err) => {
     // Duplicate key on upsert race — another instance just claimed it
     if (err.code === 11000) return null
     throw err
   })
-  // If the document was found and updated (or newly inserted), we claimed the run
-  return claimed !== null || false
+  if (!result) return false
+  return (
+    result.lastErrorObject?.updatedExisting === true ||
+    result.lastErrorObject?.upserted != null
+  )
 }
 
 async function runDailyCheck(): Promise<void> {
