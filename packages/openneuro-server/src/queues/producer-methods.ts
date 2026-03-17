@@ -16,3 +16,17 @@ export function queueIndexDataset(datasetId: string) {
     }
   })
 }
+
+/**
+ * Queue search indexing for a dataset
+ * @param datasetId Dataset to index
+ */
+export function queueDataRetentionCheck(datasetId: string) {
+  const msg = new ProducibleMessage()
+  msg.setQueue(OpenNeuroQueues.DATARETENTION).setBody({ datasetId })
+  producer.produce(msg, (err) => {
+    if (err) {
+      Sentry.captureException(err)
+    }
+  })
+}
