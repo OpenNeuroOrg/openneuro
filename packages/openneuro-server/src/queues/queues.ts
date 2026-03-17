@@ -46,11 +46,11 @@ export function setupQueues() {
     },
   )
 
-  // Rate limit data retention queue to 4 runs per minute
+  // Rate limit data retention queue to 16 runs per minute
   const drqueueRateLimit = new QueueRateLimit()
   drqueueRateLimit.set(
     OpenNeuroQueues.DATARETENTION,
-    { limit: 4, interval: 60000 },
+    { limit: 16, interval: 60000 },
     (err) => {
       if (err) {
         Sentry.captureException(err)
