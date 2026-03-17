@@ -14,7 +14,8 @@ import * as subscriptions from "../handlers/subscriptions"
 import { generateDataladCookie } from "../libs/authentication/jwt"
 import { redis } from "../libs/redis"
 import CacheItem, { CacheType } from "../cache/item"
-import { getDraftRevision, updateDatasetRevision } from "./draft"
+import { getDraftInfo, getDraftRevision, updateDatasetRevision } from "./draft"
+import { getSnapshots } from "./snapshots"
 import { encodeFilePath, filesUrl, fileUrl, getFileName } from "./files"
 import { getAccessionNumber } from "../libs/dataset"
 import Dataset from "../models/dataset"
@@ -70,7 +71,6 @@ export const createDataset = async (
     // Creation is complete here, mark successful
     await updateEvent(event)
     await subscriptions.subscribe(datasetId, uploader)
-    await notifications.snapshotReminder(datasetId)
     return ds
   } catch (e) {
     Sentry.captureException(e)
@@ -531,3 +531,24 @@ export const getUserFollowed = (datasetId, userId) =>
     datasetId,
     userId,
   }).exec()
+
+// Returns the age in milliseconds since the draft diverged from the last
+// snapshot (or since the draft was last modified if there is no snapshot).
+// Returns null if the draft is in sync with the last snapshot.
+export async function getDraftRetentionAge(
+  datasetId: string,
+): Promise<number | null> {
+  const draft = await getDraftInfo(datasetId)
+  const snapshots = await getSnapshots(datasetId)
+  const lastSnapshot = snapshots && snapshots.length
+    ? snapshots[snapshots.length - 1]
+    : null
+
+  if (lastSnapshot && draft.hexsha === lastSnapshot.hexsha) {
+    return null
+  }
+
+  const now = new Date()
+  const modified = new Date(draft.modified)
+  return now.getTime() - modified.getTime()
+}
