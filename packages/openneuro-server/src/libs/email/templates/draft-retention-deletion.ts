@@ -53,7 +53,7 @@ export const draftRetentionDeletion = ({
 		</p>
 
 		<p>
-			Once data has been removed to continue working on this dataset, you will need to re-upload your files.
+			Once data has been removed you will need to re-upload your files to continue working on this dataset.
 		</p>
 
 		<p>
