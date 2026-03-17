@@ -50,7 +50,7 @@ exports[`email template -> comment created > renders with expected arguments 1`]
 
 		<p>
 			Sincerely,
-			The CRN Team
+			The OpenNeuro Team
 		</p>
 
 		<a class="dataset-link" href="https://openneuro.org/datasets/ds12345678/snapshot">Create a snapshot. &raquo;</a>

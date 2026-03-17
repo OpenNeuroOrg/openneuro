@@ -58,7 +58,7 @@ export const snapshotReminder = ({
 
 		<p>
 			Sincerely,
-			The CRN Team
+			The OpenNeuro Team
 		</p>
 
 		<a class="dataset-link" href="${siteUrl}/datasets/${datasetId}/snapshot">Create a snapshot. &raquo;</a>

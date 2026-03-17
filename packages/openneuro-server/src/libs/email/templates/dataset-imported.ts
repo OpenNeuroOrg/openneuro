@@ -78,7 +78,7 @@ export const datasetImportEmail = ({
 
 		<p>
 			Sincerely,
-			The CRN Team
+			The OpenNeuro Team
 		</p>
 	</div>
 </body>

@@ -94,7 +94,7 @@ export const commentCreated = ({
 
 		<p>
 			Sincerely,
-			The CRN Team
+			The OpenNeuro Team
 		</p>
 
 	</div>
