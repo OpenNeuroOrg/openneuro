@@ -72,7 +72,9 @@ export async function checkDataRetentionNotifications(
   }
 
   // One-time notice: no snapshot created within 24h of initial upload
-  if (!lastSnapshot && age >= DAY && !record.notifiedNoSnapshot) {
+  if (
+    !lastSnapshot && age >= DAY && age < 14 * DAY && !record.notifiedNoSnapshot
+  ) {
     await notifyWriteUsers(datasetId, (user) => ({
       _id: `${datasetId}_${user._id}_no_snapshot_reminder`,
       type: "email",

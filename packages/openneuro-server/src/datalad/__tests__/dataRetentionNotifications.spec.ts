@@ -109,6 +109,20 @@ describe("checkDataRetentionNotifications", () => {
     )
   })
 
+  it("skips snapshot reminder when draft is already 14+ days old", async () => {
+    mockDraft(daysAgo(15))
+    mockSnapshots([])
+
+    await checkDataRetentionNotifications(TEST_DATASET)
+    // Should send only the 14-day retention warning, not the snapshot reminder
+    expect(notifications.send).toHaveBeenCalledTimes(1)
+    expect(notifications.send).toHaveBeenCalledWith(
+      expect.objectContaining({
+        _id: expect.stringContaining("retention_14day"),
+      }),
+    )
+  })
+
   it("sends 14-day warning when draft is 14+ days old", async () => {
     mockDraft(daysAgo(15))
     mockSnapshots([{ hexsha: "other" }])
