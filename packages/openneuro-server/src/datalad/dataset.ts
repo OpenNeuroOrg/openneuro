@@ -26,7 +26,6 @@ import Subscription from "../models/subscription"
 import BadAnnexObject from "../models/badAnnexObject"
 import { datasetsConnection } from "./pagination"
 import { getDatasetWorker } from "../libs/datalad-service"
-import notifications from "../libs/notifications"
 import { createEvent, updateEvent } from "../libs/events"
 
 export const giveUploaderPermission = (datasetId, userId) => {

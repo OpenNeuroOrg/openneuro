@@ -30,7 +30,9 @@ async function initSchedulerState(): Promise<void> {
     )
   } catch (err) {
     // Ignore duplicate key errors on insert race condition
-    if ((err as any).code !== 11000) throw err
+    if (!(err instanceof Error && "code" in err && err.code === 11000)) {
+      throw err
+    }
   }
 }
 
@@ -66,6 +68,7 @@ export async function startDailySchedule(): Promise<void> {
   const run = () => {
     runDailyCheck().catch((err) => {
       Sentry.captureException(err)
+      // eslint-disable-next-line no-console
       console.error(err)
     })
   }
