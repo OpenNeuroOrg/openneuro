@@ -48,7 +48,7 @@ async function claimDailyRun(): Promise<boolean> {
     { $set: { lastRun: new Date() } },
     { new: true },
   )
-  return result == null
+  return result !== null
 }
 
 async function runDailyCheck(): Promise<void> {
