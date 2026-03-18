@@ -16,8 +16,12 @@ services:
       - /watch
     volumes:
       - ./:/srv:rw,z
-      - /srv/dist
-      - /srv/.build-cache
+      - build-dist:/srv/dist
+      - build-cache:/srv/.build-cache
+      - app-dist:/srv/packages/openneuro-app/dist
+      - indexer-dist:/srv/packages/openneuro-indexer/dist
+      - search-dist:/srv/packages/openneuro-search/dist
+      - server-dist:/srv/packages/openneuro-server/dist
 
   # web app bundle build
   app:
@@ -78,7 +82,15 @@ services:
     image: docker.io/library/mongo:8
     environment:
       GLIBC_TUNABLES: "glibc.cpu.hwcaps=-SHSTK"
-    command: ["--replSet", "rs0", "--bind_ip_all", "--port", "27017", "--wiredTigerCacheSizeGB", "1"]
+    command: [
+      "--replSet",
+      "rs0",
+      "--bind_ip_all",
+      "--port",
+      "27017",
+      "--wiredTigerCacheSizeGB",
+      "1",
+    ]
     ports:
       - 27017:27017
     healthcheck:
@@ -226,3 +238,11 @@ services:
     ports:
       - "9200:9200"
       - "9300:9300"
+
+volumes:
+  build-dist:
+  build-cache:
+  app-dist:
+  indexer-dist:
+  search-dist:
+  server-dist:
