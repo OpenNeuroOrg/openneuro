@@ -1,60 +1,60 @@
 import { Queue } from "redis-smq"
 import { EQueueDeliveryModel, EQueueType, QueueRateLimit } from "redis-smq"
-import * as Sentry from "@sentry/node"
 
 export enum OpenNeuroQueues {
   INDEXING = "elasticsearch_indexing",
   DATARETENTION = "data_retention",
 }
 
-export function setupQueues() {
-  const indexingQueue = new Queue()
-  indexingQueue.save(
+function saveQueue(
+  name: string,
+  type: EQueueType,
+  delivery: EQueueDeliveryModel,
+): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const queue = new Queue()
+    queue.save(name, type, delivery, (err) => {
+      if (err && err.name !== "QueueQueueExistsError") {
+        reject(err)
+      } else {
+        resolve()
+      }
+    })
+  })
+}
+
+function setRateLimit(
+  name: string,
+  limit: number,
+  interval: number,
+): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const queueRateLimit = new QueueRateLimit()
+    queueRateLimit.set(name, { limit, interval }, (err) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve()
+      }
+    })
+  })
+}
+
+export async function setupQueues(): Promise<void> {
+  await saveQueue(
     OpenNeuroQueues.INDEXING,
     EQueueType.FIFO_QUEUE,
     EQueueDeliveryModel.POINT_TO_POINT,
-    (err) => {
-      // The queue may already exist, don't log that error
-      if (err && err.name !== "QueueQueueExistsError") {
-        Sentry.captureException(err)
-      }
-    },
   )
-
-  const dataRententionQueue = new Queue()
-  dataRententionQueue.save(
+  await saveQueue(
     OpenNeuroQueues.DATARETENTION,
     EQueueType.FIFO_QUEUE,
     EQueueDeliveryModel.POINT_TO_POINT,
-    (err) => {
-      // The queue may already exist, don't log that error
-      if (err && err.name !== "QueueQueueExistsError") {
-        Sentry.captureException(err)
-      }
-    },
   )
 
   // Limit indexing queue to 8 runs per minute to avoid stacking indexing excessively
-  const queueRateLimit = new QueueRateLimit()
-  queueRateLimit.set(
-    OpenNeuroQueues.INDEXING,
-    { limit: 8, interval: 60000 },
-    (err) => {
-      if (err) {
-        Sentry.captureException(err)
-      }
-    },
-  )
+  await setRateLimit(OpenNeuroQueues.INDEXING, 8, 60000)
 
   // Rate limit data retention queue to 16 runs per minute
-  const drqueueRateLimit = new QueueRateLimit()
-  drqueueRateLimit.set(
-    OpenNeuroQueues.DATARETENTION,
-    { limit: 16, interval: 60000 },
-    (err) => {
-      if (err) {
-        Sentry.captureException(err)
-      }
-    },
-  )
+  await setRateLimit(OpenNeuroQueues.DATARETENTION, 16, 60000)
 }

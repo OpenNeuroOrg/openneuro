@@ -19,6 +19,22 @@ async function enqueueAllDatasetChecks(): Promise<void> {
 }
 
 /**
+ * Ensure the scheduler state document exists in MongoDB.
+ */
+async function initSchedulerState(): Promise<void> {
+  try {
+    await SchedulerState.updateOne(
+      { key: SCHEDULER_KEY },
+      { $setOnInsert: { lastRun: null } },
+      { upsert: true },
+    )
+  } catch (err) {
+    // Ignore duplicate key errors on insert race condition
+    if ((err as any).code !== 11000) throw err
+  }
+}
+
+/**
  * Attempt to atomically claim the daily data retention scan run.
  * Returns true if this instance successfully claimed the run.
  */
@@ -30,17 +46,9 @@ async function claimDailyRun(): Promise<boolean> {
       $or: [{ lastRun: null }, { lastRun: { $lt: threshold } }],
     },
     { $set: { lastRun: new Date() } },
-    { upsert: true, new: false, rawResult: true },
-  ).catch((err) => {
-    // Duplicate key on upsert race — another instance just claimed it
-    if (err.code === 11000) return null
-    throw err
-  })
-  if (!result) return false
-  return (
-    result.lastErrorObject?.updatedExisting === true ||
-    result.lastErrorObject?.upserted != null
+    { new: true },
   )
+  return result == null
 }
 
 async function runDailyCheck(): Promise<void> {
@@ -54,12 +62,15 @@ async function runDailyCheck(): Promise<void> {
  * Polls every 30 minutes; uses a MongoDB distributed lock so only one server
  * instance runs the scan per day, durable across restarts.
  */
-export function startDailySchedule(): void {
+export async function startDailySchedule(): Promise<void> {
   const run = () => {
     runDailyCheck().catch((err) => {
       Sentry.captureException(err)
+      console.error(err)
     })
   }
+
+  await initSchedulerState()
 
   // Check shortly after startup, then poll every 30 minutes
   setTimeout(run, 60 * 1000)

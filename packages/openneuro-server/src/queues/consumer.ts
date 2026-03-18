@@ -37,5 +37,11 @@ export function startConsumer(consumer: Consumer) {
     },
   )
 
+  consumer.run((err) => {
+    if (err) {
+      Sentry.captureException(err)
+    }
+  })
+
   return consumer
 }
