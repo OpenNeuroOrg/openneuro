@@ -92,26 +92,30 @@ export async function checkDataRetentionNotifications(
       .exec()
   }
 
-  // Retention warnings — evaluated in order from most to least urgent so that
-  // each notice fires exactly once per hexsha revision
-  if (age >= 28 * DAY && !record.notifiedAtDeletion) {
+  // Retention warnings sent in order from 14 days, 7 days, and 0 days.
+  if (age >= 14 * DAY && !record.notifiedAt14Days) {
     await notifyWriteUsers(datasetId, (user) => ({
-      _id: `${datasetId}_${user._id}_retention_deletion`,
+      _id: `${datasetId}_${user._id}_retention_14day`,
       type: "email",
       email: {
         to: user.email,
         name: user.name,
-        subject: "Dataset Draft Pending Deletion",
-        html: draftRetentionDeletion({
+        subject: "Dataset Draft Deletion Warning: 14 Days Remaining",
+        html: draftRetentionWarning({
           name: user.name,
           datasetId,
+          daysRemaining: 14,
           siteUrl: config.url,
         }),
       },
     }))
-    await DataRetention.updateOne({ datasetId }, { notifiedAtDeletion: now })
+    await DataRetention.updateOne({ datasetId }, { notifiedAt14Days: now })
       .exec()
-  } else if (age >= 21 * DAY && !record.notifiedAt7Days) {
+  } else if (
+    record.notifiedAt14Days &&
+    !record.notifiedAt7Days &&
+    now.getTime() - new Date(record.notifiedAt14Days).getTime() >= 7 * DAY
+  ) {
     await notifyWriteUsers(datasetId, (user) => ({
       _id: `${datasetId}_${user._id}_retention_7day`,
       type: "email",
@@ -129,23 +133,26 @@ export async function checkDataRetentionNotifications(
     }))
     await DataRetention.updateOne({ datasetId }, { notifiedAt7Days: now })
       .exec()
-  } else if (age >= 14 * DAY && !record.notifiedAt14Days) {
+  } else if (
+    record.notifiedAt7Days &&
+    !record.notifiedAtDeletion &&
+    now.getTime() - new Date(record.notifiedAt7Days).getTime() >= 7 * DAY
+  ) {
     await notifyWriteUsers(datasetId, (user) => ({
-      _id: `${datasetId}_${user._id}_retention_14day`,
+      _id: `${datasetId}_${user._id}_retention_deletion`,
       type: "email",
       email: {
         to: user.email,
         name: user.name,
-        subject: "Dataset Draft Deletion Warning: 14 Days Remaining",
-        html: draftRetentionWarning({
+        subject: "Dataset Draft Pending Deletion",
+        html: draftRetentionDeletion({
           name: user.name,
           datasetId,
-          daysRemaining: 14,
           siteUrl: config.url,
         }),
       },
     }))
-    await DataRetention.updateOne({ datasetId }, { notifiedAt14Days: now })
+    await DataRetention.updateOne({ datasetId }, { notifiedAtDeletion: now })
       .exec()
   }
 }
