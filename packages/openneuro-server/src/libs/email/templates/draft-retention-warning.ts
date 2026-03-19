@@ -56,7 +56,7 @@ export const draftRetentionWarning = ({
 		</p>
 
 		<p>
-			To preserve your data, please create a snapshot or update your draft.
+			To preserve your data, please create a snapshot or update your draft. Please see our data retention policy for more information: <a href="https://docs.openneuro.org/policy/data_retention.html">Data Retention Policy.</a>
 		</p>
 
 		<p>
