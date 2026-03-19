@@ -12096,13 +12096,13 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["fast-xml-parser", [\
-      ["npm:5.5.6", {\
-        "packageLocation": "./.yarn/cache/fast-xml-parser-npm-5.5.6-963b985704-91a42a0cf9.zip/node_modules/fast-xml-parser/",\
+      ["npm:5.5.7", {\
+        "packageLocation": "./.yarn/cache/fast-xml-parser-npm-5.5.7-d3593c54f5-b69e65cb1c.zip/node_modules/fast-xml-parser/",\
         "packageDependencies": [\
           ["fast-xml-builder", "npm:1.1.4"],\
-          ["fast-xml-parser", "npm:5.5.6"],\
+          ["fast-xml-parser", "npm:5.5.7"],\
           ["path-expression-matcher", "npm:1.1.3"],\
-          ["strnum", "npm:2.1.2"]\
+          ["strnum", "npm:2.2.1"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -13709,7 +13709,7 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/hed-validator-npm-4.1.4-50f16ffc27-5a28a26b1f.zip/node_modules/hed-validator/",\
         "packageDependencies": [\
           ["core-js-pure", "npm:3.43.0"],\
-          ["fast-xml-parser", "npm:5.5.6"],\
+          ["fast-xml-parser", "npm:5.5.7"],\
           ["hed-validator", "npm:4.1.4"],\
           ["lodash", "npm:4.17.21"],\
           ["pluralize", "npm:8.0.0"],\
@@ -22722,10 +22722,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["strnum", [\
-      ["npm:2.1.2", {\
-        "packageLocation": "./.yarn/cache/strnum-npm-2.1.2-ab87a75952-7d894dff38.zip/node_modules/strnum/",\
+      ["npm:2.2.1", {\
+        "packageLocation": "./.yarn/cache/strnum-npm-2.2.1-b3a08c1c56-c553d83e1a.zip/node_modules/strnum/",\
         "packageDependencies": [\
-          ["strnum", "npm:2.1.2"]\
+          ["strnum", "npm:2.2.1"]\
         ],\
         "linkType": "HARD"\
       }]\
