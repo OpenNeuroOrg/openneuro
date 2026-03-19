@@ -12086,20 +12086,22 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["fast-xml-builder", [\
-      ["npm:1.0.0", {\
-        "packageLocation": "./.yarn/cache/fast-xml-builder-npm-1.0.0-1d924494e5-06c04d8054.zip/node_modules/fast-xml-builder/",\
+      ["npm:1.1.4", {\
+        "packageLocation": "./.yarn/cache/fast-xml-builder-npm-1.1.4-abdb1d2cae-32937866aa.zip/node_modules/fast-xml-builder/",\
         "packageDependencies": [\
-          ["fast-xml-builder", "npm:1.0.0"]\
+          ["fast-xml-builder", "npm:1.1.4"],\
+          ["path-expression-matcher", "npm:1.1.3"]\
         ],\
         "linkType": "HARD"\
       }]\
     ]],\
     ["fast-xml-parser", [\
-      ["npm:5.4.1", {\
-        "packageLocation": "./.yarn/cache/fast-xml-parser-npm-5.4.1-48bbd2c631-2b40067c3a.zip/node_modules/fast-xml-parser/",\
+      ["npm:5.5.6", {\
+        "packageLocation": "./.yarn/cache/fast-xml-parser-npm-5.5.6-963b985704-91a42a0cf9.zip/node_modules/fast-xml-parser/",\
         "packageDependencies": [\
-          ["fast-xml-builder", "npm:1.0.0"],\
-          ["fast-xml-parser", "npm:5.4.1"],\
+          ["fast-xml-builder", "npm:1.1.4"],\
+          ["fast-xml-parser", "npm:5.5.6"],\
+          ["path-expression-matcher", "npm:1.1.3"],\
           ["strnum", "npm:2.1.2"]\
         ],\
         "linkType": "HARD"\
@@ -13707,7 +13709,7 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/hed-validator-npm-4.1.4-50f16ffc27-5a28a26b1f.zip/node_modules/hed-validator/",\
         "packageDependencies": [\
           ["core-js-pure", "npm:3.43.0"],\
-          ["fast-xml-parser", "npm:5.4.1"],\
+          ["fast-xml-parser", "npm:5.5.6"],\
           ["hed-validator", "npm:4.1.4"],\
           ["lodash", "npm:4.17.21"],\
           ["pluralize", "npm:8.0.0"],\
@@ -19170,6 +19172,15 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/path-exists-npm-4.0.0-e9e4f63eb0-505807199d.zip/node_modules/path-exists/",\
         "packageDependencies": [\
           ["path-exists", "npm:4.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["path-expression-matcher", [\
+      ["npm:1.1.3", {\
+        "packageLocation": "./.yarn/cache/path-expression-matcher-npm-1.1.3-ea64bf895d-9a607d0bf9.zip/node_modules/path-expression-matcher/",\
+        "packageDependencies": [\
+          ["path-expression-matcher", "npm:1.1.3"]\
         ],\
         "linkType": "HARD"\
       }]\
