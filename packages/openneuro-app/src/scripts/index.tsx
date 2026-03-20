@@ -43,7 +43,7 @@ const Index: React.FC = () => {
     <Uploader>
       <SearchParamsProvider>
         <UserModalOpenProvider>
-          <NotificationsProvider initialNotifications={initialNotifications}>
+          <NotificationsProvider>
             <div className="sticky-content">
               <HeaderContainer />
               <AppRoutes />
