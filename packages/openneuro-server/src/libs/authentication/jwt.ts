@@ -156,9 +156,12 @@ export const decodeJWT = (token: string): OpenNeuroTokenProfile => {
 }
 
 export const parsedJwtFromRequest = (req) => {
-  const jwt = jwtFromRequest(req)
-  if (jwt) return decodeJWT(jwt)
-  else return null
+  try {
+    const jwt = decodeJWT(jwtFromRequest(req))
+    return jwt || null
+  } catch (_err) {
+    return null
+  }
 }
 
 const refreshToken = async (jwt) => {
