@@ -10,15 +10,17 @@ export interface UserMenuProps {
 }
 
 export const UserMenu: React.FC<UserMenuProps> = ({ signOutAndRedirect }) => {
-  const { user } = useUser()
+  const { user, loading } = useUser()
   const { notifications } = useNotifications()
+
+  if (loading || !user) return null
 
   const inboxCount =
     notifications?.filter((n) => n.status === "unread").length || 0
 
   return (
     <span className="user-menu-wrap">
-      {user?.orcid && (
+      {user.orcid && (
         <span className="notifications-link">
           <Link to={`/user/${user.orcid}/notifications/unread`}>
             <i className="fa fa-inbox">
@@ -41,7 +43,7 @@ export const UserMenu: React.FC<UserMenuProps> = ({ signOutAndRedirect }) => {
 
       <Dropdown
         className="user-menu-dropdown"
-        label={user?.avatar
+        label={user.avatar
           ? (
             <img
               className="user-menu-label avatar"
@@ -56,23 +58,23 @@ export const UserMenu: React.FC<UserMenuProps> = ({ signOutAndRedirect }) => {
             <li className="dropdown-header">
               <p>
                 <span>Hello</span> <br />
-                {user?.name} <br />
-                {user?.email}
+                {user.name} <br />
+                {user.email}
               </p>
               <p>
-                <span>signed in via {user?.provider}</span>
+                <span>signed in via {user.provider}</span>
               </p>
             </li>
 
             <li>
               <Link
-                to={user?.orcid ? `/user/${user.orcid}` : "/search?mydatasets"}
+                to={user.orcid ? `/user/${user.orcid}` : "/search?mydatasets"}
               >
                 My Datasets
               </Link>
             </li>
 
-            {user?.orcid && (
+            {user.orcid && (
               <li>
                 <Link to={`/user/${user.orcid}/account`}>Account Info</Link>
               </li>
@@ -82,13 +84,13 @@ export const UserMenu: React.FC<UserMenuProps> = ({ signOutAndRedirect }) => {
               <Link to="/keygen">Obtain an API Key</Link>
             </li>
 
-            {user?.provider !== "orcid" && (
+            {user.provider !== "orcid" && (
               <li className="user-menu-link">
                 <a href="/crn/auth/orcid?link=true">Link ORCID to my account</a>
               </li>
             )}
 
-            {user?.admin && (
+            {user.admin && (
               <li className="user-menu-link">
                 <Link to="/admin">Admin</Link>
               </li>
