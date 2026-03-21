@@ -1,3 +1,4 @@
+import { useEffect } from "react"
 import { gql, useQuery } from "@apollo/client"
 import { useCookies } from "react-cookie"
 import { getProfile } from "../authentication/profile"
@@ -211,7 +212,7 @@ export const ADVANCED_SEARCH_DATASETS_QUERY = gql`
 
 // Reusable hook to fetch user data
 export const useUser = (userId?: string) => {
-  const [cookies] = useCookies()
+  const [cookies, , removeCookie] = useCookies()
   const profile = getProfile(cookies)
   const profileSub = profile?.sub
 
@@ -229,6 +230,13 @@ export const useUser = (userId?: string) => {
   if (userError) {
     Sentry.captureException(userError)
   }
+
+  // Clear invalid session: cookie exists but query failed or returned no user
+  useEffect(() => {
+    if (!userLoading && profile && (userError || !userData?.user)) {
+      removeCookie("accessToken", { path: "/" })
+    }
+  }, [userLoading, profile, userError, userData?.user, removeCookie])
 
   return {
     user: userData?.user,
