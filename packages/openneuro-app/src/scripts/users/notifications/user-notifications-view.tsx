@@ -10,10 +10,6 @@ import styles from "./scss/usernotifications.module.scss"
 import iconUnread from "../../../assets/icon-unread.png"
 import iconSaved from "../../../assets/icon-saved.png"
 import iconArchived from "../../../assets/icon-archived.png"
-import { useUser } from "../../queries/user"
-import { Loading } from "../../components/loading/Loading"
-import * as Sentry from "@sentry/react"
-import { mapRawEventToMappedNotification } from "../../types/event-types"
 import {
   NotificationsProvider,
   useNotifications,
@@ -27,8 +23,6 @@ export const UserNotificationsView: React.FC<UserNotificationsViewProps> = (
   const { tab = "unread" } = useParams()
   const navigate = useNavigate()
   const location = useLocation()
-  const { user, loading, error } = useUser(orcidUser.id)
-
   const [indicatorStyle, setIndicatorStyle] = useState<React.CSSProperties>({
     width: "0px",
     transform: "translateX(0px)",
@@ -63,19 +57,8 @@ export const UserNotificationsView: React.FC<UserNotificationsViewProps> = (
     }
   }, [tab, orcidUser.orcid, navigate])
 
-  if (loading) return <Loading />
-  if (error) {
-    Sentry.captureException(error)
-    return (
-      <div>Error loading notifications: {error.message}. Please try again.</div>
-    )
-  }
-
-  const initialNotifications =
-    user?.notifications.map(mapRawEventToMappedNotification) || []
-
   return (
-    <NotificationsProvider initialNotifications={initialNotifications}>
+    <NotificationsProvider userId={orcidUser.id}>
       <div data-testid="user-notifications-view">
         <h3>Notifications for {orcidUser.name}</h3>
         <div className={styles.tabContainer}>

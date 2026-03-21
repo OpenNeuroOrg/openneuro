@@ -1,8 +1,18 @@
-import React, { createContext, useCallback, useContext, useState } from "react"
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react"
 import * as Sentry from "@sentry/react"
 import { useMutation } from "@apollo/client"
 import { UPDATE_NOTIFICATION_STATUS_MUTATION } from "../../queries/datasetEvents"
-import type { MappedNotification } from "../../types/event-types"
+import {
+  type MappedNotification,
+  mapRawEventToMappedNotification,
+} from "../../types/event-types"
+import { useUser } from "../../queries/user"
 
 interface NotificationsContextValue {
   notifications: MappedNotification[]
@@ -15,7 +25,7 @@ interface NotificationsContextValue {
 
 interface NotificationsProviderProps {
   children: React.ReactNode
-  initialNotifications?: MappedNotification[]
+  userId?: string
 }
 
 const NotificationsContext = createContext<
@@ -24,11 +34,16 @@ const NotificationsContext = createContext<
 
 export const NotificationsProvider: React.FC<NotificationsProviderProps> = ({
   children,
-  initialNotifications = [],
+  userId,
 }) => {
-  const [notifications, setNotifications] = useState<MappedNotification[]>(
-    initialNotifications,
-  )
+  const { user } = useUser(userId)
+  const [notifications, setNotifications] = useState<MappedNotification[]>([])
+
+  useEffect(() => {
+    const mapped = user?.notifications?.map(mapRawEventToMappedNotification) ??
+      []
+    setNotifications(mapped)
+  }, [user?.notifications])
   const [updateEventStatus] = useMutation(UPDATE_NOTIFICATION_STATUS_MUTATION)
 
   const handleUpdateNotification = useCallback(

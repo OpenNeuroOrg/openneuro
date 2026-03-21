@@ -21,7 +21,11 @@ export const parseJwt = jwtDecode
 export function getProfile(cookies): OpenNeuroTokenProfile {
   const accessToken = cookies["accessToken"]
   if (!accessToken) return null
-  return parseJwt(accessToken) as OpenNeuroTokenProfile
+  try {
+    return parseJwt(accessToken) as OpenNeuroTokenProfile
+  } catch {
+    return null
+  }
 }
 /**
  * Return profile if token is not expired.
