@@ -1,6 +1,7 @@
 import React from "react"
 import PropTypes from "prop-types"
 import { useCookies } from "react-cookie"
+import { useLocation } from "react-router-dom"
 import { getProfile } from "../../authentication/profile"
 import { config } from "../../config"
 import { useUser } from "../../queries/user"
@@ -10,13 +11,21 @@ const buildCustomQuery = (customText, prepopulatedFields) => {
     ...Object.entries(customText).map(([key, value]) => `${key}=${value}`),
     ...Object.entries(prepopulatedFields)
       .filter(([, value]) => value)
-      .map(([key, value]) => `helpdesk_ticket[${key}]=${value}`),
+      .map(([key, value]) => {
+        // Handle meta_ prefixed fields separately (e.g., meta_referrer -> meta[referrer])
+        if (key.startsWith("meta_")) {
+          const fieldName = key.replace(/^meta_/, "")
+          return `meta[${fieldName}]=${value}`
+        }
+        return `helpdesk_ticket[${key}]=${value}`
+      }),
   ]
   return customizerQueries.length ? `&${customizerQueries.join(";")}` : ""
 }
 
 function FreshdeskWidget({ subject, error, sentryId, description }) {
   const [cookies] = useCookies()
+  const { pathname } = useLocation()
   const profile = getProfile(cookies)
   const sentry = sentryId && `Sentry ID: ${sentryId}`
   const joinedDescription = [sentry, description, error]
@@ -38,6 +47,7 @@ function FreshdeskWidget({ subject, error, sentryId, description }) {
     requester: profile && user?.email,
     subject,
     description: joinedDescription,
+    meta_referrer: pathname,
   }
 
   return (
