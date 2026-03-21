@@ -14,6 +14,14 @@ import * as gtag from "./scripts/utils/gtag"
 import { relayStylePagination } from "@apollo/client/utilities"
 // TODO - This should be a global SCSS?
 import "./scripts/components/page/page.scss"
+import cookies from "./scripts/utils/cookies.js"
+import { getProfile, guardExpired } from "./scripts/authentication/profile"
+
+// Clear expired JWT before the app mounts to avoid stale auth state
+const profile = getProfile(cookies.getAll())
+if (profile && !guardExpired(profile)) {
+  cookies.remove("accessToken", { path: "/" })
+}
 
 gtag.initialize(config.analytics.trackingIds)
 
