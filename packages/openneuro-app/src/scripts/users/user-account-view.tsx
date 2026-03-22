@@ -28,13 +28,13 @@ export const UserAccountView: React.FC<UserAccountViewProps> = ({
     try {
       await updateUser({
         variables: {
-          id: orcidUser?.orcid,
+          id: orcidUser.id,
           links: newLinks,
         },
         refetchQueries: [
           {
             query: GET_USER,
-            variables: { id: orcidUser?.orcid },
+            variables: { userId: orcidUser.id },
           },
         ],
       })
@@ -49,13 +49,13 @@ export const UserAccountView: React.FC<UserAccountViewProps> = ({
     try {
       await updateUser({
         variables: {
-          id: orcidUser?.orcid,
+          id: orcidUser.id,
           location: newLocation,
         },
         refetchQueries: [
           {
             query: GET_USER,
-            variables: { id: orcidUser?.orcid },
+            variables: { userId: orcidUser.id },
           },
         ],
       })
@@ -70,13 +70,13 @@ export const UserAccountView: React.FC<UserAccountViewProps> = ({
     try {
       await updateUser({
         variables: {
-          id: orcidUser?.orcid,
+          id: orcidUser.id,
           institution: newInstitution,
         },
         refetchQueries: [
           {
             query: GET_USER,
-            variables: { id: orcidUser?.orcid },
+            variables: { userId: orcidUser.id },
           },
         ],
       })
