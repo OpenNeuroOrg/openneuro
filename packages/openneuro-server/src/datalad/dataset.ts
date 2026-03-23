@@ -530,24 +530,3 @@ export const getUserFollowed = (datasetId, userId) =>
     datasetId,
     userId,
   }).exec()
-
-// Returns the age in milliseconds since the draft diverged from the last
-// snapshot (or since the draft was last modified if there is no snapshot).
-// Returns null if the draft is in sync with the last snapshot.
-export async function getDraftRetentionAge(
-  datasetId: string,
-): Promise<number | null> {
-  const draft = await getDraftInfo(datasetId)
-  const snapshots = await getSnapshots(datasetId)
-  const lastSnapshot = snapshots && snapshots.length
-    ? snapshots[snapshots.length - 1]
-    : null
-
-  if (lastSnapshot && draft.hexsha === lastSnapshot.hexsha) {
-    return null
-  }
-
-  const now = new Date()
-  const modified = new Date(draft.modified)
-  return now.getTime() - modified.getTime()
-}
