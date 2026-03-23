@@ -43,7 +43,7 @@ export const draftRetentionDeletion = ({
 </head>
 <body>
 	<div class="top-bar">
-		<img src="${siteUrl}/assets/email-header.1cb8bf76.png" />
+		<img src="${siteUrl}/assets/email-header-GR_ZGg8w.png" />
 	</div>
 	<div class="content">
 		<h2>Hi, ${name}</h2>
