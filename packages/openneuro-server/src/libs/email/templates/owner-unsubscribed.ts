@@ -56,7 +56,7 @@ export const ownerUnsubscribed = ({
 
 		<p>
 			Sincerely,
-			The CRN Team
+			The OpenNeuro Team
 		</p>
 	</div>
 </body>

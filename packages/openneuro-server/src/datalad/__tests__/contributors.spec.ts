@@ -6,6 +6,7 @@ import { fileUrl } from "../files"
 import { datasetOrSnapshot } from "../../utils/datasetOrSnapshot"
 import { contributors } from "../contributors"
 
+vi.mock("../../config.ts")
 vi.mock("../../libs/authentication/jwt", () => ({
   sign: vi.fn(() => "mock_jwt_token"),
   verify: vi.fn(() => ({ userId: "mock_user_id" })),

@@ -1,30 +1,21 @@
-export const datasetImportEmail = ({
+export const draftRetentionWarning = ({
   siteUrl,
   name,
   datasetId,
+  daysRemaining,
 }: {
   siteUrl: string
   name: string
   datasetId: string
+  daysRemaining: number
 }): string =>
   `<html>
 <head>
 <style>
 	body {
-		font-family: 'Open Sans', sans-serif;
+		font-family: sans-serif;
 		font-weight: lighter;
 		background: #F5F5F5;
-	}
-	footer {
-		border-top: 1px solid #333;
-		padding-top: 15px;
-		background: #F5F5F5;
-	}
-	.link {
-		color: #00505c
-	}
-	.link:hover {
-		color: #0093a9
 	}
 	.top-bar {
 		width: 100%;
@@ -43,22 +34,13 @@ export const datasetImportEmail = ({
 	}
 	.dataset-link {
 		display: inline-block;
-		background: #008599;
+		background: #5cb85c;
 		color: #FFF;
 		font-size: 20px;
 		padding: 8px 15px;
 		text-decoration: none;
 		cursor: pointer;
 	}
-	.comment {
-		border: 1px solid #ccc;
-		padding: 15px;
-	}
-	.log {
-		white-space: pre-wrap;
-	}
-	.FAILED {color: #d9534f;}
-	.FINISHED {color: #5cb85c;}
 </style>
 </head>
 <body>
@@ -69,17 +51,20 @@ export const datasetImportEmail = ({
 		<h2>Hi, ${name}</h2>
 
 		<p>
-			A dataset import you requested has finished. It was imported as <b>${datasetId}</b>. 
+			Your dataset <b>${datasetId}</b> has an unpublished draft that has not been updated in some time.
+			If no snapshot is created within <b>${daysRemaining} days</b>, the draft data will be automatically removed.
 		</p>
 
-		<div>
-			<a class='dataset-link' href="${siteUrl}/datasets/${datasetId}">Click here to view the dataset on OpenNeuro &raquo;</a>
-		</div>
+		<p>
+			To preserve your data, please create a snapshot or update your draft. Please see our data retention policy for more information: <a href="https://docs.openneuro.org/policy/data_retention.html">Data Retention Policy.</a>
+		</p>
 
 		<p>
 			Sincerely,
 			The OpenNeuro Team
 		</p>
+
+		<a class="dataset-link" href="${siteUrl}/datasets/${datasetId}/snapshot">Create a snapshot. &raquo;</a>
 	</div>
 </body>
-<html>`
+</html>`

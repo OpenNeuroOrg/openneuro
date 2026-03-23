@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { vi } from "vitest"
 import request from "superagent"
 import { createDataset, datasetsFilter, testBlacklist } from "../dataset"
@@ -11,6 +12,8 @@ vi.mock("ioredis")
 vi.mock("../../libs/redis")
 vi.mock("../../config.ts")
 vi.mock("../../libs/notifications")
+vi.mock("../draft")
+vi.mock("../snapshots")
 
 describe("dataset model operations", () => {
   describe("createDataset()", () => {

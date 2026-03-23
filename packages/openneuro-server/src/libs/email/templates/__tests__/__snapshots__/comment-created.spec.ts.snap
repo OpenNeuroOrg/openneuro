@@ -76,7 +76,7 @@ exports[`email template -> comment created > renders with expected arguments 1`]
 
 		<p>
 			Sincerely,
-			The CRN Team
+			The OpenNeuro Team
 		</p>
 
 	</div>

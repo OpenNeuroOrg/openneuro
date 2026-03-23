@@ -13,7 +13,7 @@ void mongoose.connect(config.mongo.url, {
 
 async function init() {
   // Start redis message queues
-  initQueues()
+  await initQueues()
   const app = await expressApolloSetup()
   const server = createServer(app)
   server.listen(config.port, () => {

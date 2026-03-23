@@ -25,7 +25,6 @@ import Subscription from "../models/subscription"
 import BadAnnexObject from "../models/badAnnexObject"
 import { datasetsConnection } from "./pagination"
 import { getDatasetWorker } from "../libs/datalad-service"
-import notifications from "../libs/notifications"
 import { createEvent, updateEvent } from "../libs/events"
 
 export const giveUploaderPermission = (datasetId, userId) => {
@@ -70,7 +69,6 @@ export const createDataset = async (
     // Creation is complete here, mark successful
     await updateEvent(event)
     await subscriptions.subscribe(datasetId, uploader)
-    await notifications.snapshotReminder(datasetId)
     return ds
   } catch (e) {
     Sentry.captureException(e)

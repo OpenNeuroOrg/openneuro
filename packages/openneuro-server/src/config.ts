@@ -1,4 +1,5 @@
 const config = {
+  // Base URL for the site (e.g. `https://openneuro.org`)
   url: process.env.CRN_SERVER_URL,
   port: 8111,
   apiPrefix: "/crn/",
@@ -8,6 +9,7 @@ const config = {
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS, PUT, PATCH, DELETE",
     "Access-Control-Allow-Headers": "content-type, Authorization",
   },
+  // Deprecated analysis feature flag
   analysis: {
     enabled: process.env.ANALYSIS_ENABLED,
   },

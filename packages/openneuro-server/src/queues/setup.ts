@@ -3,6 +3,7 @@ import type { IRedisSMQConfig } from "redis-smq"
 import { ERedisConfigClient } from "redis-smq-common"
 import { startConsumer } from "./consumer"
 import { setupQueues } from "./queues"
+import { startDailySchedule } from "./queue-schedule"
 import config from "../config"
 
 const smqConfig: IRedisSMQConfig = {
@@ -19,11 +20,21 @@ const smqConfig: IRedisSMQConfig = {
 
 Configuration.getSetConfig(smqConfig)
 
-// Producer starts automatically
 export const producer = new Producer()
 export const consumer = new Consumer()
 
-export function initQueues() {
-  setupQueues()
+function runProducer(): Promise<void> {
+  return new Promise((resolve, reject) => {
+    producer.run((err) => {
+      if (err) reject(err)
+      else resolve()
+    })
+  })
+}
+
+export async function initQueues() {
+  await setupQueues()
+  await runProducer()
   startConsumer(consumer)
+  await startDailySchedule()
 }
