@@ -2,8 +2,6 @@
 import { vi } from "vitest"
 import request from "superagent"
 import { createDataset, datasetsFilter, testBlacklist } from "../dataset"
-import { getDraftInfo } from "../draft"
-import { getSnapshots } from "../snapshots"
 import { getDatasetWorker } from "../../libs/datalad-service"
 import { connect } from "mongoose"
 import { MongoMemoryServer } from "mongodb-memory-server"
