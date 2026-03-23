@@ -23,8 +23,6 @@ const dataRetentionSchema = new Schema({
   notifiedNoSnapshot: { type: Date, default: null },
 })
 
-dataRetentionSchema.index({ datasetId: 1 })
-
 /**
  * Data retention notification status for datasets
  */
