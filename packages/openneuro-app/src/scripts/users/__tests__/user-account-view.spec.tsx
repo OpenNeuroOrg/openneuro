@@ -33,7 +33,7 @@ const baseUser: User = {
 const userMock = {
   request: {
     query: userQueries.GET_USER,
-    variables: { id: baseUser.orcid },
+    variables: { userId: baseUser.id },
   },
   result: {
     data: {
@@ -50,13 +50,13 @@ describe("<UserAccountView />", () => {
         request: {
           query: userQueries.UPDATE_USER,
           variables: {
-            id: baseUser.orcid,
+            id: baseUser.id,
           },
         },
         result: {
           data: {
             updateUser: {
-              id: baseUser.orcid,
+              id: baseUser.id,
               location: "Marin, CA",
               links: ["https://newlink.com"],
               institution: "New University",
@@ -87,14 +87,14 @@ describe("<UserAccountView />", () => {
         request: {
           query: userQueries.UPDATE_USER,
           variables: {
-            id: baseUser.orcid,
+            id: baseUser.id,
             location: "Marin, CA",
           },
         },
         result: {
           data: {
             updateUser: {
-              id: baseUser.orcid,
+              id: baseUser.id,
               location: "Marin, CA",
               links: ["https://newlink.com"],
               institution: "New University",
@@ -128,14 +128,14 @@ describe("<UserAccountView />", () => {
       request: {
         query: userQueries.UPDATE_USER,
         variables: {
-          id: baseUser.orcid,
+          id: baseUser.id,
           institution: "New University",
         },
       },
       result: {
         data: {
           updateUser: {
-            id: baseUser.orcid,
+            id: baseUser.id,
             location: "Marin, CA",
             links: ["https://newlink.com"],
             institution: "New University",
@@ -168,14 +168,14 @@ describe("<UserAccountView />", () => {
       request: {
         query: userQueries.UPDATE_USER,
         variables: {
-          id: baseUser.orcid,
+          id: baseUser.id,
           links: ["https://newlink.com"],
         },
       },
       result: {
         data: {
           updateUser: {
-            id: baseUser.orcid,
+            id: baseUser.id,
             location: "Marin, CA",
             links: ["https://newlink.com"],
             institution: "New University",
@@ -208,14 +208,14 @@ describe("<UserAccountView />", () => {
       request: {
         query: userQueries.UPDATE_USER,
         variables: {
-          id: baseUser.orcid,
+          id: baseUser.id,
           links: ["https://newlink.com"],
         },
       },
       result: {
         data: {
           updateUser: {
-            id: baseUser.orcid,
+            id: baseUser.id,
             location: "Marin, CA",
             links: ["https://newlink.com"],
             institution: "New University",

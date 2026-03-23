@@ -14,12 +14,12 @@ import { pageTitle } from "../resources/strings.js"
 export const UserAccountView: React.FC<UserAccountViewProps> = ({
   orcidUser,
 }) => {
-  const [userLinks, setLinks] = useState<string[]>(orcidUser?.links || [])
+  const [userLinks, setLinks] = useState<string[]>(orcidUser.links ?? [])
   const [userLocation, setLocation] = useState<string>(
-    orcidUser?.location || "",
+    orcidUser.location ?? "",
   )
   const [userInstitution, setInstitution] = useState<string>(
-    orcidUser?.institution || "",
+    orcidUser.institution ?? "",
   )
   const [updateUser] = useMutation(UPDATE_USER)
 
@@ -28,13 +28,13 @@ export const UserAccountView: React.FC<UserAccountViewProps> = ({
     try {
       await updateUser({
         variables: {
-          id: orcidUser?.orcid,
+          id: orcidUser.id,
           links: newLinks,
         },
         refetchQueries: [
           {
             query: GET_USER,
-            variables: { id: orcidUser?.orcid },
+            variables: { userId: orcidUser.id },
           },
         ],
       })
@@ -49,13 +49,13 @@ export const UserAccountView: React.FC<UserAccountViewProps> = ({
     try {
       await updateUser({
         variables: {
-          id: orcidUser?.orcid,
+          id: orcidUser.id,
           location: newLocation,
         },
         refetchQueries: [
           {
             query: GET_USER,
-            variables: { id: orcidUser?.orcid },
+            variables: { userId: orcidUser.id },
           },
         ],
       })
@@ -70,13 +70,13 @@ export const UserAccountView: React.FC<UserAccountViewProps> = ({
     try {
       await updateUser({
         variables: {
-          id: orcidUser?.orcid,
+          id: orcidUser.id,
           institution: newInstitution,
         },
         refetchQueries: [
           {
             query: GET_USER,
-            variables: { id: orcidUser?.orcid },
+            variables: { userId: orcidUser.id },
           },
         ],
       })
@@ -107,7 +107,7 @@ export const UserAccountView: React.FC<UserAccountViewProps> = ({
             <span>ORCID:</span>
             {orcidUser.orcid}
           </li>
-          {orcidUser?.github &&
+          {orcidUser.github &&
             (
               <li>
                 <span>GitHub:</span>
@@ -128,7 +128,7 @@ export const UserAccountView: React.FC<UserAccountViewProps> = ({
           data-testid="links-section"
         />
 
-        {orcidUser?.id && orcidUser?.orcid !== undefined && (
+        {orcidUser.orcid !== undefined && (
           <div className={styles.umbOrcidConsent}>
             <div className={styles.umbOrcidHeading}>
               <h4>ORCID Integration</h4>
