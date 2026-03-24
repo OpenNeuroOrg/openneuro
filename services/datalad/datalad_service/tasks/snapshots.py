@@ -81,8 +81,20 @@ def edit_changes(changes, new_changes, tag, date):
     changelog_lines = changes.rstrip().splitlines()
     (start, end) = find_version(changelog_lines, tag)
     if start is None:
-        # add new version
-        changelog_lines = [*formatted_new_changes, *changelog_lines]
+        # add new version before the first existing heading
+        insert_at = 0
+        for i, line in enumerate(changelog_lines):
+            if cpan_version_prog.match(line):
+                insert_at = i
+                break
+        else:
+            # no existing version headings, append after all existing lines
+            insert_at = len(changelog_lines)
+        changelog_lines = [
+            *changelog_lines[:insert_at],
+            *formatted_new_changes,
+            *changelog_lines[insert_at:],
+        ]
     else:
         # update existing version
         changelog_lines = [
