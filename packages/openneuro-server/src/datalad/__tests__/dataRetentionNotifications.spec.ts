@@ -22,6 +22,7 @@ import notifications from "../../libs/notifications"
 import DataRetention from "../../models/dataRetention"
 import Permission from "../../models/permission"
 import User from "../../models/user"
+import Deletion from "../../models/deletion"
 import { checkDataRetentionNotifications } from "../dataRetentionNotifications"
 import * as draftModule from "../draft"
 import * as snapshotsModule from "../snapshots"
@@ -55,6 +56,7 @@ describe("checkDataRetentionNotifications", () => {
 
   beforeEach(async () => {
     await DataRetention.deleteMany({})
+    await Deletion.deleteMany({})
     await Permission.deleteMany({})
     await User.deleteMany({})
     vi.mocked(notifications.send).mockClear()
@@ -80,6 +82,19 @@ describe("checkDataRetentionNotifications", () => {
       snapshots as any,
     )
   }
+
+  it("skips notifications for deleted datasets", async () => {
+    await Deletion.create({
+      datasetId: TEST_DATASET,
+      reason: "test deletion",
+      user: { _id: TEST_USER.id },
+    })
+    mockDraft(daysAgo(15))
+    mockSnapshots([{ hexsha: "other" }])
+
+    await checkDataRetentionNotifications(TEST_DATASET)
+    expect(notifications.send).not.toHaveBeenCalled()
+  })
 
   it("does nothing when draft matches the latest snapshot", async () => {
     mockDraft(daysAgo(30), TEST_HEXSHA)

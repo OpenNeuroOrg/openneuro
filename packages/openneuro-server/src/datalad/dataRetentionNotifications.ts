@@ -3,6 +3,7 @@ import notifications from "../libs/notifications"
 import User from "../models/user"
 import Permission from "../models/permission"
 import DataRetention from "../models/dataRetention"
+import Deletion from "../models/deletion"
 import { getDraftInfo } from "./draft"
 import { getSnapshots } from "./snapshots"
 import { draftRetentionWarning } from "../libs/email/templates/draft-retention-warning"
@@ -40,6 +41,10 @@ async function notifyWriteUsers(
 export async function checkDataRetentionNotifications(
   datasetId: string,
 ): Promise<void> {
+  // Skip datasets that have been marked as deleted
+  const deleted = await Deletion.findOne({ datasetId }).exec()
+  if (deleted) return
+
   const draft = await getDraftInfo(datasetId)
   const snapshots = await getSnapshots(datasetId)
   const lastSnapshot = snapshots?.length
