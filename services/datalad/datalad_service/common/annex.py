@@ -388,7 +388,10 @@ async def edit_annexed_file(path, expected_content, new_content, encoding='utf-8
             real_path, 'r', encoding='utf-8', newline=''
         ) as annexed_file:
             annexed_file_contents = await annexed_file.read()
-            if expected_content != annexed_file_contents:
+            # Normalize only CRLF to LF before comparison
+            if expected_content.replace('\r\n', '\n') != annexed_file_contents.replace(
+                '\r\n', '\n'
+            ):
                 raise EditAnnexedFileException('unexpected {path} content')
     # Open the working tree path to overwrite
     if path != real_path:
