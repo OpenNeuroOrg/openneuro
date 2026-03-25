@@ -1,11 +1,14 @@
 import os
 import zlib
+from unittest.mock import patch
 
 import falcon
 from falcon import testing
 import pygit2
+import pytest
 
 from datalad_service.common import git
+from datalad_service.common.git import _normalize_line_endings_in_file
 from datalad_service.handlers.git import _parse_commit
 from datalad.api import Dataset
 
@@ -198,3 +201,37 @@ def test_git_tree(new_dataset):
     repo = pygit2.Repository(new_dataset.path)
     tree = git.git_tree(repo, str(repo.head.target), 'dataset_description.json')
     assert tree.id == repo.get(repo.head.target).tree_id
+
+
+@pytest.mark.parametrize(
+    'chunk_size,content,expected',
+    [
+        # \r\n fully within a chunk
+        (64, b'hello\r\nworld\r\n', b'hello\nworld\n'),
+        # \r\n split across chunk boundary: \r at end of first chunk, \n at start of second
+        (6, b'hello\r\nworld\r\n', b'hello\nworld\n'),
+        # Multiple boundary splits with a 5-byte chunk: "ab\r\n" + "cd\r\n"
+        (3, b'ab\r\ncd\r\n', b'ab\ncd\n'),
+        # No CRLF at all — file should be unchanged
+        (4, b'hello\nworld\n', b'hello\nworld\n'),
+        # Lone \r not followed by \n should be preserved
+        (4, b'hello\rworld\r\n', b'hello\rworld\n'),
+    ],
+    ids=[
+        'crlf-within-chunk',
+        'crlf-split-across-boundary',
+        'multiple-boundary-splits',
+        'no-crlf-unchanged',
+        'lone-cr-preserved',
+    ],
+)
+@pytest.mark.asyncio
+async def test_normalize_line_endings_boundary(tmp_path, chunk_size, content, expected):
+    """Test CRLF normalization including the case where \\r\\n is split across chunk boundaries."""
+    test_file = tmp_path / 'test.tsv'
+    test_file.write_bytes(content)
+
+    with patch('datalad_service.common.git.CHUNK_SIZE_BYTES', chunk_size):
+        await _normalize_line_endings_in_file(str(test_file), str(tmp_path))
+
+    assert test_file.read_bytes() == expected
