@@ -137,26 +137,33 @@ async def _normalize_line_endings_in_file(full_path, repo_temp_path):
     """
     Given a file path, normalize line endings from CRLF to LF.
     """
-    needs_change = False
-    async with aiofiles.open(full_path, 'rb') as f:
-        while chunk := await f.read(CHUNK_SIZE_BYTES):
-            if b'\r\n' in chunk:
-                needs_change = True
-                break
-
-    if not needs_change:
-        return
-
-    # If changes are needed, stream-edit the file via a temporary file
+    changed = False
     async with aiofiles.tempfile.NamedTemporaryFile(
         'wb', dir=repo_temp_path, delete=False
     ) as tmp:
         temp_path = tmp.name
         try:
             async with aiofiles.open(full_path, 'rb') as f:
+                carry = b''
                 while chunk := await f.read(CHUNK_SIZE_BYTES):
-                    await tmp.write(chunk.replace(b'\r\n', b'\n'))
-            os.rename(temp_path, full_path)
+                    chunk = carry + chunk
+                    # Hold back a trailing \r — it might be half of \r\n
+                    if chunk.endswith(b'\r'):
+                        carry = b'\r'
+                        chunk = chunk[:-1]
+                    else:
+                        carry = b''
+                    normalized = chunk.replace(b'\r\n', b'\n')
+                    if not changed and len(normalized) != len(chunk):
+                        changed = True
+                    await tmp.write(normalized)
+                # Flush any held-back \r (lone \r at EOF)
+                if carry:
+                    await tmp.write(carry)
+            if changed:
+                os.rename(temp_path, full_path)
+            else:
+                os.unlink(temp_path)
         except:
             os.unlink(temp_path)
             raise
