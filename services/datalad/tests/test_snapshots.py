@@ -6,7 +6,7 @@ import falcon
 from datalad.api import Dataset
 import pygit2
 
-from datalad_service.tasks.snapshots import write_new_changes
+from datalad_service.tasks.snapshots import edit_changes, write_new_changes
 from datalad_service.common.git import git_show, git_show_content
 
 
@@ -163,6 +163,60 @@ async def test_write_new_changes(datalad_store, new_dataset):
   - Some changes
 1.0.0 2018-01-01
   - Initial version
+"""
+    )
+
+
+def test_edit_changes_with_preamble():
+    """New version should be inserted after preamble text, not before it."""
+    changes = """Preamble text that should be preserved
+
+1.0.0 2025-09-24
+  - Initial upload
+"""
+    result = edit_changes(changes, ['Added data'], '2.0.0', '2026-03-24')
+    assert (
+        result
+        == """Preamble text that should be preserved
+
+2.0.0 2026-03-24
+  - Added data
+1.0.0 2025-09-24
+  - Initial upload
+"""
+    )
+
+
+def test_edit_changes_update_existing_with_preamble():
+    """Updating an existing version should preserve preamble."""
+    changes = """Preamble text that should be preserved
+
+1.0.0 2025-09-24
+  - Initial upload
+"""
+    result = edit_changes(changes, ['Updated data'], '1.0.0', '2025-09-24')
+    assert (
+        result
+        == """Preamble text that should be preserved
+
+1.0.0 2025-09-24
+  - Updated data
+"""
+    )
+
+
+def test_edit_changes_no_preamble():
+    """Without preamble, new version is prepended."""
+    changes = """1.0.0 2025-09-24
+  - Initial upload
+"""
+    result = edit_changes(changes, ['Added data'], '2.0.0', '2026-03-24')
+    assert (
+        result
+        == """2.0.0 2026-03-24
+  - Added data
+1.0.0 2025-09-24
+  - Initial upload
 """
     )
 
