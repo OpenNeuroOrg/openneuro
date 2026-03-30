@@ -7,11 +7,53 @@ function isValidOrcid(orcid: string): boolean {
   return /^[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{3}[0-9X]$/.test(orcid || "")
 }
 
+// TODO - Use GraphQL codegen
+type GraphQLUserType = {
+  id: string
+  provider: "orcid" | "google"
+  avatar: string
+  orcid: string
+  created: Date
+  modified: Date
+  lastSeen: Date
+  email: string
+  name: string
+  admin: boolean
+  blocked: boolean
+  location: string
+  institution: string
+  github: string
+  githubSynced: Date
+  links: [string]
+  notifications: [Record<string, unknown>]
+  orcidConsent: boolean
+}
+
 export async function user(
   obj,
   { id },
   { userInfo }: { userInfo?: Record<string, unknown> } = {},
-) {
+): Promise<Partial<GraphQLUserType> | null> {
+  if (userInfo.reviewer) {
+    const oneWeekAgo = new Date()
+    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7)
+    return {
+      id: "reviewer",
+      name: "Anonymous Reviewer",
+      email: "reviewer@openneuro.org",
+      provider: "orcid",
+      orcid: "0000-0000-0000-0000",
+      admin: false,
+      blocked: false,
+      location: "",
+      institution: "",
+      orcidConsent: true,
+      created: oneWeekAgo,
+      lastSeen: new Date(),
+      modified: oneWeekAgo,
+    }
+  }
+
   let user
   if (isValidOrcid(id)) {
     user = await User.findOne({
@@ -225,6 +267,11 @@ export const updateUser = async (
  */
 export async function notifications(obj, _, { userInfo }) {
   const userId = obj.id
+
+  // Reviewers never have notifications
+  if (userInfo.reviewer) {
+    return []
+  }
 
   // --- authorization ---
   if (!userInfo || (userInfo.id !== userId && !userInfo.admin)) {
