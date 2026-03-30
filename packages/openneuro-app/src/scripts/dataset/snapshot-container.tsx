@@ -185,12 +185,13 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
                 heading="Authors"
                 item={
                   <>
-                    {profile && (
-                      <RequestContributorButton
-                        dataset={dataset}
-                        currentUserId={currentUserId}
-                      />
-                    )}
+                    {profile && !profile.scopes.includes("dataset:reviewer") &&
+                      (
+                        <RequestContributorButton
+                          dataset={dataset}
+                          currentUserId={currentUserId}
+                        />
+                      )}
                     <ContributorsListDisplay
                       datasetId={dataset.id}
                       contributors={snapshot.contributors}
