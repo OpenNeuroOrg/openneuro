@@ -5,6 +5,46 @@ import { useUser } from "../queries/user"
 import { useNotifications } from "./notifications/user-notifications-context"
 import "./scss/user-menu.scss"
 
+interface UserMenuListProps {
+  user: NonNullable<ReturnType<typeof useUser>["user"]>
+}
+
+function UserMenuList({ user }: UserMenuListProps) {
+  return (
+    <>
+      <li>
+        <Link
+          to={user.orcid ? `/user/${user.orcid}` : "/search?mydatasets"}
+        >
+          My Datasets
+        </Link>
+      </li>
+
+      {user.orcid && (
+        <li>
+          <Link to={`/user/${user.orcid}/account`}>Account Info</Link>
+        </li>
+      )}
+
+      <li className="user-menu-link">
+        <Link to="/keygen">Obtain an API Key</Link>
+      </li>
+
+      {user.provider !== "orcid" && (
+        <li className="user-menu-link">
+          <a href="/crn/auth/orcid?link=true">Link ORCID to my account</a>
+        </li>
+      )}
+
+      {user.admin && (
+        <li className="user-menu-link">
+          <Link to="/admin">Admin</Link>
+        </li>
+      )}
+    </>
+  )
+}
+
 export interface UserMenuProps {
   signOutAndRedirect: () => void
 }
@@ -14,6 +54,8 @@ export const UserMenu: React.FC<UserMenuProps> = ({ signOutAndRedirect }) => {
   const { notifications } = useNotifications()
 
   if (loading || !user) return null
+
+  const reviewer = user.id === "reviewer"
 
   const inboxCount =
     notifications?.filter((n) => n.status === "unread").length || 0
@@ -66,35 +108,7 @@ export const UserMenu: React.FC<UserMenuProps> = ({ signOutAndRedirect }) => {
               </p>
             </li>
 
-            <li>
-              <Link
-                to={user.orcid ? `/user/${user.orcid}` : "/search?mydatasets"}
-              >
-                My Datasets
-              </Link>
-            </li>
-
-            {user.orcid && (
-              <li>
-                <Link to={`/user/${user.orcid}/account`}>Account Info</Link>
-              </li>
-            )}
-
-            <li className="user-menu-link">
-              <Link to="/keygen">Obtain an API Key</Link>
-            </li>
-
-            {user.provider !== "orcid" && (
-              <li className="user-menu-link">
-                <a href="/crn/auth/orcid?link=true">Link ORCID to my account</a>
-              </li>
-            )}
-
-            {user.admin && (
-              <li className="user-menu-link">
-                <Link to="/admin">Admin</Link>
-              </li>
-            )}
+            {!reviewer && <UserMenuList user={user} />}
 
             <li className="user-menu-link">
               <a onClick={signOutAndRedirect} className="btn-submit-other">
