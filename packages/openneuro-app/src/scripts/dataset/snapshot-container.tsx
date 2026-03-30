@@ -185,7 +185,7 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
                 heading="Authors"
                 item={
                   <>
-                    {profile && !profile.scopes.includes("dataset:reviewer") &&
+                    {profile && !isAnonymousReviewer &&
                       (
                         <RequestContributorButton
                           dataset={dataset}
