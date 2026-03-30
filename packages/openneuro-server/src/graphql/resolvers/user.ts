@@ -231,7 +231,12 @@ export const setBlocked = (obj, { id, blocked }, { userInfo }) => {
 export const updateUser = async (
   obj,
   { id, location, institution, links, orcidConsent },
+  { userInfo },
 ) => {
+  if (!userInfo) {
+    throw new Error("You must be logged in to update a user")
+  }
+
   try {
     let user
 
@@ -245,6 +250,11 @@ export const updateUser = async (
 
     if (!user) {
       throw new Error("User not found")
+    }
+
+    // Only allow users to update their own profile, or admins to update any
+    if (user.id !== userInfo.id && !userInfo.admin) {
+      throw new Error("You are not authorized to update this user")
     }
 
     // Update user fields (optional values based on provided inputs)
