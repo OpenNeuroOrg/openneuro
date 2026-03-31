@@ -34,7 +34,7 @@ export async function user(
   { id },
   { userInfo }: { userInfo?: Record<string, unknown> } = {},
 ): Promise<Partial<GraphQLUserType> | null> {
-  if (userInfo.reviewer) {
+  if (userInfo?.reviewer) {
     const oneWeekAgo = new Date()
     oneWeekAgo.setDate(oneWeekAgo.getDate() - 7)
     return {

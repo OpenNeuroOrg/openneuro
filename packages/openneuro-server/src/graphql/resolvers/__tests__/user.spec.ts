@@ -10,7 +10,7 @@ import {
 import { MongoMemoryServer } from "mongodb-memory-server"
 import mongoose, { Types } from "mongoose"
 import User from "../../../models/user"
-import { users } from "../user.js"
+import { user, users } from "../user.js"
 import type { GraphQLContext } from "../user.js"
 
 vi.mock("ioredis")
@@ -130,6 +130,27 @@ describe("user resolvers", () => {
   beforeEach(async () => {
     await User.deleteMany({})
     await User.insertMany(testUsersSeedData)
+  })
+
+  describe("user()", () => {
+    it("does not crash when userInfo is undefined (anonymous request)", async () => {
+      const result = await user(null, { id: "u1" }, {})
+      expect(result).not.toBeNull()
+      expect(result!.id).toBe("u1")
+      // Email should be hidden for anonymous users
+      expect(result!.email).toBeUndefined()
+    })
+
+    it("does not crash when context is completely missing", async () => {
+      const result = await user(null, { id: "u1" }, undefined)
+      expect(result).not.toBeNull()
+      expect(result!.id).toBe("u1")
+    })
+
+    it("returns null for non-existent user", async () => {
+      const result = await user(null, { id: "nonexistent" }, {})
+      expect(result).toBeNull()
+    })
   })
 
   describe("users()", () => {
