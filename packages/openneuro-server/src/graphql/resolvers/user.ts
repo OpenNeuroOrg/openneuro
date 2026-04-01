@@ -278,14 +278,14 @@ export const updateUser = async (
 export async function notifications(obj, _, { userInfo }) {
   const userId = obj.id
 
-  // Reviewers never have notifications
-  if (userInfo.reviewer) {
+  // --- authorization ---
+  if (!userInfo || (userInfo.id !== userId && !userInfo.admin)) {
     return []
   }
 
-  // --- authorization ---
-  if (!userInfo || (userInfo.id !== userId && !userInfo.admin)) {
-    throw new Error("Not authorized to view these notifications.")
+  // Reviewers never have notifications
+  if (userInfo.reviewer) {
+    return []
   }
 
   // --- get user and orcid ---

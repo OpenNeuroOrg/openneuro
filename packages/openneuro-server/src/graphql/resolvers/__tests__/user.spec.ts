@@ -10,7 +10,7 @@ import {
 import { MongoMemoryServer } from "mongodb-memory-server"
 import mongoose, { Types } from "mongoose"
 import User from "../../../models/user"
-import { user, users } from "../user.js"
+import { notifications, user, users } from "../user.js"
 import type { GraphQLContext } from "../user.js"
 
 vi.mock("ioredis")
@@ -383,6 +383,29 @@ describe("user resolvers", () => {
       )
       expect(result.users.length).toBe(1)
       expect(result.totalCount).toBe(3) // u1, u4, u6 are admins
+    })
+  })
+
+  describe("notifications()", () => {
+    it("returns [] when userInfo is undefined (unauthenticated request)", async () => {
+      const result = await notifications({ id: "u1" }, undefined, {
+        userInfo: undefined,
+      })
+      expect(result).toEqual([])
+    })
+
+    it("returns [] when a different non-admin user requests another user's notifications", async () => {
+      const result = await notifications({ id: "u1" }, undefined, {
+        userInfo: { id: "u2", admin: false },
+      })
+      expect(result).toEqual([])
+    })
+
+    it("returns an array when the user requests their own notifications", async () => {
+      const result = await notifications({ id: "u1" }, undefined, {
+        userInfo: { id: "u1", admin: false },
+      })
+      expect(Array.isArray(result)).toBe(true)
     })
   })
 })
