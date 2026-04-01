@@ -1,3 +1,4 @@
+import gzip
 import os
 import falcon
 from falcon import testing
@@ -427,12 +428,11 @@ def test_recursive_tree(client, new_dataset, datalad_store):
         f'/datasets/{ds_id}/tree/1.0.0', params={'recursive': 'true'}
     )
     assert recursive_response.status == falcon.HTTP_OK
-    recursive_content = json.loads(recursive_response.content)
-    recursive_files = recursive_content['files']
+    recursive_content = json.loads(gzip.decompress(recursive_response.content))
     # No directory entries in recursive output
-    assert all(not f['directory'] for f in recursive_files)
+    assert all(not f['directory'] for f in recursive_content)
     # Should contain nested file with full path
-    filenames = [f['filename'] for f in recursive_files]
+    filenames = [f['filename'] for f in recursive_content]
     assert 'sub-01/anat/sub-01_T1w.nii.gz' in filenames
     assert 'dataset_description.json' in filenames
     assert 'CHANGES' in filenames
