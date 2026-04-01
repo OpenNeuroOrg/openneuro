@@ -286,13 +286,17 @@ async def get_repo_urls(path, files):
     return files
 
 
-async def get_repo_files(dataset, dataset_path, tree):
-    """Read all files in a repo at a given branch, tag, or commit hash."""
+async def get_repo_files(dataset, dataset_path, tree, recursive=False):
+    """Read files in a repo at a given branch, tag, or commit hash.
+
+    When recursive=True, uses git ls-tree -r to list all files with full
+    paths in a single call. Otherwise lists one directory level.
+    """
+    ls_tree_args = ['git', 'ls-tree', '-l', tree]
+    if recursive:
+        ls_tree_args.append('-r')
     gitProcess = await asyncio.create_subprocess_exec(
-        'git',
-        'ls-tree',
-        '-l',
-        tree,
+        *ls_tree_args,
         cwd=dataset_path,
         stdout=asyncio.subprocess.PIPE,
     )
@@ -304,42 +308,43 @@ async def get_repo_files(dataset, dataset_path, tree):
         read_ls_tree_line(gitTreeLine, files, symlinkFilenames, symlinkObjects)
     await gitProcess.wait()
 
-    # After regular files, process all symlinks with one git cat-file --batch call
+    # Process all symlinks with one git cat-file --batch call
     # This is about 100x faster than one call per file for annexed file heavy datasets
-    catFileInput = '\n'.join(symlinkObjects)
-    catFileProcess = await asyncio.create_subprocess_exec(
-        'git',
-        'cat-file',
-        '--batch',
-        '--buffer',
-        cwd=dataset_path,
-        stdin=asyncio.subprocess.PIPE,
-        stdout=asyncio.subprocess.PIPE,
-    )
-    stdout, _ = await catFileProcess.communicate(input=catFileInput.encode('utf-8'))
-    # Output looks like this:
-    # dc9dde956f6f28e425a412a4123526e330668e7e blob 140
-    # ../../.git/annex/objects/Q0/VP/MD5E-s1618574--43762c4310549dcc8c5c25567f42722d.nii.gz/MD5E-s1618574--43762c4310549dcc8c5c25567f42722d.nii.gz
-    for index, line in enumerate(stdout.splitlines()):
-        # Skip metadata (even) lines
-        if index % 2 == 1:
-            key = line.rstrip().split(b'/')[-1].decode('utf-8')
-            # Get the size from key
-            size = int(key.split('-', 2)[1].lstrip('s'))
-            filename = symlinkFilenames[(index - 1) // 2]
-            file_id = compute_file_hash(key, filename)
-            files.append(
-                {
-                    'filename': filename,
-                    'size': int(size),
-                    'id': file_id,
-                    'key': key,
-                    'urls': [],
-                    'annexed': True,
-                    'directory': False,
-                }
-            )
-    # Now find URLs for each file if available
+    if symlinkObjects:
+        catFileInput = '\n'.join(symlinkObjects)
+        catFileProcess = await asyncio.create_subprocess_exec(
+            'git',
+            'cat-file',
+            '--batch',
+            '--buffer',
+            cwd=dataset_path,
+            stdin=asyncio.subprocess.PIPE,
+            stdout=asyncio.subprocess.PIPE,
+        )
+        stdout, _ = await catFileProcess.communicate(input=catFileInput.encode('utf-8'))
+        # Output looks like this:
+        # dc9dde956f6f28e425a412a4123526e330668e7e blob 140
+        # ../../.git/annex/objects/Q0/VP/MD5E-s1618574--43762c4310549dcc8c5c25567f42722d.nii.gz/MD5E-s1618574--43762c4310549dcc8c5c25567f42722d.nii.gz
+        for index, line in enumerate(stdout.splitlines()):
+            # Skip metadata (even) lines
+            if index % 2 == 1:
+                key = line.rstrip().split(b'/')[-1].decode('utf-8')
+                # Get the size from key
+                size = int(key.split('-', 2)[1].lstrip('s'))
+                filename = symlinkFilenames[(index - 1) // 2]
+                file_id = compute_file_hash(key, filename)
+                files.append(
+                    {
+                        'filename': filename,
+                        'size': int(size),
+                        'id': file_id,
+                        'key': key,
+                        'urls': [],
+                        'annexed': True,
+                        'directory': False,
+                    }
+                )
+    # Find URLs for each file if available
     files = await get_repo_urls(dataset_path, files)
     # Provide fallbacks for any URLs that did not match rmet exports
     for f in files:

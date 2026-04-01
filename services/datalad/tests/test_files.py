@@ -4,6 +4,7 @@ from falcon import testing
 import json
 from datalad.api import Dataset
 
+from datalad_service.common.tag_cache import write_tag_cache
 from datalad_service.tasks.files import parse_s3_annex_url
 
 
@@ -380,6 +381,70 @@ def test_delete_non_existing_file(client, new_dataset):
         json.loads(response.content)['error']
         == 'the following files not found: fake, test'
     )
+
+
+def test_recursive_tree(client, new_dataset, datalad_store):
+    """Test that ?recursive=true returns cached files for a tag."""
+    ds_id = os.path.basename(new_dataset.path)
+    dataset_path = datalad_store.get_dataset_path(ds_id)
+    # Add a nested file, commit, and tag
+    response = client.simulate_post(
+        f'/datasets/{ds_id}/files/sub-01:anat:sub-01_T1w.nii.gz',
+        body='fMRI data goes here',
+    )
+    assert response.status == falcon.HTTP_OK
+    response = client.simulate_post(f'/datasets/{ds_id}/draft')
+    assert response.status == falcon.HTTP_OK
+    response = client.simulate_post(f'/datasets/{ds_id}/snapshots/1.0.0')
+    assert response.status == falcon.HTTP_OK
+    # Non-recursive should include directories
+    root_response = client.simulate_get(f'/datasets/{ds_id}/tree/1.0.0')
+    assert root_response.status == falcon.HTTP_OK
+    root_content = json.loads(root_response.content)
+    dir_entries = [f for f in root_content['files'] if f['directory']]
+    assert len(dir_entries) > 0, 'Non-recursive listing should include directories'
+    # Pre-populate the tag cache with the flattened file list
+    # (normally done by export_dataset or populate_tag_cache task)
+    flat_files = []
+    for f in root_content['files']:
+        if not f['directory']:
+            flat_files.append(f)
+    # Add the nested file manually with its full path
+    flat_files.append(
+        {
+            'filename': 'sub-01/anat/sub-01_T1w.nii.gz',
+            'size': 19,
+            'id': 'test-id',
+            'key': 'test-key',
+            'urls': ['http://example.com/test'],
+            'annexed': True,
+            'directory': False,
+        }
+    )
+    write_tag_cache(dataset_path, '1.0.0', flat_files)
+    # Recursive should serve from cache
+    recursive_response = client.simulate_get(
+        f'/datasets/{ds_id}/tree/1.0.0', params={'recursive': 'true'}
+    )
+    assert recursive_response.status == falcon.HTTP_OK
+    recursive_content = json.loads(recursive_response.content)
+    recursive_files = recursive_content['files']
+    # No directory entries in recursive output
+    assert all(not f['directory'] for f in recursive_files)
+    # Should contain nested file with full path
+    filenames = [f['filename'] for f in recursive_files]
+    assert 'sub-01/anat/sub-01_T1w.nii.gz' in filenames
+    assert 'dataset_description.json' in filenames
+    assert 'CHANGES' in filenames
+
+
+def test_recursive_tree_requires_tag(client, new_dataset):
+    """Test that ?recursive=true rejects non-tag refs."""
+    ds_id = os.path.basename(new_dataset.path)
+    response = client.simulate_get(
+        f'/datasets/{ds_id}/tree/HEAD', params={'recursive': 'true'}
+    )
+    assert response.status == falcon.HTTP_400
 
 
 def test_parse_s3_annex_url():
