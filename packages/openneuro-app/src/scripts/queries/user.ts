@@ -231,9 +231,9 @@ export const useUser = (userId?: string) => {
     Sentry.captureException(userError)
   }
 
-  // Clear invalid session: cookie exists but query failed or returned no user
+  // Clear invalid session: cookie exists but query returned no user
   useEffect(() => {
-    if (!userLoading && profile && (userError || !userData?.user)) {
+    if (!userLoading && profile && !userError && !userData?.user) {
       removeCookie("accessToken", { path: "/" })
     }
   }, [userLoading, profile, userError, userData?.user, removeCookie])
