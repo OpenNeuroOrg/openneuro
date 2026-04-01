@@ -323,7 +323,7 @@ export const typeDefs = `
 
   input SubjectMetadataInput {
     participantId: String!
-    age: Int
+    age: Float
     sex: String
     group: String
   }
@@ -355,7 +355,7 @@ export const typeDefs = `
     openneuroPaperDOI: String
     seniorAuthor: String
     adminUsers: [String]
-    ages: [Int]
+    ages: [Float]
     modalities: [String]
     grantFunderName: String
     grantIdentifier: String
@@ -784,7 +784,7 @@ export const typeDefs = `
 
   type SubjectMetadata {
     participantId: String!
-    age: Int
+    age: Float
     sex: String
     group: String
   }
@@ -934,7 +934,7 @@ export const typeDefs = `
     openneuroPaperDOI: String
     seniorAuthor: String
     adminUsers: [String]
-    ages: [Int]
+    ages: [Float]
     modalities: [String]
     grantFunderName: String
     grantIdentifier: String
