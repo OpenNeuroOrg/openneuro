@@ -633,7 +633,7 @@ export const typeDefs = `
     onBrainlife: Boolean @cacheControl(maxAge: 10080, scope: PUBLIC)
     # Total size in bytes of this snapshot
     size: BigInt
-    # Single list of files to download this snapshot (only available on snapshots)
+    # Single list of files to download this snapshot (only available on snapshots), may be null if the snapshot is still being processed
     downloadFiles: [DatasetFile]
     # Contributors list from datacite.yml
     contributors: [Contributor]

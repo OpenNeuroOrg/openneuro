@@ -20,7 +20,6 @@ import Snapshot from "../models/snapshot"
 import type { SnapshotDocument } from "../models/snapshot"
 import { updateDatasetRevision } from "./draft"
 import { getDatasetWorker } from "../libs/datalad-service"
-import { join } from "path"
 import { createEvent, updateEvent } from "../libs/events"
 import { queueIndexDataset } from "../queues/producer-methods"
 
@@ -294,33 +293,28 @@ export const getPublicSnapshots = () => {
 }
 
 /**
- * For snapshots, precache all trees for downloads
+ * For snapshots, return a pre-computed recursive file listing.
+ *
+ * The worker pre-caches this on disk after S3 export. For legacy snapshots
+ * without a cache, the worker queues a background task to populate it
+ * and returns 202 — we return null to signal "not ready yet".
  */
-export const downloadFiles = (datasetId, tag) => {
-  const downloadCache = new CacheItem(redis, CacheType.snapshotDownload, [
-    datasetId,
-    tag,
-  ], 432000)
-  // Return an existing cache object if we have one
-  return downloadCache.get(async () => {
-    // If not, fetch all trees sequentially and cache the result (hopefully some or all trees are cached)
-    const files = await getFilesRecursive(datasetId, tag, "")
-    files.sort()
-    return files
-  })
-}
-
-export async function getFilesRecursive(datasetId, tree, path = "") {
-  const files = []
-  // Fetch files
-  const fileTree = await getFiles(datasetId, tree)
-  for (const file of fileTree) {
-    const absPath = join(path, file.filename)
-    if (file.directory) {
-      files.push(...(await getFilesRecursive(datasetId, file.id, absPath)))
-    } else {
-      files.push({ ...file, filename: absPath })
-    }
+export const downloadFiles = async (datasetId, tag) => {
+  const response = await fetch(
+    `http://${
+      getDatasetWorker(datasetId)
+    }/datasets/${datasetId}/tree/${tag}?recursive=true`,
+    {
+      signal: AbortSignal.timeout(10000),
+    },
+  )
+  if (response.status === 202) {
+    // Cache is being populated, return null so the client knows to retry
+    return null
   }
-  return files
+  if (!response.ok) {
+    return null
+  }
+  const body = await response.json()
+  return body?.files ?? null
 }
