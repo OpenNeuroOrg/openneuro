@@ -54,14 +54,17 @@ export const DownloadScript = ({
   datasetId,
   snapshotTag,
 }: DownloadS3DerivativesProps): JSX.Element => {
-  const [getDownload, { loading, data }] = useLazyQuery(getSnapshotDownload, {
-    variables: {
-      datasetId: datasetId,
-      tag: snapshotTag,
+  const [getDownload, { loading, data, error }] = useLazyQuery(
+    getSnapshotDownload,
+    {
+      variables: {
+        datasetId: datasetId,
+        tag: snapshotTag,
+      },
+      errorPolicy: "all",
     },
-    errorPolicy: "all",
-  })
-  if (data) {
+  )
+  if (data?.snapshot?.downloadFiles) {
     const script = generateDownloadScript(data)
     inlineDownload(`${datasetId}-${snapshotTag}.sh`, script)
   }
@@ -76,9 +79,17 @@ export const DownloadScript = ({
           Node.js.
         </p>
         <p>
-          {loading
+          {error
+            ? (
+              "Failed to generate download script."
+            )
+            : loading
             ? (
               "Loading..."
+            )
+            : data?.snapshot && !data.snapshot.downloadFiles
+            ? (
+              "Download is not yet available for this version. Please try again later."
             )
             : (
               <a
