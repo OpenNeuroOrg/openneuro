@@ -300,6 +300,10 @@ export const getPublicSnapshots = () => {
  * and returns 202 — we return null to signal "not ready yet".
  */
 export const downloadFiles = async (datasetId, tag) => {
+  // Only serve full file listings for public datasets (URLs are unsigned)
+  const ds = await Dataset.findOne({ id: datasetId }, "public").lean().exec()
+  if (!ds?.public) return null
+
   const response = await fetch(
     `http://${
       getDatasetWorker(datasetId)
@@ -313,7 +317,9 @@ export const downloadFiles = async (datasetId, tag) => {
     return null
   }
   if (!response.ok) {
-    return null
+    throw new Error(
+      `Failed to fetch downloadFiles for ${datasetId}:${tag} (${response.status})`,
+    )
   }
   const body = await response.json()
   return body

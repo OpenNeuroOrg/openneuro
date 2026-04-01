@@ -3,9 +3,10 @@ vi.mock("ioredis")
 import { MongoMemoryServer } from "mongodb-memory-server"
 import request from "superagent"
 import { createDataset } from "../dataset"
-import { createSnapshot } from "../snapshots"
+import { createSnapshot, downloadFiles } from "../snapshots"
 import { getDatasetWorker } from "../../libs/datalad-service"
 import { connect } from "mongoose"
+import Dataset from "../../models/dataset"
 
 // Mock requests to Datalad service
 vi.mock("superagent")
@@ -50,6 +51,68 @@ describe("snapshot model operations", () => {
           `${getDatasetWorker(dsId)}/datasets/${dsId}/snapshots/${tag}`,
         ),
       )
+    })
+  })
+
+  describe("downloadFiles()", () => {
+    const datasetId = "ds000001"
+    const tag = "1.0.0"
+    const workerUrl = `http://${
+      getDatasetWorker(datasetId)
+    }/datasets/${datasetId}/tree/${tag}?recursive=true`
+
+    beforeEach(() => {
+      vi.spyOn(Dataset, "findOne").mockImplementation(() =>
+        ({
+          lean: () => ({ exec: () => Promise.resolve({ public: true }) }),
+        }) as any
+      )
+    })
+
+    afterEach(() => {
+      vi.restoreAllMocks()
+    })
+
+    it("returns the parsed JSON body on a successful response", async () => {
+      const mockFiles = [
+        { filename: "sub-01/anat/T1w.nii.gz", size: 1234 },
+        { filename: "dataset_description.json", size: 56 },
+      ]
+      vi.spyOn(globalThis, "fetch").mockResolvedValue(
+        new Response(JSON.stringify(mockFiles), { status: 200 }),
+      )
+      const result = await downloadFiles(datasetId, tag)
+      expect(result).toEqual(mockFiles)
+      expect(globalThis.fetch).toHaveBeenCalledWith(workerUrl, {
+        signal: expect.any(AbortSignal),
+      })
+    })
+
+    it("returns null when the worker responds with 202 (cache populating)", async () => {
+      vi.spyOn(globalThis, "fetch").mockResolvedValue(
+        new Response(null, { status: 202 }),
+      )
+      const result = await downloadFiles(datasetId, tag)
+      expect(result).toBeNull()
+    })
+
+    it("throws when the worker responds with a non-ok status", async () => {
+      vi.spyOn(globalThis, "fetch").mockResolvedValue(
+        new Response("Internal Server Error", { status: 500 }),
+      )
+      await expect(downloadFiles(datasetId, tag)).rejects.toThrow(
+        "Failed to fetch downloadFiles for ds000001:1.0.0 (500)",
+      )
+    })
+
+    it("returns null for non-public datasets", async () => {
+      vi.spyOn(Dataset, "findOne").mockImplementation(() =>
+        ({
+          lean: () => ({ exec: () => Promise.resolve({ public: false }) }),
+        }) as any
+      )
+      const result = await downloadFiles(datasetId, tag)
+      expect(result).toBeNull()
     })
   })
 })
