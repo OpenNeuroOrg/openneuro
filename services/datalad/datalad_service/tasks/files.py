@@ -9,6 +9,8 @@ import botocore
 import pygit2
 
 from datalad_service.common.annex import get_repo_files
+from datalad_service.common.tag_cache import write_tag_cache
+from datalad_service.broker import broker
 from datalad_service.common.git import (
     git_commit,
     git_commit_index,
@@ -45,6 +47,13 @@ async def get_tree(store, dataset, tree):
     """Get the working tree, optionally a branch tree."""
     dataset_path = store.get_dataset_path(dataset)
     return await get_repo_files(dataset, dataset_path, tree)
+
+
+@broker.task
+async def populate_tag_cache(dataset, dataset_path, tag):
+    """Compute recursive file listing for a tag and write to disk cache."""
+    files = await get_repo_files(dataset, dataset_path, tag, recursive=True)
+    write_tag_cache(dataset_path, tag, files)
 
 
 async def remove_files(store, dataset, paths, name=None, email=None, cookies=None):

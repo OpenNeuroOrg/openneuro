@@ -21,9 +21,14 @@ from datalad_service.config import AWS_ACCESS_KEY_ID
 from datalad_service.config import AWS_SECRET_ACCESS_KEY
 from datalad_service.config import GCP_ACCESS_KEY_ID
 from datalad_service.config import GCP_SECRET_ACCESS_KEY
-from datalad_service.common.annex import get_tag_info, is_git_annex_remote
+from datalad_service.common.annex import (
+    get_tag_info,
+    is_git_annex_remote,
+    get_repo_files,
+)
 from datalad_service.common.openneuro import clear_dataset_cache, is_public_dataset
 from datalad_service.common.git import git_show, git_tag, git_tag_tree
+from datalad_service.common.tag_cache import write_tag_cache
 from datalad_service.common.github import github_export
 from datalad_service.common.s3 import (
     s3_export,
@@ -172,6 +177,16 @@ async def export_dataset(
             if github_enabled and public_dataset:
                 # Perform all GitHub export steps
                 github_export(dataset_id, dataset_path, new_tag)
+            # Pre-compute recursive file listing while data is still local
+            try:
+                files = await get_repo_files(
+                    dataset_id, dataset_path, new_tag, recursive=True
+                )
+                write_tag_cache(dataset_path, new_tag, files)
+            except Exception as e:
+                logger.warning(
+                    f'Failed to populate tag cache for {dataset_id}@{new_tag}: {e}'
+                )
             # Drop cache once all exports are complete
             clear_dataset_cache(dataset_id)
             # Check and clean local annexed files once export is complete

@@ -5,6 +5,7 @@ import falcon
 
 from datalad_service.common.annex import EditAnnexedFileException
 from datalad_service.common.git import delete_tag
+from datalad_service.common.tag_cache import delete_tag_cache
 from datalad_service.tasks.snapshots import (
     create_snapshot,
     get_snapshot,
@@ -77,6 +78,7 @@ class SnapshotResource:
         if snapshot:
             dataset_path = self.store.get_dataset_path(dataset)
             delete_tag(dataset_path, snapshot)
+            delete_tag_cache(dataset_path, snapshot)
             resp.media = {}
             resp.status = falcon.HTTP_OK
         else:
