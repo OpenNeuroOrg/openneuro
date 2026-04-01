@@ -19,7 +19,7 @@ class S3ConfigException(Exception):
     pass
 
 
-def generate_s3_annex_options(dataset_path, backup=False):
+def generate_s3_annex_options(dataset_path, backup=False, include_tagging=True):
     dataset_id = os.path.basename(dataset_path)
     annex_options = [
         'type=S3',
@@ -44,6 +44,8 @@ def generate_s3_annex_options(dataset_path, backup=False):
             'autoenable=true',
             f'publicurl=https://s3.amazonaws.com/{get_s3_bucket()}',
         ]
+        if include_tagging:
+            annex_options.append('x-amz-tagging=access=private')
     return annex_options
 
 
@@ -62,8 +64,7 @@ def backup_remote_env():
 
 def setup_s3_sibling(dataset_path):
     """Add a sibling for an S3 bucket publish."""
-    # Public remote
-    # TODO set ['x-amz-tagging=access=private'] if tagging is supported in git-annex
+    # Public S3 bucket remote
     subprocess.run(
         ['git-annex', 'initremote', get_s3_remote()]
         + generate_s3_annex_options(dataset_path),
@@ -122,16 +123,18 @@ def setup_s3_backup_sibling_workaround(dataset_path):
     )
 
 
-def update_s3_sibling(dataset_path):
+def update_s3_sibling(dataset_path, public_dataset):
     """Update S3 remote with latest config."""
     # note: enableremote command will only upsert config options, none are deleted
     if not is_git_annex_remote(dataset_path, get_s3_remote()):
         setup_s3_sibling(dataset_path)
     else:
-        # Update the remote config
+        # Update the remote config (and configure tagging for private datasets)
         subprocess.run(
             ['git-annex', 'enableremote', get_s3_remote()]
-            + generate_s3_annex_options(dataset_path),
+            + generate_s3_annex_options(
+                dataset_path, include_tagging=(not public_dataset)
+            ),
             check=True,
             cwd=dataset_path,
         )
@@ -142,7 +145,9 @@ def update_s3_sibling(dataset_path):
         # Update the backup remote config
         subprocess.run(
             ['git-annex', 'enableremote', get_s3_backup_remote()]
-            + generate_s3_annex_options(dataset_path, backup=True),
+            + generate_s3_annex_options(
+                dataset_path, backup=True, include_tagging=False
+            ),
             check=True,
             cwd=dataset_path,
             env=backup_remote_env(),
@@ -172,7 +177,9 @@ def validate_s3_config(dataset_path):
             options_line = line
     if options_line:
         # check that each of the expected annex options is what's actually configured
-        expected_options = generate_s3_annex_options(dataset_path)
+        expected_options = generate_s3_annex_options(
+            dataset_path, include_tagging=False
+        )
         for expected_option in expected_options:
             if not expected_option in options_line:
                 return False

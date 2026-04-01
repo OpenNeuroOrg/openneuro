@@ -73,7 +73,7 @@ async def create_remotes_and_export(dataset_path, public=False):
     create_remotes(dataset_path)
     await export_dataset(dataset_path)
     if public:
-        await set_s3_access_tag(os.path.basename(dataset_path), 'public')
+        await set_remote_public(dataset_path)
 
 
 def create_remotes(dataset_path):
@@ -154,7 +154,7 @@ async def export_dataset(
         repo = pygit2.Repository(dataset_path)
         tags = sorted(git_tag(repo), key=lambda tag: tag.name)
         # Update configuration for the remote
-        update_s3_sibling(dataset_path)
+        update_s3_sibling(dataset_path, public_dataset)
         # Push the most recent tag
         if tags:
             new_tag = tags[-1].name
@@ -162,8 +162,6 @@ async def export_dataset(
                 await s3_export(dataset_path, get_s3_remote(), new_tag)
             except subprocess.CalledProcessError as e:
                 logger.warning(f'S3 export failed for {dataset_id}@{new_tag}: {e}')
-            if not public_dataset:
-                await set_s3_access_tag(dataset_id, 'private')
             try:
                 await s3_backup_push(dataset_path)
             except subprocess.CalledProcessError as e:
@@ -316,11 +314,11 @@ async def annex_drop(dataset_path, branches):
 
 async def set_remote_public(dataset):
     """Clear x-amz-meta-access when a dataset is made public."""
-    # If git-annex supports tags in the future, we'd modify this here.
-    # await run_check(
-    #    ['git-annex', 'enableremote', get_s3_remote(), 'x-amz-tagging=access=public'],
-    #    dataset_path,
-    # )
+    dataset_path = os.path.join(datalad_service.common.s3.get_datasets_path(), dataset)
+    await run_check(
+        ['git-annex', 'enableremote', get_s3_remote(), 'x-amz-tagging=access=public'],
+        dataset_path,
+    )
     await set_s3_access_tag(dataset, 'public')
 
 
