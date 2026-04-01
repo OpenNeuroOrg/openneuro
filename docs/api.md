@@ -187,7 +187,24 @@ This will return any files below sub-01 in the tree for this version.
 }
 ```
 
-The full tree can be retrieved by recursively following tree objects.
+The full tree can be retrieved by recursively following tree objects. Alternatively clients downloading entire datasets may use the snapshot { downloadFiles } field.
+
+```graphql
+query downloadFiles {
+  dataset(id: "ds001234") {
+    latestSnapshot {
+      downloadFiles {
+        id
+        key
+        filename
+        urls
+      }
+    }
+  }
+}
+```
+
+This field is populated asynchronously after a version snapshot is created. Exports of newly created snapshots may take a few minutes to several hours before the field is populated. A client requesting this field should check for `dataset.latestSnapshot.downloadFiles` null value and retry with a backoff interval.
 
 ## Example Mutations
 
