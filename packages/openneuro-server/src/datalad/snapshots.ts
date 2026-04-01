@@ -316,5 +316,5 @@ export const downloadFiles = async (datasetId, tag) => {
     return null
   }
   const body = await response.json()
-  return body?.files ?? null
+  return body
 }
