@@ -279,7 +279,7 @@ export async function notifications(obj, _, { userInfo }) {
   const userId = obj.id
 
   // Reviewers never have notifications
-  if (userInfo.reviewer) {
+  if (userInfo?.reviewer) {
     return []
   }
 
