@@ -37,6 +37,15 @@ export const getUnexpiredProfile = (cookies) => {
 }
 
 /**
+ * Check if the accessToken cookie should be removed due to expiration or corruption
+ */
+export function shouldRemoveToken(cookies): boolean {
+  const profile = getProfile(cookies)
+  const hasToken = !!cookies["accessToken"]
+  return hasToken && (!profile || !guardExpired(profile))
+}
+
+/**
  * Test for an expired token
  * @param {object} profile A profile returned by getProfile()
  * @returns {boolean} False if expired

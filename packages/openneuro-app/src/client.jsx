@@ -15,11 +15,10 @@ import { relayStylePagination } from "@apollo/client/utilities"
 // TODO - This should be a global SCSS?
 import "./scripts/components/page/page.scss"
 import cookies from "./scripts/utils/cookies.js"
-import { getProfile, guardExpired } from "./scripts/authentication/profile"
+import { shouldRemoveToken } from "./scripts/authentication/profile"
 
-// Clear expired JWT before the app mounts to avoid stale auth state
-const profile = getProfile(cookies.getAll())
-if (profile && !guardExpired(profile)) {
+// Clear expired or corrupted JWT before the app mounts to avoid stale auth state
+if (shouldRemoveToken(cookies.getAll())) {
   cookies.remove("accessToken", { path: "/" })
 }
 
