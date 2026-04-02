@@ -2,6 +2,7 @@ import asyncio
 from pathlib import Path
 import json
 import logging
+import math
 import re
 
 import requests
@@ -73,12 +74,35 @@ async def validate_dataset_deno_call(dataset_path, ref, logger=logger):
     )
 
 
+def sanitize_age(age):
+    """Coerce age to a finite float or None.
+
+    The bids-validator may produce non-numeric ages (e.g. "89+") that
+    cannot be represented as a GraphQL Float.
+    """
+    if isinstance(age, (int, float)) and math.isfinite(age):
+        return float(age)
+    return None
+
+
+def sanitize_subject_metadata(subject_metadata):
+    """Sanitize subjectMetadata ages before sending to GraphQL."""
+    if not subject_metadata:
+        return subject_metadata
+    return [
+        {**s, 'age': sanitize_age(s.get('age'))} for s in subject_metadata
+    ]
+
+
 def summary_mutation(dataset_id, ref, validator_output, validator_metadata):
     """
     Return the OpenNeuro mutation to update a dataset summary.
     """
     summary = validator_output['summary']
     summary['datasetId'] = dataset_id
+    summary['subjectMetadata'] = sanitize_subject_metadata(
+        summary.get('subjectMetadata'),
+    )
     # Set the object id to the git sha256 ref
     summary['id'] = ref
     summary['validatorMetadata'] = validator_metadata

@@ -43,7 +43,7 @@
                 "participantId": { "type": "keyword" },
                 "group": { "type": "keyword" },
                 "sex": { "type": "keyword" },
-                "age": { "type": "integer" }
+                "age": { "type": "float" }
               }
             },
             "pet": {
