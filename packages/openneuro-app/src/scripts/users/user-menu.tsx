@@ -62,7 +62,7 @@ export const UserMenu: React.FC<UserMenuProps> = ({ signOutAndRedirect }) => {
 
   return (
     <span className="user-menu-wrap">
-      {user.orcid && (
+      {user.orcid && user.id !== "reviewer" && (
         <span className="notifications-link">
           <Link to={`/user/${user.orcid}/notifications/unread`}>
             <i className="fa fa-inbox">
