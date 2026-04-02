@@ -10,7 +10,8 @@ import {
 import { MongoMemoryServer } from "mongodb-memory-server"
 import mongoose, { Types } from "mongoose"
 import User from "../../../models/user"
-import { user, users } from "../user.js"
+import DatasetEvent from "../../../models/datasetEvents"
+import { notifications, user, users } from "../user.js"
 import type { GraphQLContext } from "../user.js"
 
 vi.mock("ioredis")
@@ -383,6 +384,59 @@ describe("user resolvers", () => {
       )
       expect(result.users.length).toBe(1)
       expect(result.totalCount).toBe(3) // u1, u4, u6 are admins
+    })
+  })
+
+  describe("notifications()", () => {
+    it("returns empty array for reviewer users", async () => {
+      const result = await notifications(
+        { id: "reviewer" },
+        null,
+        { userInfo: { reviewer: true, admin: false, blocked: false } },
+      )
+      expect(result).toEqual([])
+    })
+
+    it("does not crash when userInfo is undefined", async () => {
+      await expect(
+        notifications({ id: "u1" }, null, { userInfo: undefined }),
+      ).rejects.toThrow("Not authorized to view these notifications.")
+    })
+
+    it("returns notifications for a user viewing their own", async () => {
+      await DatasetEvent.create({
+        id: "event-1",
+        datasetId: "ds000001",
+        userId: "u1",
+        timestamp: new Date(),
+        event: {
+          type: "contributorCitation",
+          datasetId: "ds000001",
+          addedBy: "u2",
+          targetUserId: "u1",
+          contributorData: { name: "Test User" },
+        },
+        success: true,
+        note: "Added as contributor",
+      })
+      const result = await notifications(
+        { id: "u1" },
+        null,
+        { userInfo: { id: "u1", admin: false, userId: "u1" } },
+      )
+      expect(result.length).toBe(1)
+      expect(result[0].id).toBe("event-1")
+      expect(result[0].notificationStatus.status).toBe("UNREAD")
+    })
+
+    it("throws authorization error for regular user viewing another user's notifications", async () => {
+      await expect(
+        notifications(
+          { id: "u1" },
+          null,
+          { userInfo: { id: "u2", admin: false, userId: "u2" } },
+        ),
+      ).rejects.toThrow("Not authorized to view these notifications.")
     })
   })
 })
