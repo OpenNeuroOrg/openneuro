@@ -13,6 +13,8 @@ export interface TreeEntry {
   k: string
   /** S3 versionId (empty for directories) */
   v: string
+  /** S3 bucket override (empty string = default AWS_S3_PUBLIC_BUCKET) */
+  b: string
   /** needs presigned URL */
   p: boolean
   /** is directory */

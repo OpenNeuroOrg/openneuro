@@ -98,17 +98,16 @@ export const computeTotalSize = (files: DatasetFile[]): number =>
  */
 function parseS3Url(
   url: string,
-): { s3Key: string; versionId: string } | null {
+): { bucket: string; s3Key: string; versionId: string } | null {
   try {
     const parsed = new URL(url)
     const versionId = parsed.searchParams.get("versionId") || ""
     // Path is /{bucket}/{key...} - strip the leading slash and bucket
     const pathParts = parsed.pathname.split("/")
-    // Remove empty first element and bucket name
     pathParts.shift() // empty string before leading /
-    pathParts.shift() // bucket name
+    const bucket = pathParts.shift() || "" // bucket name
     const s3Key = decodeURIComponent(pathParts.join("/"))
-    return { s3Key, versionId }
+    return { bucket, s3Key, versionId }
   } catch {
     return null
   }
@@ -136,17 +135,22 @@ function workerFileToEntry(
       s: 0,
       k: "",
       v: "",
+      b: "",
       p: false,
       d: true,
     }
   }
   const parsed = file.urls[0] ? parseS3Url(file.urls[0]) : null
+  // Store empty string for the default bucket to save cache space
+  const defaultBucket = process.env.AWS_S3_PUBLIC_BUCKET || ""
+  const bucket = parsed?.bucket === defaultBucket ? "" : (parsed?.bucket || "")
   return {
     n: file.filename,
     h: file.id,
     s: file.size,
     k: parsed?.s3Key || "",
     v: parsed?.versionId || "",
+    b: bucket,
     p: needsPresign,
     d: false,
   }
@@ -166,9 +170,9 @@ async function entryToDatasetFile(entry: TreeEntry): Promise<DatasetFile> {
   }
   let url: string
   if (entry.p && entry.k && entry.v) {
-    url = await getPresignedUrl(redis, entry.k, entry.v)
+    url = await getPresignedUrl(redis, entry.b, entry.k, entry.v)
   } else if (entry.k && entry.v) {
-    url = publicS3Url(entry.k, entry.v)
+    url = publicS3Url(entry.b, entry.k, entry.v)
   } else {
     url = ""
   }
