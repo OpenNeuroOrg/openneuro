@@ -10,7 +10,6 @@ export const DRAFT_FILES_QUERY = gql`
       draft {
         files(tree: $tree) {
           id
-          key
           filename
           size
           directory
@@ -27,7 +26,6 @@ export const SNAPSHOT_FILES_QUERY = gql`
     snapshot(datasetId: $datasetId, tag: $snapshotTag) {
       files(tree: $tree) {
         id
-        key
         filename
         size
         directory
@@ -43,8 +41,7 @@ export const SNAPSHOT_FILES_QUERY = gql`
  */
 export const nestFiles = (path) => (file) => ({
   ...file,
-  // Generate a unique id for any nested files to avoid overwriting trees with two parents
-  id: `${path}:${file.id}`,
+  id: file.id,
   filename: `${path}:${file.filename}`,
 })
 
@@ -85,7 +82,7 @@ export const fetchMoreDirectory = (
 ) =>
   fetchMore({
     query: snapshotTag ? SNAPSHOT_FILES_QUERY : DRAFT_FILES_QUERY,
-    variables: { datasetId, snapshotTag, tree: directory.key },
+    variables: { datasetId, snapshotTag, tree: directory.id },
     updateQuery: mergeNewFiles(directory, snapshotTag),
   })
 

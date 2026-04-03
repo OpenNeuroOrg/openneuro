@@ -44,7 +44,6 @@ const UPDATE_CONTRIBUTORS = gql`
           files {
             id
             filename
-            key
             size
             annexed
             urls

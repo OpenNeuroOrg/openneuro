@@ -77,7 +77,6 @@ export const DRAFT_FILES_FRAGMENT = gql`
       id
       files {
         id
-        key
         filename
         size
         directory
@@ -202,7 +201,6 @@ export const SNAPSHOT_FIELDS = gql`
     }
     files {
       id
-      key
       filename
       size
       directory

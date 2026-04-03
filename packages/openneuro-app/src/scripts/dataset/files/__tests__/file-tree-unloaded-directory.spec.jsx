@@ -38,7 +38,7 @@ describe("FileTreeUnloadedDirectory component", () => {
       expect(
         mergeNewFiles(dir)(defaultObj, { fetchMoreResult: updatedObj }).dataset
           .draft.files,
-      ).toEqual([a, b, { ...c, id: "sub-01:91011", filename: "sub-01:c" }])
+      ).toEqual([a, b, { ...c, id: "91011", filename: "sub-01:c" }])
     })
     it("works with snapshots", () => {
       const dir = { filename: "sub-01", directory: true }
@@ -52,7 +52,7 @@ describe("FileTreeUnloadedDirectory component", () => {
           .snapshot.files,
       ).toEqual([dir, a, b, {
         ...c,
-        id: "sub-01:91011",
+        id: "91011",
         filename: "sub-01:c",
       }])
     })
@@ -67,7 +67,7 @@ describe("FileTreeUnloadedDirectory component", () => {
           .snapshot.files,
       ).toEqual([{
         ...c,
-        id: "sub-01:91011",
+        id: "91011",
         filename: "sub-01:c",
       }])
     })
@@ -83,7 +83,7 @@ describe("FileTreeUnloadedDirectory component", () => {
           .dataset.draft.files,
       ).toEqual([{
         ...c,
-        id: "sub-01:91011",
+        id: "91011",
         filename: "sub-01:c",
       }])
     })
