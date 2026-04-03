@@ -157,7 +157,10 @@ function workerFileToEntry(
 }
 
 /** Convert a TreeEntry back to a DatasetFile, resolving presigned URLs if needed */
-async function entryToDatasetFile(entry: TreeEntry): Promise<DatasetFile> {
+async function entryToDatasetFile(
+  entry: TreeEntry,
+  datasetId: string,
+): Promise<DatasetFile> {
   if (entry.d) {
     return {
       id: entry.h,
@@ -174,7 +177,10 @@ async function entryToDatasetFile(entry: TreeEntry): Promise<DatasetFile> {
   } else if (entry.k && entry.v) {
     url = publicS3Url(entry.b, entry.k, entry.v)
   } else {
-    url = ""
+    const serverUrl = process.env.CRN_SERVER_URL
+    const filename = encodeURIComponent(entry.n)
+    url =
+      `${serverUrl}/crn/datasets/${datasetId}/objects/${entry.h}?filename=${filename}`
   }
   return {
     id: entry.h,
@@ -189,8 +195,11 @@ async function entryToDatasetFile(entry: TreeEntry): Promise<DatasetFile> {
 /** Convert an array of TreeEntry to DatasetFile[], resolving URLs */
 async function entriesToDatasetFiles(
   entries: TreeEntry[],
+  datasetId: string,
 ): Promise<DatasetFile[]> {
-  return Promise.all(entries.map(entryToDatasetFile))
+  return Promise.all(
+    entries.map((entry) => entryToDatasetFile(entry, datasetId)),
+  )
 }
 
 /**
@@ -204,7 +213,7 @@ export const getFiles = async (
   // Try cache first
   const cached = await getTree(redis, treeish)
   if (cached) {
-    return entriesToDatasetFiles(cached)
+    return entriesToDatasetFiles(cached, datasetId)
   }
 
   // Cache miss: fetch from worker
@@ -232,7 +241,7 @@ export const getFiles = async (
       // Still exporting — cache briefly to avoid repeated worker fetches
       void setTree(redis, treeish, entries, 600)
     }
-    return entriesToDatasetFiles(entries)
+    return entriesToDatasetFiles(entries, datasetId)
   }
   return []
 }
@@ -263,7 +272,7 @@ export async function getFilesRecursive(
         treesMap.set(hash, entries)
       }
     }
-    return reconstructFromTrees(treesMap, tree, path)
+    return reconstructFromTrees(treesMap, tree, path, datasetId, tree)
   }
 
   // Walk the tree recursively, collecting unique tree hashes along the way
@@ -311,6 +320,8 @@ async function reconstructFromTrees(
   treesMap: Map<string, TreeEntry[]>,
   rootTree: string,
   path: string,
+  datasetId: string,
+  treeish: string,
 ): Promise<DatasetFile[]> {
   const entries = treesMap.get(rootTree)
   if (!entries) return []
@@ -318,9 +329,15 @@ async function reconstructFromTrees(
     entries.map(async (entry) => {
       const absPath = path ? join(path, entry.n) : entry.n
       if (entry.d) {
-        return reconstructFromTrees(treesMap, entry.h, absPath)
+        return reconstructFromTrees(
+          treesMap,
+          entry.h,
+          absPath,
+          datasetId,
+          treeish,
+        )
       } else {
-        const file = await entryToDatasetFile(entry)
+        const file = await entryToDatasetFile(entry, datasetId, treeish)
         return [{ ...file, filename: absPath }]
       }
     }),
