@@ -13,7 +13,6 @@ from datalad_service.tasks.snapshots import (
 )
 from datalad_service.tasks.publish import (
     export_dataset,
-    monitor_remote_configs,
 )
 
 
@@ -62,7 +61,6 @@ class SnapshotResource:
             resp.status = falcon.HTTP_OK
 
             if not skip_publishing:
-                monitor_remote_configs(ds_path)
                 # Publish after response
                 await export_dataset.kiq(ds_path)
         except SnapshotExistsException as err:

@@ -101,7 +101,7 @@ async def export_backup_and_drop(dataset_path):
     dataset_id = os.path.basename(dataset_path)
     public_dataset = is_public_dataset(dataset_id)
     repo = pygit2.Repository(dataset_path)
-    update_s3_sibling(dataset_path)
+    update_s3_sibling(dataset_path, public_dataset)
     tags = sorted(git_tag(repo), key=lambda tag: tag.name)
     if tags:
         await s3_backup_push(dataset_path)
@@ -281,13 +281,6 @@ async def delete_github_sibling(dataset_id):
 async def delete_siblings(dataset_id):
     delete_s3_sibling(dataset_id)
     await delete_github_sibling(dataset_id)
-
-
-def monitor_remote_configs(dataset_path):
-    """Check remote configs and correct invalidities."""
-    s3_ok = datalad_service.common.s3.validate_s3_config(dataset_path)
-    if not s3_ok:
-        update_s3_sibling(dataset_path)
 
 
 @broker.task
