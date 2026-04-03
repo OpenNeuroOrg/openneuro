@@ -24,7 +24,7 @@ export function generateDownloadScript(data): string {
   // ds000001:1.0.0 -> ds000001-1.0.0 for directories
   const directory = data.snapshot.id.split(":").join("-")
   let script = "#!/bin/sh\n"
-  for (const f of data.snapshot.downloadFiles) {
+  for (const f of data.snapshot.files) {
     script += `curl --create-dirs ${f.urls[0]} -o ${directory}/${f.filename}\n`
   }
   return script
@@ -39,7 +39,7 @@ export const getSnapshotDownload = gql`
   query snapshot($datasetId: ID!, $tag: String!) {
     snapshot(datasetId: $datasetId, tag: $tag) {
       id
-      downloadFiles {
+      files(recursive: true) {
         id
         directory
         filename
@@ -87,7 +87,7 @@ export const DownloadScript = ({
             ? (
               "Loading..."
             )
-            : data?.snapshot && !data.snapshot.downloadFiles
+            : data?.snapshot && !data.snapshot.files
             ? (
               "Download is not yet available for this version. Please try again later."
             )

@@ -11,7 +11,7 @@ describe("DownloadScript", () => {
   const mockData = {
     snapshot: {
       id: "ds000001:1.0.0",
-      downloadFiles: [
+      files: [
         {
           id: "a2776e2e194d72419638d7611ddef7efa9c9f643",
           directory: false,
