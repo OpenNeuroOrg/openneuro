@@ -12,8 +12,7 @@ from datalad_service.common.annex import (
 
 expected_file_object = {
     'filename': 'dataset_description.json',
-    'id': '43502da40903d08b18b533f8897330badd6e1da3',
-    'key': '838d19644b3296cf32637bbdf9ae5c87db34842f',
+    'id': '838d19644b3296cf32637bbdf9ae5c87db34842f',
     'size': 101,
 }
 
@@ -53,8 +52,7 @@ def test_get_ls_tree_line():
         {
             'filename': 'dataset_description.json',
             'size': 459,
-            'id': '78dd92373749f62af23f3ae499b7a8ac33418fff',
-            'key': 'a786c385bd1812410d01177affb6ce834d85facd',
+            'id': 'a786c385bd1812410d01177affb6ce834d85facd',
             'urls': [],
             'annexed': False,
             'directory': False,
