@@ -273,18 +273,18 @@ async function walkTree(
 ): Promise<DatasetFile[]> {
   collectedHashes.push(tree)
   const fileTree = await getFiles(datasetId, tree)
-  const files: DatasetFile[] = []
-  for (const file of fileTree) {
-    const absPath = path ? join(path, file.filename) : file.filename
-    if (file.directory) {
-      files.push(
-        ...(await walkTree(datasetId, file.key, absPath, collectedHashes)),
-      )
-    } else {
-      files.push({ ...file, filename: absPath })
-    }
-  }
-  return files
+  // Parallelize sibling directory fetches
+  const results = await Promise.all(
+    fileTree.map(async (file) => {
+      const absPath = path ? join(path, file.filename) : file.filename
+      if (file.directory) {
+        return walkTree(datasetId, file.key, absPath, collectedHashes)
+      } else {
+        return [{ ...file, filename: absPath }]
+      }
+    }),
+  )
+  return results.flat()
 }
 
 /**
@@ -298,17 +298,16 @@ async function reconstructFromTrees(
 ): Promise<DatasetFile[]> {
   const entries = treesMap.get(rootTree)
   if (!entries) return []
-  const files: DatasetFile[] = []
-  for (const entry of entries) {
-    const absPath = path ? join(path, entry.n) : entry.n
-    if (entry.d) {
-      files.push(
-        ...(await reconstructFromTrees(treesMap, entry.h, absPath)),
-      )
-    } else {
-      const file = await entryToDatasetFile(entry)
-      files.push({ ...file, filename: absPath })
-    }
-  }
-  return files
+  const results = await Promise.all(
+    entries.map(async (entry) => {
+      const absPath = path ? join(path, entry.n) : entry.n
+      if (entry.d) {
+        return reconstructFromTrees(treesMap, entry.h, absPath)
+      } else {
+        const file = await entryToDatasetFile(entry)
+        return [{ ...file, filename: absPath }]
+      }
+    }),
+  )
+  return results.flat()
 }
