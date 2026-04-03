@@ -3344,6 +3344,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@msgpack/msgpack", [\
+      ["npm:3.1.3", {\
+        "packageLocation": "./.yarn/cache/@msgpack-msgpack-npm-3.1.3-3f3adaf78f-cf597b7ed1.zip/node_modules/@msgpack/msgpack/",\
+        "packageDependencies": [\
+          ["@msgpack/msgpack", "npm:3.1.3"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@napi-rs/wasm-runtime", [\
       ["npm:0.2.4", {\
         "packageLocation": "./.yarn/cache/@napi-rs-wasm-runtime-npm-0.2.4-bc75480c68-af335867ec.zip/node_modules/@napi-rs/wasm-runtime/",\
@@ -4238,6 +4247,7 @@ const RAW_RUNTIME_STATE =
           ["@elastic/elasticsearch", "npm:8.13.1"],\
           ["@graphql-tools/schema", "virtual:7551ce9da6a1d08fa7e13a80e2f973b491766328bd179cc2db79caffc61371ac135c2ad0ad653010fa4ab35dcca89d6c85968158f6af4813bc27a96b906e116a#npm:10.0.0"],\
           ["@keyv/redis", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:4.5.0"],\
+          ["@msgpack/msgpack", "npm:3.1.3"],\
           ["@openneuro/search", "workspace:packages/openneuro-search"],\
           ["@openneuro/server", "workspace:packages/openneuro-server"],\
           ["@sentry/node", "npm:10.37.0"],\
