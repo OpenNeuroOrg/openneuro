@@ -232,7 +232,7 @@ export const getFiles = async (
       // Still exporting — cache briefly to avoid repeated worker fetches
       void setTree(redis, treeish, entries, 600)
     }
-    return files
+    return entriesToDatasetFiles(entries)
   }
   return []
 }
