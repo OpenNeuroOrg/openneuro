@@ -5,7 +5,7 @@ import { description } from "./description.js"
 import { readme } from "./readme.js"
 import { getDraftRevision } from "../../datalad/draft.js"
 import { checkDatasetWrite } from "../permissions.js"
-import { getFiles } from "../../datalad/files"
+import { getFiles, getFilesRecursive } from "../../datalad/files"
 import { filterRemovedAnnexObjects } from "../utils/file.js"
 import { validation } from "./validation"
 import FileCheck from "../../models/fileCheck"
@@ -14,7 +14,10 @@ import { contributors } from "../../datalad/contributors"
 // A draft must have a dataset parent
 export const draftFiles = async (dataset, args, { userInfo }) => {
   const hexsha = await getDraftRevision(dataset.id)
-  const files = await getFiles(dataset.id, args.tree || hexsha)
+  const treeish = args.tree || hexsha
+  const files = args.recursive
+    ? await getFilesRecursive(dataset.id, treeish)
+    : await getFiles(dataset.id, treeish)
   return filterRemovedAnnexObjects(dataset.id, userInfo)(files)
 }
 
