@@ -38,7 +38,7 @@ def test_s3_annex_options(monkeypatch):
     assert 'fileprefix=test00001/' in options
     assert 'bucket=a-fake-test-public-bucket' in options
     # Check that the private tag is applied by default
-    # assert 'x-amz-tagging=access=private' in options
+    assert 'x-amz-tagging=access=private' in options
 
 
 def test_s3_annex_backup_options(monkeypatch):
@@ -66,7 +66,7 @@ def test_update_s3_sibling(monkeypatch, no_init_remote, new_dataset):
     create_remotes(new_dataset.path)
     # This will break this dataset beyond here in tests, but make sure it fails at the enableremote step
     with pytest.raises(subprocess.CalledProcessError):
-        update_s3_sibling(new_dataset.path)
+        update_s3_sibling(new_dataset.path, False)
 
 
 def test_validate_s3_config(no_init_remote, new_dataset):
