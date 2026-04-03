@@ -214,16 +214,19 @@ export const getFiles = async (
   const files: DatasetFile[] | undefined = body?.files
 
   if (files && files.length > 0) {
-    // Check if all non-directory files have S3 URLs (skip caching if still exporting)
+    const needsPresign = await datasetNeedsPresign(datasetId)
+    const entries = files.map((f) => workerFileToEntry(f, needsPresign))
+    // Check if all non-directory files have S3 URLs
     const allExported = files.every(
       (f) => f.directory || f.urls[0]?.includes("s3.amazonaws.com"),
     )
     if (allExported) {
-      const needsPresign = await datasetNeedsPresign(datasetId)
-      const entries = files.map((f) => workerFileToEntry(f, needsPresign))
-      // Fire-and-forget cache writes
+      // Exported trees are content-addressed and stable, cache permanently
       void setTree(redis, treeish, entries)
       void addDatasetTree(redis, datasetId, treeish)
+    } else {
+      // Still exporting — cache briefly to avoid repeated worker fetches
+      void setTree(redis, treeish, entries, 3600)
     }
     return files
   }

@@ -45,14 +45,19 @@ export async function getTree(
   return null
 }
 
-/** Encode and write a tree to cache (no TTL, content-addressed) */
+/** Encode and write a tree to cache. Optional TTL for unexported trees. */
 export async function setTree(
   redis: Redis,
   treeHash: string,
   entries: TreeEntry[],
+  ttl?: number,
 ): Promise<void> {
   const packed = Buffer.from(encode(entries))
-  await redis.set(treeKey(treeHash), packed)
+  if (ttl) {
+    await redis.setex(treeKey(treeHash), ttl, packed)
+  } else {
+    await redis.set(treeKey(treeHash), packed)
+  }
 }
 
 /** Pipeline-fetch multiple trees by hash */
