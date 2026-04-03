@@ -140,7 +140,12 @@ def parse_remote_line(remoteLine):
     if remoteConfig['type'] == 'S3' and remoteConfig['bucket'] in S3_BUCKETS_WHITELIST:
         remoteUuid = remoteLine[0:36]
         remoteUrl = remoteConfig['publicurl'] if 'publicurl' in remoteConfig else None
-        return {'uuid': remoteUuid, 'url': remoteUrl, 'name': remoteConfig['name']}
+        return {
+            'uuid': remoteUuid,
+            'url': remoteUrl,
+            'name': remoteConfig['name'],
+            'x-amz-tagging': remoteConfig.get('x-amz-tagging'),
+        }
 
 
 def parse_rmet_line(remote, rmetLine):
@@ -153,12 +158,15 @@ def parse_rmet_line(remote, rmetLine):
         except UnicodeDecodeError:
             return None
     s3version, path = remoteData.split('#')
-    if remote['name'] == get_s3_remote():
+    if (
+        remote['name'] == get_s3_remote()
+        and remote.get('x-amz-tagging') == 'access=private'
+    ):
         # Presigned via OpenNeuro's credentials
         url = presign_remote_url(path, s3version)
         return url
     else:
-        # Anonymous access for any other buckets
+        # Anonymous access for public data or other buckets
         return encode_remote_url(
             '{}{}{}?versionId={}'.format(remote['url'], slash, path, s3version)
         )
