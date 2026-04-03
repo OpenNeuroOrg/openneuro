@@ -16,7 +16,7 @@ import pygit2
 
 import datalad_service.config
 from datalad_service.common.git import git_show
-from datalad_service.common.s3_client import presign_remote_url, get_s3_remote
+from datalad_service.common.s3_client import get_s3_remote
 
 SERVICE_EMAIL = 'git@openneuro.org'
 SERVICE_USER = 'Git Worker'
@@ -158,18 +158,10 @@ def parse_rmet_line(remote, rmetLine):
         except UnicodeDecodeError:
             return None
     s3version, path = remoteData.split('#')
-    if (
-        remote['name'] == get_s3_remote()
-        and remote.get('x-amz-tagging') == 'access=private'
-    ):
-        # Presigned via OpenNeuro's credentials
-        url = presign_remote_url(path, s3version)
-        return url
-    else:
-        # Anonymous access for public data or other buckets
-        return encode_remote_url(
-            '{}{}{}?versionId={}'.format(remote['url'], slash, path, s3version)
-        )
+    # Anonymous access for public data or other buckets
+    return encode_remote_url(
+        '{}{}{}?versionId={}'.format(remote['url'], slash, path, s3version)
+    )
 
 
 def read_rmet_file(remote, catFile):
