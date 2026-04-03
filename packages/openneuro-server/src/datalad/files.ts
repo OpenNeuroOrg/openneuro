@@ -251,21 +251,30 @@ export async function getFilesRecursive(
   if (cachedTreeHashes) {
     // Bulk-fetch all trees in one pipeline
     const treesMap = await getTreesBulk(redis, cachedTreeHashes)
-    // If all trees are in cache, reconstruct the full listing
-    if (treesMap.size === cachedTreeHashes.length) {
-      return reconstructFromTrees(treesMap, tree, path)
+    if (treesMap.size < cachedTreeHashes.length) {
+      // Fetch only the missing trees from the worker (getFiles caches them)
+      const missingHashes = cachedTreeHashes.filter((h) => !treesMap.has(h))
+      await Promise.all(
+        missingHashes.map((hash) => getFiles(datasetId, hash)),
+      )
+      // Re-read the now-cached entries in bulk
+      const refetched = await getTreesBulk(redis, missingHashes)
+      for (const [hash, entries] of refetched) {
+        treesMap.set(hash, entries)
+      }
     }
-    // Some trees evicted, fall through to recursive walk
+    return reconstructFromTrees(treesMap, tree, path)
   }
 
-  // Walk the tree recursively, collecting tree hashes along the way
-  const collectedHashes: string[] = []
+  // Walk the tree recursively, collecting unique tree hashes along the way
+  const collectedHashes = new Set<string>()
   const files = await walkTree(datasetId, tree, path, collectedHashes)
 
   // Cache the commit-to-trees mapping for next time
-  if (collectedHashes.length > 0) {
-    void setCommitTrees(redis, tree, collectedHashes)
-    void addDatasetTrees(redis, datasetId, collectedHashes)
+  if (collectedHashes.size > 0) {
+    const hashArray = [...collectedHashes]
+    void setCommitTrees(redis, tree, hashArray)
+    void addDatasetTrees(redis, datasetId, hashArray)
   }
 
   return files
@@ -276,9 +285,9 @@ async function walkTree(
   datasetId: string,
   tree: string,
   path: string,
-  collectedHashes: string[],
+  collectedHashes: Set<string>,
 ): Promise<DatasetFile[]> {
-  collectedHashes.push(tree)
+  collectedHashes.add(tree)
   const fileTree = await getFiles(datasetId, tree)
   // Parallelize sibling directory fetches
   const results = await Promise.all(
