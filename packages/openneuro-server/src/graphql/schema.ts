@@ -869,7 +869,6 @@ export const typeDefs = `
   # File metadata and link to contents
   type DatasetFile {
     id: ID!
-    key: String
     filename: String!
     size: BigInt
     annexed: Boolean

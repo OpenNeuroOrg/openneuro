@@ -102,8 +102,7 @@ def read_ls_tree_line(gitTreeLine, files, symlinkFilenames, symlinkObjects):
             files.append(
                 {
                     # Computing an id here is important but the client needs to manage the cache merge since only the client knows the parent directory
-                    'id': compute_file_hash(obj_hash, filename),
-                    'key': obj_hash,
+                    'id': obj_hash,
                     'filename': filename,
                     'directory': True,
                     'annexed': False,
@@ -112,13 +111,11 @@ def read_ls_tree_line(gitTreeLine, files, symlinkFilenames, symlinkObjects):
                 }
             )
         else:
-            file_id = compute_file_hash(obj_hash, filename)
             files.append(
                 {
                     'filename': filename,
                     'size': int(size),
-                    'id': file_id,
-                    'key': obj_hash,
+                    'id': obj_hash,
                     'directory': False,
                     'urls': [],
                     'annexed': False,
@@ -327,13 +324,11 @@ async def get_repo_files(dataset, dataset_path, tree):
             # Get the size from key
             size = int(key.split('-', 2)[1].lstrip('s'))
             filename = symlinkFilenames[(index - 1) // 2]
-            file_id = compute_file_hash(key, filename)
             files.append(
                 {
                     'filename': filename,
                     'size': int(size),
-                    'id': file_id,
-                    'key': key,
+                    'id': key,
                     'urls': [],
                     'annexed': True,
                     'directory': False,
@@ -341,13 +336,6 @@ async def get_repo_files(dataset, dataset_path, tree):
             )
     # Now find URLs for each file if available
     files = await get_repo_urls(dataset_path, files)
-    # Provide fallbacks for any URLs that did not match rmet exports
-    for f in files:
-        if not f['directory'] and len(f['urls']) == 0:
-            key = f['key']
-            fallback = f'{datalad_service.config.CRN_SERVER_URL}/crn/datasets/{dataset}/objects/{key}'
-            encoded_url = encode_remote_url(fallback)
-            f['urls'].append(encoded_url)
     return files
 
 

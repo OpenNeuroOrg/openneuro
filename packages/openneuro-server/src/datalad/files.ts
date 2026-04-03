@@ -79,7 +79,6 @@ export const filesUrl = (datasetId: string): string =>
 /** Minimal variant of DatasetFile type from GraphQL API */
 export type DatasetFile = {
   id: string
-  key: string
   filename: string
   directory: boolean
   size: number
@@ -131,7 +130,7 @@ function workerFileToEntry(
   if (file.directory) {
     return {
       n: file.filename,
-      h: file.key,
+      h: file.id,
       s: 0,
       k: "",
       v: "",
@@ -164,7 +163,6 @@ async function entryToDatasetFile(
   if (entry.d) {
     return {
       id: entry.h,
-      key: entry.h,
       filename: entry.n,
       directory: true,
       size: 0,
@@ -184,7 +182,6 @@ async function entryToDatasetFile(
   }
   return {
     id: entry.h,
-    key: entry.h,
     filename: entry.n,
     directory: false,
     size: entry.s,
@@ -303,7 +300,7 @@ async function walkTree(
     fileTree.map(async (file) => {
       const absPath = path ? join(path, file.filename) : file.filename
       if (file.directory) {
-        return walkTree(datasetId, file.key, absPath, collectedHashes)
+        return walkTree(datasetId, file.id, absPath, collectedHashes)
       } else {
         return [{ ...file, filename: absPath }]
       }
