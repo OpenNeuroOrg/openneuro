@@ -230,7 +230,7 @@ export const getFiles = async (
       void addDatasetTree(redis, datasetId, treeish)
     } else {
       // Still exporting — cache briefly to avoid repeated worker fetches
-      void setTree(redis, treeish, entries, 3600)
+      void setTree(redis, treeish, entries, 600)
     }
     return files
   }
