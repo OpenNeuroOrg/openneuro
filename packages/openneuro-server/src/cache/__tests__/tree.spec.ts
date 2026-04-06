@@ -30,7 +30,7 @@ function createRedisMock() {
   const store = new Map<string, Buffer>()
   const sets = new Map<string, Set<string>>()
 
-  const pipelineOps: Array<() => [Error | null, unknown]> = []
+  const pipelineOps: (() => [Error | null, unknown])[] = []
   const pipelineMock = {
     getBuffer(key: string) {
       pipelineOps.push(() => {
@@ -74,7 +74,7 @@ function createRedisMock() {
     // expose internals for assertions
     _store: store,
     _sets: sets,
-  } as any as Redis
+  } as unknown as Redis
 }
 
 describe("tree cache", () => {
