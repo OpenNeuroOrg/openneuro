@@ -95,7 +95,7 @@ export const computeTotalSize = (files: DatasetFile[]): number =>
  * Parse an S3 URL from the worker into key and versionId components.
  * URLs: https://s3.amazonaws.com/{bucket}/{key}?versionId={ver}
  */
-function parseS3Url(
+export function parseS3Url(
   url: string,
 ): { bucket: string; s3Key: string; versionId: string } | null {
   try {
@@ -123,7 +123,7 @@ async function datasetNeedsPresign(datasetId: string): Promise<boolean> {
 }
 
 /** Convert a worker response file to a compact TreeEntry */
-function workerFileToEntry(
+export function workerFileToEntry(
   file: DatasetFile,
   needsPresign: boolean,
 ): TreeEntry {
