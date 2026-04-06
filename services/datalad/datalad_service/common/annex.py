@@ -339,6 +339,109 @@ async def get_repo_files(dataset, dataset_path, tree):
     return files
 
 
+def _should_skip(filename):
+    """Check if a file should be skipped (git/datalad internals)."""
+    return (
+        filename.startswith('.git')
+        or filename.startswith('.datalad')
+        or filename == '.gitattributes'
+    )
+
+
+def _read_tree_pygit2(repo, tree_obj):
+    """Read a single tree object using pygit2.
+
+    Returns (files, symlink_entries) where symlink_entries need annex key resolution.
+    """
+    files = []
+    symlink_entries = []
+    for entry in tree_obj:
+        filename = entry.name
+        if _should_skip(filename):
+            continue
+        mode = entry.filemode
+        hex_hash = str(entry.id)
+        if mode == 0o120000:
+            # Annexed file symlink — resolve target to get annex key
+            blob = repo[entry.id]
+            target = blob.data.decode('utf-8').rstrip()
+            key = target.split('/')[-1]
+            size = int(key.split('-', 2)[1].lstrip('s'))
+            files.append(
+                {
+                    'filename': filename,
+                    'size': size,
+                    'id': key,
+                    'urls': [],
+                    'annexed': True,
+                    'directory': False,
+                }
+            )
+        elif mode == 0o160000:
+            # Submodule — skip
+            continue
+        elif entry.type == pygit2.GIT_OBJECT_TREE:
+            files.append(
+                {
+                    'id': hex_hash,
+                    'filename': filename,
+                    'directory': True,
+                    'annexed': False,
+                    'size': 0,
+                    'urls': [],
+                }
+            )
+        else:
+            # Regular blob — get size directly
+            blob = repo[entry.id]
+            files.append(
+                {
+                    'filename': filename,
+                    'size': blob.size,
+                    'id': hex_hash,
+                    'directory': False,
+                    'urls': [],
+                    'annexed': False,
+                }
+            )
+    return files
+
+
+async def get_repo_files_batch(dataset, dataset_path, trees):
+    """Read files for multiple trees using pygit2 with shared URL resolution."""
+    repo = pygit2.Repository(dataset_path)
+    per_tree_files = {}
+
+    for tree_hash in trees:
+        try:
+            obj = repo.revparse_single(tree_hash)
+            # If this is a commit, peel to its tree
+            if obj.type == pygit2.GIT_OBJECT_COMMIT:
+                obj = obj.peel(pygit2.Tree)
+            if obj is None or obj.type != pygit2.GIT_OBJECT_TREE:
+                per_tree_files[tree_hash] = []
+                continue
+            per_tree_files[tree_hash] = _read_tree_pygit2(repo, obj)
+        except (KeyError, ValueError):
+            per_tree_files[tree_hash] = []
+
+    # Resolve URLs for all files across all trees in one pass
+    all_files = []
+    for files in per_tree_files.values():
+        all_files.extend(files)
+    all_files = await get_repo_urls(dataset_path, all_files)
+
+    # Redistribute files back to per-tree results
+    offset = 0
+    tree_results = {}
+    for tree_hash in trees:
+        count = len(per_tree_files[tree_hash])
+        tree_results[tree_hash] = all_files[offset : offset + count]
+        offset += count
+
+    return tree_results
+
+
 def get_tag_info(dataset_path, tag):
     """`git annex info <tag>`"""
     git_process = subprocess.run(

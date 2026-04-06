@@ -8,7 +8,7 @@ import boto3
 import botocore
 import pygit2
 
-from datalad_service.common.annex import get_repo_files
+from datalad_service.common.annex import get_repo_files, get_repo_files_batch
 from datalad_service.common.git import (
     git_commit,
     git_commit_index,
@@ -45,6 +45,12 @@ async def get_tree(store, dataset, tree):
     """Get the working tree, optionally a branch tree."""
     dataset_path = store.get_dataset_path(dataset)
     return await get_repo_files(dataset, dataset_path, tree)
+
+
+async def get_trees(store, dataset, trees):
+    """Get multiple trees in a single batch operation."""
+    dataset_path = store.get_dataset_path(dataset)
+    return await get_repo_files_batch(dataset, dataset_path, trees)
 
 
 async def remove_files(store, dataset, paths, name=None, email=None, cookies=None):
