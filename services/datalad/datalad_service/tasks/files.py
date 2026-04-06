@@ -8,7 +8,7 @@ import boto3
 import botocore
 import pygit2
 
-from datalad_service.common.annex import get_repo_files, get_repo_files_batch
+from datalad_service.common.annex import get_repo_files_batch
 from datalad_service.common.git import (
     git_commit,
     git_commit_index,
@@ -39,12 +39,6 @@ async def commit_files(store, dataset, files, name=None, email=None, cookies=Non
     # Run the validator but don't block on the request
     await validate_dataset.kiq(dataset, dataset_path, str(ref), cookies)
     return ref
-
-
-async def get_tree(store, dataset, tree):
-    """Get the working tree, optionally a branch tree."""
-    dataset_path = store.get_dataset_path(dataset)
-    return await get_repo_files(dataset, dataset_path, tree)
 
 
 async def get_trees(store, dataset, trees):
