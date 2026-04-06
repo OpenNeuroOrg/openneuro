@@ -44,7 +44,7 @@ async def commit_files(store, dataset, files, name=None, email=None, cookies=Non
 async def get_trees(store, dataset, trees):
     """Get multiple trees in a single batch operation."""
     dataset_path = store.get_dataset_path(dataset)
-    return await get_repo_files_batch(dataset, dataset_path, trees)
+    return await get_repo_files_batch(dataset_path, trees)
 
 
 async def remove_files(store, dataset, paths, name=None, email=None, cookies=None):
