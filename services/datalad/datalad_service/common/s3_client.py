@@ -21,21 +21,6 @@ def get_s3_client():
     return boto3_s3_client
 
 
-def presign_remote_url(key, version, expiration=604800):
-    """Presign URLs for the public bucket on S3."""
-    bucket = get_s3_bucket()
-    s3_client = get_s3_client()
-    return s3_client.generate_presigned_url(
-        ClientMethod='get_object',
-        Params={
-            'Bucket': bucket,
-            'Key': key,
-            'VersionId': version,
-        },
-        ExpiresIn=expiration,
-    )
-
-
 def get_s3_remote():
     return 's3-PUBLIC'
 

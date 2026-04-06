@@ -35,6 +35,9 @@ const client = new ApolloClient({
           advancedSearch: relayStylePagination(),
         },
       },
+      DatasetFile: {
+        keyFields: false,
+      },
     },
   }),
   connectToDevTools: config.sentry.environment !== "production",

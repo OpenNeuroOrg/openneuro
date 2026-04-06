@@ -581,7 +581,7 @@ export const typeDefs = `
     # Validator issues (schema validator)
     validation: DatasetValidation
     # Committed files in the working tree
-    files(tree: String): [DatasetFile]
+    files(tree: String, recursive: Boolean): [DatasetFile]
     # dataset_description.json fields
     description: Description
     # Dataset README
@@ -616,7 +616,7 @@ export const typeDefs = `
     # Validator issues (schema validator)
     validation: DatasetValidation
     # Snapshot files
-    files(tree: String): [DatasetFile]
+    files(tree: String, recursive: Boolean): [DatasetFile]
     # dataset_description.json fields
     description: Description
     # Snapshot usage and download statistics
@@ -633,8 +633,6 @@ export const typeDefs = `
     onBrainlife: Boolean @cacheControl(maxAge: 10080, scope: PUBLIC)
     # Total size in bytes of this snapshot
     size: BigInt
-    # Single list of files to download this snapshot (only available on snapshots)
-    downloadFiles: [DatasetFile]
     # Contributors list from datacite.yml
     contributors: [Contributor]
   }
@@ -871,7 +869,6 @@ export const typeDefs = `
   # File metadata and link to contents
   type DatasetFile {
     id: ID!
-    key: String
     filename: String!
     size: BigInt
     annexed: Boolean

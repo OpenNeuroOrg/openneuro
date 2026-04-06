@@ -1,4 +1,5 @@
 import { redis } from "../../libs/redis.js"
+import { clearDatasetTrees } from "../../cache/tree"
 
 /**
  * Clear all cache entries for a given datasetId
@@ -11,8 +12,11 @@ export async function cacheClear(
   // Check for admin and validate datasetId argument
   if (userInfo?.admin && datasetId.length == 8 && datasetId.startsWith("ds")) {
     try {
+      // Clear tree cache entries via the dataset-to-trees index
+      await clearDatasetTrees(redis, datasetId)
+
+      // Also clear non-tree cache keys (descriptions, snapshots, etc.)
       const stream = redis.scanStream({
-        // Scan for any keys that include the datasetId
         match: `*${datasetId}*`,
       })
       const pipeline = redis.pipeline()

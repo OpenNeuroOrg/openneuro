@@ -86,7 +86,11 @@ export const getFile = async (req, res) => {
  */
 export const getObject = (req, res) => {
   const { datasetId, key } = req.params
+  const { filename } = req.query
   const worker = getDatasetWorker(datasetId)
+  if (req.query?.filename) {
+    res.set("Content-Disposition", `attachment; filename=${filename}`)
+  }
   // Backend depends on git object or git-annex key
   if (key.length === 40) {
     const uri = `${worker}/datasets/${datasetId}/objects/${key}`

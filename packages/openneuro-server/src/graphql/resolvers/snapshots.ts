@@ -6,7 +6,7 @@ import { readme } from "./readme.js"
 import { description } from "./description.js"
 import { summary } from "./summary"
 import { issuesSnapshotStatus, snapshotIssues } from "./issues.js"
-import { getFiles } from "../../datalad/files"
+import { getFiles, getFilesRecursive } from "../../datalad/files"
 import Summary from "../../models/summary"
 import DatasetModel from "../../models/dataset"
 import { filterRemovedAnnexObjects } from "../utils/file"
@@ -14,7 +14,6 @@ import DeprecatedSnapshot from "../../models/deprecatedSnapshot"
 import { redis } from "../../libs/redis"
 import CacheItem, { CacheType } from "../../cache/item"
 import { normalizeDOI } from "../../libs/doi/normalize"
-import { downloadFiles } from "../../datalad/snapshots"
 import { snapshotValidation } from "./validation"
 import { advancedDatasetSearchConnection } from "./dataset-search"
 import { contributors } from "../../datalad/contributors"
@@ -34,10 +33,14 @@ export const snapshot = (obj, { datasetId, tag }, context) => {
         description: () => description(snapshot),
         readme: () => readme(snapshot),
         summary: () => summary({ id: datasetId, revision: snapshot.hexsha }),
-        files: ({ tree }) =>
-          getFiles(datasetId, tree || snapshot.hexsha).then(
+        files: ({ tree, recursive }) => {
+          const filesPromise = recursive
+            ? getFilesRecursive(datasetId, tree || snapshot.hexsha)
+            : getFiles(datasetId, tree || snapshot.hexsha)
+          return filesPromise.then(
             filterRemovedAnnexObjects(datasetId, context.userInfo),
-          ),
+          )
+        },
         size: () =>
           Summary.findOne({ datasetId: datasetId, id: snapshot.hexsha })
             .exec()
@@ -45,7 +48,6 @@ export const snapshot = (obj, { datasetId, tag }, context) => {
         deprecated: () => deprecated({ datasetId, tag }),
         related: () => related(datasetId),
         onBrainlife: () => onBrainlife(snapshot),
-        downloadFiles: () => downloadFiles(datasetId, tag),
       }))
     },
   )

@@ -16,7 +16,7 @@ import pygit2
 
 import datalad_service.config
 from datalad_service.common.git import git_show
-from datalad_service.common.s3_client import presign_remote_url, get_s3_remote
+from datalad_service.common.s3_client import get_s3_remote
 
 SERVICE_EMAIL = 'git@openneuro.org'
 SERVICE_USER = 'Git Worker'
@@ -102,8 +102,7 @@ def read_ls_tree_line(gitTreeLine, files, symlinkFilenames, symlinkObjects):
             files.append(
                 {
                     # Computing an id here is important but the client needs to manage the cache merge since only the client knows the parent directory
-                    'id': compute_file_hash(obj_hash, filename),
-                    'key': obj_hash,
+                    'id': obj_hash,
                     'filename': filename,
                     'directory': True,
                     'annexed': False,
@@ -112,13 +111,11 @@ def read_ls_tree_line(gitTreeLine, files, symlinkFilenames, symlinkObjects):
                 }
             )
         else:
-            file_id = compute_file_hash(obj_hash, filename)
             files.append(
                 {
                     'filename': filename,
                     'size': int(size),
-                    'id': file_id,
-                    'key': obj_hash,
+                    'id': obj_hash,
                     'directory': False,
                     'urls': [],
                     'annexed': False,
@@ -158,18 +155,10 @@ def parse_rmet_line(remote, rmetLine):
         except UnicodeDecodeError:
             return None
     s3version, path = remoteData.split('#')
-    if (
-        remote['name'] == get_s3_remote()
-        and remote.get('x-amz-tagging') == 'access=private'
-    ):
-        # Presigned via OpenNeuro's credentials
-        url = presign_remote_url(path, s3version)
-        return url
-    else:
-        # Anonymous access for public data or other buckets
-        return encode_remote_url(
-            '{}{}{}?versionId={}'.format(remote['url'], slash, path, s3version)
-        )
+    # Anonymous access for public data or other buckets
+    return encode_remote_url(
+        '{}{}{}?versionId={}'.format(remote['url'], slash, path, s3version)
+    )
 
 
 def read_rmet_file(remote, catFile):
@@ -199,8 +188,8 @@ async def get_repo_urls(path, files):
     # First obtain the git-annex branch objects
     rmet_queries = set(['remote.log', 'trust.log'])
     for f in files:
-        if 'key' in f:
-            rmet_queries.add(compute_rmet(f['key']))
+        if f.get('annexed'):
+            rmet_queries.add(compute_rmet(f['id']))
 
     query_list = list(rmet_queries)
     batch_input = '\n'.join(f'git-annex:{p}' for p in query_list)
@@ -227,8 +216,8 @@ async def get_repo_urls(path, files):
         return files
     rmetFiles = defaultdict(list)
     for f in files:
-        if 'key' in f:
-            rmetPath = compute_rmet(f['key'])
+        if f.get('annexed'):
+            rmetPath = compute_rmet(f['id'])
             if rmetPath in rmetObjects:
                 # Keep a reference to the files so we can add URLs later
                 rmetFiles[rmetPath].append(f)
@@ -335,13 +324,11 @@ async def get_repo_files(dataset, dataset_path, tree):
             # Get the size from key
             size = int(key.split('-', 2)[1].lstrip('s'))
             filename = symlinkFilenames[(index - 1) // 2]
-            file_id = compute_file_hash(key, filename)
             files.append(
                 {
                     'filename': filename,
                     'size': int(size),
-                    'id': file_id,
-                    'key': key,
+                    'id': key,
                     'urls': [],
                     'annexed': True,
                     'directory': False,
@@ -349,13 +336,6 @@ async def get_repo_files(dataset, dataset_path, tree):
             )
     # Now find URLs for each file if available
     files = await get_repo_urls(dataset_path, files)
-    # Provide fallbacks for any URLs that did not match rmet exports
-    for f in files:
-        if not f['directory'] and len(f['urls']) == 0:
-            key = f['key']
-            fallback = f'{datalad_service.config.CRN_SERVER_URL}/crn/datasets/{dataset}/objects/{key}'
-            encoded_url = encode_remote_url(fallback)
-            f['urls'].append(encoded_url)
     return files
 
 
