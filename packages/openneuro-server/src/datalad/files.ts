@@ -334,7 +334,7 @@ async function reconstructFromTrees(
           treeish,
         )
       } else {
-        const file = await entryToDatasetFile(entry, datasetId, treeish)
+        const file = await entryToDatasetFile(entry, datasetId)
         return [{ ...file, filename: absPath }]
       }
     }),
