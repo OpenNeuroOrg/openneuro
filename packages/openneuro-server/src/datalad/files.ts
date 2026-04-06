@@ -156,7 +156,7 @@ function workerFileToEntry(
 }
 
 /** Convert a TreeEntry back to a DatasetFile, resolving presigned URLs if needed */
-async function entryToDatasetFile(
+export async function entryToDatasetFile(
   entry: TreeEntry,
   datasetId: string,
 ): Promise<DatasetFile> {
