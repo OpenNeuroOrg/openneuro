@@ -188,8 +188,8 @@ async def get_repo_urls(path, files):
     # First obtain the git-annex branch objects
     rmet_queries = set(['remote.log', 'trust.log'])
     for f in files:
-        if 'key' in f:
-            rmet_queries.add(compute_rmet(f['key']))
+        if f.get('annexed'):
+            rmet_queries.add(compute_rmet(f['id']))
 
     query_list = list(rmet_queries)
     batch_input = '\n'.join(f'git-annex:{p}' for p in query_list)
@@ -216,8 +216,8 @@ async def get_repo_urls(path, files):
         return files
     rmetFiles = defaultdict(list)
     for f in files:
-        if 'key' in f:
-            rmetPath = compute_rmet(f['key'])
+        if f.get('annexed'):
+            rmetPath = compute_rmet(f['id'])
             if rmetPath in rmetObjects:
                 # Keep a reference to the files so we can add URLs later
                 rmetFiles[rmetPath].append(f)
