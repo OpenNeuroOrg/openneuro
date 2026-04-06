@@ -298,7 +298,7 @@ def _read_tree_pygit2(repo, tree_obj):
     return files
 
 
-async def get_repo_files_batch(dataset_path, trees):
+async def get_repo_files(dataset_path, trees):
     """Read files for multiple trees using pygit2 with shared URL resolution."""
     repo = pygit2.Repository(dataset_path)
     per_tree_files = {}

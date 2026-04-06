@@ -2,8 +2,8 @@ import logging
 
 import falcon
 
+from datalad_service.common.annex import get_repo_files
 from datalad_service.common.bids import dataset_sort
-from datalad_service.tasks.files import get_trees
 
 
 class TreeResource:
@@ -20,7 +20,10 @@ class TreeResource:
                 resp.status = falcon.HTTP_BAD_REQUEST
                 resp.media = {'error': 'trees list is required'}
                 return
-            results = await get_trees(self.store, dataset, tree_hashes)
+            dataset_path = self.store.get_dataset_path(
+                dataset
+            )  # Check that dataset exists before doing git work
+            results = await get_repo_files(dataset_path, tree_hashes)
             for tree_hash in results:
                 results[tree_hash].sort(key=dataset_sort)
             resp.status = falcon.HTTP_OK
