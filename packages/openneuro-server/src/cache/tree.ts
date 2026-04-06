@@ -21,8 +21,6 @@ export interface TreeEntry {
   d: boolean
 }
 
-const COMMIT_TREES_TTL = 30 * 24 * 60 * 60 // 30 days in seconds
-
 function treeKey(hash: string): string {
   return `tree:${hash}`
 }
@@ -90,7 +88,7 @@ export async function setCommitTrees(
   treeHashes: string[],
 ): Promise<void> {
   const packed = Buffer.from(encode(treeHashes))
-  await redis.setex(commitTreesKey(commitHash), COMMIT_TREES_TTL, packed)
+  await redis.set(commitTreesKey(commitHash), packed)
 }
 
 /** Read the set of tree hashes for a commit */
