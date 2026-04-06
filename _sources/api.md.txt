@@ -86,7 +86,6 @@ query snapshotFiles {
   snapshot(datasetId: "ds000001", tag: "1.0.0") {
     files {
       id
-      key
       filename
       size
       directory
@@ -104,32 +103,28 @@ This will return a listing of files at the top level of the dataset.
     "snapshot": {
       "files": [
         {
-          "id": "92e695a42470f48ad581ac8dd0894c07ebc4a9b8",
-          "key": "87b0d1e84b52af82a50100edc269f5c24e4caba5",
+          "id": "87b0d1e84b52af82a50100edc269f5c24e4caba5",
           "filename": "CHANGES",
           "size": 273,
           "directory": false,
           "annexed": false
         },
         {
-          "id": "c1905b369e84cbb3016022ebf1ea1574087e20c2",
-          "key": "d8ced4c2adedad6d69c264f94a71df6be20a2241",
+          "id": "d8ced4c2adedad6d69c264f94a71df6be20a2241",
           "filename": "README",
           "size": 807,
           "directory": false,
           "annexed": false
         },
         {
-          "id": "7293821ae8d5c647351cb2a31484162097a442c4",
-          "key": "8f6598628c1e0938397e9a3994ba71416a674f9b",
+          "id": "8f6598628c1e0938397e9a3994ba71416a674f9b",
           "filename": "dataset_description.json",
           "size": 150,
           "directory": false,
           "annexed": false
         },
         {
-          "id": "1882d325538b14729e3c715d8ccf1aede77a6143",
-          "key": "db72baeb3665a309db35d6ef649e117eb45a8a87",
+          "id": "db72baeb3665a309db35d6ef649e117eb45a8a87",
           "filename": "sub-01",
           "size": 0,
           "directory": true,
@@ -141,14 +136,13 @@ This will return a listing of files at the top level of the dataset.
 }
 ```
 
-In this example, you can see that sub-01 has the `"directory": true`. This means the directory `key` field can be used to retrieve additional trees.
+In this example, you can see that sub-01 has the `"directory": true`. This means the directory `id` field can be used to retrieve additional trees.
 
 ```graphql
 query snapshotFiles {
   snapshot(datasetId: "ds000001", tag: "1.0.0") {
     files(tree: "db72baeb3665a309db35d6ef649e117eb45a8a87") {
       id
-      key
       filename
       size
       directory
@@ -166,16 +160,14 @@ This will return any files below sub-01 in the tree for this version.
     "snapshot": {
       "files": [
         {
-          "id": "1156b949676f8afcbded143b695ebaa1d18027f1",
-          "key": "26d2ff4f763308d462f151c53e3e06f6b7d2aaaa",
+          "id": "26d2ff4f763308d462f151c53e3e06f6b7d2aaaa",
           "filename": "anat",
           "size": 0,
           "directory": true,
           "annexed": false
         },
         {
-          "id": "5e262c7c950f44a21f44a096f07e6727c8c747af",
-          "key": "4113b1609e2b0ea2e0a04e0800204d2ee6aab578",
+          "id": "4113b1609e2b0ea2e0a04e0800204d2ee6aab578",
           "filename": "func",
           "size": 0,
           "directory": true,
@@ -187,7 +179,21 @@ This will return any files below sub-01 in the tree for this version.
 }
 ```
 
-The full tree can be retrieved by recursively following tree objects.
+The full tree can be retrieved by recursively following tree objects or passing the recursive option.
+
+```
+query snapshotFiles {
+  snapshot(datasetId: "ds000001", tag: "1.0.0") {
+    files(tree: "db72baeb3665a309db35d6ef649e117eb45a8a87", recursive: true) {
+      id
+      filename
+      size
+      directory
+      annexed
+    }
+  }
+}
+```
 
 ## Example Mutations
 
