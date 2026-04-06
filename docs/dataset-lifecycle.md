@@ -14,7 +14,7 @@ pass through, and the mutations that drive transitions between them.
 A dataset's state is determined by two fields: whether it has any
 snapshots and whether it is public.
 
-```mermaid
+```{mermaid}
 stateDiagram-v2
     [*] --> Draft
     Draft --> Embargoed : createSnapshot()
@@ -126,7 +126,7 @@ delete.
 Snapshots can be independently deprecated without changing the dataset's
 state.
 
-```mermaid
+```{mermaid}
 stateDiagram-v2
     [*] --> Active : createSnapshot()
     Active --> Deprecated : deprecateSnapshot()
