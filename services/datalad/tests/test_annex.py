@@ -1,10 +1,8 @@
-import io
-
 from datalad_service.common.annex import (
     compute_rmet,
     parse_remote_line,
     parse_rmet_line,
-    read_rmet_file,
+    read_rmet_blob,
     encode_remote_url,
 )
 
@@ -95,15 +93,14 @@ def test_parse_rmet_line_base64():
     )
 
 
-def test_read_rmet_file():
+def test_read_rmet_blob():
     remote = {
         'name': 's3-PUBLIC',
         'url': 'https://s3.amazonaws.com/a-fake-test-public-bucket',
         'uuid': '57894849-d0c8-4c62-8418-3627be18a196',
     }
-    catFile = io.BytesIO(b""":::99fe93bfea62c16a10488593da870df25d09be81
-    1590213748.042921433s 57894849-d0c8-4c62-8418-3627be18a196:V +iVcEk18e3J2WQys4zr_ANaTPfpUufW4Y#ds002778/dataset_description.json""")
-    url = read_rmet_file(remote, catFile)
+    blob_data = b"""1590213748.042921433s 57894849-d0c8-4c62-8418-3627be18a196:V +iVcEk18e3J2WQys4zr_ANaTPfpUufW4Y#ds002778/dataset_description.json"""
+    url = read_rmet_blob(remote, blob_data)
     assert (
         'https://s3.amazonaws.com/a-fake-test-public-bucket/ds002778/dataset_description.json?versionId=iVcEk18e3J2WQys4zr_ANaTPfpUufW4Y'
         in url
