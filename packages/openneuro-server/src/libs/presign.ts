@@ -1,6 +1,6 @@
 import type { Redis } from "ioredis"
 import { createHMAC, createSHA1 } from "hash-wasm"
-import { decode, encode } from "@msgpack/msgpack"
+import { pack, unpack } from "msgpackr"
 
 const PRESIGN_TTL = 5 * 24 * 60 * 60 // 5 days in seconds
 const PRESIGN_EXPIRATION = 7 * 24 * 60 * 60 // 7 days for the presigned URL itself
@@ -119,7 +119,7 @@ export async function getPresignedUrlsForTreesBulk(
   for (let i = 0; i < requests.length; i++) {
     const data = cached?.[i]?.[1] as Buffer | null
     if (data) {
-      result.set(requests[i].treeHash, decode(data) as Record<string, string>)
+      result.set(requests[i].treeHash, unpack(data) as Record<string, string>)
     } else {
       missIndices.push(i)
     }
@@ -143,7 +143,7 @@ export async function getPresignedUrlsForTreesBulk(
         )
       }
       result.set(req.treeHash, urlMap)
-      writePipeline.setex(keys[i], PRESIGN_TTL, Buffer.from(encode(urlMap)))
+      writePipeline.setex(keys[i], PRESIGN_TTL, pack(urlMap))
     }
     await writePipeline.exec()
   }

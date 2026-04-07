@@ -1,5 +1,5 @@
 import type { Redis } from "ioredis"
-import { decode, encode } from "@msgpack/msgpack"
+import { pack, unpack } from "msgpackr"
 import { presignTreeKey } from "../libs/presign"
 
 /** Compact tree entry stored in Redis */
@@ -41,7 +41,7 @@ export async function getTree(
 ): Promise<TreeEntry[] | null> {
   const data = await redis.getBuffer(treeKey(treeHash))
   if (data) {
-    return decode(data) as TreeEntry[]
+    return unpack(data) as TreeEntry[]
   }
   return null
 }
@@ -53,7 +53,7 @@ export async function setTree(
   entries: TreeEntry[],
   ttl?: number,
 ): Promise<void> {
-  const packed = Buffer.from(encode(entries))
+  const packed = pack(entries)
   if (ttl) {
     await redis.setex(treeKey(treeHash), ttl, packed)
   } else {
@@ -76,7 +76,7 @@ export async function getTreesBulk(
   for (let i = 0; i < treeHashes.length; i++) {
     const [err, data] = results[i]
     if (!err && data) {
-      trees.set(treeHashes[i], decode(data as Buffer) as TreeEntry[])
+      trees.set(treeHashes[i], unpack(data as Buffer) as TreeEntry[])
     }
   }
   return trees
@@ -88,7 +88,7 @@ export async function setCommitTrees(
   commitHash: string,
   treeHashes: string[],
 ): Promise<void> {
-  const packed = Buffer.from(encode(treeHashes))
+  const packed = pack(treeHashes)
   await redis.set(commitTreesKey(commitHash), packed)
 }
 
@@ -99,7 +99,7 @@ export async function getCommitTrees(
 ): Promise<string[] | null> {
   const data = await redis.getBuffer(commitTreesKey(commitHash))
   if (data) {
-    return decode(data) as string[]
+    return unpack(data) as string[]
   }
   return null
 }
