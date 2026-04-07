@@ -2,8 +2,8 @@ import logging
 
 import falcon
 
+from datalad_service.common.annex import get_repo_files
 from datalad_service.common.bids import dataset_sort
-from datalad_service.tasks.files import get_tree
 
 
 class TreeResource:
@@ -11,15 +11,23 @@ class TreeResource:
         self.store = store
         self.logger = logging.getLogger('datalad_service.' + __name__)
 
-    async def on_get(self, req, resp, dataset, tree):
-        # Request for index of files
-        # Return a list of file objects
-        # {name, path, size}
+    async def on_post(self, req, resp, dataset):
+        """Resolve one or more tree hashes in minimal git operations."""
         try:
-            files = await get_tree(self.store, dataset, tree)
-            files.sort(key=dataset_sort)
+            body = await req.get_media()
+            tree_hashes = body.get('trees', [])
+            if not tree_hashes:
+                resp.status = falcon.HTTP_BAD_REQUEST
+                resp.media = {'error': 'trees list is required'}
+                return
+            dataset_path = self.store.get_dataset_path(
+                dataset
+            )  # Check that dataset exists before doing git work
+            results = await get_repo_files(dataset_path, tree_hashes)
+            for tree_hash in results:
+                results[tree_hash].sort(key=dataset_sort)
             resp.status = falcon.HTTP_OK
-            resp.media = {'files': files}
+            resp.media = {'trees': results}
         except FileNotFoundError:
             resp.status = falcon.HTTP_NOT_FOUND
             resp.media = {'error': 'Dataset does not exist'}

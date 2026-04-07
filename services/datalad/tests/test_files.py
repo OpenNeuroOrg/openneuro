@@ -183,9 +183,13 @@ def test_file_indexing(client, new_dataset):
     response = client.simulate_post(f'/datasets/{ds_id}/draft')
     assert response.status == falcon.HTTP_OK
     # Get the files in the committed tree
-    root_response = client.simulate_get('/datasets/{}/tree/{}'.format(ds_id, 'HEAD'))
+    root_response = client.simulate_post(
+        f'/datasets/{ds_id}/tree',
+        json={'trees': ['HEAD']},
+    )
     assert root_response.status == falcon.HTTP_OK
     root_content = json.loads(root_response.content)
+    root_files = root_content['trees']['HEAD']
     for f in [
         {
             'filename': 'dataset_description.json',
@@ -193,6 +197,7 @@ def test_file_indexing(client, new_dataset):
             'id': '838d19644b3296cf32637bbdf9ae5c87db34842f',
             'urls': [],
             'annexed': False,
+            'symlink': False,
             'directory': False,
         },
         {
@@ -201,6 +206,7 @@ def test_file_indexing(client, new_dataset):
             'id': 'MD5E-s8--4d87586dfb83dc4a5d15c6cfa6f61e27',
             'urls': [],
             'annexed': True,
+            'symlink': False,
             'directory': False,
         },
         {
@@ -208,35 +214,36 @@ def test_file_indexing(client, new_dataset):
             'filename': 'sub-01',
             'directory': True,
             'annexed': False,
+            'symlink': False,
             'size': 0,
             'urls': [],
         },
     ]:
-        assert f in root_content['files']
+        assert f in root_files
     # Test sub-01 directory
-    sub_response = client.simulate_get(
-        '/datasets/{}/tree/{}'.format(
-            ds_id,
-            next(
-                (f['id'] for f in root_content['files'] if f['filename'] == 'sub-01'),
-                None,
-            ),
-        )
+    sub_01_id = next(
+        (f['id'] for f in root_files if f['filename'] == 'sub-01'),
+        None,
+    )
+    sub_response = client.simulate_post(
+        f'/datasets/{ds_id}/tree',
+        json={'trees': [sub_01_id]},
     )
     assert sub_response.status == falcon.HTTP_OK
     sub_content = json.loads(sub_response.content)
+    sub_files = sub_content['trees'][sub_01_id]
     # Test sub-01/anat directory
-    anat_response = client.simulate_get(
-        '/datasets/{}/tree/{}'.format(
-            ds_id,
-            next(
-                (f['id'] for f in sub_content['files'] if f['filename'] == 'anat'),
-                None,
-            ),
-        )
+    anat_id = next(
+        (f['id'] for f in sub_files if f['filename'] == 'anat'),
+        None,
+    )
+    anat_response = client.simulate_post(
+        f'/datasets/{ds_id}/tree',
+        json={'trees': [anat_id]},
     )
     assert anat_response.status == falcon.HTTP_OK
     anat_content = json.loads(anat_response.content)
+    anat_files = anat_content['trees'][anat_id]
     # Test sub-01/anat/sub-01_T1w.nii.gz file
     assert {
         'filename': 'sub-01_T1w.nii.gz',
@@ -244,8 +251,9 @@ def test_file_indexing(client, new_dataset):
         'id': 'MD5E-s19--8149926e49b677a5ccecf1ad565acccf.nii.gz',
         'urls': [],
         'annexed': True,
+        'symlink': False,
         'directory': False,
-    } in anat_content['files']
+    } in anat_files
 
 
 def test_empty_file(client, new_dataset):
@@ -260,9 +268,13 @@ def test_empty_file(client, new_dataset):
     )
     assert response.status == falcon.HTTP_OK
     # Get the files in the committed tree
-    response = client.simulate_get(f'/datasets/{ds_id}/tree/HEAD')
+    response = client.simulate_post(
+        f'/datasets/{ds_id}/tree',
+        json={'trees': ['HEAD']},
+    )
     assert response.status == falcon.HTTP_OK
     response_content = json.loads(response.content)
+    tree_files = response_content['trees']['HEAD']
     # Check that all elements exist in both lists
     print(response_content)
     assert {
@@ -271,16 +283,18 @@ def test_empty_file(client, new_dataset):
         'id': 'MD5E-s0--d41d8cd98f00b204e9800998ecf8427e',
         'urls': [],
         'annexed': True,
+        'symlink': False,
         'directory': False,
-    } in response_content['files']
+    } in tree_files
     assert {
         'filename': 'dataset_description.json',
         'size': 101,
         'id': '838d19644b3296cf32637bbdf9ae5c87db34842f',
         'urls': [],
         'annexed': False,
+        'symlink': False,
         'directory': False,
-    } in response_content['files']
+    } in tree_files
 
 
 def test_duplicate_file_id(client, new_dataset):
@@ -300,23 +314,27 @@ def test_duplicate_file_id(client, new_dataset):
         f'/datasets/{ds_id}/draft', params={'validate': 'false'}
     )
     assert response.status == falcon.HTTP_OK
-    response = client.simulate_get(f'/datasets/{ds_id}/tree/HEAD')
+    response = client.simulate_post(
+        f'/datasets/{ds_id}/tree',
+        json={'trees': ['HEAD']},
+    )
     assert response.status == falcon.HTTP_OK
     response_content = json.loads(response.content)
+    root_files = response_content['trees']['HEAD']
     derivatives_tree = next(
-        (f['id'] for f in response_content['files'] if f['filename'] == 'derivatives'),
+        (f['id'] for f in root_files if f['filename'] == 'derivatives'),
         None,
     )
-    response = client.simulate_get(f'/datasets/{ds_id}/tree/{derivatives_tree}')
+    response = client.simulate_post(
+        f'/datasets/{ds_id}/tree',
+        json={'trees': [derivatives_tree]},
+    )
     assert response.status == falcon.HTTP_OK
     response_content = json.loads(response.content)
+    deriv_files = response_content['trees'][derivatives_tree]
     # Find each file in the results
-    file_one = next(
-        (f for f in response_content['files'] if f['filename'] == 'one.json'), None
-    )
-    file_two = next(
-        (f for f in response_content['files'] if f['filename'] == 'two.json'), None
-    )
+    file_one = next((f for f in deriv_files if f['filename'] == 'one.json'), None)
+    file_two = next((f for f in deriv_files if f['filename'] == 'two.json'), None)
     # With id as the raw object hash, identical content produces identical ids
     assert file_one['id'] == file_two['id']
 

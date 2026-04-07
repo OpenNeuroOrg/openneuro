@@ -7,12 +7,9 @@ import aioshutil
 import falcon
 import pygit2
 
+from datalad_service.common.annex import annex_key_re
 from datalad_service.common.git import git_commit
 from datalad_service.common.user import get_user_info
-
-annex_key_re = re.compile(
-    r'^(?P<backend>[A-Z0-9]+)-s(?P<size>[0-9]+)--(?P<hash>[a-f0-9]+)'
-)
 
 
 async def move_files(upload_path, dataset_path):

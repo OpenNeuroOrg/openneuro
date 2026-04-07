@@ -135,7 +135,7 @@ def create_app():
     app.add_route('/datasets/{dataset:dataset}/info/{name}', dataset_info_resource)
     app.add_route('/datasets/{dataset:dataset}/files', dataset_files)
     app.add_route('/datasets/{dataset:dataset}/files/{filename:path}', dataset_files)
-    app.add_route('/datasets/{dataset:dataset}/tree/{tree}', dataset_tree)
+    app.add_route('/datasets/{dataset:dataset}/tree', dataset_tree)
     app.add_route('/datasets/{dataset:dataset}/objects/{obj}', dataset_objects)
 
     app.add_route('/datasets/{dataset:dataset}/snapshots', dataset_snapshots)

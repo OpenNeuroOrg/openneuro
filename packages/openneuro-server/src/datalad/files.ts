@@ -200,6 +200,58 @@ async function entriesToDatasetFiles(
 }
 
 /**
+ * Fetch multiple trees from the worker in a single batch POST request.
+ * Returns a map of tree hash -> DatasetFile[].
+ */
+async function fetchTreesFromWorker(
+  datasetId: string,
+  treeHashes: string[],
+): Promise<Map<string, DatasetFile[]>> {
+  const response = await fetch(
+    `http://${getDatasetWorker(datasetId)}/datasets/${datasetId}/tree`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ trees: treeHashes }),
+      signal: AbortSignal.timeout(30000),
+    },
+  )
+  const body = await response.json()
+  const treesData: Record<string, DatasetFile[]> | undefined = body?.trees
+  const result = new Map<string, DatasetFile[]>()
+  if (treesData) {
+    for (const [hash, files] of Object.entries(treesData)) {
+      result.set(hash, files || [])
+    }
+  }
+  return result
+}
+
+/**
+ * Cache a batch of worker results, returning entries for each tree.
+ */
+async function cacheWorkerTrees(
+  datasetId: string,
+  workerResults: Map<string, DatasetFile[]>,
+): Promise<void> {
+  const needsPresign = await datasetNeedsPresign(datasetId)
+  for (const [hash, files] of workerResults) {
+    if (files.length > 0) {
+      const entries = files.map((f) => workerFileToEntry(f, needsPresign))
+      const allExported = files.every(
+        (f) => f.directory || f.urls[0]?.includes("s3.amazonaws.com"),
+      )
+      if (allExported) {
+        void setTree(redis, hash, entries)
+        void addDatasetTree(redis, datasetId, hash)
+      } else {
+        void setTree(redis, hash, entries, 600)
+      }
+    }
+  }
+}
+
+/**
  * Get files for a specific revision (tree hash or commit hash).
  * Uses content-addressed caching keyed by full git hash.
  */
@@ -213,31 +265,13 @@ export const getFiles = async (
     return entriesToDatasetFiles(cached, datasetId)
   }
 
-  // Cache miss: fetch from worker
-  const response = await fetch(
-    `http://${
-      getDatasetWorker(datasetId)
-    }/datasets/${datasetId}/tree/${treeish}`,
-    { signal: AbortSignal.timeout(10000) },
-  )
-  const body = await response.json()
-  const files: DatasetFile[] | undefined = body?.files
-
+  // Cache miss: fetch from worker via batch endpoint
+  const workerResults = await fetchTreesFromWorker(datasetId, [treeish])
+  await cacheWorkerTrees(datasetId, workerResults)
+  const files = workerResults.get(treeish)
   if (files && files.length > 0) {
     const needsPresign = await datasetNeedsPresign(datasetId)
     const entries = files.map((f) => workerFileToEntry(f, needsPresign))
-    // Check if all non-directory files have S3 URLs
-    const allExported = files.every(
-      (f) => f.directory || f.urls[0]?.includes("s3.amazonaws.com"),
-    )
-    if (allExported) {
-      // Exported trees are content-addressed and stable, cache permanently
-      void setTree(redis, treeish, entries)
-      void addDatasetTree(redis, datasetId, treeish)
-    } else {
-      // Still exporting — cache briefly to avoid repeated worker fetches
-      void setTree(redis, treeish, entries, 600)
-    }
     return entriesToDatasetFiles(entries, datasetId)
   }
   return []
@@ -258,11 +292,10 @@ export async function getFilesRecursive(
     // Bulk-fetch all trees in one pipeline
     const treesMap = await getTreesBulk(redis, cachedTreeHashes)
     if (treesMap.size < cachedTreeHashes.length) {
-      // Fetch only the missing trees from the worker (getFiles caches them)
+      // Batch-fetch all missing trees from the worker in one request
       const missingHashes = cachedTreeHashes.filter((h) => !treesMap.has(h))
-      await Promise.all(
-        missingHashes.map((hash) => getFiles(datasetId, hash)),
-      )
+      const workerResults = await fetchTreesFromWorker(datasetId, missingHashes)
+      await cacheWorkerTrees(datasetId, workerResults)
       // Re-read the now-cached entries in bulk
       const refetched = await getTreesBulk(redis, missingHashes)
       for (const [hash, entries] of refetched) {
@@ -272,9 +305,44 @@ export async function getFilesRecursive(
     return reconstructFromTrees(treesMap, tree, path, datasetId, tree)
   }
 
-  // Walk the tree recursively, collecting unique tree hashes along the way
+  // Breadth-first walk: batch all uncached trees per level into one request
+  const treesMap = new Map<string, TreeEntry[]>()
   const collectedHashes = new Set<string>()
-  const files = await walkTree(datasetId, tree, path, collectedHashes)
+
+  // Seed with the root tree
+  let pendingHashes = [tree]
+
+  while (pendingHashes.length > 0) {
+    // Check cache for all pending hashes
+    const cached = await getTreesBulk(redis, pendingHashes)
+    const uncached = pendingHashes.filter((h) => !cached.has(h))
+
+    // Fetch all uncached trees in one worker request
+    if (uncached.length > 0) {
+      const workerResults = await fetchTreesFromWorker(datasetId, uncached)
+      await cacheWorkerTrees(datasetId, workerResults)
+      const fetched = await getTreesBulk(redis, uncached)
+      for (const [hash, entries] of fetched) {
+        cached.set(hash, entries)
+      }
+    }
+
+    // Merge into treesMap and collect next level of directory hashes
+    const nextLevel: string[] = []
+    for (const hash of pendingHashes) {
+      collectedHashes.add(hash)
+      const entries = cached.get(hash)
+      if (entries) {
+        treesMap.set(hash, entries)
+        for (const entry of entries) {
+          if (entry.d && !collectedHashes.has(entry.h)) {
+            nextLevel.push(entry.h)
+          }
+        }
+      }
+    }
+    pendingHashes = nextLevel
+  }
 
   // Cache the commit-to-trees mapping for next time
   if (collectedHashes.size > 0) {
@@ -283,30 +351,7 @@ export async function getFilesRecursive(
     void addDatasetTrees(redis, datasetId, hashArray)
   }
 
-  return files
-}
-
-/** Walk a tree recursively, populating files and collecting tree hashes */
-async function walkTree(
-  datasetId: string,
-  tree: string,
-  path: string,
-  collectedHashes: Set<string>,
-): Promise<DatasetFile[]> {
-  collectedHashes.add(tree)
-  const fileTree = await getFiles(datasetId, tree)
-  // Parallelize sibling directory fetches
-  const results = await Promise.all(
-    fileTree.map(async (file) => {
-      const absPath = path ? join(path, file.filename) : file.filename
-      if (file.directory) {
-        return walkTree(datasetId, file.id, absPath, collectedHashes)
-      } else {
-        return [{ ...file, filename: absPath }]
-      }
-    }),
-  )
-  return results.flat()
+  return reconstructFromTrees(treesMap, tree, path, datasetId, tree)
 }
 
 /**
