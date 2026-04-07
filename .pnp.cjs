@@ -3526,11 +3526,56 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
-    ["@msgpack/msgpack", [\
-      ["npm:3.1.3", {\
-        "packageLocation": "./.yarn/cache/@msgpack-msgpack-npm-3.1.3-3f3adaf78f-cf597b7ed1.zip/node_modules/@msgpack/msgpack/",\
+    ["@msgpackr-extract/msgpackr-extract-darwin-arm64", [\
+      ["npm:3.0.3", {\
+        "packageLocation": "./.yarn/unplugged/@msgpackr-extract-msgpackr-extract-darwin-arm64-npm-3.0.3-23b9647943/node_modules/@msgpackr-extract/msgpackr-extract-darwin-arm64/",\
         "packageDependencies": [\
-          ["@msgpack/msgpack", "npm:3.1.3"]\
+          ["@msgpackr-extract/msgpackr-extract-darwin-arm64", "npm:3.0.3"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@msgpackr-extract/msgpackr-extract-darwin-x64", [\
+      ["npm:3.0.3", {\
+        "packageLocation": "./.yarn/unplugged/@msgpackr-extract-msgpackr-extract-darwin-x64-npm-3.0.3-cf8ce1c077/node_modules/@msgpackr-extract/msgpackr-extract-darwin-x64/",\
+        "packageDependencies": [\
+          ["@msgpackr-extract/msgpackr-extract-darwin-x64", "npm:3.0.3"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@msgpackr-extract/msgpackr-extract-linux-arm", [\
+      ["npm:3.0.3", {\
+        "packageLocation": "./.yarn/unplugged/@msgpackr-extract-msgpackr-extract-linux-arm-npm-3.0.3-e3c3cf3492/node_modules/@msgpackr-extract/msgpackr-extract-linux-arm/",\
+        "packageDependencies": [\
+          ["@msgpackr-extract/msgpackr-extract-linux-arm", "npm:3.0.3"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@msgpackr-extract/msgpackr-extract-linux-arm64", [\
+      ["npm:3.0.3", {\
+        "packageLocation": "./.yarn/unplugged/@msgpackr-extract-msgpackr-extract-linux-arm64-npm-3.0.3-9da3d01c14/node_modules/@msgpackr-extract/msgpackr-extract-linux-arm64/",\
+        "packageDependencies": [\
+          ["@msgpackr-extract/msgpackr-extract-linux-arm64", "npm:3.0.3"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@msgpackr-extract/msgpackr-extract-linux-x64", [\
+      ["npm:3.0.3", {\
+        "packageLocation": "./.yarn/unplugged/@msgpackr-extract-msgpackr-extract-linux-x64-npm-3.0.3-76216d0983/node_modules/@msgpackr-extract/msgpackr-extract-linux-x64/",\
+        "packageDependencies": [\
+          ["@msgpackr-extract/msgpackr-extract-linux-x64", "npm:3.0.3"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@msgpackr-extract/msgpackr-extract-win32-x64", [\
+      ["npm:3.0.3", {\
+        "packageLocation": "./.yarn/unplugged/@msgpackr-extract-msgpackr-extract-win32-x64-npm-3.0.3-7a8ff8fc6d/node_modules/@msgpackr-extract/msgpackr-extract-win32-x64/",\
+        "packageDependencies": [\
+          ["@msgpackr-extract/msgpackr-extract-win32-x64", "npm:3.0.3"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -4429,7 +4474,6 @@ const RAW_RUNTIME_STATE =
           ["@elastic/elasticsearch", "npm:8.13.1"],\
           ["@graphql-tools/schema", "virtual:7551ce9da6a1d08fa7e13a80e2f973b491766328bd179cc2db79caffc61371ac135c2ad0ad653010fa4ab35dcca89d6c85968158f6af4813bc27a96b906e116a#npm:10.0.0"],\
           ["@keyv/redis", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:4.5.0"],\
-          ["@msgpack/msgpack", "npm:3.1.3"],\
           ["@openneuro/search", "workspace:packages/openneuro-search"],\
           ["@openneuro/server", "workspace:packages/openneuro-server"],\
           ["@sentry/node", "npm:10.37.0"],\
@@ -4468,6 +4512,7 @@ const RAW_RUNTIME_STATE =
           ["mongodb-memory-server", "npm:9.2.0"],\
           ["mongoose", "npm:8.9.5"],\
           ["morgan", "npm:1.10.0"],\
+          ["msgpackr", "npm:1.11.9"],\
           ["node-mailjet", "npm:3.3.5"],\
           ["nodemon", "npm:3.1.0"],\
           ["object-hash", "npm:2.1.1"],\
@@ -17924,6 +17969,33 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["msgpackr", [\
+      ["npm:1.11.9", {\
+        "packageLocation": "./.yarn/cache/msgpackr-npm-1.11.9-87afe6260a-823ac908cc.zip/node_modules/msgpackr/",\
+        "packageDependencies": [\
+          ["msgpackr", "npm:1.11.9"],\
+          ["msgpackr-extract", "npm:3.0.3"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["msgpackr-extract", [\
+      ["npm:3.0.3", {\
+        "packageLocation": "./.yarn/unplugged/msgpackr-extract-npm-3.0.3-3594f14366/node_modules/msgpackr-extract/",\
+        "packageDependencies": [\
+          ["@msgpackr-extract/msgpackr-extract-darwin-arm64", "npm:3.0.3"],\
+          ["@msgpackr-extract/msgpackr-extract-darwin-x64", "npm:3.0.3"],\
+          ["@msgpackr-extract/msgpackr-extract-linux-arm", "npm:3.0.3"],\
+          ["@msgpackr-extract/msgpackr-extract-linux-arm64", "npm:3.0.3"],\
+          ["@msgpackr-extract/msgpackr-extract-linux-x64", "npm:3.0.3"],\
+          ["@msgpackr-extract/msgpackr-extract-win32-x64", "npm:3.0.3"],\
+          ["msgpackr-extract", "npm:3.0.3"],\
+          ["node-gyp", "npm:8.2.0"],\
+          ["node-gyp-build-optional-packages", "npm:5.2.2"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["multimatch", [\
       ["npm:5.0.0", {\
         "packageLocation": "./.yarn/cache/multimatch-npm-5.0.0-9938abf6fa-82c8030a53.zip/node_modules/multimatch/",\
@@ -18144,6 +18216,16 @@ const RAW_RUNTIME_STATE =
           ["semver", "npm:7.5.4"],\
           ["tar", "npm:6.1.11"],\
           ["which", "npm:2.0.2"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["node-gyp-build-optional-packages", [\
+      ["npm:5.2.2", {\
+        "packageLocation": "./.yarn/cache/node-gyp-build-optional-packages-npm-5.2.2-2994e6ac33-f448a328cf.zip/node_modules/node-gyp-build-optional-packages/",\
+        "packageDependencies": [\
+          ["detect-libc", "npm:2.1.2"],\
+          ["node-gyp-build-optional-packages", "npm:5.2.2"]\
         ],\
         "linkType": "HARD"\
       }]\
