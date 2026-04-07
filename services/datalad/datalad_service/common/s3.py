@@ -1,5 +1,6 @@
 import os
 import subprocess
+import pathlib
 
 import boto3
 from botocore.config import Config
@@ -113,7 +114,9 @@ def setup_s3_backup_sibling_workaround(dataset_path):
         Body=uuid.encode('utf-8'),
     )
     # Create the creds file
-    with open(os.path.join(dataset_path, '.git', 'annex', 'creds', uuid), 'w') as f:
+    creds_path = pathlib.Path(dataset_path, '.git', 'annex', 'creds')
+    creds_path.mkdir(parents=True, exist_ok=True)
+    with open(creds_path / uuid, 'w') as f:
         f.write(f'{aws_access_key_id}\n{aws_secret_access_key}\n')
     # Enableremote after
     subprocess.run(
