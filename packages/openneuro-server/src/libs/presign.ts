@@ -74,16 +74,52 @@ export async function getPresignedUrl(
   if (cached) {
     return cached
   }
-  const command = new GetObjectCommand({
-    Bucket: resolvedBucket,
-    Key: s3Key,
-    VersionId: versionId,
-  })
-  const url = await getSignedUrl(s3Client, command, {
-    expiresIn: PRESIGN_EXPIRATION,
-  })
+  const hmac = await getHMAC()
+  const expires = Math.floor(Date.now() / 1000) + PRESIGN_EXPIRATION
+  const url = presignV2(hmac, resolvedBucket, s3Key, versionId, expires)
   await redis.setex(key, PRESIGN_TTL, url)
   return url
+}
+
+/**
+ * Bulk-resolve presigned URLs for many files in two pipelined Redis calls.
+ * Returns an array of resolved URLs matching the input order.
+ */
+export async function getPresignedUrlsBulk(
+  redis: Redis,
+  items: { bucket: string; s3Key: string; versionId: string }[],
+): Promise<string[]> {
+  if (items.length === 0) return []
+
+  const resolved = items.map((item) => ({
+    ...item,
+    bucket: resolveBucket(item.bucket),
+  }))
+  const keys = resolved.map((r) => presignKey(r.bucket, r.s3Key, r.versionId))
+  const cached = await redis.mget(...keys)
+
+  // Fill hits from cache, sign misses and queue them for write-back
+  const hmac = await getHMAC()
+  const expires = Math.floor(Date.now() / 1000) + PRESIGN_EXPIRATION
+  const writePipeline = redis.pipeline()
+  let misses = 0
+
+  const results = cached.map((val, i) => {
+    if (val) return val
+    misses++
+    const url = presignV2(
+      hmac,
+      resolved[i].bucket,
+      resolved[i].s3Key,
+      resolved[i].versionId,
+      expires,
+    )
+    writePipeline.setex(keys[i], PRESIGN_TTL, url)
+    return url
+  })
+
+  if (misses > 0) await writePipeline.exec()
+  return results
 }
 
 /**
