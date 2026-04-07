@@ -4112,6 +4112,7 @@ __metadata:
     graphql-compose: "npm:9.0.10"
     graphql-iso-date: "npm:^3.6.1"
     graphql-tools: "npm:9.0.0"
+    hash-wasm: "npm:^4.12.0"
     immutable: "npm:^4.3.8"
     ioredis: "npm:^5.6.1"
     ioredis-mock: "npm:^8.8.1"
