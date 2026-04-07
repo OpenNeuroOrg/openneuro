@@ -1,5 +1,6 @@
 import type { Redis } from "ioredis"
 import { decode, encode } from "@msgpack/msgpack"
+import { presignTreeKey } from "../libs/presign"
 
 /** Compact tree entry stored in Redis */
 export interface TreeEntry {
@@ -141,6 +142,7 @@ export async function clearDatasetTrees(
     const pipeline = redis.pipeline()
     for (const hash of treeHashes) {
       pipeline.del(treeKey(hash))
+      pipeline.del(presignTreeKey(hash))
     }
     pipeline.del(datasetTreesKey(datasetId))
     await pipeline.exec()

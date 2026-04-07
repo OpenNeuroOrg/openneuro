@@ -187,11 +187,19 @@ describe("tree cache", () => {
   })
 
   describe("clearDatasetTrees", () => {
-    it("deletes all cached trees and the index", async () => {
+    it("deletes all cached trees, presign caches, and the index", async () => {
       const redis = createRedisMock()
-      // Populate tree data and index
+      // Populate tree data, presign caches, and index
       await setTree(redis, "t1", [makeEntry({ n: "a" })])
       await setTree(redis, "t2", [makeEntry({ n: "b" })])
+      ;(redis as any)._store.set(
+        "ps-tree:t1",
+        Buffer.from("presign-data-1"),
+      )
+      ;(redis as any)._store.set(
+        "ps-tree:t2",
+        Buffer.from("presign-data-2"),
+      )
       await addDatasetTrees(redis, "ds000001", ["t1", "t2"])
 
       await clearDatasetTrees(redis, "ds000001")
@@ -199,6 +207,9 @@ describe("tree cache", () => {
       // Individual trees should be gone
       expect(await getTree(redis, "t1")).toBeNull()
       expect(await getTree(redis, "t2")).toBeNull()
+      // Presign caches should be gone
+      expect((redis as any)._store.has("ps-tree:t1")).toBe(false)
+      expect((redis as any)._store.has("ps-tree:t2")).toBe(false)
       // Index should be gone
       expect(await getDatasetTrees(redis, "ds000001")).toEqual([])
     })

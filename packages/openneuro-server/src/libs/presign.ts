@@ -1,5 +1,6 @@
 import type { Redis } from "ioredis"
 import { createHMAC, createSHA1 } from "hash-wasm"
+import { decode, encode } from "@msgpack/msgpack"
 
 const PRESIGN_TTL = 5 * 24 * 60 * 60 // 5 days in seconds
 const PRESIGN_EXPIRATION = 7 * 24 * 60 * 60 // 7 days for the presigned URL itself
@@ -82,33 +83,43 @@ export async function getPresignedUrl(
   return url
 }
 
-/**
- * Bulk-resolve presigned URLs for many files in two pipelined Redis calls.
- * Returns an array of resolved URLs matching the input order.
- */
-export async function getPresignedUrlsBulk(
-  redis: Redis,
-  items: { bucket: string; s3Key: string; versionId: string }[],
-): Promise<string[]> {
-  if (items.length === 0) return []
+export function presignTreeKey(treeHash: string): string {
+  return `ps-tree:${treeHash}`
+}
 
-  // Build cache keys and pipeline GET all at once
-  const keys = items.map((item) =>
-    presignKey(resolveBucket(item.bucket), item.s3Key, item.versionId)
-  )
+/**
+ * Bulk-resolve presigned URLs for multiple trees in two pipelined Redis calls.
+ * Returns a map of tree hash -> record of filename -> presigned URL.
+ */
+export async function getPresignedUrlsForTreesBulk(
+  redis: Redis,
+  requests: {
+    treeHash: string
+    items: {
+      filename: string
+      bucket: string
+      s3Key: string
+      versionId: string
+    }[]
+  }[],
+): Promise<Map<string, Record<string, string>>> {
+  if (requests.length === 0) return new Map()
+
+  // Pipeline GET all tree presign caches at once
+  const keys = requests.map((r) => presignTreeKey(r.treeHash))
   const pipeline = redis.pipeline()
   for (const key of keys) {
-    pipeline.get(key)
+    pipeline.getBuffer(key)
   }
   const cached = await pipeline.exec()
 
-  // Identify misses and sign them
-  const results = new Array<string>(items.length)
+  const result = new Map<string, Record<string, string>>()
   const missIndices: number[] = []
-  for (let i = 0; i < items.length; i++) {
-    const val = cached?.[i]?.[1] as string | null
-    if (val) {
-      results[i] = val
+
+  for (let i = 0; i < requests.length; i++) {
+    const data = cached?.[i]?.[1] as Buffer | null
+    if (data) {
+      result.set(requests[i].treeHash, decode(data) as Record<string, string>)
     } else {
       missIndices.push(i)
     }
@@ -118,27 +129,26 @@ export async function getPresignedUrlsBulk(
     const hmac = await getHMAC()
     const expires = Math.floor(Date.now() / 1000) + PRESIGN_EXPIRATION
 
-    // Sign all misses synchronously — hash-wasm HMAC is ~1μs per call
-    for (const i of missIndices) {
-      const item = items[i]
-      results[i] = presignV2(
-        hmac,
-        resolveBucket(item.bucket),
-        item.s3Key,
-        item.versionId,
-        expires,
-      )
-    }
-
-    // Pipeline SET all new presigned URLs back into Redis
     const writePipeline = redis.pipeline()
     for (const i of missIndices) {
-      writePipeline.setex(keys[i], PRESIGN_TTL, results[i])
+      const req = requests[i]
+      const urlMap: Record<string, string> = {}
+      for (const item of req.items) {
+        urlMap[item.filename] = presignV2(
+          hmac,
+          resolveBucket(item.bucket),
+          item.s3Key,
+          item.versionId,
+          expires,
+        )
+      }
+      result.set(req.treeHash, urlMap)
+      writePipeline.setex(keys[i], PRESIGN_TTL, Buffer.from(encode(urlMap)))
     }
     await writePipeline.exec()
   }
 
-  return results
+  return result
 }
 
 /**
