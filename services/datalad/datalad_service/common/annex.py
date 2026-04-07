@@ -4,8 +4,10 @@ import hashlib
 import io
 import json
 from mmap import mmap
+import re
 import subprocess
 import os
+import posixpath
 import urllib.parse
 import time
 import uuid
@@ -27,6 +29,10 @@ S3_BUCKETS_WHITELIST = [
     'bobsrepository',
     'openneuro-datalad-public-nell-test',
 ]
+
+annex_key_re = re.compile(
+    r'^(?P<backend>[A-Z0-9]+)-s(?P<size>[0-9]+)--(?P<hash>[a-f0-9]+)'
+)
 
 
 class InitRemoteException(Exception):
@@ -239,13 +245,12 @@ def _should_skip(filename):
     )
 
 
-def _read_tree_pygit2(repo, tree_obj):
+def _read_tree_pygit2(repo, tree_obj, dataset_path):
     """Read a single tree object using pygit2.
 
-    Returns (files, symlink_entries) where symlink_entries need annex key resolution.
+    Returns a list of file entries with annex key resolution where applicable.
     """
     files = []
-    symlink_entries = []
     for entry in tree_obj:
         filename = entry.name
         if _should_skip(filename):
@@ -253,21 +258,42 @@ def _read_tree_pygit2(repo, tree_obj):
         mode = entry.filemode
         hex_hash = str(entry.id)
         if mode == 0o120000:
-            # Annexed file symlink — resolve target to get annex key
             blob = repo[entry.id]
             target = blob.data.decode('utf-8').rstrip()
             key = target.split('/')[-1]
-            size = int(key.split('-', 2)[1].lstrip('s'))
-            files.append(
-                {
-                    'filename': filename,
-                    'size': size,
-                    'id': key,
-                    'urls': [],
-                    'annexed': True,
-                    'directory': False,
-                }
-            )
+            if re.match(annex_key_re, key):
+                # Annexed file symlink — resolve target to get annex key
+                size = int(key.split('-', 2)[1].lstrip('s'))
+                files.append(
+                    {
+                        'filename': filename,
+                        'size': size,
+                        'id': key,
+                        'urls': [],
+                        'annexed': True,
+                        'symlink': False,
+                        'directory': False,
+                    }
+                )
+            else:
+                # In-tree symlink — validate target stays within the dataset
+                normalized = posixpath.normpath(target)
+                if posixpath.isabs(normalized):
+                    continue
+                parts = normalized.split('/')
+                if '.git' in parts:
+                    continue
+                files.append(
+                    {
+                        'filename': filename,
+                        'size': 0,
+                        'id': hex_hash,
+                        'directory': False,
+                        'urls': [],
+                        'symlink': True,
+                        'annexed': False,
+                    }
+                )
         elif mode == 0o160000:
             # Submodule — skip
             continue
@@ -278,6 +304,7 @@ def _read_tree_pygit2(repo, tree_obj):
                     'filename': filename,
                     'directory': True,
                     'annexed': False,
+                    'symlink': False,
                     'size': 0,
                     'urls': [],
                 }
@@ -293,6 +320,7 @@ def _read_tree_pygit2(repo, tree_obj):
                     'directory': False,
                     'urls': [],
                     'annexed': False,
+                    'symlink': False,
                 }
             )
     return files
@@ -312,7 +340,7 @@ async def get_repo_files(dataset_path, trees):
             if obj is None or obj.type != pygit2.GIT_OBJECT_TREE:
                 per_tree_files[tree_hash] = []
                 continue
-            per_tree_files[tree_hash] = _read_tree_pygit2(repo, obj)
+            per_tree_files[tree_hash] = _read_tree_pygit2(repo, obj, dataset_path)
         except (KeyError, ValueError):
             per_tree_files[tree_hash] = []
 

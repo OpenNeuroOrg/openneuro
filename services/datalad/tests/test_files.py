@@ -197,6 +197,7 @@ def test_file_indexing(client, new_dataset):
             'id': '838d19644b3296cf32637bbdf9ae5c87db34842f',
             'urls': [],
             'annexed': False,
+            'symlink': False,
             'directory': False,
         },
         {
@@ -205,6 +206,7 @@ def test_file_indexing(client, new_dataset):
             'id': 'MD5E-s8--4d87586dfb83dc4a5d15c6cfa6f61e27',
             'urls': [],
             'annexed': True,
+            'symlink': False,
             'directory': False,
         },
         {
@@ -212,6 +214,7 @@ def test_file_indexing(client, new_dataset):
             'filename': 'sub-01',
             'directory': True,
             'annexed': False,
+            'symlink': False,
             'size': 0,
             'urls': [],
         },
@@ -248,6 +251,7 @@ def test_file_indexing(client, new_dataset):
         'id': 'MD5E-s19--8149926e49b677a5ccecf1ad565acccf.nii.gz',
         'urls': [],
         'annexed': True,
+        'symlink': False,
         'directory': False,
     } in anat_files
 
@@ -279,6 +283,7 @@ def test_empty_file(client, new_dataset):
         'id': 'MD5E-s0--d41d8cd98f00b204e9800998ecf8427e',
         'urls': [],
         'annexed': True,
+        'symlink': False,
         'directory': False,
     } in tree_files
     assert {
@@ -287,6 +292,7 @@ def test_empty_file(client, new_dataset):
         'id': '838d19644b3296cf32637bbdf9ae5c87db34842f',
         'urls': [],
         'annexed': False,
+        'symlink': False,
         'directory': False,
     } in tree_files
 
