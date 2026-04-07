@@ -75,16 +75,70 @@ export async function getPresignedUrl(
   if (cached) {
     return cached
   }
-  const command = new GetObjectCommand({
-    Bucket: resolvedBucket,
-    Key: s3Key,
-    VersionId: versionId,
-  })
-  const url = await getSignedUrl(s3Client, command, {
-    expiresIn: PRESIGN_EXPIRATION,
-  })
+  const hmac = await getHMAC()
+  const expires = Math.floor(Date.now() / 1000) + PRESIGN_EXPIRATION
+  const url = presignV2(hmac, resolvedBucket, s3Key, versionId, expires)
   await redis.setex(key, PRESIGN_TTL, url)
   return url
+}
+
+/**
+ * Bulk-resolve presigned URLs for many files in two pipelined Redis calls.
+ * Returns an array of resolved URLs matching the input order.
+ */
+export async function getPresignedUrlsBulk(
+  redis: Redis,
+  items: { bucket: string; s3Key: string; versionId: string }[],
+): Promise<string[]> {
+  if (items.length === 0) return []
+
+  // Build cache keys and pipeline GET all at once
+  const keys = items.map((item) =>
+    presignKey(resolveBucket(item.bucket), item.s3Key, item.versionId)
+  )
+  const pipeline = redis.pipeline()
+  for (const key of keys) {
+    pipeline.get(key)
+  }
+  const cached = await pipeline.exec()
+
+  // Identify misses and sign them
+  const results = new Array<string>(items.length)
+  const missIndices: number[] = []
+  for (let i = 0; i < items.length; i++) {
+    const val = cached?.[i]?.[1] as string | null
+    if (val) {
+      results[i] = val
+    } else {
+      missIndices.push(i)
+    }
+  }
+
+  if (missIndices.length > 0) {
+    const hmac = await getHMAC()
+    const expires = Math.floor(Date.now() / 1000) + PRESIGN_EXPIRATION
+
+    // Sign all misses synchronously — hash-wasm HMAC is ~1μs per call
+    for (const i of missIndices) {
+      const item = items[i]
+      results[i] = presignV2(
+        hmac,
+        resolveBucket(item.bucket),
+        item.s3Key,
+        item.versionId,
+        expires,
+      )
+    }
+
+    // Pipeline SET all new presigned URLs back into Redis
+    const writePipeline = redis.pipeline()
+    for (const i of missIndices) {
+      writePipeline.setex(keys[i], PRESIGN_TTL, results[i])
+    }
+    await writePipeline.exec()
+  }
+
+  return results
 }
 
 /**

@@ -1,6 +1,10 @@
 import { redis } from "../libs/redis"
 import { getDatasetWorker } from "../libs/datalad-service"
-import { getPresignedUrl, publicS3Url } from "../libs/presign"
+import {
+  getPresignedUrl,
+  getPresignedUrlsBulk,
+  publicS3Url,
+} from "../libs/presign"
 import Dataset from "../models/dataset"
 import {
   addDatasetTree,
@@ -308,8 +312,6 @@ export async function getFilesRecursive(
   // Breadth-first walk: batch all uncached trees per level into one request
   const treesMap = new Map<string, TreeEntry[]>()
   const collectedHashes = new Set<string>()
-
-  // Seed with the root tree
   let pendingHashes = [tree]
 
   while (pendingHashes.length > 0) {
@@ -363,26 +365,90 @@ async function reconstructFromTrees(
   rootTree: string,
   path: string,
   datasetId: string,
-  treeish: string,
+  _treeish: string,
 ): Promise<DatasetFile[]> {
-  const entries = treesMap.get(rootTree)
-  if (!entries) return []
-  const results = await Promise.all(
-    entries.map(async (entry) => {
-      const absPath = path ? join(path, entry.n) : entry.n
+  // Iterative reconstruction to avoid deep recursion overhead
+  const stack: { hash: string; path: string }[] = [{ hash: rootTree, path }]
+  const fileEntries: { entry: TreeEntry; absPath: string }[] = []
+
+  // Phase 1: walk tree structure (sync), collect file entries
+  while (stack.length > 0) {
+    const { hash, path: currentPath } = stack.pop()!
+    const entries = treesMap.get(hash)
+    if (!entries) continue
+    for (const entry of entries) {
+      const absPath = currentPath ? join(currentPath, entry.n) : entry.n
       if (entry.d) {
-        return reconstructFromTrees(
-          treesMap,
-          entry.h,
-          absPath,
-          datasetId,
-          treeish,
-        )
+        stack.push({ hash: entry.h, path: absPath })
       } else {
-        const file = await entryToDatasetFile(entry, datasetId)
-        return [{ ...file, filename: absPath }]
+        fileEntries.push({ entry, absPath })
       }
-    }),
-  )
-  return results.flat()
+    }
+  }
+
+  // Phase 2: partition entries by URL resolution strategy
+  const presignItems: {
+    index: number
+    bucket: string
+    s3Key: string
+    versionId: string
+  }[] = []
+  const results = new Array<DatasetFile>(fileEntries.length)
+  const serverUrl = process.env.CRN_SERVER_URL
+
+  for (let i = 0; i < fileEntries.length; i++) {
+    const { entry, absPath } = fileEntries[i]
+    if (entry.p && entry.k && entry.v) {
+      // Needs presigning — collect for bulk resolution
+      presignItems.push({
+        index: i,
+        bucket: entry.b,
+        s3Key: entry.k,
+        versionId: entry.v,
+      })
+      results[i] = {
+        id: entry.h,
+        filename: absPath,
+        directory: false,
+        size: entry.s,
+        urls: [],
+      }
+    } else if (entry.k && entry.v) {
+      results[i] = {
+        id: entry.h,
+        filename: absPath,
+        directory: false,
+        size: entry.s,
+        urls: [publicS3Url(entry.b, entry.k, entry.v)],
+      }
+    } else {
+      const filename = encodeURIComponent(entry.n)
+      results[i] = {
+        id: entry.h,
+        filename: absPath,
+        directory: false,
+        size: entry.s,
+        urls: [
+          `${serverUrl}/crn/datasets/${datasetId}/objects/${entry.h}?filename=${filename}`,
+        ],
+      }
+    }
+  }
+
+  // Bulk-resolve presigned URLs (1-2 Redis round-trips instead of N)
+  if (presignItems.length > 0) {
+    const urls = await getPresignedUrlsBulk(
+      redis,
+      presignItems.map((p) => ({
+        bucket: p.bucket,
+        s3Key: p.s3Key,
+        versionId: p.versionId,
+      })),
+    )
+    for (let j = 0; j < presignItems.length; j++) {
+      results[presignItems[j].index].urls = [urls[j]]
+    }
+  }
+
+  return results
 }
