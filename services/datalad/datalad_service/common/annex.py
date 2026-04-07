@@ -1,7 +1,5 @@
-import asyncio
 import base64
 import hashlib
-import io
 import json
 from mmap import mmap
 import re
@@ -114,20 +112,12 @@ def parse_rmet_line(remote, rmetLine):
     )
 
 
-def read_rmet_file(remote, catFile):
-    # First line is git metadata
-    line = catFile.readline().rstrip()
+def read_rmet_blob(remote, blob_data):
+    """Extract URL from raw rmet blob bytes for the given remote."""
     url = None
-    if line.startswith(b':::'):
-        while True:
-            # Examine each remote entry in the rmet file
-            nextLine = catFile.readline().rstrip()
-            if nextLine == b'':
-                break
-            else:
-                # If we find expected remote, return the URL
-                if remote['uuid'].encode('utf-8') in nextLine:
-                    url = parse_rmet_line(remote, nextLine.decode('utf-8'))
+    for line in blob_data.decode('utf-8').splitlines():
+        if remote['uuid'] in line:
+            url = parse_rmet_line(remote, line)
     return url
 
 
@@ -136,103 +126,63 @@ def encode_remote_url(url):
     return urllib.parse.quote_plus(url, safe='/:?=')
 
 
-async def get_repo_urls(path, files):
+def get_repo_urls(repo, files):
     """For each file provided, obtain the rmet data and append URLs if possible."""
-    # First obtain the git-annex branch objects
-    rmet_queries = set(['remote.log', 'trust.log'])
-    for f in files:
-        if f.get('annexed'):
-            rmet_queries.add(compute_rmet(f['id']))
-
-    query_list = list(rmet_queries)
-    batch_input = '\n'.join(f'git-annex:{p}' for p in query_list)
-
-    process = await asyncio.create_subprocess_exec(
-        'git',
-        'cat-file',
-        '--batch-check',
-        cwd=path,
-        stdin=asyncio.subprocess.PIPE,
-        stdout=asyncio.subprocess.PIPE,
-    )
-    stdout, _ = await process.communicate(input=batch_input.encode('utf-8'))
-
-    rmetObjects = {}
-    for i, line in enumerate(stdout.decode('utf-8').splitlines()):
-        parts = line.split()
-        if parts[-1] == 'missing':
-            continue
-        rmetObjects[query_list[i]] = parts[0]
-
-    if 'remote.log' not in rmetObjects:
-        # Skip searching for URLs if no remote.log is present
+    try:
+        annex_tree = repo.revparse_single('git-annex').peel(pygit2.Tree)
+    except KeyError:
         return files
-    rmetFiles = defaultdict(list)
+
+    # Read trust.log
+    trust_log = {}
+    try:
+        trust_blob = repo[annex_tree['trust.log'].id]
+        for line in trust_blob.data.decode('utf-8').splitlines():
+            line = line.strip()
+            if line:
+                uuid, trust, timestamp = line.split(' ')
+                trust_log[uuid] = trust
+    except KeyError:
+        pass
+
+    # Read remote.log
+    try:
+        remote_blob = repo[annex_tree['remote.log'].id]
+    except KeyError:
+        return files
+
+    remote = None
+    for line in remote_blob.data.decode('utf-8').splitlines():
+        if not line.strip():
+            continue
+        matched = parse_remote_line(line.strip())
+        # X remotes are dead
+        if matched and trust_log.get(matched['uuid']) == 'X':
+            continue
+        if matched:
+            remote = matched
+
+    if not remote:
+        return files
+
+    # Build rmet lookup
+    rmet_files = defaultdict(list)
     for f in files:
         if f.get('annexed'):
-            rmetPath = compute_rmet(f['id'])
-            if rmetPath in rmetObjects:
-                # Keep a reference to the files so we can add URLs later
-                rmetFiles[rmetPath].append(f)
-    # Then read those objects with git cat-file --batch
-    gitObjects = ''
-    if 'trust.log' in rmetObjects:
-        gitObjects += rmetObjects['trust.log'] + '\n'
-    gitObjects += rmetObjects['remote.log'] + '\n'
-    gitObjects += '\n'.join(rmetObjects[rmetPath] for rmetPath in rmetFiles)
-    catFileProcess = await asyncio.create_subprocess_exec(
-        'git',
-        'cat-file',
-        '--batch=:::%(objectname)',
-        '--buffer',
-        cwd=path,
-        stdin=asyncio.subprocess.PIPE,
-        stdout=asyncio.subprocess.PIPE,
-    )
-    stdout, _ = await catFileProcess.communicate(input=gitObjects.encode('utf-8'))
-    catFile = io.BytesIO(stdout)
-    # Read in trust.log and remote.log first
-    trustLog = {}
-    if 'trust.log' in rmetObjects:
-        trustLogMetadata = catFile.readline().rstrip()
-        while True:
-            line = catFile.readline().rstrip()
-            if line == b'':
-                break
-            else:
-                uuid, trust, timestamp = line.decode('utf-8').split(' ')
-                trustLog[uuid] = trust
-    remoteLogMetadata = catFile.readline().rstrip()
-    remote = None
-    while True:
-        line = catFile.readline().rstrip()
-        if line == b'':
-            break
-        else:
-            matchedRemote = parse_remote_line(line.decode('utf-8'))
-            # X remotes are dead
-            if (
-                matchedRemote
-                and matchedRemote['uuid'] in trustLog
-                and trustLog[matchedRemote['uuid']] == 'X'
-            ):
-                continue
-            if matchedRemote:
-                remote = matchedRemote
-    # Check if we found a useful external remote
-    if remote:
-        # Read the rest of the files.
-        # Output looks like this:
-        # fc83dd77328c85d9856d661ccee76b9c550b0600 blob 129
-        # 1590213748.042921433s 57894849-d0c8-4c62-8418-3627be18a196:V +iVcEk18e3J2WQys4zr_ANaTPfpUufW4Y#ds002778/dataset_description.json
-        # 1590213748.042921433s c6ba9b9b-ce53-4dfb-b2cc-d2ebf5f27a99:V +z9Zl27ykeacyuMzZGfSbzrblwxPkN2SM#ds002778/dataset_description.json
-        # \n
-        for path in rmetFiles:
-            url = read_rmet_file(remote, catFile)
+            rmet_path = compute_rmet(f['id'])
+            rmet_files[rmet_path].append(f)
+
+    # Resolve URLs from rmet blobs
+    for rmet_path, file_list in rmet_files.items():
+        try:
+            blob = repo[annex_tree[rmet_path].id]
+            url = read_rmet_blob(remote, blob.data)
             if url:
-                # Add this URL to all files that reference this rmet
-                for file in rmetFiles[path]:
-                    file['urls'].append(url)
+                for f in file_list:
+                    f['urls'].append(url)
+        except KeyError:
+            continue
+
     return files
 
 
@@ -348,7 +298,7 @@ async def get_repo_files(dataset_path, trees):
     all_files = []
     for files in per_tree_files.values():
         all_files.extend(files)
-    all_files = await get_repo_urls(dataset_path, all_files)
+    all_files = get_repo_urls(repo, all_files)
 
     # Redistribute files back to per-tree results
     offset = 0
