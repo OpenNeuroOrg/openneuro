@@ -186,15 +186,6 @@ def get_repo_urls(repo, files):
     return files
 
 
-def _should_skip(filename):
-    """Check if a file should be skipped (git/datalad internals)."""
-    return (
-        filename.startswith('.git')
-        or filename.startswith('.datalad')
-        or filename == '.gitattributes'
-    )
-
-
 def _read_tree_pygit2(repo, tree_obj, dataset_path):
     """Read a single tree object using pygit2.
 
@@ -202,77 +193,47 @@ def _read_tree_pygit2(repo, tree_obj, dataset_path):
     """
     files = []
     for entry in tree_obj:
-        filename = entry.name
-        if _should_skip(filename):
+        if entry.filemode == 0o160000:
+            # Skip submodules
             continue
-        mode = entry.filemode
-        hex_hash = str(entry.id)
-        if mode == 0o120000:
-            blob = repo[entry.id]
-            target = blob.data.decode('utf-8').rstrip()
+
+        file_entry = {
+            'filename': entry.name,
+            'id': str(entry.id),
+            'size': 0,
+            'urls': [],
+            'directory': False,
+            'annexed': False,
+            'symlink': False,
+        }
+
+        if entry.filemode == 0o120000:
+            target = repo[entry.id].data.decode('utf-8').rstrip()
             key = target.split('/')[-1]
             if re.match(annex_key_re, key):
-                # Annexed file symlink — resolve target to get annex key
-                size = int(key.split('-', 2)[1].lstrip('s'))
-                files.append(
-                    {
-                        'filename': filename,
-                        'size': size,
-                        'id': key,
-                        'urls': [],
-                        'annexed': True,
-                        'symlink': False,
-                        'directory': False,
-                    }
-                )
+                # Annexed file symlink
+                file_entry['id'] = key
+                file_entry['size'] = int(key.split('-', 2)[1].lstrip('s'))
+                file_entry['annexed'] = True
             else:
-                # In-tree symlink — validate target stays within the dataset
-                normalized = posixpath.normpath(target)
-                if posixpath.isabs(normalized):
+                # In-tree symlink
+                dataset_abs = os.path.abspath(dataset_path)
+                target_abs = os.path.abspath(os.path.join(dataset_abs, target))
+                # Validate target stays within the dataset
+                if os.path.commonpath((dataset_abs, target_abs)) != dataset_abs:
                     continue
-                parts = normalized.split('/')
-                if '.git' in parts:
+                # Disallow .git symlinks except for annex objects
+                if '.git' in posixpath.normpath(target).split('/'):
                     continue
-                files.append(
-                    {
-                        'filename': filename,
-                        'size': 0,
-                        'id': hex_hash,
-                        'directory': False,
-                        'urls': [],
-                        'symlink': True,
-                        'annexed': False,
-                    }
-                )
-        elif mode == 0o160000:
-            # Submodule — skip
-            continue
+                file_entry['symlink'] = True
         elif entry.type == pygit2.GIT_OBJECT_TREE:
-            files.append(
-                {
-                    'id': hex_hash,
-                    'filename': filename,
-                    'directory': True,
-                    'annexed': False,
-                    'symlink': False,
-                    'size': 0,
-                    'urls': [],
-                }
-            )
+            file_entry['directory'] = True
         else:
-            # Regular blob — get size directly
-            blob = repo[entry.id]
-            files.append(
-                {
-                    'filename': filename,
-                    'size': blob.size,
-                    'id': hex_hash,
-                    'directory': False,
-                    'urls': [],
-                    'annexed': False,
-                    'symlink': False,
-                }
-            )
+            # Regular blob
+            file_entry['size'] = repo[entry.id].size
+
+        files.append(file_entry)
+
     return files
 
 
