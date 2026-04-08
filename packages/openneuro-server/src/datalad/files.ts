@@ -240,6 +240,7 @@ async function cacheWorkerTrees(
 ): Promise<Map<string, TreeEntry[]>> {
   const needsPresign = await datasetNeedsPresign(datasetId)
   const result = new Map<string, TreeEntry[]>()
+  const permanentHashes: string[] = []
   for (const [hash, files] of workerResults) {
     if (files.length > 0) {
       const entries = files.map((f) => workerFileToEntry(f, needsPresign))
@@ -249,11 +250,14 @@ async function cacheWorkerTrees(
       )
       if (allExported) {
         void setTree(redis, hash, entries)
-        void addDatasetTree(redis, datasetId, hash)
+        permanentHashes.push(hash)
       } else {
         void setTree(redis, hash, entries, 600)
       }
     }
+  }
+  if (permanentHashes.length > 0) {
+    void addDatasetTrees(redis, datasetId, permanentHashes)
   }
   return result
 }
