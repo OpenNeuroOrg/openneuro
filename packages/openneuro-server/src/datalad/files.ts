@@ -23,7 +23,7 @@ import { join } from "node:path"
  * @param {String} path
  */
 export const encodeFilePath = (path: string): string => {
-  return path.replace(new RegExp("/", "g"), ":")
+  return path.replace(/\//g, ":")
 }
 
 /**
@@ -31,7 +31,7 @@ export const encodeFilePath = (path: string): string => {
  * @param {String} path
  */
 export const decodeFilePath = (path: string): string => {
-  return path.replace(new RegExp(":", "g"), "/")
+  return path.replace(/:/g, "/")
 }
 
 /**
