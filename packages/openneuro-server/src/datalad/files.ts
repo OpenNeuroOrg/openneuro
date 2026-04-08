@@ -40,8 +40,8 @@ export const decodeFilePath = (path: string): string => {
  * @param {String} filename
  */
 export const getFileName = (path: string, filename: string): string => {
-  const filePath = path ? [path, filename].join("/") : filename
-  return filename ? encodeFilePath(filePath) : encodeFilePath(path)
+  if (!filename) return encodeFilePath(path)
+  return encodeFilePath(path ? `${path}/${filename}` : filename)
 }
 
 /**
