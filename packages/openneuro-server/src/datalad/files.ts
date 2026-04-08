@@ -237,11 +237,13 @@ async function fetchTreesFromWorker(
 async function cacheWorkerTrees(
   datasetId: string,
   workerResults: Map<string, DatasetFile[]>,
-): Promise<void> {
+): Promise<Map<string, TreeEntry[]>> {
   const needsPresign = await datasetNeedsPresign(datasetId)
+  const result = new Map<string, TreeEntry[]>()
   for (const [hash, files] of workerResults) {
     if (files.length > 0) {
       const entries = files.map((f) => workerFileToEntry(f, needsPresign))
+      result.set(hash, entries)
       const allExported = files.every(
         (f) => f.directory || f.urls[0]?.includes("s3.amazonaws.com"),
       )
@@ -253,6 +255,7 @@ async function cacheWorkerTrees(
       }
     }
   }
+  return result
 }
 
 /**
@@ -271,11 +274,9 @@ export const getFiles = async (
 
   // Cache miss: fetch from worker via batch endpoint
   const workerResults = await fetchTreesFromWorker(datasetId, [treeish])
-  await cacheWorkerTrees(datasetId, workerResults)
-  const files = workerResults.get(treeish)
-  if (files && files.length > 0) {
-    const needsPresign = await datasetNeedsPresign(datasetId)
-    const entries = files.map((f) => workerFileToEntry(f, needsPresign))
+  const newEntriesMap = await cacheWorkerTrees(datasetId, workerResults)
+  const entries = newEntriesMap.get(treeish)
+  if (entries && entries.length > 0) {
     return entriesToDatasetFiles(entries, datasetId)
   }
   return []
@@ -299,10 +300,8 @@ export async function getFilesRecursive(
       // Batch-fetch all missing trees from the worker in one request
       const missingHashes = cachedTreeHashes.filter((h) => !treesMap.has(h))
       const workerResults = await fetchTreesFromWorker(datasetId, missingHashes)
-      await cacheWorkerTrees(datasetId, workerResults)
-      // Re-read the now-cached entries in bulk
-      const refetched = await getTreesBulk(redis, missingHashes)
-      for (const [hash, entries] of refetched) {
+      const newEntriesMap = await cacheWorkerTrees(datasetId, workerResults)
+      for (const [hash, entries] of newEntriesMap) {
         treesMap.set(hash, entries)
       }
     }
@@ -322,9 +321,8 @@ export async function getFilesRecursive(
     // Fetch all uncached trees in one worker request
     if (uncached.length > 0) {
       const workerResults = await fetchTreesFromWorker(datasetId, uncached)
-      await cacheWorkerTrees(datasetId, workerResults)
-      const fetched = await getTreesBulk(redis, uncached)
-      for (const [hash, entries] of fetched) {
+      const newEntriesMap = await cacheWorkerTrees(datasetId, workerResults)
+      for (const [hash, entries] of newEntriesMap) {
         cached.set(hash, entries)
       }
     }
