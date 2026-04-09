@@ -95,3 +95,38 @@ export interface DatasetWithDescription {
     Description?: string
   }
 }
+
+// Datacite JSON REST API types
+
+export type DoiState = "draft" | "registered" | "findable"
+export type DoiEvent = "draft" | "register" | "publish" | "hide"
+
+export interface DataciteTitle {
+  title: string
+  lang?: string
+}
+
+export interface DatacitePublisher {
+  name: string
+}
+
+export interface DataciteDoiAttributes {
+  doi: string
+  event?: DoiEvent
+  creators: RawDataciteCreator[]
+  titles: DataciteTitle[]
+  publisher: DatacitePublisher
+  publicationYear: number
+  types: RawDataciteTypes
+  url: string
+  schemaVersion?: string
+  descriptions?: { description: string; descriptionType: string }[]
+  contributors?: RawDataciteContributor[]
+}
+
+export interface DataciteDoiRequest {
+  data: {
+    type: "dois"
+    attributes: DataciteDoiAttributes
+  }
+}
