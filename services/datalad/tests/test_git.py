@@ -44,7 +44,7 @@ def test_git_show_non_iso_test(new_dataset):
     ds.save(events_path)
     ds.close()
     repo = pygit2.Repository(new_dataset.path)
-    assert git.git_show(repo, 'HEAD', 'events.tsv') == non_utf8_events.decode('cp852')
+    assert git.git_show(repo, 'HEAD', 'events.tsv') == non_utf8_events.decode('cp775')
 
 
 dataset_description_4096 = """{
