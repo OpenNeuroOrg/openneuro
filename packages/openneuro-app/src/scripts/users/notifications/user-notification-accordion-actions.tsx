@@ -10,7 +10,7 @@ interface NotificationActionButtonsProps {
   notification: MappedNotification
   isProcessing: boolean
   onUpdate: (id: string, updates: Partial<MappedNotification>) => void
-  handleProcessAction: (action: "accepted" | "denied") => void
+  handleProcessAction: (action: "ACCEPTED" | "DENIED") => void
   handleStatusChange: (
     newStatus: "unread" | "saved" | "archived",
   ) => Promise<void>
@@ -32,16 +32,16 @@ export const NotificationActionButtons: React.FC<
         <>
           <button
             className={`${styles.notificationapprove}`}
-            onClick={() => handleProcessAction("accepted")}
-            disabled={approval === "accepted" || isProcessing}
+            onClick={() => handleProcessAction("ACCEPTED")}
+            disabled={approval === "ACCEPTED" || isProcessing}
           >
             <i className="fa fa-check" /> Accept
           </button>
 
           <button
             className={`${styles.notificationdeny}`}
-            onClick={() => handleProcessAction("denied")}
-            disabled={approval === "denied" || isProcessing}
+            onClick={() => handleProcessAction("DENIED")}
+            disabled={approval === "DENIED" || isProcessing}
           >
             <i className="fa fa-times" /> Deny
           </button>

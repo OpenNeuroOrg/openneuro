@@ -7,6 +7,10 @@ import Draft from "./draft.js"
 import Snapshot from "./snapshots.js"
 import User from "./user.js"
 import Comment from "./comment.js"
+import {
+  DatasetEventDescriptionTypeResolvers,
+  DatasetEventTypeResolvers,
+} from "./datasetEvents"
 
 export default {
   // Scalars
@@ -22,4 +26,6 @@ export default {
   Draft,
   Snapshot,
   Comment,
+  DatasetEvent: DatasetEventTypeResolvers,
+  DatasetEventDescription: DatasetEventDescriptionTypeResolvers,
 }

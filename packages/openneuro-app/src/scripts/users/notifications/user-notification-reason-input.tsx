@@ -1,10 +1,11 @@
 import React from "react"
+import { formatStatusForDisplay } from "../../types/event-types"
 import styles from "./scss/usernotifications.module.scss"
 
 interface NotificationReasonInputProps {
   reasonInput: string
   setReasonInput: (reason: string) => void
-  currentApprovalAction: "accepted" | "denied" | null
+  currentApprovalAction: "ACCEPTED" | "DENIED" | null
   handleReasonCancel: () => void
   handleReasonSubmit: () => void
   isProcessing: boolean
@@ -26,14 +27,16 @@ export const NotificationReasonInput: React.FC<NotificationReasonInputProps> = (
     <div className={styles.reasonInputContainer}>
       <label htmlFor={textareaId} className="sr-only">
         {`Reason for ${
-          currentApprovalAction ? currentApprovalAction : "approval"
+          formatStatusForDisplay(currentApprovalAction) || "approval"
         } action`}
       </label>
       <textarea
         id={textareaId}
         value={reasonInput}
         onChange={(e) => setReasonInput(e.target.value)}
-        placeholder={`Reason for ${currentApprovalAction}...`}
+        placeholder={`Reason for ${
+          formatStatusForDisplay(currentApprovalAction)
+        }...`}
         rows={3}
         className={styles.reasonTextarea}
         style={{ width: "100%" }}

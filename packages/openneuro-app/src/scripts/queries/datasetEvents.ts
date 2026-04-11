@@ -53,7 +53,7 @@ export const PROCESS_CONTRIBUTOR_REQUEST_MUTATION = gql`
     $datasetId: ID!
     $requestId: ID!
     $targetUserId: ID!
-    $resolutionStatus: String!
+    $resolutionStatus: ResponseStatusType!
     $reason: String
   ) {
     processContributorRequest(
@@ -153,7 +153,7 @@ export const CREATE_CONTRIBUTOR_CITATION_EVENT = gql`
 `
 
 export const PROCESS_CONTRIBUTOR_CITATION_MUTATION = gql`
-  mutation ProcessContributorCitation($eventId: ID!, $status: String!) {
+  mutation ProcessContributorCitation($eventId: ID!, $status: ResponseStatusType!) {
     processContributorCitation(eventId: $eventId, status: $status) {
       id
       timestamp

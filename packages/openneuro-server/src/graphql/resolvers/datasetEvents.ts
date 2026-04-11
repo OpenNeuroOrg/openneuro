@@ -1,4 +1,6 @@
 import DatasetEvent from "../../models/datasetEvents"
+import { toDbStatus, toGraphqlStatus } from "./response-status"
+import type { DbStatus, GraphqlStatus } from "./response-status"
 import User from "../../models/user"
 import type { UserDocument } from "../../models/user"
 import { checkDatasetAdmin } from "../permissions"
@@ -51,7 +53,7 @@ export type EnrichedDatasetEvent =
   & Omit<DatasetEventDocument, "notificationStatus">
   & {
     hasBeenRespondedTo?: boolean
-    responseStatus?: "pending" | "accepted" | "denied" | null
+    responseStatus?: DbStatus | null
     notificationStatus?: UserNotificationStatusDocument
   }
 
@@ -81,11 +83,11 @@ export async function datasetEvents(
       }) as UserNotificationStatusDocument
     }
 
+    // Internal representation stays lowercase (DbStatus) here; the
+    // GraphQL resolver edge (DatasetEventTypeResolvers in ./index.ts)
+    // converts to the uppercase ResponseStatusType enum at query time.
     if ("resolutionStatus" in e.event) {
-      ev.responseStatus = e.event.resolutionStatus as
-        | "pending"
-        | "accepted"
-        | "denied"
+      ev.responseStatus = e.event.resolutionStatus as DbStatus
       ev.hasBeenRespondedTo = ev.responseStatus !== null &&
         ev.responseStatus !== "pending"
     } else {
@@ -141,13 +143,36 @@ export const DatasetEventResolvers = {
     ) {
       data = ev.event.contributorData
     }
-
     return {
       ...data,
       contributorType: data?.contributorType || "Researcher",
     }
   },
 }
+
+/**
+ * Minimal type-level resolvers wired via ./index.ts. These exist so the
+ * case conversion for resolutionStatus / responseStatus runs at the
+ * GraphQL edge, regardless of which query/mutation produced the event
+ * object. Only the status-related fields are declared here; every other
+ * field of DatasetEvent and DatasetEventDescription continues to resolve
+ * via default property access.
+ */
+export const DatasetEventTypeResolvers = {
+  responseStatus: (
+    ev: { responseStatus?: DbStatus | null },
+  ): GraphqlStatus | null => toGraphqlStatus(ev.responseStatus),
+  hasBeenRespondedTo: (
+    ev: { hasBeenRespondedTo?: boolean },
+  ): boolean => ev.hasBeenRespondedTo ?? false,
+}
+
+export const DatasetEventDescriptionTypeResolvers = {
+  resolutionStatus: (
+    evDesc: { resolutionStatus?: DbStatus | null },
+  ): GraphqlStatus | null => toGraphqlStatus(evDesc.resolutionStatus),
+}
+
 /**
  * Create a 'contributor request' event
  */
@@ -235,13 +260,13 @@ export async function processContributorRequest(
     datasetId,
     requestId,
     targetUserId,
-    resolutionStatus,
+    resolutionStatus: graphqlResolutionStatus,
     reason,
   }: {
     datasetId: string
     requestId: string
     targetUserId: string
-    resolutionStatus: "accepted" | "denied"
+    resolutionStatus: "ACCEPTED" | "DENIED"
     reason?: string
   },
   { user: currentUserId, userInfo }: {
@@ -251,6 +276,14 @@ export async function processContributorRequest(
 ) {
   if (!currentUserId) {
     throw new Error("Authentication required to process contributor requests.")
+  }
+
+  const resolutionStatus = toDbStatus(graphqlResolutionStatus)
+
+  // Note that this is technically possible with hand-crafted GraphQL
+  // Separating types in the schema will enforce this at the endpoint
+  if (resolutionStatus === "pending") {
+    throw new Error("PENDING is not a valid resolution action.")
   }
 
   await checkDatasetAdmin(datasetId, currentUserId, userInfo)
@@ -437,14 +470,22 @@ export async function processContributorCitation(
   obj,
   {
     eventId,
-    status,
+    status: graphqlStatus,
   }: {
     eventId: string
-    status: "accepted" | "denied"
+    status: "ACCEPTED" | "DENIED"
   },
   { user, userInfo }: { user: string; userInfo: { admin?: boolean } },
 ) {
   if (!user) throw new Error("Authentication required.")
+
+  const status = toDbStatus(graphqlStatus)
+
+  // Note that this is technically possible with hand-crafted GraphQL
+  // Separating types in the schema will enforce this at the endpoint
+  if (status === "pending") {
+    throw new Error("PENDING is not a valid resolution action.")
+  }
 
   const citationEvent = await DatasetEvent.findOne({ id: eventId })
 

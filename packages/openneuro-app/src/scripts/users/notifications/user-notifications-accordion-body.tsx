@@ -58,7 +58,7 @@ export const NotificationBodyContent: React.FC<NotificationBodyContentProps> = (
     )
   }
 
-  if (approval === "accepted" && isContributorCitation) {
+  if (approval === "ACCEPTED" && isContributorCitation) {
     return (
       <div>
         The following user has been added as a contributor to {datasetId}.
@@ -67,7 +67,7 @@ export const NotificationBodyContent: React.FC<NotificationBodyContentProps> = (
     )
   }
 
-  if (approval === "accepted" && isContributorRequest) {
+  if (approval === "ACCEPTED" && isContributorRequest) {
     return (
       <div>
         <Username user={requesterUser} />{" "}
@@ -77,7 +77,7 @@ export const NotificationBodyContent: React.FC<NotificationBodyContentProps> = (
     )
   }
 
-  if (approval === "accepted" && isContributorResponse) {
+  if (approval === "ACCEPTED" && isContributorResponse) {
     return (
       <div>
         Admin <Username user={adminUser} />{" "}
