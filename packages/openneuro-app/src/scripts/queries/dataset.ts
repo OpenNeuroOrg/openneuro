@@ -3,7 +3,7 @@
  */
 import { gql } from "@apollo/client"
 import * as DatasetQueryFragments from "../datalad/dataset/dataset-query-fragments.js"
-import { DATASET_COMMENTS } from "../datalad/dataset/comments-fragments.js"
+import { DATASET_COMMENTS } from "../dataset/fragments/comments-fragments.js"
 
 /**
  * Generate the dataset page query
