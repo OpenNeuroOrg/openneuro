@@ -2,13 +2,9 @@ import DatasetEvent from "../../models/datasetEvents"
 import { toDbStatus, toGraphqlStatus } from "./response-status"
 import type { DbStatus, GraphqlStatus } from "./response-status"
 import User from "../../models/user"
-import type { UserDocument } from "../../models/user"
 import { checkDatasetAdmin } from "../permissions"
 import type {
-  DatasetEventContributorCitation,
-  DatasetEventContributorCitationResponse,
   DatasetEventContributorRequest,
-  DatasetEventContributorRequestResponse,
   DatasetEventDocument,
 } from "../../models/datasetEvents"
 import { UserNotificationStatus } from "../../models/userNotificationStatus"
@@ -24,28 +20,6 @@ function isContributorRequest(
   event: DatasetEventDocument,
 ): event is DatasetEventDocument & { event: DatasetEventContributorRequest } {
   return event.event.type === "contributorRequest"
-}
-
-function isContributorCitation(
-  event: DatasetEventDocument,
-): event is DatasetEventDocument & { event: DatasetEventContributorCitation } {
-  return event.event.type === "contributorCitation"
-}
-
-function isContributorRequestResponse(
-  event: DatasetEventDocument,
-): event is DatasetEventDocument & {
-  event: DatasetEventContributorRequestResponse
-} {
-  return event.event.type === "contributorRequestResponse"
-}
-
-function isContributorCitationResponse(
-  event: DatasetEventDocument,
-): event is DatasetEventDocument & {
-  event: DatasetEventContributorCitationResponse
-} {
-  return event.event.type === "contributorCitationResponse"
 }
 
 /** Enriched type for GraphQL */
@@ -103,51 +77,6 @@ export async function datasetEvents(
       !(ev.event.type === "note" && ev.event.admin) &&
       ev.event.type !== "permissionChange",
   )
-}
-
-// --- Field-level resolvers ---
-export const DatasetEventResolvers = {
-  hasBeenRespondedTo: (ev: EnrichedDatasetEvent) =>
-    ev.hasBeenRespondedTo ?? false,
-  responseStatus: (ev: EnrichedDatasetEvent) => ev.responseStatus ?? null,
-  notificationStatus: (ev: EnrichedDatasetEvent) =>
-    ev.notificationStatus?.status ?? "UNREAD",
-  requestId: (ev: EnrichedDatasetEvent) =>
-    isContributorRequest(ev) || isContributorRequestResponse(ev)
-      ? ev.event.requestId
-      : null,
-  target: async (ev: EnrichedDatasetEvent): Promise<UserDocument | null> => {
-    const targetUserId = isContributorRequestResponse(ev) ||
-        isContributorCitation(ev) ||
-        isContributorCitationResponse(ev)
-      ? ev.event.targetUserId
-      : undefined
-
-    if (!targetUserId) return null
-    // Use findOne({ id }) for UUID strings
-    return User.findOne({ id: targetUserId })
-  },
-  user: async (ev: EnrichedDatasetEvent): Promise<UserDocument | null> =>
-    ev.userId ? User.findOne({ id: ev.userId }) : null,
-  contributorData: (ev: EnrichedDatasetEvent) => {
-    let data: DatasetEventContributorCitation["contributorData"] | undefined
-
-    if (
-      (isContributorCitation(ev) || isContributorCitationResponse(ev)) &&
-      ev.event.contributorData
-    ) {
-      data = ev.event.contributorData
-    } else if (
-      (isContributorRequest(ev) || isContributorRequestResponse(ev)) &&
-      ev.event.contributorData
-    ) {
-      data = ev.event.contributorData
-    }
-    return {
-      ...data,
-      contributorType: data?.contributorType || "Researcher",
-    }
-  },
 }
 
 /**
