@@ -25,14 +25,18 @@ export function queueIndexDataset(datasetId: string) {
  * Queue data retention check for a dataset
  * @param datasetId Dataset to check
  */
-export function queueDataRetentionCheck(datasetId: string) {
+export async function queueDataRetentionCheck(
+  datasetId: string,
+): Promise<void> {
   try {
     const msg = new ProducibleMessage()
     msg.setQueue(OpenNeuroQueues.DATARETENTION).setBody({ datasetId })
-    producer.produce(msg, (err) => {
-      if (err) {
-        Sentry.captureException(err)
-      }
+    msg.setTTL(64800000) // 18 hours in ms to survive the consumer rate limits
+    await new Promise<void>((resolve, reject) => {
+      producer.produce(msg, (err) => {
+        if (err) reject(err)
+        else resolve()
+      })
     })
   } catch (err) {
     Sentry.captureException(err)
