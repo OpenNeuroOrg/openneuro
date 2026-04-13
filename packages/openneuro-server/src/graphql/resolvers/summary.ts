@@ -1,3 +1,4 @@
+import { getDraftRevision } from "../../datalad/draft"
 import Summary from "../../models/summary"
 import type { SummaryDocument } from "../../models/summary"
 
@@ -50,4 +51,20 @@ export const updateSummary = (obj, args) => {
   )
     .exec()
     .then(() => args.summary)
+}
+
+/**
+ * Get the primary modality for a dataset from the validator summary.
+ * Returns undefined if no summary is available.
+ */
+export async function getPrimaryModality(
+  datasetId: string,
+): Promise<string | undefined> {
+  try {
+    const revision = await getDraftRevision(datasetId)
+    const result = await summary({ id: datasetId, revision })
+    return result?.primaryModality || undefined
+  } catch {
+    return undefined
+  }
 }

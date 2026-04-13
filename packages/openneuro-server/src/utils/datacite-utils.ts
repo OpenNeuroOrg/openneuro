@@ -7,7 +7,9 @@ import { commitFiles } from "../datalad/dataset"
 import { getDatasetWorker } from "../libs/datalad-service"
 import type {
   Contributor,
-  RawDataciteContributor,
+  ContributorType,
+  Creator,
+  DataciteContributor,
   RawDataciteYml,
 } from "../types/datacite"
 import { validateOrcid } from "../utils/orcid-utils"
@@ -131,11 +133,11 @@ export const saveDataciteYmlToRepo = async (
 }
 
 /**
- * Converts RawDataciteContributor -> internal Contributor type.
+ * Converts DataciteContributor -> internal Contributor type.
  * Optionally attaches a `userId` if the contributor exists as a site user.
  */
 export const normalizeRawContributors = async (
-  raw: RawDataciteContributor[] | undefined,
+  raw: DataciteContributor[] | undefined,
 ): Promise<Contributor[]> => {
   if (!Array.isArray(raw)) return []
 
@@ -183,14 +185,14 @@ export const updateContributors = async (
       dataciteData = await emptyDataciteYml({ datasetId, revision })
     }
 
-    // Map contributors to RawDataciteContributor format
-    const rawContributors: RawDataciteContributor[] = newContributors.map((
+    // Map contributors to DataciteContributor format
+    const rawContributors: DataciteContributor[] = newContributors.map((
       c,
     ) => ({
       name: c.name,
       givenName: c.givenName,
       familyName: c.familyName,
-      contributorType: c.contributorType || "Researcher",
+      contributorType: (c.contributorType || "Researcher") as ContributorType,
       nameType: "Personal" as const,
       nameIdentifiers: c.orcid
         ? [{ nameIdentifier: c.orcid, nameIdentifierScheme: "ORCID" }]
@@ -223,7 +225,7 @@ export const updateContributorsUtil = async (
   //
   // 1. Build contributors (full form, includes `order`)
   //
-  const contributorsCopy: RawDataciteContributor[] = newContributors.map((
+  const contributorsCopy: DataciteContributor[] = newContributors.map((
     c,
     index,
   ) => ({
@@ -240,7 +242,7 @@ export const updateContributorsUtil = async (
         schemeUri: "https://orcid.org",
       }]
       : [],
-    contributorType: c.contributorType || "Researcher",
+    contributorType: (c.contributorType || "Researcher") as ContributorType,
     order: index + 1,
   }))
 
@@ -249,13 +251,8 @@ export const updateContributorsUtil = async (
   //
   // 2. Build creators (strictly filtered / no empty fields / no order)
   //
-  type RawDataciteCreator = Omit<
-    RawDataciteContributor,
-    "contributorType" | "order"
-  >
-
-  const creators: RawDataciteCreator[] = contributorsCopy.map((c) => {
-    const creator: RawDataciteCreator = {
+  const creators: Creator[] = contributorsCopy.map((c) => {
+    const creator: Creator = {
       name: c.name,
       nameType: "Personal",
     }

@@ -1,32 +1,5 @@
-import request from "superagent"
 import config from "../../config"
-
-export const template = ({
-  doi,
-  creators,
-  title,
-  year,
-  resourceType,
-}) =>
-  `<?xml version="1.0" encoding="UTF-8"?>
-<resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://datacite.org/schema/kernel-4" xsi:schemaLocation="http://datacite.org/schema/kernel-4 http://schema.datacite.org/meta/kernel-4/metadata.xsd">
-  <identifier identifierType="DOI">${doi}</identifier>
-  <creators>
-  ${
-    creators
-      .map((creator) =>
-        `<creator><creatorName>${creator}</creatorName></creator>`
-      )
-      .join("")
-  }
-  </creators>
-  <titles>
-    <title xml:lang="en-us">${title}</title>
-  </titles>
-  <publisher>Openneuro</publisher>
-  <publicationYear>${year}</publicationYear>
-  <resourceType resourceTypeGeneral="Dataset">${resourceType}</resourceType>
-</resource>`
+import type { DataCite, DataciteDoiRequest } from "../../types/datacite"
 
 /**
  * @param {Object} doiConfig
@@ -37,50 +10,114 @@ export const formatBasicAuth = (doiConfig) =>
   "Basic " +
   Buffer.from(doiConfig.username + ":" + doiConfig.password).toString("base64")
 
-export default {
-  auth: formatBasicAuth(config.doi),
-  createDOI(accNumber, snapshotId) {
-    let doi = config.doi.prefix + "/openneuro." + accNumber
-    if (snapshotId) {
-      doi = doi + ".v" + snapshotId
-    }
-    return doi
-  },
+/**
+ * Build a DOI string from dataset accession number and optional snapshot ID.
+ */
+export function createDOI(accNumber: string, snapshotId?: string): string {
+  let doi = config.doi.prefix + "/openneuro." + accNumber
+  if (snapshotId) {
+    doi = doi + ".v" + snapshotId
+  }
+  return doi
+}
 
-  async mintDOI(doi, url) {
-    return await request
-      .put(config.doi.url + "doi/" + doi)
-      .set("Authorization", this.auth)
-      .set("Content-Type", "text/plain;charset=UTF-8")
-      .send("doi=" + doi + "\nurl=" + url)
-  },
+/**
+ * Build the Datacite JSON API request payload.
+ */
+export function buildPayload(
+  attributes: DataCite,
+  event?: DataCite["event"],
+): DataciteDoiRequest {
+  return {
+    data: {
+      type: "dois",
+      attributes: {
+        ...attributes,
+        ...(event ? { event } : {}),
+        schemaVersion: "http://datacite.org/schema/kernel-4",
+      },
+    },
+  }
+}
 
-  registerMetadata(context) {
-    const xml = template(context)
-    return request
-      .post(config.doi.url + "metadata/")
-      .set("Authorization", this.auth)
-      .set("Content-Type", "application/xml;charset=UTF-8")
-      .send(xml)
-  },
+/**
+ * Create or update a DOI via the Datacite JSON REST API.
+ * Uses PUT to {baseUrl}dois/{doi} which handles both create and update.
+ */
+export async function upsertDoi(
+  payload: DataciteDoiRequest,
+): Promise<Response> {
+  const doi = payload.data.attributes.doi
+  const url = `${config.doi.url}dois/${encodeURIComponent(doi)}`
+  const response = await fetch(url, {
+    method: "PUT",
+    headers: {
+      "Authorization": formatBasicAuth(config.doi),
+      "Content-Type": "application/vnd.api+json",
+    },
+    body: JSON.stringify(payload),
+  })
+  if (!response.ok) {
+    const body = await response.text()
+    throw new Error(
+      `Datacite API error ${response.status} for ${doi}: ${body}`,
+    )
+  }
+  return response
+}
 
-  registerSnapshotDoi(datasetId, snapshotId, oldDesc) {
-    const baseDoi = this.createDOI(datasetId, snapshotId)
-    const url =
-      `https://openneuro.org/datasets/${datasetId}/versions/${snapshotId}`
-    const context = {
-      doi: baseDoi,
-      creators: oldDesc.Authors.filter((x) => x),
-      title: oldDesc.Name,
-      year: new Date().getFullYear(),
-      resourceType: "fMRI",
-    }
-    return this.registerMetadata(context)
-      .then(() => {
-        return this.mintDOI(baseDoi, url)
-      })
-      .then(() => {
-        return baseDoi
-      })
-  },
+/**
+ * Transition a DOI's state without re-sending full metadata.
+ */
+export async function updateDoiState(
+  doi: string,
+  event: DataCite["event"],
+): Promise<void> {
+  const url = `${config.doi.url}dois/${encodeURIComponent(doi)}`
+  const payload = {
+    data: {
+      type: "dois",
+      attributes: { event },
+    },
+  }
+  const response = await fetch(url, {
+    method: "PUT",
+    headers: {
+      "Authorization": formatBasicAuth(config.doi),
+      "Content-Type": "application/vnd.api+json",
+    },
+    body: JSON.stringify(payload),
+  })
+  if (!response.ok) {
+    const body = await response.text()
+    throw new Error(
+      `Datacite API state transition error ${response.status} for ${doi}: ${body}`,
+    )
+  }
+}
+
+/**
+ * Create a draft DOI for a dataset snapshot.
+ * Returns the DOI string.
+ */
+export async function createDraftDoi(
+  attributes: DataCite,
+): Promise<string> {
+  const payload = buildPayload(attributes)
+  await upsertDoi(payload)
+  return attributes.doi
+}
+
+/**
+ * Transition a DOI from draft to findable.
+ */
+export async function publishDoi(doi: string): Promise<void> {
+  await updateDoiState(doi, "publish")
+}
+
+/**
+ * Transition a DOI from findable to registered (hidden but reserved).
+ */
+export async function hideDoi(doi: string): Promise<void> {
+  await updateDoiState(doi, "hide")
 }

@@ -1,5 +1,6 @@
 import { vi } from "vitest"
 import { validateDataciteMetadata } from "../validate.js"
+import type { ResourceTypeGeneral } from "../../../types/datacite/datacite-v4.5.ts"
 
 vi.mock("ioredis")
 
@@ -89,8 +90,7 @@ describe("validateDataciteMetadata", () => {
     const errors = validateDataciteMetadata({
       ...validAttrs,
       types: {
-        resourceTypeGeneral:
-          "" as unknown as import("../../../types/datacite/datacite-v4.5").ResourceTypeGeneral,
+        resourceTypeGeneral: "" as unknown as ResourceTypeGeneral,
       },
     })
     expect(errors).toEqual(

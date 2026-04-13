@@ -1,29 +1,44 @@
 /**
- * Interfaces for working with datacite.yml metadata.
- * Both contributors and creators
+ * DataCite types.
+ *
+ * Schema-derived types are re-exported from the generated datacite-v4.5 module.
+ * Only app-specific types that don't exist in the DataCite schema are defined here.
  */
 
+export type {
+  Affiliation,
+  ContributorType,
+  Creator,
+  DescriptionType,
+  NameIdentifiers,
+  NameType,
+  Person,
+  PublicationYear,
+  ResourceTypeGeneral,
+  TitleType,
+} from "./datacite/datacite-v4.5"
+
+export type { Contributor as DataciteContributor } from "./datacite/datacite-v4.5"
+
+import type { Creator, DataCiteV45, TitleType } from "./datacite/datacite-v4.5"
+
 /**
- * Unique identifier for a person or organization.
+ * Re-export the versioned schema type under a version-agnostic name.
+ *
+ * Titles and creators are omitted and we separately check minItems:1
  */
-export interface NameIdentifier {
-  nameIdentifier: string
-  nameIdentifierScheme: string
-  schemeUri?: string
+export type DataCite = Omit<DataCiteV45, "creators" | "titles"> & {
+  creators: Creator[]
+  titles: {
+    title: string
+    titleType?: TitleType
+    lang?: string
+  }[]
 }
 
 /**
- * An interface for an organizational or institutional affiliation.
- */
-export interface Affiliation {
-  name: string
-  schemeUri?: string
-  affiliationIdentifier?: string
-  affiliationIdentifierScheme?: string
-}
-
-/**
- * Contributor object (normalized form used internally in app).
+ * Internal app contributor type with fields not in the DataCite schema
+ * (orcid shorthand, display order, linked user ID).
  */
 export interface Contributor {
   name: string
@@ -36,59 +51,9 @@ export interface Contributor {
 }
 
 /**
- * Base interface shared by both creators and contributors in datacite.yml
+ * DOI states tracked in our database (response-only, not in the DataCite request schema).
  */
-export interface RawDataciteBaseContributor {
-  name: string
-  nameType: "Personal" | "Organizational"
-  givenName?: string
-  familyName?: string
-  nameIdentifiers?: NameIdentifier[]
-  affiliation?: Affiliation[]
-}
-
-/**
- * Raw Creator object as it appears in datacite.yml creators array.
- * Does NOT have contributorType.
- */
-export type RawDataciteCreator = RawDataciteBaseContributor
-
-/**
- * Raw Contributor object as it appears in datacite.yml contributors array.
- * Adds contributorType, which is required.
- */
-export interface RawDataciteContributor extends RawDataciteBaseContributor {
-  contributorType: string
-}
-
-/**
- * An interface for the resource types.
- */
-export interface RawDataciteTypes {
-  resourceType?: string
-  resourceTypeGeneral: string
-}
-
-/**
- * The main attributes section of the datacite.yml file.
- */
-export interface RawDataciteAttributes {
-  contributors?: RawDataciteContributor[]
-  creators?: RawDataciteCreator[]
-  types: RawDataciteTypes
-  descriptions?: {
-    description: string
-    descriptionType: string
-  }[]
-}
-/**
- * The top-level interface for the entire datacite.yml file structure.
- */
-export interface RawDataciteYml {
-  data: {
-    attributes: RawDataciteAttributes
-  }
-}
+export type DoiState = "draft" | "registered" | "findable"
 
 export interface DatasetWithDescription {
   dataset_description?: {
@@ -96,37 +61,27 @@ export interface DatasetWithDescription {
   }
 }
 
-// Datacite JSON REST API types
-
-export type DoiState = "draft" | "registered" | "findable"
-export type DoiEvent = "draft" | "register" | "publish" | "hide"
-
-export interface DataciteTitle {
-  title: string
-  lang?: string
+/**
+ * The datacite.yml file structure stored in dataset repositories.
+ * Uses a subset of DataCiteV45 fields wrapped in a JSON:API-like envelope.
+ */
+export interface RawDataciteYml {
+  data: {
+    attributes: Partial<
+      Pick<
+        DataCite,
+        "contributors" | "creators" | "types" | "descriptions"
+      >
+    >
+  }
 }
 
-export interface DatacitePublisher {
-  name: string
-}
-
-export interface DataciteDoiAttributes {
-  doi: string
-  event?: DoiEvent
-  creators: RawDataciteCreator[]
-  titles: DataciteTitle[]
-  publisher: DatacitePublisher
-  publicationYear: number
-  types: RawDataciteTypes
-  url: string
-  schemaVersion?: string
-  descriptions?: { description: string; descriptionType: string }[]
-  contributors?: RawDataciteContributor[]
-}
-
+/**
+ * JSON:API request envelope for the DataCite REST API.
+ */
 export interface DataciteDoiRequest {
   data: {
     type: "dois"
-    attributes: DataciteDoiAttributes
+    attributes: DataCite
   }
 }
