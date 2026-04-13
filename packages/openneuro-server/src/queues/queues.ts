@@ -55,6 +55,6 @@ export async function setupQueues(): Promise<void> {
   // Limit indexing queue to 8 runs per minute to avoid stacking indexing excessively
   await setRateLimit(OpenNeuroQueues.INDEXING, 8, 60000)
 
-  // Rate limit data retention queue to 16 runs per minute
-  await setRateLimit(OpenNeuroQueues.DATARETENTION, 16, 60000)
+  // Rate limit data retention queue to 60 runs per minute
+  await setRateLimit(OpenNeuroQueues.DATARETENTION, 60, 60000)
 }
