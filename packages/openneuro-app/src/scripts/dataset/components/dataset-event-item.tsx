@@ -102,7 +102,7 @@ export const DatasetEventItem: React.FC<DatasetEventItemProps> = ({
       )
     } else {
       if (event.event.type === "contributorResponse") {
-        const statusText = event.event.resolutionStatus === "accepted"
+        const statusText = event.event.resolutionStatus === "ACCEPTED"
           ? "Accepted"
           : "Denied"
         return (
@@ -160,7 +160,7 @@ export const DatasetEventItem: React.FC<DatasetEventItemProps> = ({
     }
   }
 
-  const handleSaveOrProcessRequest = async (status?: "accepted" | "denied") => {
+  const handleSaveOrProcessRequest = async (status?: "ACCEPTED" | "DENIED") => {
     if (status) {
       if (!event.user?.id) {
         toast.error("Cannot process request: User ID not found.")
@@ -239,14 +239,14 @@ export const DatasetEventItem: React.FC<DatasetEventItemProps> = ({
               {editingNoteId === event.id && (
                 <>
                   <button
-                    onClick={() => handleSaveOrProcessRequest("accepted")}
+                    onClick={() => handleSaveOrProcessRequest("ACCEPTED")}
                     className={`${styles.eventActionButton} on-button on-button--small on-button--secondary`}
                     style={{ marginBottom: "5px" }}
                   >
                     Accept
                   </button>
                   <button
-                    onClick={() => handleSaveOrProcessRequest("denied")}
+                    onClick={() => handleSaveOrProcessRequest("DENIED")}
                     className={`${styles.eventActionButton} on-button on-button--small`}
                   >
                     Deny

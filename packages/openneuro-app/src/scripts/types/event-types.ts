@@ -1,6 +1,19 @@
 import type { User } from "./user-types"
 
-export type RequestStatus = "pending" | "accepted" | "denied"
+export type RequestStatus = "PENDING" | "ACCEPTED" | "DENIED"
+
+/**
+ * Format a RequestStatus or compatible string for display in user-facing UI.
+ * The type-level representation uses uppercase (matching the GraphQL
+ * ResponseStatusType enum), but UI rendering uses lowercase ("accepted",
+ * "denied", "pending") for readability. Call this at every display site
+ * so that the convention stays consistent if new sites are added.
+ */
+export function formatStatusForDisplay(
+  status: string | null | undefined,
+): string {
+  return status ? status.toLowerCase() : ""
+}
 
 export interface ContributorData {
   name?: string
@@ -53,7 +66,7 @@ export interface MappedNotification {
   content: string
   status: "unread" | "saved" | "archived"
   type: EventDescription["type"]
-  approval?: "pending" | "accepted" | "denied"
+  approval?: RequestStatus
   originalNotification: Event
   datasetId?: string
   needsReview?: boolean
@@ -94,8 +107,8 @@ export const mapRawEventToMappedNotification = (
       title = "is requesting to be added to"
       requesterUser = user // user initiating the request (admin)
       targetUser = target || rawNotification.user // fallback
-      approval = resolutionStatus ?? "pending"
-      needsReview = approval === "pending"
+      approval = resolutionStatus ?? "PENDING"
+      needsReview = approval === "PENDING"
       break
     case "contributorCitation":
       title = "added"
@@ -110,22 +123,22 @@ export const mapRawEventToMappedNotification = (
             email: "",
             orcid: "",
           })
-      approval = resolutionStatus ?? "pending"
-      needsReview = approval === "pending"
+      approval = resolutionStatus ?? "PENDING"
+      needsReview = approval === "PENDING"
       break
 
     case "contributorRequestResponse":
       title = "responded to a contributor request"
       adminUser = user
       targetUser = target
-      approval = resolutionStatus ?? "pending"
+      approval = resolutionStatus ?? "PENDING"
       break
 
     case "contributorCitationResponse":
       title = "had their citation request for"
       adminUser = user
       targetUser = target
-      approval = resolutionStatus ?? "pending"
+      approval = resolutionStatus ?? "PENDING"
       break
 
     case "note":

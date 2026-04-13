@@ -2,7 +2,7 @@ import React from "react"
 import PropTypes from "prop-types"
 import { gql } from "@apollo/client"
 import { Mutation } from "@apollo/client/react/components"
-import { DATASET_COMMENTS } from "../dataset/comments-fragments.js"
+import { DATASET_COMMENTS } from "../../dataset/fragments/comments-fragments.js"
 import { datasetCacheId } from "./cache-id.js"
 
 const deleteComment = gql`

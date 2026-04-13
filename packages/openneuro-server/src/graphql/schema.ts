@@ -215,8 +215,8 @@ export const typeDefs = `
       datasetId: ID!
       targetUserId: ID!
       requestId: ID!
-      resolutionStatus: String!
-      reason: String 
+      resolutionStatus: ResponseStatusType!
+      reason: String
     ): DatasetEvent
     # Create or update a fileCheck document
     updateFileCheck(
@@ -239,7 +239,7 @@ export const typeDefs = `
     ): DatasetEvent
     processContributorCitation(
       eventId: ID!
-      status: String!
+      status: ResponseStatusType!
     ): DatasetEvent
     # Update worker task queue status
     updateWorkerTask(
@@ -972,7 +972,7 @@ export const typeDefs = `
     requestId: ID
     reason: String
     datasetId: ID
-    resolutionStatus: String
+    resolutionStatus: ResponseStatusType
     contributorData: Contributor
   }
 
@@ -994,7 +994,7 @@ export const typeDefs = `
     datasetId: ID
     # User's notification status event
     notificationStatus: UserNotificationStatus
-    responseStatus: String 
+    responseStatus: ResponseStatusType
     hasBeenRespondedTo: Boolean
   }
 

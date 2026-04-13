@@ -2,11 +2,12 @@ import React from "react"
 import { Link } from "react-router-dom"
 import { useUser } from "../queries/user"
 import type { Contributor } from "../types/datacite"
+import type { RequestStatus } from "../types/event-types.ts"
 import ORCIDiDLogo from "../../assets/ORCIDiD_iconvector.svg"
 
 interface SingleContributorDisplayProps {
   contributor: Contributor & {
-    resolutionStatus?: "pending" | "accepted" | "denied"
+    resolutionStatus?: RequestStatus
   }
   isLast: boolean
   separator: React.ReactNode
@@ -34,7 +35,7 @@ export const SingleContributorDisplay: React.FC<SingleContributorDisplayProps> =
     const userExists = !!user?.id
 
     // TODO get resolutionStatus from event/contributor
-    const resolutionAccepted = true //contributor.resolutionStatus === "accepted"
+    const resolutionAccepted = true //contributor.resolutionStatus === "ACCEPTED"
 
     return (
       <>

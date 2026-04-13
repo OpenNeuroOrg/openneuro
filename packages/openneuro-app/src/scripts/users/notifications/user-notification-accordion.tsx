@@ -15,7 +15,10 @@ import { NotificationActionButtons } from "./user-notification-accordion-actions
 import ToastContent from "../../common/partials/toast-content"
 import styles from "./scss/usernotifications.module.scss"
 
-import type { MappedNotification } from "../../types/event-types"
+import {
+  formatStatusForDisplay,
+  type MappedNotification,
+} from "../../types/event-types"
 
 export const NotificationAccordion = ({
   notification,
@@ -53,7 +56,7 @@ export const NotificationAccordion = ({
   const [showReasonInput, setShowReasonInput] = useState(false)
   const [reasonInput, setReasonInput] = useState("")
   const [currentApprovalAction, setCurrentApprovalAction] = useState<
-    "accepted" | "denied" | null
+    "ACCEPTED" | "DENIED" | null
   >(null)
 
   const [processContributorRequest, { loading: processRequestLoading }] =
@@ -78,7 +81,7 @@ export const NotificationAccordion = ({
     }
   }, [isOpen])
 
-  const handleProcessAction = useCallback((action: "accepted" | "denied") => {
+  const handleProcessAction = useCallback((action: "ACCEPTED" | "DENIED") => {
     setIsOpen(true)
     setShowReasonInput(true)
     setReasonInput("")
@@ -120,7 +123,9 @@ export const NotificationAccordion = ({
         toast.success(
           <ToastContent
             title="Contributor Request Processed"
-            body={`Request has been ${currentApprovalAction}.`}
+            body={`Request has been ${
+              formatStatusForDisplay(currentApprovalAction)
+            }.`}
           />,
         )
       } else if (isContributorCitation) {
@@ -144,7 +149,9 @@ export const NotificationAccordion = ({
         toast.success(
           <ToastContent
             title="Contributor Citation Processed"
-            body={`Citation has been ${currentApprovalAction}.`}
+            body={`Citation has been ${
+              formatStatusForDisplay(currentApprovalAction)
+            }.`}
           />,
         )
       }

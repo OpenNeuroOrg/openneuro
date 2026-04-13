@@ -1,4 +1,5 @@
 import React from "react"
+import { formatStatusForDisplay } from "../../types/event-types"
 import type { User } from "../../types/user-types"
 import { Username } from "../username"
 import styles from "./scss/usernotifications.module.scss"
@@ -63,7 +64,9 @@ export const NotificationHeader: React.FC<NotificationHeaderProps> = ({
           <a href={datasetLink} className={styles.titlelink}>
             {datasetId}
           </a>{" "}
-          {type != "contributorCitation" ? resStatus : ""}
+          {type != "contributorCitation"
+            ? formatStatusForDisplay(resStatus)
+            : ""}
         </span>
       )
     }
