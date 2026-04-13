@@ -14,7 +14,7 @@ async function enqueueAllDatasetChecks(): Promise<void> {
   const cursor = Dataset.find({}, "id").cursor()
   for await (const dataset of cursor) {
     // Check data retention policy status and send notifications
-    queueDataRetentionCheck(dataset.id)
+    await queueDataRetentionCheck(dataset.id)
   }
 }
 
