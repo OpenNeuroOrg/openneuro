@@ -64,7 +64,7 @@ export const DownloadScript = ({
       errorPolicy: "all",
     },
   )
-  if (data?.snapshot?.downloadFiles) {
+  if (data?.snapshot?.files) {
     const script = generateDownloadScript(data)
     inlineDownload(`${datasetId}-${snapshotTag}.sh`, script)
   }
