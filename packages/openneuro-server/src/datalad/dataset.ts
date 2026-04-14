@@ -26,6 +26,8 @@ import BadAnnexObject from "../models/badAnnexObject"
 import { datasetsConnection } from "./pagination"
 import { getDatasetWorker } from "../libs/datalad-service"
 import { createEvent, updateEvent } from "../libs/events"
+import Doi from "../models/doi"
+import { hideDoi, publishDoi } from "../libs/doi/index"
 
 export const giveUploaderPermission = (datasetId, userId) => {
   const permission = new Permission({ datasetId, userId, level: "admin" })
@@ -490,7 +492,7 @@ export const flagAnnexObject = (
 }
 
 /**
- * Update public state
+ * Update public state and transition DOI states accordingly.
  */
 export async function updatePublic(datasetId, publicFlag, user) {
   const event = await createEvent(
@@ -503,6 +505,32 @@ export async function updatePublic(datasetId, publicFlag, user) {
     { public: publicFlag, publishDate: new Date() },
   ).exec()
   await updateEvent(event)
+
+  // Transition DOI states
+  try {
+    if (publicFlag) {
+      // Draft transition to Findable for all DOIs on this dataset
+      const draftDois = await Doi.find({ datasetId, state: "draft" })
+      for (const record of draftDois) {
+        await publishDoi(record.doi)
+        record.state = "findable"
+        await record.save()
+      }
+    } else {
+      // Findable transition to Registered when unpublishing
+      const findableDois = await Doi.find({
+        datasetId,
+        state: { $in: ["findable", null] },
+      })
+      for (const record of findableDois) {
+        await hideDoi(record.doi)
+        record.state = "registered"
+        await record.save()
+      }
+    }
+  } catch (err) {
+    Sentry.captureException(err)
+  }
 }
 
 export const getDatasetAnalytics = (datasetId, _tag) => {

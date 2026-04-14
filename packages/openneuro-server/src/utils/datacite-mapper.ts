@@ -1,11 +1,15 @@
-import type { Contributor, RawDataciteContributor } from "../types/datacite"
+import type {
+  Contributor,
+  ContributorType,
+  DataciteContributor,
+} from "../types/datacite"
 
 export const mapToRawContributor = (
   c: Contributor,
-): RawDataciteContributor => ({
+): DataciteContributor => ({
   name: c.name,
   nameType: "Personal",
-  contributorType: c.contributorType || "Researcher",
+  contributorType: (c.contributorType || "Researcher") as ContributorType,
   givenName: c.givenName,
   familyName: c.familyName,
   nameIdentifiers: c.orcid

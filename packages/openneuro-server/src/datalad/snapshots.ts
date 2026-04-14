@@ -10,8 +10,9 @@ import {
   snapshotCreationComparison,
   updateDatasetName,
 } from "../graphql/resolvers/dataset"
-import { description } from "../graphql/resolvers/description"
-import doiLib from "../libs/doi/index"
+import { createDraftDoi } from "../libs/doi/index"
+import { assembleMetadata } from "../libs/doi/metadata"
+import Doi from "../models/doi"
 import { getFiles } from "./files"
 import { generateDataladCookie } from "../libs/authentication/jwt"
 import notifications from "../libs/notifications"
@@ -50,25 +51,32 @@ const createIfNotExistsDoi = async (
   tag,
   descriptionFieldUpdates,
 ) => {
-  if (config.doi.username && config.doi.password) {
-    // Mint a DOI
-    // Get the newest description
-    try {
-      const oldDesc = await description({ id: datasetId, revision: "HEAD" })
-      const snapshotDoi = await doiLib.registerSnapshotDoi(
-        datasetId,
-        tag,
-        oldDesc,
-      )
-      if (snapshotDoi) {
-        descriptionFieldUpdates["DatasetDOI"] = `doi:${snapshotDoi}`
-      }
-    } catch (err) {
-      Sentry.captureException(err)
-      // eslint-disable-next-line no-console
-      console.error(err)
-      throw new Error("DOI minting failed.")
-    }
+  if (!config.doi.username || !config.doi.password) return
+
+  // Skip if DOI already exists for this snapshot
+  const existing = await Doi.findOne({ datasetId, snapshotId: tag })
+  if (existing) {
+    descriptionFieldUpdates["DatasetDOI"] = `doi:${existing.doi}`
+    return
+  }
+
+  try {
+    const attributes = await assembleMetadata(datasetId, tag, "HEAD")
+    const doi = await createDraftDoi(attributes)
+
+    // Persist to MongoDB
+    await Doi.updateOne(
+      { datasetId, snapshotId: tag },
+      { $set: { doi, state: "draft" } },
+      { upsert: true },
+    )
+
+    descriptionFieldUpdates["DatasetDOI"] = `doi:${doi}`
+  } catch (err) {
+    Sentry.captureException(err)
+    // eslint-disable-next-line no-console
+    console.error(err)
+    throw new Error(`DOI minting failed: ${err.message}`)
   }
 }
 
