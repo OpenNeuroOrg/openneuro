@@ -1,5 +1,5 @@
 import { builder } from "../builder"
-import { Severity, SortOrdering } from "./enums"
+import { SearchSortOption, Severity, SortOrdering } from "./enums"
 
 export const UserSortInput = builder.inputType("UserSortInput", {
   fields: (t) => ({
@@ -187,5 +187,35 @@ export const ContributorInput = builder.inputType("ContributorInput", {
     orcid: t.string(),
     contributorType: t.string(),
     order: t.int(),
+  }),
+})
+
+export const DatasetSearchInput = builder.inputType("DatasetSearchInput", {
+  description: "Search input for advanced dataset search",
+  fields: (t) => ({
+    keywords: t.stringList(),
+    modality: t.string(),
+    ageRange: t.intList(),
+    subjectCountRange: t.intList(),
+    diagnosis: t.string(),
+    tasks: t.stringList(),
+    authors: t.stringList(),
+    sex: t.string(),
+    dateRange: t.string(),
+    species: t.string(),
+    studyStructure: t.string(),
+    studyDomains: t.stringList(),
+    bidsDatasetType: t.string(),
+    brainInitiative: t.boolean(),
+    bodyParts: t.stringList(),
+    scannerManufacturers: t.stringList(),
+    scannerManufacturersModelNames: t.stringList(),
+    tracerNames: t.stringList(),
+    tracerRadionuclides: t.stringList(),
+    sortBy: t.field({ type: SearchSortOption }),
+    userId: t.string({
+      description: "Filter datasets by a specific user's permissions",
+    }),
+    publicOnly: t.boolean({ description: "Filter to only public datasets" }),
   }),
 })

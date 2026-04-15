@@ -44,3 +44,16 @@ export const RelatedObjectKind = builder.enumType("RelatedObjectKind", {
   description: "RelatedObject kind of target object",
   values: ["Dataset", "Article"] as const,
 })
+
+export const SearchSortOption = builder.enumType("SearchSortOption", {
+  description: "Sort options for advanced dataset search",
+  values: [
+    "relevance",
+    "newest",
+    "oldest",
+    "activity",
+    "name_asc",
+    "name_desc",
+    "last_updated",
+  ] as const,
+})

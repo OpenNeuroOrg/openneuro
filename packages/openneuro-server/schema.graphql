@@ -199,6 +199,36 @@ type DatasetReviewer {
   url: String!
 }
 
+"""Search input for advanced dataset search"""
+input DatasetSearchInput {
+  ageRange: [Int!]
+  authors: [String!]
+  bidsDatasetType: String
+  bodyParts: [String!]
+  brainInitiative: Boolean
+  dateRange: String
+  diagnosis: String
+  keywords: [String!]
+  modality: String
+
+  """Filter to only public datasets"""
+  publicOnly: Boolean
+  scannerManufacturers: [String!]
+  scannerManufacturersModelNames: [String!]
+  sex: String
+  sortBy: SearchSortOption
+  species: String
+  studyDomains: [String!]
+  studyStructure: String
+  subjectCountRange: [Int!]
+  tasks: [String!]
+  tracerNames: [String!]
+  tracerRadionuclides: [String!]
+
+  """Filter datasets by a specific user's permissions"""
+  userId: String
+}
+
 input DatasetSort {
   created: SortOrdering
   downloads: SortOrdering
@@ -463,7 +493,7 @@ type Permission {
 }
 
 type Query {
-  advancedSearch(after: String, allDatasets: Boolean, datasetStatus: String, datasetType: String, first: Int, query: JSON!, sortBy: JSON): DatasetConnection
+  advancedSearch(after: String, allDatasets: Boolean, datasetStatus: String, datasetType: String, first: Int, query: DatasetSearchInput!): DatasetConnection
   dataset(id: ID!): Dataset
   datasets(after: String, before: String, filterBy: DatasetFilter = {}, first: Int = 25, modality: String, myDatasets: Boolean, orderBy: DatasetSort = {created: ascending}): DatasetConnection
   flaggedFiles(deleted: Boolean = false, flagged: Boolean = true): [FlaggedFile!]
@@ -507,6 +537,17 @@ enum ResponseStatusType {
   ACCEPTED
   DENIED
   PENDING
+}
+
+"""Sort options for advanced dataset search"""
+enum SearchSortOption {
+  activity
+  last_updated
+  name_asc
+  name_desc
+  newest
+  oldest
+  relevance
 }
 
 enum Severity {
