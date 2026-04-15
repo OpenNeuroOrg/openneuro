@@ -11,6 +11,7 @@ import styled from "@emotion/styled"
 import { apiPath } from "../files/file"
 import { FileCheckList } from "../fragments/file-check-list"
 import { FsckDataset } from "../mutations/fsck-dataset"
+import { useUser } from "../../queries/user"
 
 const FormRow = styled.div`
   margin-top: 0;
@@ -20,6 +21,8 @@ const FormRow = styled.div`
 export const NoErrors = (
   { datasetId, modified, validation, authors, fileCheck, children },
 ) => {
+  const { user } = useUser()
+  const adminUser = user?.admin || false
   const noErrors = validation?.errors === 0
   // zero authors will cause DOI minting to fail
   const hasAuthor = authors?.length > 0
@@ -58,8 +61,11 @@ export const NoErrors = (
         )}
         {!noBadFiles && (
           <span>
-            <FsckDataset datasetId={datasetId} disabled={!recheckEnabled} />
-            {!recheckEnabled && (
+            <FsckDataset
+              datasetId={datasetId}
+              disabled={!recheckEnabled && !adminUser}
+            />
+            {!recheckEnabled && !adminUser && (
               <p>A recheck can be requested in {minutesDiff} minutes.</p>
             )}
           </span>
