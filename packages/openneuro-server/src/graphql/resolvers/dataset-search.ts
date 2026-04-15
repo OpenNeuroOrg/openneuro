@@ -55,7 +55,7 @@ export const elasticRelayConnection = (
         const node = childResolvers.dataset(
           null,
           { id: hit._source.id },
-          { user, userInfo },
+          { user, userInfo } as never,
         )
         return { id: hit._source.id, node }
       }),

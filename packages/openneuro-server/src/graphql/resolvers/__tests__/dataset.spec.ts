@@ -21,7 +21,11 @@ describe("dataset resolvers", () => {
       const { id: dsId } = await ds.createDataset(
         null,
         { affirmedDefaced: true, affirmedConsent: false },
-        { user: "123456", userInfo: {} },
+        {
+          user: "123456",
+          isSuperUser: false,
+          userInfo: { id: "123456", userId: "123456", admin: false },
+        },
       )
       expect(dsId).toEqual(expect.stringMatching(/^ds[0-9]{6}$/))
     })
@@ -168,8 +172,11 @@ describe("dataset resolvers", () => {
         { datasetId: "ds999999", files: [{ path: "/sub-99" }] },
         {
           user: "a_user_id",
+          isSuperUser: false,
           userInfo: {
             // bypass permission checks
+            id: "a_user_id",
+            userId: "a_user_id",
             admin: true,
           },
         },
