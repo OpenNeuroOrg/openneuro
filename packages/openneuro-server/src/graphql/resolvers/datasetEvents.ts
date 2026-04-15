@@ -1,4 +1,5 @@
 import DatasetEvent from "../../models/datasetEvents"
+import type { GraphQLContext } from "../builder"
 import { toDbStatus, toGraphqlStatus } from "./response-status"
 import type { DbStatus, GraphqlStatus } from "./response-status"
 import User from "../../models/user"
@@ -35,9 +36,9 @@ export type EnrichedDatasetEvent =
  * Get all events for a dataset
  */
 export async function datasetEvents(
-  obj,
-  _,
-  { userInfo, user },
+  obj: { id: string },
+  _: unknown,
+  { userInfo, user }: GraphQLContext,
 ): Promise<EnrichedDatasetEvent[]> {
   const allEvents: DatasetEventDocument[] = await DatasetEvent.find({
     datasetId: obj.id,
@@ -106,9 +107,9 @@ export const DatasetEventDescriptionTypeResolvers = {
  * Create a 'contributor request' event
  */
 export async function createContributorRequestEvent(
-  obj,
-  { datasetId },
-  { user },
+  obj: unknown,
+  { datasetId }: { datasetId: string },
+  { user }: Pick<GraphQLContext, "user">,
 ) {
   if (!user) {
     throw new Error("Authentication required to request contributor status.")
@@ -149,9 +150,9 @@ export async function createContributorRequestEvent(
  * Create or update an admin note event
  */
 export async function saveAdminNote(
-  obj,
-  { id, datasetId, note },
-  { user, userInfo },
+  obj: unknown,
+  { id, datasetId, note }: { id?: string; datasetId: string; note: string },
+  { user, userInfo }: GraphQLContext,
 ) {
   if (!userInfo?.admin) throw new Error("Not authorized")
 
@@ -299,7 +300,11 @@ export async function processContributorRequest(
 /**
  * Update a user's notification status
  */
-export async function updateEventStatus(obj, { eventId, status }, { user }) {
+export async function updateEventStatus(
+  obj: unknown,
+  { eventId, status }: { eventId: string; status: string },
+  { user }: Pick<GraphQLContext, "user">,
+) {
   if (!user) throw new Error("Authentication required.")
   return await UserNotificationStatus.findOneAndUpdate(
     { userId: user, datasetEventId: eventId },
