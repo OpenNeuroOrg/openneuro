@@ -36,7 +36,6 @@
     "express": "4.20.0",
     "graphql": "16.8.1",
     "graphql-bigint": "^1.0.0",
-    "graphql-compose": "9.0.10",
     "graphql-iso-date": "^3.6.1",
     "graphql-tools": "9.0.0",
     "graphql-type-json": "^0.3.2",

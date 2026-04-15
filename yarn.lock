@@ -3301,7 +3301,6 @@ __metadata:
     express: "npm:4.20.0"
     graphql: "npm:16.8.1"
     graphql-bigint: "npm:^1.0.0"
-    graphql-compose: "npm:9.0.10"
     graphql-iso-date: "npm:^3.6.1"
     graphql-tools: "npm:9.0.0"
     graphql-type-json: "npm:^0.3.2"
@@ -10779,15 +10778,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql-compose@npm:9.0.10":
-  version: 9.0.10
-  resolution: "graphql-compose@npm:9.0.10"
-  dependencies:
-    graphql-type-json: "npm:0.3.2"
-  checksum: 10/afe106b0e0d77bb41060f341ac3a707f11e858e9ce6eda838f207fd5b6747f4cf39aa1f660a8dca6878acae3f37d6e9da1ab932fb5e40548e28194cf4509b8bf
-  languageName: node
-  linkType: hard
-
 "graphql-iso-date@npm:^3.6.1":
   version: 3.6.1
   resolution: "graphql-iso-date@npm:3.6.1"
@@ -10824,7 +10814,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql-type-json@npm:0.3.2, graphql-type-json@npm:^0.3.2":
+"graphql-type-json@npm:^0.3.2":
   version: 0.3.2
   resolution: "graphql-type-json@npm:0.3.2"
   peerDependencies:
