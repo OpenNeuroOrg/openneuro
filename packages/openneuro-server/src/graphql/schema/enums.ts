@@ -1,9 +1,5 @@
 import { builder } from "../builder"
 
-export const CacheControlScope = builder.enumType("CacheControlScope", {
-  values: ["PUBLIC", "PRIVATE"] as const,
-})
-
 export const SortOrdering = builder.enumType("SortOrdering", {
   values: ["ascending", "descending"] as const,
 })

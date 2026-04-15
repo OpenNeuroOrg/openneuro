@@ -78,7 +78,7 @@ builder.queryType({
         users(root, args as never, ctx as never) as never,
     }),
     participantCount: t.int({
-      directives: { cacheControl: { maxAge: 3600, scope: "PUBLIC" } },
+      directives: { cacheControl: { maxAge: 3600 } },
       args: {
         modality: t.arg.string(),
       },
@@ -113,7 +113,7 @@ builder.queryType({
     publicMetadata: t.field({
       type: [Metadata],
       nullable: { list: true, items: true },
-      directives: { cacheControl: { maxAge: 86400, scope: "PUBLIC" } },
+      directives: { cacheControl: { maxAge: 86400 } },
       resolve: (root) => publicMetadata(root) as never,
     }),
     orcidConsent: t.boolean({

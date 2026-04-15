@@ -3,7 +3,7 @@ import { DatasetRef } from "./refs"
 
 export const Description = builder.simpleObject("Description", {
   description: "Contents of dataset_description.json",
-  directives: { cacheControl: { maxAge: 30, scope: "PUBLIC" } },
+  directives: { cacheControl: { maxAge: 30 } },
   fields: (t) => ({
     id: t.id({ nullable: false }),
     Name: t.string({ nullable: false }),

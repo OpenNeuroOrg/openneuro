@@ -125,13 +125,13 @@ DatasetRef.implement({
       resolve: (obj) => obj.publishDate as unknown as string,
     }),
     onBrainlife: t.boolean({
-      directives: { cacheControl: { maxAge: 10080, scope: "PUBLIC" } },
+      directives: { cacheControl: { maxAge: 10080 } },
       resolve: (obj) => onBrainlife(obj as never) as never,
     }),
     derivatives: t.field({
       type: [DatasetDerivatives],
       nullable: { list: true, items: true },
-      directives: { cacheControl: { maxAge: 3600, scope: "PUBLIC" } },
+      directives: { cacheControl: { maxAge: 3600 } },
       resolve: (obj) => derivatives(obj as never) as never,
     }),
     metadata: t.field({

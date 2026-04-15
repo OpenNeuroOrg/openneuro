@@ -114,7 +114,7 @@ export const FollowDatasetResponse = builder.simpleObject(
 
 export const Star = builder.simpleObject("Star", {
   description: "Dataset Stars",
-  directives: { cacheControl: { maxAge: 300, scope: "PUBLIC" } },
+  directives: { cacheControl: { maxAge: 300 } },
   fields: (t) => ({
     userId: t.string(),
     datasetId: t.string(),

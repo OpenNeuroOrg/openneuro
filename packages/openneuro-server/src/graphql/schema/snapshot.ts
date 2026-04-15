@@ -13,7 +13,7 @@ import { DeprecatedSnapshot, RelatedObject } from "./misc"
 import SnapshotFields from "../resolvers/snapshots"
 
 SnapshotRef.implement({
-  directives: { cacheControl: { maxAge: 3600, scope: "PUBLIC" } },
+  directives: { cacheControl: { maxAge: 3600 } },
   fields: (t) => ({
     id: t.id({ nullable: false, resolve: (obj) => obj.id }),
     tag: t.string({ nullable: false, resolve: (obj) => obj.tag }),
@@ -68,7 +68,7 @@ SnapshotRef.implement({
       resolve: (obj) => SnapshotFields.analytics(obj),
     }),
     readme: t.string({
-      directives: { cacheControl: { maxAge: 31536000, scope: "PUBLIC" } },
+      directives: { cacheControl: { maxAge: 31536000 } },
       resolve: (obj) =>
         (typeof obj.readme === "function" ? obj.readme() : obj.readme) as never,
     }),
@@ -91,7 +91,7 @@ SnapshotRef.implement({
           : obj.related) as never,
     }),
     onBrainlife: t.boolean({
-      directives: { cacheControl: { maxAge: 10080, scope: "PUBLIC" } },
+      directives: { cacheControl: { maxAge: 10080 } },
       resolve: (obj) =>
         typeof obj.onBrainlife === "function"
           ? obj.onBrainlife()

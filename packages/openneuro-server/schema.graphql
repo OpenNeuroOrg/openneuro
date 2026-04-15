@@ -38,11 +38,6 @@ The `BigInt` scalar type represents non-fractional signed whole numeric values. 
 """
 scalar BigInt
 
-enum CacheControlScope {
-  PRIVATE
-  PUBLIC
-}
-
 type Comment {
   createDate: DateTime!
   id: ID!
