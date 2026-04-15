@@ -1,21 +1,30 @@
 import Comment from "../../models/comment"
+import type { CommentDocument } from "../../models/comment"
 import notifications from "../../libs/notifications"
 import { user } from "./user.js"
 import { checkAdmin } from "../permissions"
+import type { GraphQLContext } from "../builder"
 
-export const comment = (obj, { id }) => {
+export const comment = (
+  obj: unknown,
+  { id }: { id: string },
+): Promise<CommentDocument | null> => {
   return Comment.findOne({ _id: id }).exec()
 }
 
-export const datasetComments = (obj) => {
+export const datasetComments = (
+  obj: { id: string },
+): Promise<CommentDocument[]> => {
   return Comment.find({ datasetId: obj.id }).exec()
 }
 
-export const userComments = (obj) => {
+export const userComments = (
+  obj: { id: string },
+): Promise<CommentDocument[]> => {
   return Comment.find({ "user._id": obj.id }).exec()
 }
 
-const replies = (obj) => {
+const replies = (obj: CommentDocument): Promise<CommentDocument[]> => {
   return Comment.find({ parentId: obj._id }).exec()
 }
 
@@ -31,7 +40,7 @@ export const flatten = (arr) => [].concat(...arr)
  * @param {import('../../models/comment').CommentDocument} obj
  * @returns {Promise<import('../../models/comment').CommentDocument[]>}
  */
-const allNestedReplies = async (obj) => {
+const allNestedReplies = async (obj: { _id: string }) => {
   const replies = await Comment.find({ parentId: obj._id }).exec()
   if (!replies.length) {
     return replies
@@ -45,9 +54,13 @@ const allNestedReplies = async (obj) => {
  * Insert new comment and return the comment _id for replies to reference
  */
 export const addComment = (
-  obj,
-  { datasetId, parentId, comment: text },
-  { user },
+  obj: unknown,
+  { datasetId, parentId, comment: text }: {
+    datasetId: string
+    parentId?: string
+    comment: string
+  },
+  { user }: Pick<GraphQLContext, "user">,
 ) => {
   if (!user) {
     return Promise.reject(
@@ -67,9 +80,9 @@ export const addComment = (
 }
 
 export const editComment = async (
-  obj,
-  { commentId, comment: text },
-  { user },
+  obj: unknown,
+  { commentId, comment: text }: { commentId: string; comment: string },
+  { user }: Pick<GraphQLContext, "user">,
 ) => {
   const existingComment = await Comment.findById(commentId).exec()
   // You may only edit your own comments
@@ -82,9 +95,12 @@ export const editComment = async (
 }
 
 export const deleteComment = async (
-  obj,
-  { commentId, deleteChildren = true },
-  { user, userInfo },
+  obj: unknown,
+  { commentId, deleteChildren = true }: {
+    commentId: string
+    deleteChildren?: boolean
+  },
+  { user, userInfo }: GraphQLContext,
 ) => {
   await checkAdmin(user, userInfo)
 
@@ -103,9 +119,9 @@ export const deleteComment = async (
 
 //"5c9bf7e3088cea6fa775c42a"
 const CommentFields = {
-  parent: (obj) => comment(obj, { id: obj.parentId }),
+  parent: (obj: CommentDocument) => comment(obj, { id: obj.parentId }),
   replies,
-  user: (obj) => user(obj, { id: obj.user._id }),
+  user: (obj: CommentDocument) => user(obj, { id: obj.user._id }),
 }
 
 export default CommentFields

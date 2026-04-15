@@ -12,11 +12,11 @@ describe("comment resolver helpers", () => {
     const adminUser = {
       user: "1234",
       userInfo: { admin: true },
-    }
+    } as never
     const nonAdminUser = {
       user: "5678",
       userInfo: { admin: false },
-    }
+    } as never
     let mongod
     beforeAll(async () => {
       // Setup MongoDB with mongodb-memory-server
