@@ -24,16 +24,33 @@ builder.queryType({
     datasets: t.field({
       type: DatasetConnection,
       args: {
-        first: t.arg.int({ defaultValue: 25 }),
-        after: t.arg.string(),
-        before: t.arg.string(),
+        first: t.arg.int({
+          defaultValue: 25,
+          description: "Limit results, default 25, max 100",
+        }),
+        after: t.arg.string({
+          description: "Cursor key used to fetch later results",
+        }),
+        before: t.arg.string({
+          description: "Cursor key used to fetch earlier results",
+        }),
         orderBy: t.arg({
           type: DatasetSort,
           defaultValue: { created: "ascending" },
+          description: "Sorting fields",
         }),
-        filterBy: t.arg({ type: DatasetFilter, defaultValue: {} }),
-        myDatasets: t.arg.boolean(),
-        modality: t.arg.string(),
+        filterBy: t.arg({
+          type: DatasetFilter,
+          defaultValue: {},
+          description: "Filtering fields",
+        }),
+        myDatasets: t.arg.boolean({
+          description:
+            "Query user's datasets only - excludes public datasets from other filters",
+        }),
+        modality: t.arg.string({
+          description: "Query datasets of a specific modality",
+        }),
       },
       resolve: (root, args, ctx) =>
         datasets(root, args as never, ctx as never) as never,
@@ -80,8 +97,15 @@ builder.queryType({
       type: [FlaggedFile],
       nullable: { list: true, items: true },
       args: {
-        flagged: t.arg.boolean({ defaultValue: true }),
-        deleted: t.arg.boolean({ defaultValue: false }),
+        flagged: t.arg.boolean({
+          defaultValue: true,
+          description: "Get files that have been flagged, default true.",
+        }),
+        deleted: t.arg.boolean({
+          defaultValue: false,
+          description:
+            "Get files that have already been deleted, default false.",
+        }),
       },
       resolve: (root, args, ctx) =>
         flaggedFiles(root, args as never, ctx as never) as never,

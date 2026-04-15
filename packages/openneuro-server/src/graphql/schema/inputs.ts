@@ -23,11 +23,22 @@ export const DatasetSort = builder.inputType("DatasetSort", {
 
 export const DatasetFilter = builder.inputType("DatasetFilter", {
   fields: (t) => ({
-    public: t.boolean(),
-    shared: t.boolean(),
-    invalid: t.boolean(),
-    starred: t.boolean(),
-    all: t.boolean(),
+    public: t.boolean({
+      description: "Limit to datasets available publicly",
+    }),
+    shared: t.boolean({
+      description: "Return only datasets that are shared with the user",
+    }),
+    invalid: t.boolean({
+      description: "Return only datasets with an invalid Draft",
+    }),
+    starred: t.boolean({
+      description: "Return only datasets starred by the query user",
+    }),
+    all: t.boolean({
+      description:
+        "Return all datasets, ignores any other constraints but not sorts",
+    }),
   }),
 })
 

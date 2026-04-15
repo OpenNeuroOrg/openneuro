@@ -169,10 +169,19 @@ type DatasetFile {
 }
 
 input DatasetFilter {
+  """Return all datasets, ignores any other constraints but not sorts"""
   all: Boolean
+
+  """Return only datasets with an invalid Draft"""
   invalid: Boolean
+
+  """Limit to datasets available publicly"""
   public: Boolean
+
+  """Return only datasets that are shared with the user"""
   shared: Boolean
+
+  """Return only datasets starred by the query user"""
   starred: Boolean
 }
 
@@ -478,8 +487,37 @@ type Permission {
 type Query {
   advancedSearch(after: String, allDatasets: Boolean, datasetStatus: String, datasetType: String, first: Int, query: DatasetSearchInput!): DatasetConnection
   dataset(id: ID!): Dataset
-  datasets(after: String, before: String, filterBy: DatasetFilter = {}, first: Int = 25, modality: String, myDatasets: Boolean, orderBy: DatasetSort = {created: ascending}): DatasetConnection
-  flaggedFiles(deleted: Boolean = false, flagged: Boolean = true): [FlaggedFile]
+  datasets(
+    """Cursor key used to fetch later results"""
+    after: String
+
+    """Cursor key used to fetch earlier results"""
+    before: String
+
+    """Filtering fields"""
+    filterBy: DatasetFilter = {}
+
+    """Limit results, default 25, max 100"""
+    first: Int = 25
+
+    """Query datasets of a specific modality"""
+    modality: String
+
+    """
+    Query user's datasets only - excludes public datasets from other filters
+    """
+    myDatasets: Boolean
+
+    """Sorting fields"""
+    orderBy: DatasetSort = {created: ascending}
+  ): DatasetConnection
+  flaggedFiles(
+    """Get files that have already been deleted, default false."""
+    deleted: Boolean = false
+
+    """Get files that have been flagged, default true."""
+    flagged: Boolean = true
+  ): [FlaggedFile]
   orcidConsent: Boolean
   participantCount(modality: String): Int
   publicMetadata: [Metadata]
