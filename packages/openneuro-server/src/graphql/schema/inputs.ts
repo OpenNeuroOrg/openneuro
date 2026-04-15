@@ -38,13 +38,6 @@ export const DeleteFile = builder.inputType("DeleteFile", {
   }),
 })
 
-export const UploadFile = builder.inputType("UploadFile", {
-  fields: (t) => ({
-    filename: t.string({ required: true }),
-    size: t.field({ type: "BigInt", required: true }),
-  }),
-})
-
 export const SummaryPetInput = builder.inputType("SummaryPetInput", {
   fields: (t) => ({
     BodyPart: t.stringList(),

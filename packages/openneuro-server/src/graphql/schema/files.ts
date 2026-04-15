@@ -13,18 +13,6 @@ export const DatasetFile = builder.simpleObject("DatasetFile", {
   }),
 })
 
-export const FilesUpdate = builder.simpleObject("FilesUpdate", {
-  description: "Update to files",
-  fields: (t) => ({
-    datasetId: t.string(),
-    action: t.string(),
-    payload: t.field({
-      type: [DatasetFile],
-      nullable: { list: true, items: true },
-    }),
-  }),
-})
-
 export const ValidationIssueFile = builder.simpleObject("ValidationIssueFile", {
   fields: (t) => ({
     name: t.string(),

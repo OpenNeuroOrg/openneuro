@@ -28,7 +28,6 @@ export const builder = new SchemaBuilder<{
   Scalars: {
     Date: { Input: string; Output: string }
     DateTime: { Input: string; Output: string }
-    Time: { Input: string; Output: string }
     BigInt: { Input: string; Output: string }
     JSON: { Input: unknown; Output: unknown }
   }

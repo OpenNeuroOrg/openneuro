@@ -33,12 +33,6 @@ input AnnexFsckInput {
   untrusted: [String!]
 }
 
-"""Authors of a dataset"""
-type Author {
-  ORCID: String
-  name: String
-}
-
 """
 The `BigInt` scalar type represents non-fractional signed whole numeric values. BigInt can represent values between -(2^53) + 1 and 2^53 - 1. 
 """
@@ -182,10 +176,6 @@ input DatasetFilter {
   starred: Boolean
 }
 
-type DatasetId {
-  datasetId: ID
-}
-
 type DatasetPermissions {
   id: ID!
   userPermissions: [Permission]
@@ -321,13 +311,6 @@ type FileCheck {
   hexsha: String!
   refs: [String!]!
   remote: String
-}
-
-"""Update to files"""
-type FilesUpdate {
-  action: String
-  datasetId: String
-  payload: [DatasetFile]
 }
 
 """An annexed file that has been flagged for removal."""
@@ -658,19 +641,9 @@ input SummaryPetInput {
   TracerRadionuclide: [String!]
 }
 
-"""
-A time string at UTC, such as 10:15:30Z, compliant with the `full-time` format outlined in section 5.6 of the RFC 3339profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
-"""
-scalar Time
-
 type UpdateContributorsPayload {
   dataset: Dataset
   success: Boolean!
-}
-
-input UploadFile {
-  filename: String!
-  size: BigInt!
 }
 
 """Client metadata needed to complete an upload"""

@@ -53,12 +53,6 @@ export const FileCheck = builder.simpleObject("FileCheck", {
   }),
 })
 
-export const DatasetId = builder.simpleObject("DatasetId", {
-  fields: (t) => ({
-    datasetId: t.id(),
-  }),
-})
-
 export const UserNotificationStatus = builder.simpleObject(
   "UserNotificationStatus",
   {
@@ -154,14 +148,6 @@ export const DeprecatedSnapshot = builder.simpleObject("DeprecatedSnapshot", {
     user: t.string(),
     reason: t.string(),
     timestamp: t.field({ type: "Date" }),
-  }),
-})
-
-export const Author = builder.simpleObject("Author", {
-  description: "Authors of a dataset",
-  fields: (t) => ({
-    ORCID: t.string(),
-    name: t.string(),
   }),
 })
 
