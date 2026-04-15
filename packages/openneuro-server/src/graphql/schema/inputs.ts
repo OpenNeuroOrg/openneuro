@@ -199,8 +199,14 @@ export const DatasetSearchInput = builder.inputType("DatasetSearchInput", {
   fields: (t) => ({
     keywords: t.stringList(),
     modality: t.string(),
-    ageRange: t.intList(),
-    subjectCountRange: t.intList(),
+    ageRange: t.field({
+      type: ["Int"],
+      required: { list: false, items: false },
+    }),
+    subjectCountRange: t.field({
+      type: ["Int"],
+      required: { list: false, items: false },
+    }),
     diagnosis: t.string(),
     tasks: t.stringList(),
     authors: t.stringList(),

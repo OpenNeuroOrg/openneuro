@@ -195,7 +195,7 @@ type DatasetReviewer {
 
 """Search input for advanced dataset search"""
 input DatasetSearchInput {
-  ageRange: [Int!]
+  ageRange: [Int]
   authors: [String!]
   bidsDatasetType: String
   bodyParts: [String!]
@@ -214,7 +214,7 @@ input DatasetSearchInput {
   species: String
   studyDomains: [String!]
   studyStructure: String
-  subjectCountRange: [Int!]
+  subjectCountRange: [Int]
   tasks: [String!]
   tracerNames: [String!]
   tracerRadionuclides: [String!]
