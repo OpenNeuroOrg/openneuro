@@ -64,7 +64,7 @@ DatasetRef.implement({
     uploader: t.field({
       type: UserRef,
       resolve: (obj, _args, ctx) =>
-        user(null, { id: obj.uploader }, ctx) as never,
+        user(null, { id: obj.uploader }, ctx),
     }),
     public: t.boolean({ resolve: (obj) => obj.public }),
     draft: t.field({
@@ -86,7 +86,7 @@ DatasetRef.implement({
     latestSnapshot: t.field({
       type: SnapshotRef,
       nullable: false,
-      resolve: (obj, _args, ctx) => latestSnapshot(obj, null, ctx) as never,
+      resolve: (obj, _args, ctx) => latestSnapshot(obj, null, ctx),
     }),
     permissions: t.field({
       type: DatasetPermissions,
@@ -94,20 +94,20 @@ DatasetRef.implement({
     }),
     analytics: t.field({
       type: Analytic,
-      resolve: (obj) => analytics(obj as never) as never,
+      resolve: (obj) => analytics(obj),
     }),
     stars: t.field({
       type: [Star],
       nullable: { list: true, items: true },
-      resolve: (obj) => stars(obj as never) as never,
+      resolve: (obj) => stars(obj),
     }),
     followers: t.field({
       type: [Follower],
       nullable: { list: true, items: true },
-      resolve: (obj) => followers(obj as never) as never,
+      resolve: (obj) => followers(obj),
     }),
     name: t.string({
-      resolve: (obj) => datasetName(obj) as never,
+      resolve: (obj) => datasetName(obj),
     }),
     comments: t.field({
       type: [CommentRef],
@@ -136,12 +136,12 @@ DatasetRef.implement({
     }),
     metadata: t.field({
       type: Metadata,
-      resolve: (obj, _args, ctx) => metadata(obj, null, ctx) as never,
+      resolve: (obj, _args, ctx) => metadata(obj, null, ctx),
     }),
     history: t.field({
       type: [DatasetCommit],
       nullable: { list: true, items: true },
-      resolve: (obj) => history(obj) as never,
+      resolve: (obj) => history(obj),
     }),
     worker: t.string({
       resolve: (obj) => getDatasetWorker(obj.id),
@@ -149,7 +149,7 @@ DatasetRef.implement({
     reviewers: t.field({
       type: [DatasetReviewer],
       nullable: { list: true, items: true },
-      resolve: (obj, _args, ctx) => reviewers(obj, null, ctx) as never,
+      resolve: (obj, _args, ctx) => reviewers(obj, null, ctx),
     }),
     brainInitiative: t.boolean({
       resolve: (obj, _args, ctx) =>
@@ -158,7 +158,7 @@ DatasetRef.implement({
     events: t.field({
       type: [DatasetEventRef],
       nullable: { list: true, items: true },
-      resolve: (obj, _args, ctx) => datasetEvents(obj, null, ctx) as never,
+      resolve: (obj, _args, ctx) => datasetEvents(obj, null, ctx),
     }),
   }),
 })

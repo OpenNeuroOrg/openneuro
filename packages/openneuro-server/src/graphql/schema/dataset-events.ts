@@ -53,7 +53,7 @@ DatasetEventDescriptionRef.implement({
     contributorData: t.field({
       type: Contributor,
       resolve: (obj) =>
-        "contributorData" in obj ? obj.contributorData as never : null,
+        "contributorData" in obj ? obj.contributorData : null,
     }),
   }),
 })
@@ -78,7 +78,7 @@ DatasetEventRef.implement({
     datasetId: t.id({ resolve: (obj) => obj.datasetId }),
     notificationStatus: t.field({
       type: UserNotificationStatus,
-      resolve: (obj) => obj.notificationStatus as never,
+      resolve: (obj) => obj.notificationStatus,
     }),
     responseStatus: t.field({
       type: ResponseStatusType,
