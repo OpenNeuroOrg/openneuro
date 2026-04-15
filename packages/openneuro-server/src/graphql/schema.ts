@@ -241,6 +241,8 @@ export const typeDefs = `
       eventId: ID!
       status: ResponseStatusType!
     ): DatasetEvent
+    # Hold or release automated deletion for a dataset
+    holdDeletion(datasetId: ID!, hold: Boolean!): Boolean
     # Update worker task queue status
     updateWorkerTask(
       id: ID!,
@@ -527,6 +529,8 @@ export const typeDefs = `
     brainInitiative: Boolean
     # Log of events associated with this dataset
     events: [DatasetEvent]
+    # Hold automated deletion for this dataset
+    holdDeletion: Boolean
   }
 
   type DatasetDerivatives {
