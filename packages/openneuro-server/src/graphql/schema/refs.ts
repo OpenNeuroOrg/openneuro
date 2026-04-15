@@ -14,3 +14,6 @@ export const SnapshotRef = builder.objectRef<Record<string, unknown>>(
   "Snapshot",
 )
 export const CommentRef = builder.objectRef<CommentDocument>("Comment")
+export const DatasetEventRef = builder.objectRef<Record<string, unknown>>(
+  "DatasetEvent",
+)

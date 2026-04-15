@@ -2,7 +2,6 @@ import type { PipelineStage } from "mongoose"
 import User from "../../models/user"
 import DatasetEvent from "../../models/datasetEvents"
 import type { UserNotificationStatusDocument } from "../../models/userNotificationStatus"
-
 function isValidOrcid(orcid: string): boolean {
   return /^[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{3}[0-9X]$/.test(orcid || "")
 }
@@ -77,13 +76,15 @@ export async function user(
 }
 
 export interface UserInfo {
-  userId: string
+  id?: string
+  userId?: string
   admin: boolean
   username?: string
   provider?: string
   providerId?: string
   blocked?: boolean
   orcidConsent?: boolean | null
+  reviewer?: boolean
 }
 
 export interface GraphQLContext {
@@ -202,7 +203,11 @@ export const users = async (
   }
 }
 
-export const removeUser = (obj, { id }, { userInfo }) => {
+export const removeUser = (
+  obj: unknown,
+  { id }: { id: string },
+  { userInfo }: GraphQLContext,
+) => {
   if (userInfo.admin) {
     return User.findByIdAndDelete(id).exec()
   } else {
@@ -210,7 +215,11 @@ export const removeUser = (obj, { id }, { userInfo }) => {
   }
 }
 
-export const setAdmin = (obj, { id, admin }, { userInfo }) => {
+export const setAdmin = (
+  obj: unknown,
+  { id, admin }: { id: string; admin: boolean },
+  { userInfo }: GraphQLContext,
+) => {
   if (userInfo.admin) {
     return User.findOneAndUpdate({ id }, { admin }).exec()
   } else {
@@ -220,7 +229,11 @@ export const setAdmin = (obj, { id, admin }, { userInfo }) => {
   }
 }
 
-export const setBlocked = (obj, { id, blocked }, { userInfo }) => {
+export const setBlocked = (
+  obj: unknown,
+  { id, blocked }: { id: string; blocked: boolean },
+  { userInfo }: GraphQLContext,
+) => {
   if (userInfo.admin) {
     return User.findOneAndUpdate({ id }, { blocked }).exec()
   } else {
@@ -229,9 +242,15 @@ export const setBlocked = (obj, { id, blocked }, { userInfo }) => {
 }
 
 export const updateUser = async (
-  obj,
-  { id, location, institution, links, orcidConsent },
-  { userInfo },
+  obj: unknown,
+  { id, location, institution, links, orcidConsent }: {
+    id: string
+    location?: string
+    institution?: string
+    links?: string[]
+    orcidConsent?: boolean
+  },
+  { userInfo }: GraphQLContext,
 ) => {
   if (!userInfo) {
     throw new Error("You must be logged in to update a user")
@@ -275,7 +294,11 @@ export const updateUser = async (
  * Get all events associated with a specific user (for their notifications feed).
  * Uses a single aggregation pipeline for improved performance.
  */
-export async function notifications(obj, _, { userInfo }) {
+export async function notifications(
+  obj: Partial<GraphQLUserType>,
+  _: unknown,
+  { userInfo }: GraphQLContext,
+) {
   const userId = obj.id
 
   // Reviewers never have notifications

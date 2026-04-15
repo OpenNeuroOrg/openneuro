@@ -12,7 +12,7 @@ export interface UserDocument extends Document {
   // User's preferred name (visible)
   name: string
   // Login provider
-  provider: StaticRangeInit
+  provider: string
   // The id from the login provider
   providerId: string
   // ORCID iD associated with this OpenNeuro user
