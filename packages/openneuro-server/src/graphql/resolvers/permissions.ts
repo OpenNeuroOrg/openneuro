@@ -6,7 +6,7 @@ import { checkDatasetAdmin } from "../permissions"
 import { user } from "./user"
 import { createEvent, updateEvent } from "../../libs/events"
 
-interface DatasetPermission {
+export interface DatasetPermission {
   id: string
   userPermissions: (PermissionDocument & { user: Promise<UserDocument> })[]
 }

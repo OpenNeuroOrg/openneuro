@@ -8,7 +8,7 @@ function isValidOrcid(orcid: string): boolean {
 }
 
 // TODO - Use GraphQL codegen
-type GraphQLUserType = {
+export type GraphQLUserType = {
   id: string
   provider: "orcid" | "google"
   avatar: string
