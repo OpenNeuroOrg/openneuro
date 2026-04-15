@@ -2,6 +2,7 @@ import config from "../config"
 import notifications from "../libs/notifications"
 import User from "../models/user"
 import Permission from "../models/permission"
+import Dataset from "../models/dataset"
 import DataRetention from "../models/dataRetention"
 import Deletion from "../models/deletion"
 import { getDraftInfo } from "./draft"
@@ -44,6 +45,10 @@ export async function checkDataRetentionNotifications(
   // Skip datasets that have been marked as deleted
   const deleted = await Deletion.findOne({ datasetId }).exec()
   if (deleted) return
+
+  // Skip datasets with deletion hold set by an admin
+  const dataset = await Dataset.findOne({ id: datasetId }).exec()
+  if (dataset?.holdDeletion) return
 
   const draft = await getDraftInfo(datasetId)
   const snapshots = await getSnapshots(datasetId)

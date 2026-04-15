@@ -22,6 +22,7 @@ import notifications from "../../libs/notifications"
 import DataRetention from "../../models/dataRetention"
 import Permission from "../../models/permission"
 import User from "../../models/user"
+import Dataset from "../../models/dataset"
 import Deletion from "../../models/deletion"
 import { checkDataRetentionNotifications } from "../dataRetentionNotifications"
 import * as draftModule from "../draft"
@@ -55,6 +56,7 @@ describe("checkDataRetentionNotifications", () => {
   })
 
   beforeEach(async () => {
+    await Dataset.deleteMany({})
     await DataRetention.deleteMany({})
     await Deletion.deleteMany({})
     await Permission.deleteMany({})
@@ -89,6 +91,15 @@ describe("checkDataRetentionNotifications", () => {
       reason: "test deletion",
       user: { _id: TEST_USER.id },
     })
+    mockDraft(daysAgo(15))
+    mockSnapshots([{ hexsha: "other" }])
+
+    await checkDataRetentionNotifications(TEST_DATASET)
+    expect(notifications.send).not.toHaveBeenCalled()
+  })
+
+  it("skips notifications for datasets with holdDeletion flag", async () => {
+    await Dataset.create({ id: TEST_DATASET, holdDeletion: true })
     mockDraft(daysAgo(15))
     mockSnapshots([{ hexsha: "other" }])
 
