@@ -444,7 +444,7 @@ type Mutation {
   undoDeprecateSnapshot(datasetId: ID!, tag: String!): Snapshot
   updateContributors(datasetId: String!, newContributors: [ContributorInput!]!): UpdateContributorsPayload!
   updateDescription(datasetId: ID!, field: String!, value: String!): Description
-  updateDescriptionList(datasetId: ID!, field: String!, value: [String!]!): Description
+  updateDescriptionList(datasetId: ID!, field: String!, value: [String!]): Description
   updateEventStatus(eventId: ID!, status: NotificationStatusType!): UserNotificationStatus
   updateFileCheck(annexFsck: [AnnexFsckInput!]!, datasetId: ID!, hexsha: String!, refs: [String!]!, remote: String): FileCheck
   updateOrcidPermissions(datasetId: ID!, level: String!, userOrcid: String!): DatasetPermissions

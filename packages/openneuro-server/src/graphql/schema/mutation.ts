@@ -293,7 +293,7 @@ builder.mutationType({
       args: {
         datasetId: t.arg.id({ required: true }),
         field: t.arg.string({ required: true }),
-        value: t.arg.stringList({ required: true }),
+        value: t.arg.stringList(),
       },
       resolve: (root, args, ctx) =>
         updateDescriptionList(root, args as never, ctx as never) as never,
