@@ -5,12 +5,7 @@ import { Description, UpdateContributorsPayload } from "./description"
 import { Summary } from "./metadata"
 import { Metadata } from "./metadata"
 import { UploadMetadata } from "./upload"
-import {
-  FileCheck,
-  FlaggedFile,
-  RepoMetadata,
-  UserNotificationStatus,
-} from "./misc"
+import { FileCheck, RepoMetadata, UserNotificationStatus } from "./misc"
 import { DatasetReviewer } from "./reviewer"
 import { WorkerTask } from "./worker"
 import { FollowDatasetResponse, StarDatasetResponse } from "./misc"

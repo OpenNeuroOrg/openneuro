@@ -42,11 +42,10 @@ export async function deleteReviewer(
 /**
  * Resolver for dataset reviewers
  */
-/* eslint-disable-next-line @typescript-eslint/no-unused-vars */
 export function reviewers(
   obj: { id: string },
   _: unknown,
-  { user, userInfo }: GraphQLContext,
+  { user: _user, userInfo: _userInfo }: GraphQLContext,
 ) {
   return Reviewer.find({ datasetId: obj.id }).lean().exec()
 }
