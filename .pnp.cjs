@@ -815,7 +815,7 @@ const RAW_RUNTIME_STATE =
           ["@apollo/server", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:5.5.0"],\
           ["@as-integrations/express5", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:1.1.2"],\
           ["@types/apollo__server", null],\
-          ["@types/express", "npm:4.17.17"],\
+          ["@types/express", "npm:5.0.6"],\
           ["express", "npm:5.2.1"]\
         ],\
         "packagePeers": [\
@@ -4246,8 +4246,8 @@ const RAW_RUNTIME_STATE =
           ["@sentry/profiling-node", "npm:10.37.0"],\
           ["@types/cors", "npm:2.8.13"],\
           ["@types/draft-js", "npm:0.10.45"],\
-          ["@types/express", "npm:4.17.17"],\
-          ["@types/express-serve-static-core", "npm:4.17.35"],\
+          ["@types/express", "npm:5.0.6"],\
+          ["@types/express-serve-static-core", "npm:5.1.1"],\
           ["@types/ioredis", "npm:4.27.4"],\
           ["@types/ioredis-mock", "npm:8.2.2"],\
           ["@types/js-yaml", "npm:4.0.9"],\
@@ -6431,23 +6431,22 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["@types/express", [\
-      ["npm:4.17.17", {\
-        "packageLocation": "./.yarn/cache/@types-express-npm-4.17.17-46fe8173db-e2959a5fec.zip/node_modules/@types/express/",\
+      ["npm:5.0.6", {\
+        "packageLocation": "./.yarn/cache/@types-express-npm-5.0.6-a43836c0f4-da2cc3de1b.zip/node_modules/@types/express/",\
         "packageDependencies": [\
           ["@types/body-parser", "npm:1.19.1"],\
-          ["@types/express", "npm:4.17.17"],\
-          ["@types/express-serve-static-core", "npm:4.17.35"],\
-          ["@types/qs", "npm:6.9.7"],\
-          ["@types/serve-static", "npm:1.13.10"]\
+          ["@types/express", "npm:5.0.6"],\
+          ["@types/express-serve-static-core", "npm:5.1.1"],\
+          ["@types/serve-static", "npm:2.2.0"]\
         ],\
         "linkType": "HARD"\
       }]\
     ]],\
     ["@types/express-serve-static-core", [\
-      ["npm:4.17.35", {\
-        "packageLocation": "./.yarn/cache/@types-express-serve-static-core-npm-4.17.35-c86e5f6e4a-9f08212ac1.zip/node_modules/@types/express-serve-static-core/",\
+      ["npm:5.1.1", {\
+        "packageLocation": "./.yarn/cache/@types-express-serve-static-core-npm-5.1.1-615a8587b0-7f3d8cf7e6.zip/node_modules/@types/express-serve-static-core/",\
         "packageDependencies": [\
-          ["@types/express-serve-static-core", "npm:4.17.35"],\
+          ["@types/express-serve-static-core", "npm:5.1.1"],\
           ["@types/node", "npm:16.9.6"],\
           ["@types/qs", "npm:6.9.7"],\
           ["@types/range-parser", "npm:1.2.4"],\
@@ -6498,6 +6497,15 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/@types-http-cache-semantics-npm-4.0.1-90863c7a3e-d059bf8a15.zip/node_modules/@types/http-cache-semantics/",\
         "packageDependencies": [\
           ["@types/http-cache-semantics", "npm:4.0.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@types/http-errors", [\
+      ["npm:2.0.5", {\
+        "packageLocation": "./.yarn/cache/@types-http-errors-npm-2.0.5-fc57abf6db-a88da66936.zip/node_modules/@types/http-errors/",\
+        "packageDependencies": [\
+          ["@types/http-errors", "npm:2.0.5"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -6907,12 +6915,12 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["@types/serve-static", [\
-      ["npm:1.13.10", {\
-        "packageLocation": "./.yarn/cache/@types-serve-static-npm-1.13.10-5434e2c519-62b4e79cb0.zip/node_modules/@types/serve-static/",\
+      ["npm:2.2.0", {\
+        "packageLocation": "./.yarn/cache/@types-serve-static-npm-2.2.0-5b97070e23-f2bad1304c.zip/node_modules/@types/serve-static/",\
         "packageDependencies": [\
-          ["@types/mime", "npm:1.3.2"],\
+          ["@types/http-errors", "npm:2.0.5"],\
           ["@types/node", "npm:16.9.6"],\
-          ["@types/serve-static", "npm:1.13.10"]\
+          ["@types/serve-static", "npm:2.2.0"]\
         ],\
         "linkType": "HARD"\
       }]\
