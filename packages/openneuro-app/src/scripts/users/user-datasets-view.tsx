@@ -9,36 +9,51 @@ import { Loading } from "../components/loading/Loading"
 import type { Dataset, UserDatasetsViewProps } from "../types/user-types"
 import styles from "./scss/datasetcard.module.scss"
 
-type SortByType = {
-  [key: string]: "asc" | "desc"
-} | null
+interface SearchInput {
+  keywords?: string[]
+  userId?: string
+  publicOnly?: boolean
+  sortBy?: string
+}
 
-interface ElasticsearchQuery {
-  bool: {
-    filter: (
-      | { terms: { "permissions.userPermissions.user.id": string[] } }
-      | { term: { public: boolean | null } }
-    )[]
-    must: (
-      | {
-        bool: {
-          should: (
-            | {
-              multi_match: {
-                query: string
-                fields: string[]
-                fuzziness: number
-              }
-            }
-            | { prefix: { name: string } }
-            | { prefix: { "description.Name": string } }
-          )[]
-          minimum_should_match: number
-        }
-      }
-      | { match_all: Record<string, never> }
-    )[]
+const buildSearchInput = (
+  searchQuery: string,
+  publicFilter: string,
+  userId: string | undefined,
+  hasEdit: boolean,
+  sortBy: string | undefined,
+): SearchInput => {
+  const input: SearchInput = {}
+
+  if (userId) {
+    input.userId = userId
   }
+
+  if (hasEdit) {
+    if (publicFilter === "public") {
+      input.publicOnly = true
+    }
+  } else {
+    input.publicOnly = true
+  }
+
+  if (searchQuery) {
+    input.keywords = [searchQuery]
+  }
+
+  if (sortBy) {
+    input.sortBy = sortBy
+  }
+
+  return input
+}
+
+const SORT_MAP: Record<string, string | undefined> = {
+  "name-asc": "name_asc",
+  "name-desc": "name_desc",
+  "date-newest": "newest",
+  "date-oldest": "oldest",
+  "date-updated": "last_updated",
 }
 
 export const UserDatasetsView: React.FC<UserDatasetsViewProps> = ({
@@ -52,81 +67,12 @@ export const UserDatasetsView: React.FC<UserDatasetsViewProps> = ({
   const [loadMoreLoading, setLoadMoreLoading] = useState(false)
   const [cursor, setCursor] = useState<string | null>(null)
   const [hasNextPage, setHasNextPage] = useState(false)
-  const [sortBy, setSortBy] = useState<SortByType>(null)
   const loadAmount = 26
 
-  const generateElasticsearchQuery = useCallback(
-    (
-      currentSearchQuery: string,
-      currentPublicFilter: string,
-    ): ElasticsearchQuery => {
-      const baseQuery: ElasticsearchQuery = {
-        bool: {
-          filter: [],
-          must: [],
-        },
-      }
+  const sortByValue = SORT_MAP[sortOrder]
 
-      if (orcidUser?.id) {
-        baseQuery.bool.filter.push({
-          terms: {
-            "permissions.userPermissions.user.id": [orcidUser.id],
-          },
-        })
-      }
-
-      if (hasEdit) {
-        if (currentPublicFilter === "public") {
-          baseQuery.bool.filter.push({ term: { public: true } })
-        }
-      } else {
-        baseQuery.bool.filter.push({ term: { public: true } })
-      }
-
-      if (currentSearchQuery) {
-        baseQuery.bool.must.push({
-          bool: {
-            should: [
-              {
-                multi_match: {
-                  query: currentSearchQuery,
-                  fields: [
-                    "id^3",
-                    "name^3",
-                    "description.Name^3",
-                    "description.Authors^3",
-                    "latestSnapshot.description.Name",
-                    "latestSnapshot.description.Authors",
-                    "latestSnapshot.readme",
-                  ],
-                  fuzziness: 1,
-                },
-              },
-              {
-                prefix: {
-                  name: currentSearchQuery.toLowerCase(),
-                },
-              },
-              {
-                prefix: {
-                  "description.Name": currentSearchQuery.toLowerCase(),
-                },
-              },
-            ],
-            minimum_should_match: 1,
-          },
-        })
-      } else {
-        baseQuery.bool.must.push({ match_all: {} })
-      }
-
-      return baseQuery
-    },
-    [orcidUser?.id, hasEdit],
-  )
-
-  const [elasticsearchQuery, setElasticsearchQuery] = useState(() =>
-    generateElasticsearchQuery("", "all")
+  const [searchInput, setSearchInput] = useState(() =>
+    buildSearchInput("", "all", orcidUser?.id, hasEdit, sortByValue)
   )
 
   const { data, loading, error, fetchMore, refetch } = useQuery(
@@ -134,8 +80,7 @@ export const UserDatasetsView: React.FC<UserDatasetsViewProps> = ({
     {
       variables: {
         first: loadAmount,
-        query: elasticsearchQuery,
-        sortBy: sortBy,
+        query: searchInput,
         cursor: null,
         allDatasets: true,
         datasetStatus: undefined,
@@ -161,89 +106,63 @@ export const UserDatasetsView: React.FC<UserDatasetsViewProps> = ({
     (newSearchQuery: string, currentPublicFilter: string) => {
       setSearchQuery(newSearchQuery)
       setPublicFilter(currentPublicFilter)
-      const newElasticsearchQuery = generateElasticsearchQuery(
+      const newInput = buildSearchInput(
         newSearchQuery,
         currentPublicFilter,
+        orcidUser?.id,
+        hasEdit,
+        sortByValue,
       )
-      setElasticsearchQuery(newElasticsearchQuery)
+      setSearchInput(newInput)
       refetch({
-        query: newElasticsearchQuery,
+        query: newInput,
         cursor: null,
-        sortBy: sortBy,
         datasetStatus: undefined,
       })
     },
-    [
-      generateElasticsearchQuery,
-      refetch,
-      setSearchQuery,
-      setPublicFilter,
-      setElasticsearchQuery,
-      sortBy,
-      hasEdit,
-      orcidUser?.id,
-    ],
+    [refetch, sortByValue, hasEdit, orcidUser?.id],
   )
 
   const handlePublicFilterChange = useCallback(
     (newPublicFilter) => {
       setPublicFilter(newPublicFilter)
-      const newElasticsearchQuery = generateElasticsearchQuery(
+      const newInput = buildSearchInput(
         searchQuery,
         newPublicFilter,
+        orcidUser?.id,
+        hasEdit,
+        sortByValue,
       )
-      setElasticsearchQuery(newElasticsearchQuery)
+      setSearchInput(newInput)
       refetch({
-        query: newElasticsearchQuery,
+        query: newInput,
         cursor: null,
-        sortBy: sortBy,
         datasetStatus: undefined,
       })
     },
-    [
-      setPublicFilter,
-      generateElasticsearchQuery,
-      refetch,
-      searchQuery,
-      sortBy,
-      hasEdit,
-      orcidUser?.id,
-    ],
+    [refetch, searchQuery, sortByValue, hasEdit, orcidUser?.id],
   )
 
   const handleSortOrderChange = useCallback(
     (newSortOrder) => {
       setSortOrder(newSortOrder)
-      let newSortBy = null
-      switch (newSortOrder) {
-        case "name-asc":
-          newSortBy = { "metadata.datasetName": "asc" }
-          break
-        case "name-desc":
-          newSortBy = { "metadata.datasetName": "desc" }
-          break
-        case "date-newest":
-          newSortBy = { created: "desc" }
-          break
-        case "date-oldest":
-          newSortBy = { created: "asc" }
-          break
-        case "date-updated":
-          newSortBy = { "metadata.latestSnapshotCreatedAt": "desc" }
-          break
-        default:
-          newSortBy = null
-      }
-      setSortBy(newSortBy)
+      const newSortByValue = SORT_MAP[newSortOrder]
+      const newInput = buildSearchInput(
+        searchQuery,
+        publicFilter,
+        orcidUser?.id,
+        hasEdit,
+        newSortByValue,
+      )
+      setSearchInput(newInput)
       refetch({
-        sortBy: newSortBy,
+        query: newInput,
         first: loadAmount,
         cursor: null,
-        query: elasticsearchQuery,
         datasetStatus: undefined,
       })
     },
-    [setSortOrder, refetch, setSortBy, elasticsearchQuery, hasEdit],
+    [refetch, searchQuery, publicFilter, hasEdit, orcidUser?.id],
   )
 
   const handleLoadMore = useCallback(() => {
@@ -256,8 +175,7 @@ export const UserDatasetsView: React.FC<UserDatasetsViewProps> = ({
       variables: {
         first: loadAmount,
         cursor: cursor,
-        query: elasticsearchQuery,
-        sortBy: sortBy,
+        query: searchInput,
         allDatasets: true,
         datasetStatus: undefined,
       },
@@ -293,8 +211,7 @@ export const UserDatasetsView: React.FC<UserDatasetsViewProps> = ({
     hasNextPage,
     loadMoreLoading,
     cursor,
-    elasticsearchQuery,
-    sortBy,
+    searchInput,
     hasEdit,
   ])
 
@@ -307,23 +224,25 @@ export const UserDatasetsView: React.FC<UserDatasetsViewProps> = ({
   }, [data, hasEdit, loadAmount])
 
   useEffect(() => {
-    const newElasticsearchQuery = generateElasticsearchQuery(
+    const newInput = buildSearchInput(
       searchQuery,
       publicFilter,
+      orcidUser?.id,
+      hasEdit,
+      sortByValue,
     )
-    setElasticsearchQuery(newElasticsearchQuery)
-  }, [searchQuery, publicFilter, generateElasticsearchQuery])
+    setSearchInput(newInput)
+  }, [searchQuery, publicFilter, orcidUser?.id, hasEdit, sortByValue])
 
   useEffect(() => {
-    if (elasticsearchQuery) {
+    if (searchInput) {
       refetch({
-        query: elasticsearchQuery,
+        query: searchInput,
         cursor: null,
-        sortBy: sortBy,
         datasetStatus: undefined,
       })
     }
-  }, [elasticsearchQuery, refetch, sortBy, hasEdit])
+  }, [searchInput, refetch, hasEdit])
 
   if (loading) return <Loading />
   if (error) {

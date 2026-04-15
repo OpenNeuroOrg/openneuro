@@ -166,17 +166,7 @@ export const undoDeprecateSnapshot = async (
 
 /** Query used to run a search for NIH datasets */
 const brainInitiativeQuery = {
-  "bool": {
-    "filter": [
-      {
-        "match": {
-          "brainInitiative": {
-            "query": "true",
-          },
-        },
-      },
-    ],
-  },
+  brainInitiative: true,
 }
 
 export const participantCount = (obj, { modality }) => {
@@ -204,7 +194,6 @@ export const participantCount = (obj, { modality }) => {
           query: brainInitiativeQuery,
           datasetType: "All Public",
           datasetStatus: "",
-          sortBy: "",
           after,
           first: 100,
         }, { user: null, userInfo: {} })

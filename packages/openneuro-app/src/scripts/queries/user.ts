@@ -96,18 +96,16 @@ export const UPDATE_USER = gql`
 
 export const ADVANCED_SEARCH_DATASETS_QUERY = gql`
   query advancedSearchDatasets(
-    $query: JSON!
+    $query: DatasetSearchInput!
     $cursor: String
     $allDatasets: Boolean
     $datasetStatus: String
-    $sortBy: JSON
     $first: Int!
   ) {
     datasets: advancedSearch(
       query: $query
       allDatasets: $allDatasets
       datasetStatus: $datasetStatus
-      sortBy: $sortBy
       first: $first
       after: $cursor
     ) {

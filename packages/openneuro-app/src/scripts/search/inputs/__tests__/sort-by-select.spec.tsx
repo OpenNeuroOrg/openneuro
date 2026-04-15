@@ -10,7 +10,7 @@ const providerProps = {
 
 describe("SortBySelect component", () => {
   it("displays Newest when parameters are set to default", () => {
-    searchRender(<SortBySelect variables={{ query: { bool: {} } }} />, {
+    searchRender(<SortBySelect variables={{ query: {} }} />, {
       providerProps,
     })
     expect(screen.getByText("SORT BY:").closest("div")).toHaveTextContent(
@@ -22,17 +22,7 @@ describe("SortBySelect component", () => {
       <SortBySelect
         variables={{
           query: {
-            bool: {
-              filter: [
-                {
-                  match: {
-                    "latestSnapshot.summary.modalities": {
-                      query: "mri",
-                    },
-                  },
-                },
-              ],
-            },
+            modality: "mri",
           },
         }}
       />,
@@ -46,7 +36,7 @@ describe("SortBySelect component", () => {
   })
   it("displays Relevance when any non-modality parameters are set away from default", () => {
     searchRender(
-      <SortBySelect variables={{ query: { bool: { species: "Human" } } }} />,
+      <SortBySelect variables={{ query: { species: "Human" } }} />,
       { providerProps },
     )
     expect(screen.getByText("SORT BY:").closest("div")).toHaveTextContent(
@@ -58,19 +48,7 @@ describe("SortBySelect component", () => {
       <SortBySelect
         variables={{
           query: {
-            bool: {
-              filter: [
-                {
-                  range: {
-                    "latestSnapshot.summary.subjectMetadata.age": {
-                      gte: 10,
-                      lte: 100,
-                      relation: "INTERSECTS",
-                    },
-                  },
-                },
-              ],
-            },
+            ageRange: [10, 100],
           },
         }}
       />,

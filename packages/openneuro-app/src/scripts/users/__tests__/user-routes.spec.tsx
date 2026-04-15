@@ -35,18 +35,9 @@ const setupUserRoutes = (
         variables: {
           first: 26,
           query: {
-            bool: {
-              filter: [
-                {
-                  terms: {
-                    "permissions.userPermissions.user.id": [orcidUser.id],
-                  },
-                },
-              ],
-              must: [{ match_all: {} }],
-            },
+            userId: orcidUser.id,
+            sortBy: "last_updated",
           },
-          sortBy: null,
           cursor: null,
           allDatasets: true,
           datasetStatus: undefined,

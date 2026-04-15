@@ -190,8 +190,16 @@ const routes = [
   // git redirect routes
   { method: "get", url: "/git/:datasetId", handler: datalad.gitRepo },
   { method: "post", url: "/git/:datasetId", handler: datalad.gitRepo },
-  { method: "get", url: "/git/:datasetId/*", handler: datalad.gitRepo },
-  { method: "post", url: "/git/:datasetId/*", handler: datalad.gitRepo },
+  {
+    method: "get",
+    url: "/git/:datasetId/*arguments",
+    handler: datalad.gitRepo,
+  },
+  {
+    method: "post",
+    url: "/git/:datasetId/*arguments",
+    handler: datalad.gitRepo,
+  },
 ]
 
 // initialize routes -------------------------------

@@ -11,7 +11,7 @@ const PUBLIC_DATASETS_COUNT = gql`
 `
 
 const BRAIN_INITIATIVE_COUNT = gql`
-  query AdvancedSearch($query: JSON!, $datasetType: String!) {
+  query AdvancedSearch($query: DatasetSearchInput!, $datasetType: String!) {
     advancedSearch(query: $query, datasetType: $datasetType) {
       pageInfo {
         count
@@ -26,9 +26,7 @@ const usePublicDatasetsCount = (modality?: string) => {
   const query = isNIH ? BRAIN_INITIATIVE_COUNT : PUBLIC_DATASETS_COUNT
   const variables = isNIH
     ? {
-      query: {
-        bool: { filter: [{ match: { brainInitiative: { query: "true" } } }] },
-      },
+      query: { brainInitiative: true },
       datasetType: "public",
     }
     : { modality }
