@@ -20,13 +20,13 @@ const SortBySelect: FC<SortBySelectProps> = ({
       sortBy_selected,
     }))
 
-  // If no query or only modality is set, ignore "relevance" option
+  // If no query or only modality/sortBy is set, ignore "relevance" option
+  const queryKeys = Object.keys(variables.query).filter(
+    (k) => k !== "sortBy",
+  )
   if (
-    Object.keys(variables.query.bool).length === 0 ||
-    (Object.keys(variables.query.bool).length === 1 &&
-      variables.query.bool?.filter?.every(
-        (f) => f?.match?.["latestSnapshot.summary.modalities"],
-      ))
+    queryKeys.length === 0 ||
+    (queryKeys.length === 1 && queryKeys[0] === "modality")
   ) {
     const available = sortBy_available.filter(
       (item) => item.value !== "relevance",

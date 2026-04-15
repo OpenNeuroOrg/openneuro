@@ -1,33 +1,20 @@
 import { useContext } from "react"
 import { gql, useQuery } from "@apollo/client"
 import { SearchParamsCtx } from "./search-params-ctx"
-import initialSearchParams from "./initial-search-params"
-import {
-  BoolQuery,
-  joinWithOR,
-  matchQuery,
-  multiMatchQuery,
-  rangeListLengthQuery,
-  rangeQuery,
-  simpleQueryString,
-  sqsJoinWithAND,
-} from "./es-query-builders"
 
 const searchQuery = gql`
   query advancedSearchDatasets(
-    $query: JSON!
+    $query: DatasetSearchInput!
     $cursor: String
     $allDatasets: Boolean
     $datasetType: String
     $datasetStatus: String
-    $sortBy: JSON
   ) {
     datasets: advancedSearch(
       query: $query
       allDatasets: $allDatasets
       datasetType: $datasetType
       datasetStatus: $datasetStatus
-      sortBy: $sortBy
       first: 25
       after: $cursor
     ) {
@@ -100,9 +87,9 @@ const searchQuery = gql`
             }
             contributors {
               name
-              givenName 
-              familyName 
-              orcid 
+              givenName
+              familyName
+              orcid
               contributorType
             }
           }
@@ -136,8 +123,8 @@ const searchQuery = gql`
   }
 `
 
-const isActiveRange = (range) =>
-  JSON.stringify(range) !== JSON.stringify([null, null])
+const isActiveRange = (range: (number | null)[]): boolean =>
+  range[0] !== null || range[1] !== null
 
 export const useSearchResults = () => {
   const { searchParams } = useContext(SearchParamsCtx)
@@ -167,248 +154,43 @@ export const useSearchResults = () => {
     brain_initiative,
   } = searchParams
 
-  const boolQuery = new BoolQuery()
-  if (keywords.length) {
-    boolQuery.addClause(
-      "must",
-      simpleQueryString(sqsJoinWithAND(keywords), [
-        "id^20",
-        "latestSnapshot.readme",
-        "latestSnapshot.description.Name^6",
-        "latestSnapshot.description.Authors^3", // TODO: Nell - do we need this still?
-        "latestSnapshot.contributors.name^2",
-      ]),
-    )
-  }
-  if (modality_selected) {
-    const secondaryModalities = {
-      Diffusion: {
-        secondary: "mri_diffusion",
-        primary: "mri",
-      },
-      Structural: {
-        secondary: "mri_structural",
-        primary: "mri",
-      },
-      Functional: {
-        secondary: "mri_functional",
-        primary: "mri",
-      },
-      Perfusion: {
-        secondary: "mri_perfusion",
-        primary: "mri",
-      },
-      Static: {
-        secondary: "pet_static",
-        primary: "pet",
-      },
-      Dynamic: {
-        secondary: "pet_dynamic",
-        primary: "pet",
-      },
-    }
-    if (Object.keys(secondaryModalities).includes(modality_selected)) {
-      boolQuery.addClause(
-        "filter",
-        matchQuery(
-          "latestSnapshot.summary.secondaryModalities",
-          secondaryModalities[modality_selected].secondary,
-        ),
-      )
-    } else {
-      boolQuery.addClause(
-        "filter",
-        matchQuery("latestSnapshot.summary.modalities", modality_selected),
-      )
-    }
-  }
+  // Build the structured search input
+  const query: Record<string, unknown> = {}
 
-  if (isActiveRange(ageRange)) {
-    boolQuery.addClause(
-      "filter",
-      rangeQuery("latestSnapshot.summary.subjectMetadata.age", ...ageRange),
-    )
-  }
+  if (keywords.length) query.keywords = keywords
+  if (modality_selected) query.modality = modality_selected
+  if (isActiveRange(ageRange)) query.ageRange = ageRange
   if (isActiveRange(subjectCountRange)) {
-    boolQuery.addClause(
-      "filter",
-      rangeListLengthQuery(
-        "latestSnapshot.summary.subjects",
-        subjectCountRange[0] || 0,
-        subjectCountRange[1] || 1000000,
-      ),
-    )
+    query.subjectCountRange = subjectCountRange
   }
-  if (diagnosis_selected) {
-    boolQuery.addClause(
-      "filter",
-      matchQuery("metadata.dxStatus", diagnosis_selected),
-    )
+  if (diagnosis_selected) query.diagnosis = diagnosis_selected
+  if (tasks.length) query.tasks = tasks
+  if (authors.length) query.authors = authors
+  if (sex_selected && sex_selected !== "All") query.sex = sex_selected
+  if (date_selected && date_selected !== "All Time") {
+    query.dateRange = date_selected
   }
-  if (bidsDatasetType_selected) {
-    boolQuery.addClause(
-      "filter",
-      matchQuery(
-        "latestSnapshot.description.DatasetType",
-        bidsDatasetType_selected,
-      ),
-    )
+  if (species_selected) query.species = species_selected
+  if (section_selected) query.studyStructure = section_selected
+  if (studyDomains.length) query.studyDomains = studyDomains
+  if (bidsDatasetType_selected) query.bidsDatasetType = bidsDatasetType_selected
+  if (brain_initiative) query.brainInitiative = true
+  if (bodyParts.length) query.bodyParts = bodyParts
+  if (scannerManufacturers.length) {
+    query.scannerManufacturers = scannerManufacturers
   }
-  if (brain_initiative) {
-    boolQuery.addClause(
-      "filter",
-      matchQuery(
-        "brainInitiative",
-        brain_initiative,
-      ),
-    )
+  if (scannerManufacturersModelNames.length) {
+    query.scannerManufacturersModelNames = scannerManufacturersModelNames
   }
-  if (tasks.length) {
-    boolQuery.addClause(
-      "must",
-      simpleQueryString(sqsJoinWithAND(tasks), [
-        "latestSnapshot.summary.tasks",
-      ]),
-    )
+  if (tracerNames.length) query.tracerNames = tracerNames
+  if (tracerRadionuclides.length) {
+    query.tracerRadionuclides = tracerRadionuclides
   }
-  if (authors.length) { // TODO - NELL - does this look right?
-    const authorQuery = matchQuery(
-      "latestSnapshot.contributors.name",
-      joinWithOR(authors),
-      "2",
-    )
-    boolQuery.addClause(
-      "must",
-      {
-        bool: {
-          should: [authorQuery],
-        },
-      },
-    )
-  }
-  if (sex_selected !== "All") {
-    // Possible values for this field are specified here:
-    // https://bids-specification.readthedocs.io/en/stable/glossary.html#objects.columns.sex
-    let queryStrings = []
-    if (sex_selected == "Male") {
-      queryStrings = ["male", "m", "M", "MALE", "Male"]
-    } else if (sex_selected == "Female") {
-      queryStrings = ["female", "f", "F", "FEMALE", "Female"]
-    }
-    boolQuery.addClause(
-      "filter",
-      multiMatchQuery(
-        "latestSnapshot.summary.subjectMetadata.sex",
-        queryStrings,
-      ),
-    )
-  }
-  if (date_selected !== "All Time") {
-    let d: number
-    if (date_selected === "Last 30 days") {
-      d = 30
-    } else if (date_selected === "Last 180 days") {
-      d = 180
-    } else {
-      d = 365
-    }
-    boolQuery.addClause("filter", rangeQuery("created", `now-${d}d/d`, "now/d"))
-  }
-  if (species_selected) {
-    if (species_selected === "Other") {
-      // if species is 'Other', search for every species that isn't an available option
-      const species = initialSearchParams.species_available
-        .filter((s) => s !== "Other")
-        .join(" ")
-      boolQuery.addClause(
-        "must_not",
-        matchQuery("metadata.species", species, "AUTO", "OR"),
-      )
-    } else if (species_selected === "Human") {
-      // if species is 'Human', search for Human or null values (BIDS assumes human by default)
-      boolQuery.query.bool["should"] = [
-        matchQuery("metadata.species", "Human", "AUTO"),
-        { term: { _content: "" } },
-      ]
-    } else {
-      boolQuery.addClause(
-        "filter",
-        matchQuery("metadata.species", species_selected, "AUTO"),
-      )
-    }
-  }
-  if (section_selected) {
-    boolQuery.addClause(
-      "filter",
-      matchQuery("metadata.studyLongitudinal", section_selected, "AUTO"),
-    )
-  }
-  if (studyDomains.length) {
-    boolQuery.addClause(
-      "must",
-      matchQuery("metadata.studyDomain", joinWithOR(studyDomains)),
-    )
-  }
-  if (modality_selected === "pet" || modality_selected === null) {
-    if (bodyParts.length) {
-      boolQuery.addClause(
-        "must",
-        simpleQueryString(sqsJoinWithAND(bodyParts), [
-          "latestSnapshot.summary.pet.BodyPart",
-        ]),
-      )
-    }
-    if (scannerManufacturers.length) {
-      boolQuery.addClause(
-        "must",
-        simpleQueryString(sqsJoinWithAND(scannerManufacturers), [
-          "latestSnapshot.summary.pet.ScannerManufacturer",
-        ]),
-      )
-    }
-    if (scannerManufacturersModelNames.length) {
-      boolQuery.addClause(
-        "must",
-        simpleQueryString(sqsJoinWithAND(scannerManufacturersModelNames), [
-          "latestSnapshot.summary.pet.ScannerManufacturersModelName",
-        ]),
-      )
-    }
-    if (tracerNames.length) {
-      boolQuery.addClause(
-        "must",
-        simpleQueryString(sqsJoinWithAND(tracerNames), [
-          "latestSnapshot.summary.pet.TracerName",
-        ]),
-      )
-    }
-    if (tracerRadionuclides.length) {
-      boolQuery.addClause(
-        "must",
-        simpleQueryString(sqsJoinWithAND(tracerRadionuclides), [
-          "latestSnapshot.summary.pet.TracerRadionuclide",
-        ]),
-      )
-    }
-  }
+  if (sortBy_selected) query.sortBy = sortBy_selected.value
 
-  let sortBy
-  if (sortBy_selected.label === "Relevance") {
-    // If filters are set, sort by relevance (default sort),
-    //   otherwise, sort from newest to oldest
-    sortBy = boolQuery.isEmpty() ? { created: "desc" } : null
-  } else if (sortBy_selected.label === "Newest") {
-    sortBy = { created: "desc" }
-  } else if (sortBy_selected.label === "Oldest") {
-    sortBy = { created: "asc" }
-  } else if (sortBy_selected.label === "Activity") {
-    // TODO: figure out
-    sortBy = { "analytics.downloads": "desc" }
-  }
   return useQuery(searchQuery, {
     variables: {
-      query: boolQuery.get(),
-      sortBy,
+      query,
       allDatasets: searchAllDatasets,
       datasetType: datasetType_selected,
       datasetStatus: datasetStatus_selected,

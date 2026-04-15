@@ -267,6 +267,45 @@ export const typeDefs = `
     url: String!
   }
 
+  # Sort options for advanced dataset search
+  enum SearchSortOption {
+    relevance
+    newest
+    oldest
+    activity
+    name_asc
+    name_desc
+    last_updated
+  }
+
+  # Search input for advanced dataset search
+  input DatasetSearchInput {
+    keywords: [String]
+    modality: String
+    ageRange: [Int]
+    subjectCountRange: [Int]
+    diagnosis: String
+    tasks: [String]
+    authors: [String]
+    sex: String
+    dateRange: String
+    species: String
+    studyStructure: String
+    studyDomains: [String]
+    bidsDatasetType: String
+    brainInitiative: Boolean
+    bodyParts: [String]
+    scannerManufacturers: [String]
+    scannerManufacturersModelNames: [String]
+    tracerNames: [String]
+    tracerRadionuclides: [String]
+    sortBy: SearchSortOption
+    "Filter datasets by a specific user's permissions"
+    userId: String
+    "Filter to only public datasets"
+    publicOnly: Boolean
+  }
+
   input DeleteFile {
     path: String!
     filename: String

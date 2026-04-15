@@ -5,6 +5,7 @@ import Star from "../../models/stars"
 import Subscription from "../../models/subscription"
 import Permission from "../../models/permission"
 import { hashObject } from "../../libs/authentication/crypto"
+import { buildElasticQuery } from "./build-search-query"
 
 const elasticIndex = "datasets"
 
@@ -195,43 +196,56 @@ const parseQuery = async (query, datasetType, datasetStatus, userId) => {
 }
 
 /**
- * Search result cursor resolver
- * TODO this is a Relay pagination type and could use the interface
- * @param {any} obj
- * @param {object} args
- * @param {object} args.query Stringified Query (DSL) argument for ElasticSearch
- * @param {boolean} args.allDatasets Admin option for returning all datasets (overrides datasetType and datasetStatus, but keeps other search parameters) (default = false)
- * @param {string} args.datasetType Stringified Query (DSL) argument for ElasticSearch
- * @param {string} args.datasetStatus Stringified Query (DSL) argument for ElasticSearch
- * @param {object} args.sortBy Stringified Query (DSL) argument for ElasticSearch
- * @param {string} args.after Cursor for paging forward
- * @param {number} args.first Limit of entries to find
+ * Resolve the sort parameter from SearchSortOption enum to ES sort objects.
+ */
+const resolveSort = (sortBy: string | undefined, isEmpty: boolean) => {
+  if (sortBy === "newest") return { created: "desc" }
+  if (sortBy === "oldest") return { created: "asc" }
+  if (sortBy === "activity") return { "analytics.downloads": "desc" }
+  if (sortBy === "name_asc") return { "metadata.datasetName": "asc" }
+  if (sortBy === "name_desc") return { "metadata.datasetName": "desc" }
+  if (sortBy === "last_updated") {
+    return { "metadata.latestSnapshotCreatedAt": "desc" }
+  }
+  // "relevance" or undefined: if no filters are set, sort by newest
+  if (isEmpty) return { created: "desc" }
+  return null
+}
+
+/**
+ * Search result cursor resolver using typed DatasetSearchInput
  */
 export const advancedDatasetSearchConnection = async (
   obj,
   {
-    query,
+    query: searchInput,
     allDatasets = false,
     datasetType,
     datasetStatus,
-    sortBy,
     after,
     first = 25,
   },
   { user, userInfo },
 ) => {
+  // Build the ES query from structured input
+  const { query: esQuery, isEmpty } = buildElasticQuery(searchInput)
+  const sortByOption = searchInput.sortBy
+
   // Create an identity for this search (used to cache connections)
   const searchId = hashObject({
-    query,
+    searchInput,
     datasetType,
     datasetStatus,
-    sortBy,
+    sortByOption,
     user,
   })
-  const sort = [{ _score: "desc" }, { id: "desc" }]
-  if (sortBy) {
-    sort.unshift(sortBy)
+
+  const sort: Record<string, string>[] = [{ _score: "desc" }, { id: "desc" }]
+  const extraSort = resolveSort(sortByOption, isEmpty)
+  if (extraSort) {
+    sort.unshift(extraSort)
   }
+
   // Parse out the decode token and add it to our query if successful
   let search_after
   if (after) {
@@ -241,13 +255,17 @@ export const advancedDatasetSearchConnection = async (
       // Don't include search_after if parsing fails
     }
   }
+
+  // Apply dataset type/status/permission filters
+  const query = allDatasets
+    ? esQuery
+    : await parseQuery(esQuery, datasetType, datasetStatus, user)
+
   const requestBody = {
     index: elasticIndex,
     size: first,
     sort,
-    query: allDatasets
-      ? query
-      : await parseQuery(query, datasetType, datasetStatus, user),
+    query,
     search_after,
   }
   // Run the query
@@ -268,11 +286,10 @@ export const advancedDatasetSearch = {
     type: "DatasetConnection",
     resolve: advancedDatasetSearchConnection,
     args: {
-      query: { type: "JSON!" },
+      query: { type: "DatasetSearchInput!" },
       allDatasets: { type: "Boolean" },
       datasetType: { type: "String" },
       datasetStatus: { type: "String" },
-      sortBy: { type: "JSON" },
       after: { type: "String" },
       first: { type: "Int" },
     },
