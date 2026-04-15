@@ -10,9 +10,16 @@ import { filterRemovedAnnexObjects } from "../utils/file.js"
 import { validation } from "./validation"
 import FileCheck from "../../models/fileCheck"
 import { contributors } from "../../datalad/contributors"
+import type { GraphQLContext } from "../builder"
+
+type DraftShape = { id: string; revision?: string; modified?: Date | string }
 
 // A draft must have a dataset parent
-export const draftFiles = async (dataset, args, { userInfo }) => {
+export const draftFiles = async (
+  dataset: DraftShape,
+  args: { tree?: string | null; recursive?: boolean | null },
+  { userInfo }: Pick<GraphQLContext, "userInfo">,
+) => {
   const hexsha = await getDraftRevision(dataset.id)
   const treeish = args.tree || hexsha
   const files = args.recursive
@@ -32,14 +39,18 @@ const draftSize = async (dataset, args, { userInfo }) => {
 /**
  * Mutation to move the draft HEAD reference forward or backward
  */
-export const revalidate = async (obj, { datasetId }, { user, userInfo }) => {
+export const revalidate = async (
+  obj: unknown,
+  { datasetId }: { datasetId: string },
+  { user, userInfo }: GraphQLContext,
+) => {
   await checkDatasetWrite(datasetId, user, userInfo)
 }
 
 /**
  * Resolve any issues with files recorded for the current commit
  */
-export const fileCheck = async (dataset) => {
+export const fileCheck = async (dataset: DraftShape) => {
   const hexsha = await getDraftRevision(dataset.id)
   // For drafts, obtain the local check results
   const checks = await FileCheck.findOne({
