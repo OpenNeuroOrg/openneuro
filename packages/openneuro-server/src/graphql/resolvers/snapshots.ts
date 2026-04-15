@@ -19,6 +19,30 @@ import { advancedDatasetSearchConnection } from "./dataset-search"
 import { contributors } from "../../datalad/contributors"
 import { getDraftInfo } from "../../datalad/draft"
 
+/**
+ * Shape returned by the snapshot() resolver, combining plain data
+ * from the HTTP API with lazy-loaded thunk fields.
+ */
+export interface SnapshotShape {
+  id: string
+  datasetId: string
+  tag: string
+  created?: string
+  hexsha?: string
+  dataset: () => Promise<unknown>
+  description: () => Promise<unknown>
+  readme: () => Promise<unknown>
+  summary: () => Promise<unknown>
+  files: (args: {
+    tree?: string | null
+    recursive?: boolean | null
+  }) => Promise<unknown>
+  size: () => Promise<unknown>
+  deprecated: () => Promise<unknown>
+  related: () => Promise<unknown>
+  onBrainlife: () => Promise<boolean>
+}
+
 export const snapshots = (obj) => {
   return datalad.getSnapshots(obj.id)
 }
