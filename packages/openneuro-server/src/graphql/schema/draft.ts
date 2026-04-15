@@ -19,7 +19,7 @@ DraftRef.implement({
     modified: t.field({
       type: "DateTime",
       resolve: (obj) =>
-        obj.modified ? (obj.modified as unknown as string) : null,
+        obj.modified ?? null,
     }),
     summary: t.field({
       type: Summary,

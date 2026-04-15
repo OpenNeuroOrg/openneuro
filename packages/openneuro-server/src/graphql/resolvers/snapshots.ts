@@ -27,7 +27,7 @@ export interface SnapshotShape {
   id: string
   datasetId: string
   tag: string
-  created?: string
+  created?: Date
   hexsha?: string
   dataset: () => Promise<unknown>
   description: () => Promise<unknown>
@@ -52,6 +52,7 @@ export const snapshot = (obj, { datasetId, tag }, context) => {
     () => {
       return datalad.getSnapshot(datasetId, tag).then((snapshot) => ({
         ...snapshot,
+        created: snapshot.created ? new Date(snapshot.created) : undefined,
         datasetId,
         dataset: () => dataset(snapshot, { id: datasetId }, context),
         description: () => description(snapshot),

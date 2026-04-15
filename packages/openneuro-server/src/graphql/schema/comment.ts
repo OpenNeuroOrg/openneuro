@@ -15,7 +15,7 @@ CommentRef.implement({
     createDate: t.field({
       type: "DateTime",
       nullable: false,
-      resolve: (obj) => obj.createDate as unknown as string,
+      resolve: (obj) => obj.createDate,
     }),
     parent: t.field({
       type: CommentRef,

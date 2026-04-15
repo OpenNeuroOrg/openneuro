@@ -26,8 +26,8 @@ export interface GraphQLContext {
 export const builder = new SchemaBuilder<{
   Context: GraphQLContext
   Scalars: {
-    Date: { Input: string; Output: string }
-    DateTime: { Input: string; Output: string }
+    Date: { Input: string; Output: Date }
+    DateTime: { Input: string; Output: Date }
     BigInt: { Input: string; Output: string }
     JSON: { Input: unknown; Output: unknown }
   }

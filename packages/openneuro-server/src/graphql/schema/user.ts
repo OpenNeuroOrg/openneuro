@@ -16,17 +16,17 @@ UserRef.implement({
     created: t.field({
       type: "DateTime",
       nullable: false,
-      resolve: (obj) => obj.created as unknown as string,
+      resolve: (obj) => obj.created,
     }),
     modified: t.field({
       type: "DateTime",
       resolve: (obj) =>
         ((obj as Record<string, unknown>).updatedAt ??
-          obj.modified) as unknown as string,
+          obj.modified) as Date,
     }),
     lastSeen: t.field({
       type: "DateTime",
-      resolve: (obj) => obj.lastSeen as unknown as string,
+      resolve: (obj) => obj.lastSeen,
     }),
     email: t.string({ resolve: (obj) => obj.email }),
     name: t.string({ resolve: (obj) => obj.name }),
@@ -37,7 +37,7 @@ UserRef.implement({
     github: t.string({ resolve: (obj) => obj.github }),
     githubSynced: t.field({
       type: "Date",
-      resolve: (obj) => obj.githubSynced as unknown as string,
+      resolve: (obj) => obj.githubSynced,
     }),
     links: t.stringList({
       nullable: { list: true, items: true },

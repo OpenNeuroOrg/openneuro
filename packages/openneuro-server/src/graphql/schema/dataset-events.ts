@@ -63,7 +63,7 @@ DatasetEventRef.implement({
     id: t.id({ resolve: (obj) => obj.id }),
     timestamp: t.field({
       type: "DateTime",
-      resolve: (obj) => obj.timestamp as unknown as string,
+      resolve: (obj) => obj.timestamp,
     }),
     user: t.field({
       type: UserRef,

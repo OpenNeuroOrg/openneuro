@@ -12,7 +12,7 @@ import FileCheck from "../../models/fileCheck"
 import { contributors } from "../../datalad/contributors"
 import type { GraphQLContext } from "../builder"
 
-export type DraftShape = { id: string; revision?: string; modified?: Date | string }
+export type DraftShape = { id: string; revision?: string; modified?: Date }
 
 // A draft must have a dataset parent
 export const draftFiles = async (

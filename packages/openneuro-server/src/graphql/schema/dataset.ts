@@ -59,7 +59,7 @@ DatasetRef.implement({
     created: t.field({
       type: "DateTime",
       nullable: false,
-      resolve: (obj) => obj.created as unknown as string,
+      resolve: (obj) => obj.created,
     }),
     uploader: t.field({
       type: UserRef,
@@ -74,7 +74,7 @@ DatasetRef.implement({
         return {
           id: obj.id,
           revision: draftHead.ref,
-          modified: draftHead.modified,
+          modified: new Date(draftHead.modified),
         }
       },
     }),
@@ -122,7 +122,7 @@ DatasetRef.implement({
     }),
     publishDate: t.field({
       type: "DateTime",
-      resolve: (obj) => obj.publishDate as unknown as string,
+      resolve: (obj) => obj.publishDate,
     }),
     onBrainlife: t.boolean({
       directives: { cacheControl: { maxAge: 10080 } },
