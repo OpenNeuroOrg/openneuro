@@ -2,6 +2,7 @@ import config from "../../config"
 import Reviewer from "../../models/reviewer"
 import { checkDatasetAdmin } from "../permissions.js"
 import { generateReviewerToken } from "../../libs/authentication/jwt"
+import type { GraphQLContext } from "../builder"
 
 /**
  * Create an anonymous read-only access key
@@ -12,7 +13,11 @@ import { generateReviewerToken } from "../../libs/authentication/jwt"
  * @param {string} context.user User id
  * @param {object} context.userInfo Decoded userInfo from token
  */
-export async function createReviewer(obj, { datasetId }, { user, userInfo }) {
+export async function createReviewer(
+  obj: unknown,
+  { datasetId }: { datasetId: string },
+  { user, userInfo }: GraphQLContext,
+) {
   await checkDatasetAdmin(datasetId, user, userInfo)
   const reviewer = new Reviewer({ datasetId, creator: user })
   await reviewer.save()
@@ -26,9 +31,9 @@ export async function createReviewer(obj, { datasetId }, { user, userInfo }) {
 }
 
 export async function deleteReviewer(
-  obj,
-  { datasetId, id },
-  { user, userInfo },
+  obj: unknown,
+  { datasetId, id }: { datasetId: string; id: string },
+  { user, userInfo }: GraphQLContext,
 ) {
   await checkDatasetAdmin(datasetId, user, userInfo)
   return Reviewer.findOneAndDelete({ id }).lean().exec()
@@ -38,6 +43,10 @@ export async function deleteReviewer(
  * Resolver for dataset reviewers
  */
 /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-export function reviewers(obj, _, { user, userInfo }) {
+export function reviewers(
+  obj: { id: string },
+  _: unknown,
+  { user, userInfo }: GraphQLContext,
+) {
   return Reviewer.find({ datasetId: obj.id }).lean().exec()
 }
