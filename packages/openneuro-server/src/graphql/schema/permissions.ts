@@ -13,6 +13,9 @@ export const Permission = builder.simpleObject("Permission", {
 export const DatasetPermissions = builder.simpleObject("DatasetPermissions", {
   fields: (t) => ({
     id: t.id({ nullable: false }),
-    userPermissions: t.field({ type: [Permission] }),
+    userPermissions: t.field({
+      type: [Permission],
+      nullable: { list: true, items: true },
+    }),
   }),
 })

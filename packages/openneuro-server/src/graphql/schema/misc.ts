@@ -32,7 +32,7 @@ export const FlaggedFile = builder.simpleObject("FlaggedFile", {
 export const AnnexFsck = builder.simpleObject("AnnexFsck", {
   fields: (t) => ({
     command: t.string(),
-    errorMessages: t.stringList(),
+    errorMessages: t.stringList({ nullable: { list: true, items: true } }),
     file: t.string(),
     key: t.string(),
     note: t.string(),

@@ -23,6 +23,7 @@ CommentRef.implement({
     }),
     replies: t.field({
       type: [CommentRef],
+      nullable: { list: true, items: true },
       resolve: (obj) => CommentFields.replies(obj),
     }),
   }),

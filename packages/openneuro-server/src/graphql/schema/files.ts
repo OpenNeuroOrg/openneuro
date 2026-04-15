@@ -8,7 +8,7 @@ export const DatasetFile = builder.simpleObject("DatasetFile", {
     filename: t.string({ nullable: false }),
     size: t.field({ type: "BigInt" }),
     annexed: t.boolean(),
-    urls: t.stringList(),
+    urls: t.stringList({ nullable: { list: true, items: true } }),
     directory: t.boolean(),
   }),
 })

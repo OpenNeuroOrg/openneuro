@@ -13,7 +13,7 @@ enum AnalyticTypes {
 
 type AnnexFsck {
   command: String
-  errorMessages: [String!]
+  errorMessages: [String]
   file: String
   key: String
   note: String
@@ -53,7 +53,7 @@ type Comment {
   createDate: DateTime!
   id: ID!
   parent: Comment
-  replies: [Comment!]
+  replies: [Comment]
   text: String!
   user: User
 }
@@ -80,14 +80,14 @@ input ContributorInput {
 type Dataset {
   analytics: Analytic
   brainInitiative: Boolean
-  comments: [Comment!]
+  comments: [Comment]
   created: DateTime!
-  derivatives: [DatasetDerivatives!]
+  derivatives: [DatasetDerivatives]
   draft: Draft
-  events: [DatasetEvent!]
-  followers: [Follower!]
+  events: [DatasetEvent]
+  followers: [Follower]
   following: Boolean
-  history: [DatasetCommit!]
+  history: [DatasetCommit]
   id: ID!
   latestSnapshot: Snapshot!
   metadata: Metadata
@@ -96,10 +96,10 @@ type Dataset {
   permissions: DatasetPermissions
   public: Boolean
   publishDate: DateTime
-  reviewers: [DatasetReviewer!]
-  snapshots: [Snapshot!]
+  reviewers: [DatasetReviewer]
+  snapshots: [Snapshot]
   starred: Boolean
-  stars: [Star!]
+  stars: [Star]
   uploader: User
   worker: String
 }
@@ -118,7 +118,7 @@ type DatasetCommit {
 }
 
 type DatasetConnection {
-  edges: [DatasetEdge!]
+  edges: [DatasetEdge]
   pageInfo: PageInfo!
 }
 
@@ -171,7 +171,7 @@ type DatasetFile {
   filename: String!
   id: ID!
   size: BigInt
-  urls: [String!]
+  urls: [String]
 }
 
 input DatasetFilter {
@@ -188,7 +188,7 @@ type DatasetId {
 
 type DatasetPermissions {
   id: ID!
-  userPermissions: [Permission!]
+  userPermissions: [Permission]
 }
 
 """Anonymous dataset reviewer"""
@@ -275,16 +275,16 @@ type DeprecatedSnapshot {
 """Contents of dataset_description.json"""
 type Description {
   Acknowledgements: String
-  Authors: [String!]
+  Authors: [String]
   BIDSVersion: String!
   DatasetDOI: String
   DatasetType: String
-  EthicsApprovals: [String!]
-  Funding: [String!]
+  EthicsApprovals: [String]
+  Funding: [String]
   HowToAcknowledge: String
   License: String
   Name: String!
-  ReferencesAndLinks: [String!]
+  ReferencesAndLinks: [String]
   SeniorAuthor: String
   id: ID!
 }
@@ -298,20 +298,20 @@ type DiffFiles {
 }
 
 type Draft {
-  contributors: [Contributor!]
+  contributors: [Contributor]
   dataset: Dataset
   description: Description
   fileCheck: FileCheck
-  files(recursive: Boolean, tree: String): [DatasetFile!]
+  files(recursive: Boolean, tree: String): [DatasetFile]
   head: String
   id: ID
-  issues: [ValidationIssue!]
+  issues: [ValidationIssue]
   issuesStatus: ValidationIssueStatus
   modified: DateTime
   readme: String
   size: BigInt
   summary: Summary
-  uploads: [UploadMetadata!]
+  uploads: [UploadMetadata]
   validation: DatasetValidation
 }
 
@@ -361,10 +361,10 @@ scalar JSON
 
 """Dataset Metadata"""
 type Metadata {
-  adminUsers: [String!]
+  adminUsers: [String]
   affirmedConsent: Boolean
   affirmedDefaced: Boolean
-  ages: [Float!]
+  ages: [Float]
   associatedPaperDOI: String
   dataProcessed: Boolean
   datasetId: ID!
@@ -375,14 +375,14 @@ type Metadata {
   grantFunderName: String
   grantIdentifier: String
   latestSnapshotCreatedAt: DateTime
-  modalities: [String!]
+  modalities: [String]
   openneuroPaperDOI: String
   seniorAuthor: String
   species: String
   studyDesign: String
   studyDomain: String
   studyLongitudinal: String
-  tasksCompleted: [String!]
+  tasksCompleted: [String]
   trialCount: Int
 }
 
@@ -423,7 +423,7 @@ type Mutation {
   createRelation(datasetId: ID!, description: String, doi: String!, kind: RelatedObjectKind!, relation: RelatedObjectRelation!): Dataset
   createReviewer(datasetId: ID!): DatasetReviewer
   createSnapshot(changes: [String!], datasetId: ID!, tag: String!): Snapshot
-  deleteComment(commentId: ID!, deleteChildren: Boolean): [String!]
+  deleteComment(commentId: ID!, deleteChildren: Boolean): [String]
   deleteDataset(id: ID!, reason: String, redirect: String): Boolean
   deleteFiles(datasetId: ID!, files: [DeleteFile!]): Boolean
   deleteRelation(datasetId: ID!, doi: String!): Dataset
@@ -496,10 +496,10 @@ type Query {
   advancedSearch(after: String, allDatasets: Boolean, datasetStatus: String, datasetType: String, first: Int, query: DatasetSearchInput!): DatasetConnection
   dataset(id: ID!): Dataset
   datasets(after: String, before: String, filterBy: DatasetFilter = {}, first: Int = 25, modality: String, myDatasets: Boolean, orderBy: DatasetSort = {created: ascending}): DatasetConnection
-  flaggedFiles(deleted: Boolean = false, flagged: Boolean = true): [FlaggedFile!]
+  flaggedFiles(deleted: Boolean = false, flagged: Boolean = true): [FlaggedFile]
   orcidConsent: Boolean
   participantCount(modality: String): Int
-  publicMetadata: [Metadata!]
+  publicMetadata: [Metadata]
   search(after: String, first: Int, q: String!): DatasetConnection
   snapshot(datasetId: ID!, tag: String!): Snapshot
   user(id: ID!): User
@@ -557,19 +557,19 @@ enum Severity {
 
 type Snapshot {
   analytics: Analytic
-  contributors: [Contributor!]
+  contributors: [Contributor]
   created: DateTime
   dataset: Dataset!
   deprecated: DeprecatedSnapshot
   description: Description
-  files(recursive: Boolean, tree: String): [DatasetFile!]
+  files(recursive: Boolean, tree: String): [DatasetFile]
   hexsha: String
   id: ID!
-  issues: [ValidationIssue!]
+  issues: [ValidationIssue]
   issuesStatus: ValidationIssueStatus
   onBrainlife: Boolean
   readme: String
-  related: [RelatedObject!]
+  related: [RelatedObject]
   size: BigInt
   summary: Summary
   tag: String!
@@ -610,16 +610,16 @@ input SubjectMetadataInput {
 type Summary {
   dataProcessed: Boolean
   id: ID!
-  modalities: [String!]
+  modalities: [String]
   pet: SummaryPetFields
   primaryModality: String
   schemaVersion: String
-  secondaryModalities: [String!]
-  sessions: [String!]
+  secondaryModalities: [String]
+  sessions: [String]
   size: BigInt!
   subjectMetadata: [SubjectMetadata]
-  subjects: [String!]
-  tasks: [String!]
+  subjects: [String]
+  tasks: [String]
   totalFiles: Int!
   validatorMetadata: ValidatorMetadata
 }
@@ -643,11 +643,11 @@ input SummaryInput {
 }
 
 type SummaryPetFields {
-  BodyPart: [String!]
-  ScannerManufacturer: [String!]
-  ScannerManufacturersModelName: [String!]
-  TracerName: [String!]
-  TracerRadionuclide: [String!]
+  BodyPart: [String]
+  ScannerManufacturer: [String]
+  ScannerManufacturersModelName: [String]
+  TracerName: [String]
+  TracerRadionuclide: [String]
 }
 
 input SummaryPetInput {
@@ -695,11 +695,11 @@ type User {
   id: ID
   institution: String
   lastSeen: DateTime
-  links: [String!]
+  links: [String]
   location: String
   modified: DateTime
   name: String
-  notifications: [DatasetEvent!]!
+  notifications: [DatasetEvent!]
   orcid: String
   orcidConsent: Boolean
   provider: UserProvider

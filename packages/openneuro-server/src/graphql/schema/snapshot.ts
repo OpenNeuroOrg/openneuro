@@ -32,6 +32,7 @@ SnapshotRef.implement({
     }),
     issues: t.field({
       type: [ValidationIssue],
+      nullable: { list: true, items: true },
       resolve: (obj) => SnapshotFields.issues(obj),
     }),
     issuesStatus: t.field({
@@ -45,6 +46,7 @@ SnapshotRef.implement({
     }),
     files: t.field({
       type: [DatasetFile],
+      nullable: { list: true, items: true },
       args: {
         tree: t.arg.string(),
         recursive: t.arg.boolean(),
@@ -82,6 +84,7 @@ SnapshotRef.implement({
     }),
     related: t.field({
       type: [RelatedObject],
+      nullable: { list: true, items: true },
       resolve: (obj) =>
         (typeof obj.related === "function"
           ? obj.related()
@@ -101,6 +104,7 @@ SnapshotRef.implement({
     }),
     contributors: t.field({
       type: [Contributor],
+      nullable: { list: true, items: true },
       resolve: (obj) => SnapshotFields.contributors(obj),
     }),
   }),

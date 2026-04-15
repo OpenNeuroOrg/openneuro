@@ -27,6 +27,7 @@ DraftRef.implement({
     }),
     issues: t.field({
       type: [ValidationIssue],
+      nullable: { list: true, items: true },
       resolve: (obj, _args, ctx) => DraftFields.issues(obj, null, ctx),
     }),
     issuesStatus: t.field({
@@ -40,6 +41,7 @@ DraftRef.implement({
     }),
     files: t.field({
       type: [DatasetFile],
+      nullable: { list: true, items: true },
       args: {
         tree: t.arg.string(),
         recursive: t.arg.boolean(),
@@ -55,6 +57,7 @@ DraftRef.implement({
     }),
     uploads: t.field({
       type: [UploadMetadata],
+      nullable: { list: true, items: true },
       resolve: () => null,
     }),
     head: t.string({
@@ -70,6 +73,7 @@ DraftRef.implement({
     }),
     contributors: t.field({
       type: [Contributor],
+      nullable: { list: true, items: true },
       resolve: (obj) => DraftFields.contributors(obj),
     }),
   }),

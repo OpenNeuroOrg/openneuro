@@ -39,10 +39,13 @@ UserRef.implement({
       type: "Date",
       resolve: (obj) => obj.githubSynced as unknown as string,
     }),
-    links: t.stringList({ resolve: (obj) => obj.links }),
+    links: t.stringList({
+      nullable: { list: true, items: true },
+      resolve: (obj) => obj.links,
+    }),
     notifications: t.field({
       type: [DatasetEventRef],
-      nullable: { list: false, items: false },
+      nullable: { list: true, items: false },
       resolve: (obj, args, ctx) => notifications(obj, args, ctx),
     }),
     orcidConsent: t.boolean({ resolve: (obj) => obj.orcidConsent }),

@@ -329,6 +329,7 @@ builder.mutationType({
         editComment(root, args as never, ctx as never) as never,
     }),
     deleteComment: t.stringList({
+      nullable: { list: true, items: true },
       args: {
         commentId: t.arg.id({ required: true }),
         deleteChildren: t.arg.boolean(),
