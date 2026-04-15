@@ -22,8 +22,8 @@ describe("permissions resolvers", () => {
       try {
         await updatePermissions(
           {},
-          { datasetId: "ds01234", userEmail: "fake@test.com" },
-          { user: "1234", userInfo: { id: "1234" } },
+          { datasetId: "ds01234", userEmail: "fake@test.com", level: "ro" },
+          { user: "1234", userInfo: { id: "1234" } } as never,
         )
       } catch (err) {
         error = err

@@ -3,6 +3,7 @@ import type { UserDocument } from "../../models/user"
 import Permission from "../../models/permission"
 import type { PermissionDocument } from "../../models/permission"
 import { checkDatasetAdmin } from "../permissions"
+import type { GraphQLContext } from "../builder"
 import { user } from "./user"
 import { createEvent, updateEvent } from "../../libs/events"
 
@@ -11,14 +12,22 @@ export interface DatasetPermission {
   userPermissions: (PermissionDocument & { user: Promise<UserDocument> })[]
 }
 
-export async function permissions(ds, _, context): Promise<DatasetPermission> {
+export async function permissions(
+  ds: { id: string },
+  _: unknown,
+  context: Partial<GraphQLContext> | null,
+): Promise<DatasetPermission> {
   const permissions = await Permission.find({ datasetId: ds.id }).exec()
   return {
     id: ds.id,
     userPermissions: permissions.map(
       (userPermission) => ({
         ...userPermission.toJSON(),
-        user: user(ds, { id: userPermission.userId }, context),
+        user: user(
+          ds,
+          { id: userPermission.userId },
+          context as unknown as { userInfo?: Record<string, unknown> },
+        ),
       } as unknown as PermissionDocument & { user: Promise<UserDocument> }),
     ),
   }
@@ -71,7 +80,11 @@ async function updateUsers(datasetId: string, level: string, users) {
 /**
  * Update user permissions on a dataset
  */
-export const updatePermissions = async (obj, args, { user, userInfo }) => {
+export const updatePermissions = async (
+  obj: unknown,
+  args: { datasetId: string; userEmail: string; level: string },
+  { user, userInfo }: GraphQLContext,
+) => {
   await checkDatasetAdmin(args.datasetId, user, userInfo)
   // get all users the the email specified by permissions arg
   const users = await User.find({ email: args.userEmail })
@@ -88,7 +101,11 @@ export const updatePermissions = async (obj, args, { user, userInfo }) => {
 /**
  * ORCID variant of updatePermissions
  */
-export const updateOrcidPermissions = async (obj, args, { user, userInfo }) => {
+export const updateOrcidPermissions = async (
+  obj: unknown,
+  args: { datasetId: string; userOrcid: string; level: string },
+  { user, userInfo }: GraphQLContext,
+) => {
   await checkDatasetAdmin(args.datasetId, user, userInfo)
   // Get all users associated with the ORCID provided
   const users = await User.find({
@@ -110,7 +127,10 @@ export const updateOrcidPermissions = async (obj, args, { user, userInfo }) => {
 /**
  * Remove user permissions on a dataset
  */
-export const removePermissions = (obj, args) => {
+export const removePermissions = (
+  obj: unknown,
+  args: { datasetId: string; userId: string },
+) => {
   return Permission.deleteOne({
     datasetId: args.datasetId,
     userId: args.userId,
