@@ -13,7 +13,7 @@ export type GraphQLUserType = {
   avatar: string
   orcid: string
   created: Date
-  modified: Date
+  updatedAt: Date
   lastSeen: Date
   email: string
   name: string
@@ -23,16 +23,16 @@ export type GraphQLUserType = {
   institution: string
   github: string
   githubSynced: Date
-  links: [string]
-  notifications: [Record<string, unknown>]
-  orcidConsent: boolean
+  links: string[]
+  orcidConsent: boolean | null
 }
 
+
 export async function user(
-  obj,
-  { id },
+  obj: unknown,
+  { id }: { id: string },
   { userInfo }: { userInfo?: Record<string, unknown> } = {},
-): Promise<Partial<GraphQLUserType> | null> {
+): Promise<GraphQLUserType | null> {
   if (userInfo?.reviewer) {
     const oneWeekAgo = new Date()
     oneWeekAgo.setDate(oneWeekAgo.getDate() - 7)
@@ -41,15 +41,19 @@ export async function user(
       name: "Anonymous Reviewer",
       email: "reviewer@openneuro.org",
       provider: "orcid",
+      avatar: "",
       orcid: "0000-0000-0000-0000",
       admin: false,
       blocked: false,
       location: "",
       institution: "",
+      github: "",
+      githubSynced: oneWeekAgo,
+      links: [],
       orcidConsent: true,
       created: oneWeekAgo,
       lastSeen: new Date(),
-      modified: oneWeekAgo,
+      updatedAt: oneWeekAgo,
     }
   }
 
@@ -295,7 +299,7 @@ export const updateUser = async (
  * Uses a single aggregation pipeline for improved performance.
  */
 export async function notifications(
-  obj: Partial<GraphQLUserType>,
+  obj: Pick<GraphQLUserType, "id">,
   _: unknown,
   { userInfo }: GraphQLContext,
 ) {

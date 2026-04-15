@@ -20,9 +20,7 @@ UserRef.implement({
     }),
     modified: t.field({
       type: "DateTime",
-      resolve: (obj) =>
-        ((obj as Record<string, unknown>).updatedAt ??
-          obj.modified) as Date,
+      resolve: (obj) => obj.updatedAt,
     }),
     lastSeen: t.field({
       type: "DateTime",
