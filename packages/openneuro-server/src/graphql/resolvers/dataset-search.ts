@@ -6,6 +6,7 @@ import Subscription from "../../models/subscription"
 import Permission from "../../models/permission"
 import { hashObject } from "../../libs/authentication/crypto"
 import { buildElasticQuery } from "./build-search-query"
+import type { GraphQLContext } from "../builder"
 
 const elasticIndex = "datasets"
 
@@ -225,7 +226,7 @@ export const advancedDatasetSearchConnection = async (
     after,
     first = 25,
   },
-  { user, userInfo },
+  { user, userInfo }: GraphQLContext,
 ) => {
   // Build the ES query from structured input
   const { query: esQuery, isEmpty } = buildElasticQuery(searchInput)

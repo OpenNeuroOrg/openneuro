@@ -1,6 +1,7 @@
 import { checkDatasetRead, checkDatasetWrite } from "../permissions.js"
 import { generateRepoToken } from "../../libs/authentication/jwt"
 import { getDatasetEndpoint } from "../../libs/datalad-service.js"
+import type { GraphQLContext } from "../builder"
 
 /**
  * Generate a short lived token for git operations
@@ -14,7 +15,7 @@ import { getDatasetEndpoint } from "../../libs/datalad-service.js"
 export async function prepareRepoAccess(
   _: Record<string, unknown>,
   { datasetId }: { datasetId: string },
-  { user, userInfo }: { user: string; userInfo: Record<string, unknown> },
+  { user, userInfo }: GraphQLContext,
 ): Promise<{ token: string; endpoint: number }> {
   try {
     await checkDatasetWrite(datasetId, user, userInfo)

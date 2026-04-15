@@ -18,6 +18,7 @@ import { snapshotValidation } from "./validation"
 import { advancedDatasetSearchConnection } from "./dataset-search"
 import { contributors } from "../../datalad/contributors"
 import { getDraftInfo } from "../../datalad/draft"
+import type { GraphQLContext } from "../builder"
 
 /**
  * Shape returned by the snapshot() resolver, combining plain data
@@ -47,7 +48,7 @@ export const snapshots = (obj) => {
   return datalad.getSnapshots(obj.id)
 }
 
-export const snapshot = (obj, { datasetId, tag }, context) => {
+export const snapshot = (obj, { datasetId, tag }, context: GraphQLContext) => {
   return checkDatasetRead(datasetId, context.user, context.userInfo).then(
     () => {
       return datalad.getSnapshot(datasetId, tag).then((snapshot) => ({
@@ -125,7 +126,7 @@ export const matchKnownObjects = (desc) => {
 export const deprecateSnapshot = async (
   obj,
   { datasetId, tag, reason },
-  { user, userInfo },
+  { user, userInfo }: GraphQLContext,
 ) => {
   const id = `${datasetId}:${tag}`
   await checkDatasetWrite(datasetId, user, userInfo)
@@ -154,7 +155,7 @@ export const deprecateSnapshot = async (
 export const undoDeprecateSnapshot = async (
   obj,
   { datasetId, tag },
-  { user, userInfo },
+  { user, userInfo }: GraphQLContext,
 ) => {
   const id = `${datasetId}:${tag}`
   await checkDatasetWrite(datasetId, user, userInfo)
@@ -197,7 +198,7 @@ export const participantCount = (obj, { modality }) => {
           datasetStatus: "",
           after,
           first: 100,
-        }, { user: null, userInfo: {} })
+        }, { user: null, userInfo: {} } as unknown as GraphQLContext)
         nihDatasets.push(...results.edges.map((edge) => edge.id))
         if (!results.pageInfo.hasNextPage) {
           break
@@ -286,7 +287,7 @@ export const filterLatestSnapshot = (snapshots) => {
   }
 }
 
-export const latestSnapshot = async (obj, _, context) => {
+export const latestSnapshot = async (obj, _, context: GraphQLContext) => {
   const snapshots = await datalad.getSnapshots(obj.id)
   const snapshotTag = filterLatestSnapshot(snapshots)
   if (snapshotTag) {
@@ -307,7 +308,7 @@ export const latestSnapshot = async (obj, _, context) => {
 export const createSnapshot = (
   obj,
   { datasetId, tag, changes },
-  { user, userInfo },
+  { user, userInfo }: GraphQLContext,
 ) => {
   return checkDatasetWrite(datasetId, user, userInfo).then(async () => {
     return datalad.createSnapshot(datasetId, tag, userInfo, {}, changes)
@@ -317,7 +318,7 @@ export const createSnapshot = (
 /**
  * Remove a tag from a dataset
  */
-export const deleteSnapshot = (obj, { datasetId, tag }, { user, userInfo }) => {
+export const deleteSnapshot = (obj, { datasetId, tag }, { user, userInfo }: GraphQLContext) => {
   return checkDatasetWrite(datasetId, user, userInfo).then(() => {
     return datalad.deleteSnapshot(datasetId, tag)
   })

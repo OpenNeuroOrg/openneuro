@@ -27,6 +27,6 @@ builder.queryFields((t) => ({
       first: t.arg.int(),
     },
     resolve: (root, args, ctx) =>
-      advancedDatasetSearchConnection(root, args as never, ctx as never),
+      advancedDatasetSearchConnection(root, args as never, ctx),
   }),
 }))

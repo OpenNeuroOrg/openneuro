@@ -121,7 +121,7 @@ builder.mutationType({
         changes: t.arg.stringList(),
       },
       resolve: (root, args, ctx) =>
-        createSnapshot(root, args as never, ctx as never) as never,
+        createSnapshot(root, args as never, ctx) as never,
     }),
     deleteSnapshot: t.boolean({
       nullable: false,
@@ -130,7 +130,7 @@ builder.mutationType({
         tag: t.arg.string({ required: true }),
       },
       resolve: (root, args, ctx) =>
-        deleteSnapshot(root, args as never, ctx as never) as never,
+        deleteSnapshot(root, args as never, ctx) as never,
     }),
     removeAnnexObject: t.boolean({
       args: {
@@ -215,7 +215,7 @@ builder.mutationType({
         id: t.arg.id({ required: true }),
       },
       resolve: (root, args, ctx) =>
-        removeUser(root, args as never, ctx as never) as never,
+        removeUser(root, args as never, ctx) as never,
     }),
     setAdmin: t.field({
       type: UserRef,
@@ -224,7 +224,7 @@ builder.mutationType({
         admin: t.arg.boolean({ required: true }),
       },
       resolve: (root, args, ctx) =>
-        setAdmin(root, args as never, ctx as never) as never,
+        setAdmin(root, args as never, ctx) as never,
     }),
     setBlocked: t.field({
       type: UserRef,
@@ -233,7 +233,7 @@ builder.mutationType({
         blocked: t.arg.boolean({ required: true }),
       },
       resolve: (root, args, ctx) =>
-        setBlocked(root, args as never, ctx as never) as never,
+        setBlocked(root, args as never, ctx) as never,
     }),
     updateUser: t.field({
       type: UserRef,
@@ -245,7 +245,7 @@ builder.mutationType({
         orcidConsent: t.arg.boolean(),
       },
       resolve: (root, args, ctx) =>
-        updateUser(root, args as never, ctx as never) as never,
+        updateUser(root, args as never, ctx) as never,
     }),
     trackAnalytics: t.boolean({
       args: {
@@ -261,7 +261,7 @@ builder.mutationType({
         datasetId: t.arg.id({ required: true }),
       },
       resolve: (root, args, ctx) =>
-        followDataset(root, args as never, ctx as never) as never,
+        followDataset(root, args as never, ctx) as never,
     }),
     starDataset: t.field({
       type: StarDatasetResponse,
@@ -269,14 +269,14 @@ builder.mutationType({
         datasetId: t.arg.id({ required: true }),
       },
       resolve: (root, args, ctx) =>
-        starDataset(root, args as never, ctx as never) as never,
+        starDataset(root, args as never, ctx) as never,
     }),
     publishDataset: t.boolean({
       args: {
         datasetId: t.arg.id({ required: true }),
       },
       resolve: (root, args, ctx) =>
-        publishDataset(root, args as never, ctx as never) as never,
+        publishDataset(root, args as never, ctx) as never,
     }),
     updateDescription: t.field({
       type: Description,
@@ -286,7 +286,7 @@ builder.mutationType({
         value: t.arg.string({ required: true }),
       },
       resolve: (root, args, ctx) =>
-        updateDescription(root, args as never, ctx as never) as never,
+        updateDescription(root, args as never, ctx) as never,
     }),
     updateDescriptionList: t.field({
       type: Description,
@@ -296,7 +296,7 @@ builder.mutationType({
         value: t.arg.stringList(),
       },
       resolve: (root, args, ctx) =>
-        updateDescriptionList(root, args as never, ctx as never) as never,
+        updateDescriptionList(root, args as never, ctx) as never,
     }),
     updateReadme: t.boolean({
       args: {
@@ -304,7 +304,7 @@ builder.mutationType({
         value: t.arg.string({ required: true }),
       },
       resolve: (root, args, ctx) =>
-        updateReadme(root, args as never, ctx as never) as never,
+        updateReadme(root, args as never, ctx) as never,
     }),
     addComment: t.id({
       args: {
@@ -313,7 +313,7 @@ builder.mutationType({
         comment: t.arg.string({ required: true }),
       },
       resolve: (root, args, ctx) =>
-        addComment(root, args as never, ctx as never) as never,
+        addComment(root, args as never, ctx) as never,
     }),
     editComment: t.boolean({
       args: {
@@ -321,7 +321,7 @@ builder.mutationType({
         comment: t.arg.string({ required: true }),
       },
       resolve: (root, args, ctx) =>
-        editComment(root, args as never, ctx as never) as never,
+        editComment(root, args as never, ctx) as never,
     }),
     deleteComment: t.stringList({
       nullable: { list: true, items: true },
@@ -330,7 +330,7 @@ builder.mutationType({
         deleteChildren: t.arg.boolean(),
       },
       resolve: (root, args, ctx) =>
-        deleteComment(root, args as never, ctx as never) as never,
+        deleteComment(root, args as never, ctx) as never,
     }),
     subscribeToNewsletter: t.boolean({
       args: {
@@ -354,28 +354,28 @@ builder.mutationType({
         uploadId: t.arg.id({ required: true }),
       },
       resolve: (root, args, ctx) =>
-        prepareUpload(root, args as never, ctx as never) as never,
+        prepareUpload(root, args as never, ctx) as never,
     }),
     finishUpload: t.boolean({
       args: {
         uploadId: t.arg.id({ required: true }),
       },
       resolve: (root, args, ctx) =>
-        finishUpload(root, args as never, ctx as never) as never,
+        finishUpload(root, args as never, ctx) as never,
     }),
     cacheClear: t.boolean({
       args: {
         datasetId: t.arg.id({ required: true }),
       },
       resolve: (root, args, ctx) =>
-        cacheClear(root as never, args as never, ctx as never) as never,
+        cacheClear(root as never, args as never, ctx) as never,
     }),
     fsckDataset: t.boolean({
       args: {
         datasetId: t.arg.id({ required: true }),
       },
       resolve: (root, args, ctx) =>
-        fsckDataset(root, args as never, ctx as never) as never,
+        fsckDataset(root, args as never, ctx) as never,
     }),
     revalidate: t.boolean({
       args: {
@@ -383,7 +383,7 @@ builder.mutationType({
         ref: t.arg.string({ required: true }),
       },
       resolve: (root, args, ctx) =>
-        revalidate(root, args as never, ctx as never) as never,
+        revalidate(root, args as never, ctx) as never,
     }),
     prepareRepoAccess: t.field({
       type: RepoMetadata,
@@ -391,14 +391,14 @@ builder.mutationType({
         datasetId: t.arg.id({ required: true }),
       },
       resolve: (root, args, ctx) =>
-        prepareRepoAccess(root as never, args as never, ctx as never) as never,
+        prepareRepoAccess(root as never, args as never, ctx) as never,
     }),
     reexportRemotes: t.boolean({
       args: {
         datasetId: t.arg.id({ required: true }),
       },
       resolve: (root, args, ctx) =>
-        reexportRemotes(root, args as never, ctx as never) as never,
+        reexportRemotes(root, args as never, ctx) as never,
     }),
     resetDraft: t.boolean({
       args: {
@@ -406,7 +406,7 @@ builder.mutationType({
         ref: t.arg.string({ required: true }),
       },
       resolve: (root, args, ctx) =>
-        resetDraft(root, args as never, ctx as never) as never,
+        resetDraft(root, args as never, ctx) as never,
     }),
     deprecateSnapshot: t.field({
       type: SnapshotRef,
@@ -416,7 +416,7 @@ builder.mutationType({
         reason: t.arg.string({ required: true }),
       },
       resolve: (root, args, ctx) =>
-        deprecateSnapshot(root, args as never, ctx as never) as never,
+        deprecateSnapshot(root, args as never, ctx) as never,
     }),
     undoDeprecateSnapshot: t.field({
       type: SnapshotRef,
@@ -425,7 +425,7 @@ builder.mutationType({
         tag: t.arg.string({ required: true }),
       },
       resolve: (root, args, ctx) =>
-        undoDeprecateSnapshot(root, args as never, ctx as never) as never,
+        undoDeprecateSnapshot(root, args as never, ctx) as never,
     }),
     createReviewer: t.field({
       type: DatasetReviewer,
@@ -454,7 +454,7 @@ builder.mutationType({
         description: t.arg.string(),
       },
       resolve: (root, args, ctx) =>
-        createRelation(root, args as never, ctx as never) as never,
+        createRelation(root, args as never, ctx) as never,
     }),
     deleteRelation: t.field({
       type: DatasetRef,
@@ -463,7 +463,7 @@ builder.mutationType({
         doi: t.arg.string({ required: true }),
       },
       resolve: (root, args, ctx) =>
-        deleteRelation(root, args as never, ctx as never) as never,
+        deleteRelation(root, args as never, ctx) as never,
     }),
     importRemoteDataset: t.id({
       args: {
@@ -474,7 +474,7 @@ builder.mutationType({
         importRemoteDataset(
           root as never,
           args as never,
-          ctx as never,
+          ctx,
         ) as never,
     }),
     finishImportRemoteDataset: t.boolean({
@@ -487,7 +487,7 @@ builder.mutationType({
         finishImportRemoteDataset(
           root as never,
           args as never,
-          ctx as never,
+          ctx,
         ) as never,
     }),
     saveAdminNote: t.field({
@@ -508,7 +508,7 @@ builder.mutationType({
         reference: t.arg.string({ required: true }),
       },
       resolve: (root, args, ctx) =>
-        createGitEvent(root, args as never, ctx as never) as never,
+        createGitEvent(root, args as never, ctx) as never,
     }),
     createContributorRequestEvent: t.field({
       type: DatasetEventRef,
@@ -519,7 +519,7 @@ builder.mutationType({
         createContributorRequestEvent(
           root,
           args as never,
-          ctx as never,
+          ctx,
         ) as never,
     }),
     processContributorRequest: t.field({
@@ -532,7 +532,7 @@ builder.mutationType({
         reason: t.arg.string(),
       },
       resolve: (root, args, ctx) =>
-        processContributorRequest(root, args as never, ctx as never) as never,
+        processContributorRequest(root, args as never, ctx) as never,
     }),
     updateFileCheck: t.field({
       type: FileCheck,
@@ -544,7 +544,7 @@ builder.mutationType({
         remote: t.arg.string(),
       },
       resolve: (root, args, ctx) =>
-        updateFileCheck(root, args as never, ctx as never) as never,
+        updateFileCheck(root, args as never, ctx) as never,
     }),
     updateEventStatus: t.field({
       type: UserNotificationStatus,
@@ -553,7 +553,7 @@ builder.mutationType({
         status: t.arg({ type: NotificationStatusType, required: true }),
       },
       resolve: (root, args, ctx) =>
-        updateEventStatus(root, args as never, ctx as never) as never,
+        updateEventStatus(root, args as never, ctx) as never,
     }),
     updateContributors: t.field({
       type: UpdateContributorsPayload,
@@ -576,7 +576,7 @@ builder.mutationType({
         createContributorCitationEvent(
           root,
           args as never,
-          ctx as never,
+          ctx,
         ) as never,
     }),
     processContributorCitation: t.field({
@@ -586,7 +586,7 @@ builder.mutationType({
         status: t.arg({ type: ResponseStatusType, required: true }),
       },
       resolve: (root, args, ctx) =>
-        processContributorCitation(root, args as never, ctx as never) as never,
+        processContributorCitation(root, args as never, ctx) as never,
     }),
     updateWorkerTask: t.field({
       type: WorkerTask,
@@ -603,7 +603,7 @@ builder.mutationType({
         executionTime: t.arg.int(),
       },
       resolve: (root, args, ctx) =>
-        updateWorkerTask(root, args as never, ctx as never) as never,
+        updateWorkerTask(root, args as never, ctx) as never,
     }),
   }),
 })

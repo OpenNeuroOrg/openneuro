@@ -1,6 +1,7 @@
 import Star from "../../models/stars"
+import type { GraphQLContext } from "../builder"
 
-export const starDataset = async (obj, { datasetId }, { user }) => {
+export const starDataset = async (obj, { datasetId }, { user }: Pick<GraphQLContext, "user">) => {
   const star = await Star.findOne({ datasetId, userId: user }).exec()
   const newStar = {
     datasetId,

@@ -3,6 +3,7 @@ import { checkDatasetWrite } from "../permissions.js"
 import { generateUploadToken } from "../../libs/authentication/jwt"
 import { finishUploadRequest } from "../../datalad/upload.js"
 import { getDatasetEndpoint } from "../../libs/datalad-service.js"
+import type { GraphQLContext } from "../builder"
 
 /**
  * Track initial state for a new upload
@@ -19,7 +20,7 @@ import { getDatasetEndpoint } from "../../libs/datalad-service.js"
 export async function prepareUpload(
   obj,
   { datasetId, uploadId },
-  { user, userInfo },
+  { user, userInfo }: GraphQLContext,
 ) {
   await checkDatasetWrite(datasetId, user, userInfo)
   const upload = await Upload.findOneAndUpdate(
@@ -47,7 +48,7 @@ export async function prepareUpload(
  * @param {string} context.user User id
  * @param {object} context.userInfo Decoded userInfo from token
  */
-export async function finishUpload(obj, { uploadId }, { user, userInfo }) {
+export async function finishUpload(obj, { uploadId }, { user, userInfo }: GraphQLContext) {
   const upload = await Upload.findOne({ id: uploadId })
   const datasetId = upload.datasetId
   await checkDatasetWrite(datasetId, user, userInfo)

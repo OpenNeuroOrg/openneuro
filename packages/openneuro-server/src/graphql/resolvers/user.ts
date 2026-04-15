@@ -31,7 +31,7 @@ export type GraphQLUserType = {
 export async function user(
   obj: unknown,
   { id }: { id: string },
-  { userInfo }: { userInfo?: Record<string, unknown> } = {},
+  { userInfo }: Partial<GraphQLContext> = {},
 ): Promise<GraphQLUserType | null> {
   if (userInfo?.reviewer) {
     const oneWeekAgo = new Date()
@@ -79,21 +79,7 @@ export async function user(
   }
 }
 
-export interface UserInfo {
-  id?: string
-  userId?: string
-  admin: boolean
-  username?: string
-  provider?: string
-  providerId?: string
-  blocked?: boolean
-  orcidConsent?: boolean | null
-  reviewer?: boolean
-}
-
-export interface GraphQLContext {
-  userInfo: UserInfo | null
-}
+import type { GraphQLContext } from "../builder"
 
 type MongoOperatorValue =
   | string

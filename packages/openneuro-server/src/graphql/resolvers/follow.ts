@@ -1,6 +1,7 @@
 import Subscription from "../../models/subscription"
+import type { GraphQLContext } from "../builder"
 
-export const followDataset = async (obj, { datasetId }, { user }) => {
+export const followDataset = async (obj, { datasetId }, { user }: Pick<GraphQLContext, "user">) => {
   const following = await Subscription.findOne({
     datasetId,
     userId: user,

@@ -1,12 +1,13 @@
 import WorkerTask from "../../models/worker-task"
 import { checkWorker } from "../permissions"
+import type { GraphQLContext } from "../builder"
 
 /**
  * Update a worker task record
  *
  * This can be called for new tasks, or to update existing tasks.
  */
-export const updateWorkerTask = async (obj, args, { userInfo }) => {
+export const updateWorkerTask = async (obj, args, { userInfo }: Pick<GraphQLContext, "userInfo">) => {
   checkWorker(userInfo)
   const { id, ...updateData } = args
 

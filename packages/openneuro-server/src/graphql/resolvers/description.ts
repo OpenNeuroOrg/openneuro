@@ -3,12 +3,13 @@
  */
 import { setDescription } from "../../datalad/description"
 import { checkDatasetWrite } from "../permissions"
+import type { GraphQLContext } from "../builder"
 export { description } from "../../datalad/description"
 
 export const updateDescription = (
   obj,
   { datasetId, field, value },
-  { user, userInfo },
+  { user, userInfo }: GraphQLContext,
 ) => {
   return checkDatasetWrite(datasetId, user, userInfo)
     .then(() => setDescription(datasetId, userInfo, { [field]: value }))

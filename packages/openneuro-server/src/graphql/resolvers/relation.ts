@@ -1,11 +1,12 @@
 import Dataset from "../../models/dataset"
 import { checkDatasetAdmin } from "../permissions"
 import { DOIPattern } from "../../libs/doi/normalize"
+import type { GraphQLContext } from "../builder"
 
 export const createRelation = async (
   obj,
   { datasetId, doi, relation, kind, description },
-  { user, userInfo },
+  { user, userInfo }: GraphQLContext,
 ) => {
   await checkDatasetAdmin(datasetId, user, userInfo)
   // Validate the right DOI format
@@ -27,7 +28,7 @@ export const createRelation = async (
 export const deleteRelation = async (
   obj,
   { datasetId, doi },
-  { user, userInfo },
+  { user, userInfo }: GraphQLContext,
 ) => {
   await checkDatasetAdmin(datasetId, user, userInfo)
   return await Dataset.findOneAndUpdate(

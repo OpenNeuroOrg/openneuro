@@ -19,7 +19,7 @@ builder.queryType({
         id: t.arg.id({ required: true }),
       },
       resolve: (root, args, ctx) =>
-        dataset(root, args as never, ctx as never) as never,
+        dataset(root, args as never, ctx) as never,
     }),
     datasets: t.field({
       type: DatasetConnection,
@@ -53,7 +53,7 @@ builder.queryType({
         }),
       },
       resolve: (root, args, ctx) =>
-        datasets(root, args as never, ctx as never) as never,
+        datasets(root, args as never, ctx) as never,
     }),
     user: t.field({
       type: UserRef,
@@ -61,7 +61,7 @@ builder.queryType({
         id: t.arg.id({ required: true }),
       },
       resolve: (root, args, ctx) =>
-        user(root, args as never, ctx as never) as never,
+        user(root, args as never, ctx) as never,
     }),
     users: t.field({
       type: UserList,
@@ -75,7 +75,7 @@ builder.queryType({
         offset: t.arg.int(),
       },
       resolve: (root, args, ctx) =>
-        users(root, args as never, ctx as never) as never,
+        users(root, args as never, ctx) as never,
     }),
     participantCount: t.int({
       directives: { cacheControl: { maxAge: 3600 } },
@@ -91,7 +91,7 @@ builder.queryType({
         tag: t.arg.string({ required: true }),
       },
       resolve: (root, args, ctx) =>
-        snapshot(root, args as never, ctx as never) as never,
+        snapshot(root, args as never, ctx) as never,
     }),
     flaggedFiles: t.field({
       type: [FlaggedFile],
@@ -108,7 +108,7 @@ builder.queryType({
         }),
       },
       resolve: (root, args, ctx) =>
-        flaggedFiles(root, args as never, ctx as never) as never,
+        flaggedFiles(root, args as never, ctx) as never,
     }),
     publicMetadata: t.field({
       type: [Metadata],

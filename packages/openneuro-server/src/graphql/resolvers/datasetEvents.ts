@@ -199,10 +199,7 @@ export async function processContributorRequest(
     resolutionStatus: "ACCEPTED" | "DENIED"
     reason?: string
   },
-  { user: currentUserId, userInfo }: {
-    user: string
-    userInfo: { admin: boolean }
-  },
+  { user: currentUserId, userInfo }: GraphQLContext,
 ) {
   if (!currentUserId) {
     throw new Error("Authentication required to process contributor requests.")
@@ -333,7 +330,7 @@ export async function createContributorCitationEvent(
       familyName?: string
     }
   },
-  { user }: { user: string },
+  { user }: Pick<GraphQLContext, "user">,
 ) {
   if (!user) throw new Error("Authentication required.")
 
@@ -409,7 +406,7 @@ export async function processContributorCitation(
     eventId: string
     status: "ACCEPTED" | "DENIED"
   },
-  { user, userInfo }: { user: string; userInfo: { admin?: boolean } },
+  { user, userInfo }: GraphQLContext,
 ) {
   if (!user) throw new Error("Authentication required.")
 

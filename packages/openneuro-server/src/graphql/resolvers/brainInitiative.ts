@@ -6,6 +6,7 @@ import Metadata from "../../models/metadata"
 import CacheItem, { CacheType } from "../../cache/item"
 import * as Sentry from "@sentry/node"
 import fundedAwards from "../../data/funded_awards.json"
+import type { GraphQLContext } from "../builder"
 
 const brainInitiativeMatch = new RegExp("brain.initiative", "i")
 
@@ -19,7 +20,7 @@ const brainInitiativeGrants = fundedAwards.map((award) =>
 export const brainInitiative = async (
   dataset: DatasetOrSnapshot,
   _,
-  context,
+  context: GraphQLContext,
 ): Promise<boolean> => {
   const cache = new CacheItem(
     redis,

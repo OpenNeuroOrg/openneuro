@@ -5,11 +5,12 @@ import Validation from "../../models/validation"
 import { redis } from "../../libs/redis"
 import CacheItem from "../../cache/item"
 import { CacheType } from "../../cache/types"
+import type { GraphQLContext } from "../builder"
 
 /**
  * Issues resolver for schema validator
  */
-export const validation = async (dataset, _, { userInfo }) => {
+export const validation = async (dataset, _, { userInfo }: Pick<GraphQLContext, "userInfo">) => {
   const cache = new CacheItem(
     redis,
     CacheType.validation,
@@ -79,7 +80,7 @@ export const validation = async (dataset, _, { userInfo }) => {
 /**
  * Snapshot issues resolver for schema validator
  */
-export const snapshotValidation = async (snapshot, _, context) => {
+export const snapshotValidation = async (snapshot, _, context: Pick<GraphQLContext, "userInfo">) => {
   const dataset = {
     id: snapshot.id.split(":")[0],
     revision: snapshot.hexsha,
@@ -132,7 +133,7 @@ export const validationUrl = (datasetId, ref) => {
  * @param {string} args.datasetId Dataset accession number
  * @param {string} args.ref Git hexsha
  */
-export const revalidate = async (obj, { datasetId, ref }, { userInfo }) => {
+export const revalidate = async (obj, { datasetId, ref }, { userInfo }: Pick<GraphQLContext, "userInfo">) => {
   try {
     const response = await fetch(validationUrl(datasetId, ref), {
       method: "POST",

@@ -26,7 +26,7 @@ export async function permissions(
         user: user(
           ds,
           { id: userPermission.userId },
-          context as unknown as { userInfo?: Record<string, unknown> },
+          context as Partial<GraphQLContext>,
         ),
       } as unknown as PermissionDocument & { user: Promise<UserDocument> }),
     ),

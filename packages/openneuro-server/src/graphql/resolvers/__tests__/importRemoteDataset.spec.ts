@@ -10,7 +10,7 @@ describe("importRemoteDataset mutation", () => {
     await importRemoteDataset(
       {},
       { datasetId: "ds000000", url: "" },
-      { user: "1234", userInfo: { admin: true } },
+      { user: "1234", userInfo: { admin: true } } as never,
     )
   })
   describe("allowedImportUrl()", () => {

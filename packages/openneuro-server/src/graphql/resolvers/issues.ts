@@ -1,11 +1,12 @@
 import Issue from "../../models/issue"
 import { datasetType } from "./datasetType"
 import { revalidate } from "./validation.js"
+import type { GraphQLContext } from "../builder"
 
 /**
  * Issues resolver
  */
-export const issues = async (dataset, _, { userInfo }) => {
+export const issues = async (dataset, _, { userInfo }: Pick<GraphQLContext, "userInfo">) => {
   return Issue.findOne({
     id: dataset.revision,
     datasetId: dataset.id,

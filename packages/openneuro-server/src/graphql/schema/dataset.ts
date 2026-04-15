@@ -64,7 +64,7 @@ DatasetRef.implement({
     uploader: t.field({
       type: UserRef,
       resolve: (obj, _args, ctx) =>
-        user(null, { id: obj.uploader }, ctx as never) as never,
+        user(null, { id: obj.uploader }, ctx) as never,
     }),
     public: t.boolean({ resolve: (obj) => obj.public }),
     draft: t.field({

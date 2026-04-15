@@ -5,6 +5,7 @@ import MetadataModel from "../../models/metadata"
 import type { MetadataDocument } from "../../models/metadata"
 import { latestSnapshot } from "./snapshots"
 import { permissions } from "./permissions"
+import type { GraphQLContext } from "../builder"
 
 /**
  * Summary resolver
@@ -14,7 +15,7 @@ import { permissions } from "./permissions"
 export const metadata = async (
   dataset,
   _,
-  context,
+  context: GraphQLContext,
 ): Promise<FlattenMaps<MetadataDocument>> => {
   const record = await MetadataModel.findOne({
     datasetId: dataset.id,
@@ -79,7 +80,7 @@ export async function publicMetadata(
   }).lean()
   const dsMetadata: FlattenMaps<MetadataDocument>[] = []
   for (const ds of datasets) {
-    dsMetadata.push(await metadata(ds, null, {}))
+    dsMetadata.push(await metadata(ds, null, {} as GraphQLContext))
   }
   return dsMetadata
 }
