@@ -28,7 +28,6 @@ export { Express } from "express-serve-static-core"
 
 interface OpenNeuroRequestContext {
   user: string
-  isSuperUser: boolean
   userInfo: {
     id: string
     exp: string
@@ -109,7 +108,6 @@ export async function expressApolloSetup() {
         if (req.isAuthenticated()) {
           return {
             user: req.user.id,
-            isSuperUser: req.user.admin,
             userInfo: req.user,
           }
         }

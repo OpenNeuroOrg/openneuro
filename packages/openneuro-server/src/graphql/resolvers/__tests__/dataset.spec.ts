@@ -23,7 +23,6 @@ describe("dataset resolvers", () => {
         { affirmedDefaced: true, affirmedConsent: false },
         {
           user: "123456",
-          isSuperUser: false,
           userInfo: { id: "123456", userId: "123456", admin: false },
         },
       )
@@ -172,7 +171,6 @@ describe("dataset resolvers", () => {
         { datasetId: "ds999999", files: [{ path: "/sub-99" }] },
         {
           user: "a_user_id",
-          isSuperUser: false,
           userInfo: {
             // bypass permission checks
             id: "a_user_id",

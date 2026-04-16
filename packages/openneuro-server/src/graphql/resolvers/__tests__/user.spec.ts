@@ -110,13 +110,11 @@ const testUsersSeedData = [
 // Admin context for tests
 const adminContext = {
   user: "admin-user",
-  isSuperUser: false,
   userInfo: { id: "admin-user", userId: "admin-user", admin: true, username: "adminUser" },
 } as GraphQLContext
 // Non-admin context for tests
 const nonAdminContext = {
   user: "normal-user",
-  isSuperUser: false,
   userInfo: { id: "normal-user", userId: "normal-user", admin: false, username: "normalUser" },
 } as GraphQLContext
 

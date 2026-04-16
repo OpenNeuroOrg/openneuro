@@ -19,7 +19,6 @@ export interface UserInfo {
 
 export interface GraphQLContext {
   user: string
-  isSuperUser: boolean
   userInfo: UserInfo
 }
 
