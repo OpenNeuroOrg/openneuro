@@ -5,11 +5,7 @@ import { UserList } from "./user"
 import { FlaggedFile } from "./misc"
 import { Metadata } from "./metadata"
 import { DatasetFilter, DatasetSort, UserSortInput } from "./inputs"
-import { dataset, datasets } from "../resolvers/dataset"
-import { user, users } from "../resolvers/user"
-import { participantCount, snapshot } from "../resolvers/snapshots"
-import { flaggedFiles } from "../resolvers/flaggedFiles"
-import { publicMetadata } from "../resolvers/metadata"
+import Query from "../resolvers/query"
 
 builder.queryType({
   fields: (t) => ({
@@ -19,7 +15,7 @@ builder.queryType({
         id: t.arg.id({ required: true }),
       },
       resolve: (root, args, ctx) =>
-        dataset(root, args as never, ctx),
+        Query.dataset(root, args as never, ctx),
     }),
     datasets: t.field({
       type: DatasetConnection,
@@ -53,7 +49,7 @@ builder.queryType({
         }),
       },
       resolve: (root, args, ctx) =>
-        datasets(root, args as never, ctx),
+        Query.datasets(root, args as never, ctx),
     }),
     user: t.field({
       type: UserRef,
@@ -61,7 +57,7 @@ builder.queryType({
         id: t.arg.id({ required: true }),
       },
       resolve: (root, args, ctx) =>
-        user(root, args as never, ctx),
+        Query.user(root, args as never, ctx),
     }),
     users: t.field({
       type: UserList,
@@ -75,14 +71,14 @@ builder.queryType({
         offset: t.arg.int(),
       },
       resolve: (root, args, ctx) =>
-        users(root, args as never, ctx) as never,
+        Query.users(root, args as never, ctx) as never,
     }),
     participantCount: t.int({
       directives: { cacheControl: { maxAge: 3600 } },
       args: {
         modality: t.arg.string(),
       },
-      resolve: (root, args) => participantCount(root, args as never),
+      resolve: (root, args) => Query.participantCount(root, args as never),
     }),
     snapshot: t.field({
       type: SnapshotRef,
@@ -91,7 +87,7 @@ builder.queryType({
         tag: t.arg.string({ required: true }),
       },
       resolve: (root, args, ctx) =>
-        snapshot(root, args as never, ctx),
+        Query.snapshot(root, args as never, ctx),
     }),
     flaggedFiles: t.field({
       type: [FlaggedFile],
@@ -108,13 +104,13 @@ builder.queryType({
         }),
       },
       resolve: (root, args, ctx) =>
-        flaggedFiles(root, args as never, ctx) as never,
+        Query.flaggedFiles(root, args as never, ctx) as never,
     }),
     publicMetadata: t.field({
       type: [Metadata],
       nullable: { list: true, items: true },
       directives: { cacheControl: { maxAge: 86400 } },
-      resolve: (root) => publicMetadata(root),
+      resolve: (root) => Query.publicMetadata(root),
     }),
     orcidConsent: t.boolean({
       resolve: (_root, _args, ctx) => ctx.userInfo?.orcidConsent ?? null,
