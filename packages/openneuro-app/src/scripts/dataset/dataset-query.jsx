@@ -3,6 +3,7 @@ import * as Sentry from "@sentry/react"
 import PropTypes from "prop-types"
 import { useNavigate, useParams } from "react-router-dom"
 import { useApolloClient, useQuery } from "@apollo/client"
+import Helmet from "react-helmet"
 import { Loading } from "../components/loading/Loading"
 
 import DatasetQueryContext from "../datalad/dataset/dataset-query-context.js"
@@ -16,6 +17,7 @@ import { trackAnalytics } from "../utils/datalad"
 import FourOFourPage from "../errors/404page"
 import FourOThreePage from "../errors/403page"
 import { getDatasetPage, getDraftPage } from "../queries/dataset"
+import { datasetCanonicalUrl } from "./dataset-canonical-url"
 
 /**
  * Query to load and render dataset page - most dataset loading is done here
@@ -63,6 +65,12 @@ export const DatasetQueryHook = ({ datasetId, draft }) => {
   }
   return (
     <DatasetContext.Provider value={data.dataset}>
+      <Helmet>
+        <link
+          rel="canonical"
+          href={datasetCanonicalUrl(data.dataset).toString()}
+        />
+      </Helmet>
       <ErrorBoundary subject={"error in dataset page"}>
         <DatasetQueryContext.Provider
           value={{
