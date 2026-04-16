@@ -77,6 +77,7 @@ type Dataset {
   followers: [Follower]
   following: Boolean
   history: [DatasetCommit]
+  holdDeletion: Boolean
   id: ID!
   latestSnapshot: Snapshot!
   metadata: Metadata
@@ -423,6 +424,7 @@ type Mutation {
   flagAnnexObject(annexKey: String!, datasetId: ID!, filepath: String!, snapshot: String!): Boolean
   followDataset(datasetId: ID!): FollowDatasetResponse
   fsckDataset(datasetId: ID!): Boolean
+  holdDeletion(datasetId: ID!, hold: Boolean!): Boolean
   importRemoteDataset(datasetId: ID!, url: String!): ID
   prepareRepoAccess(datasetId: ID!): RepoMetadata
   prepareUpload(datasetId: ID!, uploadId: ID!): UploadMetadata

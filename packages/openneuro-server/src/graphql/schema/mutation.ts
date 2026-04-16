@@ -25,6 +25,8 @@ import {
   ValidatorInput,
 } from "./inputs"
 
+import Mutation from '../resolvers/mutation'
+
 // Resolvers — dataset
 import {
   createDataset,
@@ -376,6 +378,14 @@ builder.mutationType({
       },
       resolve: (root, args, ctx) =>
         fsckDataset(root, args as never, ctx),
+    }),
+    holdDeletion: t.boolean({
+      args: {
+        datasetId: t.arg.id({ required: true }),
+        hold: t.arg.boolean({ required: true }),
+      },
+      resolve: (root, args, ctx) =>
+        Mutation.holdDeletion(root, args as never, ctx),
     }),
     revalidate: t.boolean({
       args: {

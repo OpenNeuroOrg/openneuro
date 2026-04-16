@@ -160,5 +160,8 @@ DatasetRef.implement({
       nullable: { list: true, items: true },
       resolve: (obj, _args, ctx) => datasetEvents(obj, null, ctx),
     }),
+    holdDeletion: t.boolean({
+      resolve: (obj) => obj.holdDeletion
+    }),
   }),
 })
