@@ -53,6 +53,7 @@ import {
 } from "./datasetEvents"
 import { createGitEvent } from "./gitEvents"
 import { fsckDataset, updateFileCheck } from "./fileCheck"
+import { holdDeletion } from "./holdDeletion"
 import { updateContributors } from "../../datalad/contributors"
 import { updateWorkerTask } from "./worker"
 
@@ -92,6 +93,7 @@ const Mutation = {
   cacheClear,
   revalidate,
   fsckDataset,
+  holdDeletion,
   prepareRepoAccess,
   reexportRemotes,
   resetDraft,

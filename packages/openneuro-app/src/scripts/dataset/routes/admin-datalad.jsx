@@ -2,6 +2,7 @@ import React from "react"
 import PropTypes from "prop-types"
 import DatasetHistory from "../fragments/dataset-history.jsx"
 import CacheClear from "../mutations/cache-clear.jsx"
+import { HoldDeletion } from "../mutations/hold-deletion"
 import AdminExports from "../mutations/admin-exports"
 import { DatasetPageBorder } from "./styles/dataset-page-border"
 import { HeaderRow3, HeaderRow4 } from "./styles/header-row"
@@ -17,6 +18,15 @@ const AdminDataset = ({ dataset }) => (
     </p>
     <div className="dataset-form-controls">
       <CacheClear datasetId={dataset.id} />
+    </div>
+    <hr />
+    <HeaderRow4>Hold Automated Draft Deletion</HeaderRow4>
+    <p>
+      Pause automated deletion of stale draft data and prevent sending a final
+      notice for this dataset.
+    </p>
+    <div className="dataset-form-controls">
+      <HoldDeletion datasetId={dataset.id} />
     </div>
     <hr />
     <HeaderRow4>Rerun Exports</HeaderRow4>
