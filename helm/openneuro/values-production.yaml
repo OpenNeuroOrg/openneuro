@@ -74,4 +74,4 @@ redis:
     resources:
       requests:
         cpu: "1"
-        memory: "8Gi"
+        memory: "2Gi"
