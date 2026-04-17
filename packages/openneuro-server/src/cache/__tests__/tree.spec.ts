@@ -22,6 +22,8 @@ function makeEntry(overrides: Partial<TreeEntry> = {}): TreeEntry {
     b: "",
     p: false,
     d: false,
+    a: false,
+    l: false,
     ...overrides,
   }
 }
