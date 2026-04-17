@@ -74,6 +74,8 @@ describe("datalad files", () => {
         b: "",
         p: false,
         d: true,
+        a: false,
+        l: false,
       }
       const result = await entryToDatasetFile(entry, "ds000001")
       expect(result).toEqual({
@@ -82,6 +84,8 @@ describe("datalad files", () => {
         directory: true,
         size: 0,
         urls: [],
+        annexed: false,
+        symlink: false,
       })
     })
     it("returns a presigned URL for private files", async () => {
@@ -94,6 +98,8 @@ describe("datalad files", () => {
         b: "private-bucket",
         p: true,
         d: false,
+        a: false,
+        l: false,
       }
       const result = await entryToDatasetFile(entry, "ds000001")
       expect(result).toEqual({
@@ -102,6 +108,8 @@ describe("datalad files", () => {
         directory: false,
         size: 12345,
         urls: ["https://s3.amazonaws.com/bucket/key?presigned=true"],
+        annexed: false,
+        symlink: false,
       })
     })
     it("returns a public S3 URL for public files with S3 keys", async () => {
@@ -114,6 +122,8 @@ describe("datalad files", () => {
         b: "",
         p: false,
         d: false,
+        a: false,
+        l: false,
       }
       const result = await entryToDatasetFile(entry, "ds000001")
       expect(result).toEqual({
@@ -122,6 +132,8 @@ describe("datalad files", () => {
         directory: false,
         size: 500,
         urls: ["https://s3.amazonaws.com/bucket/key?versionId=abc123"],
+        annexed: false,
+        symlink: false,
       })
     })
     it("falls back to server object URL when no S3 key/version", async () => {
@@ -135,6 +147,8 @@ describe("datalad files", () => {
         b: "",
         p: false,
         d: false,
+        a: false,
+        l: false,
       }
       const result = await entryToDatasetFile(entry, "ds000001")
       expect(result).toEqual({
@@ -145,6 +159,8 @@ describe("datalad files", () => {
         urls: [
           "https://openneuro.org/crn/datasets/ds000001/objects/jkl012?filename=sub-01_T1w.nii.gz",
         ],
+        annexed: false,
+        symlink: false,
       })
     })
   })
@@ -192,6 +208,8 @@ describe("datalad files", () => {
         directory: true,
         size: 0,
         urls: [],
+        annexed: false,
+        symlink: false,
       }
       expect(workerFileToEntry(file, false)).toEqual({
         n: "sub-01",
@@ -202,6 +220,8 @@ describe("datalad files", () => {
         b: "",
         p: false,
         d: true,
+        a: false,
+        l: false,
       })
     })
     it("converts a public file with S3 URL", () => {
@@ -213,6 +233,8 @@ describe("datalad files", () => {
         urls: [
           "https://s3.amazonaws.com/openneuro.org/datasets/ds000001/README?versionId=ver2",
         ],
+        annexed: false,
+        symlink: false,
       }
       const result = workerFileToEntry(file, false)
       expect(result).toEqual({
@@ -224,6 +246,8 @@ describe("datalad files", () => {
         b: "openneuro.org",
         p: false,
         d: false,
+        a: false,
+        l: false,
       })
     })
     it("stores empty bucket when it matches the default bucket", () => {
@@ -237,6 +261,8 @@ describe("datalad files", () => {
         urls: [
           "https://s3.amazonaws.com/openneuro.org/datasets/ds000001/README?versionId=ver2",
         ],
+        symlink: false,
+        annexed: false,
       }
       const result = workerFileToEntry(file, false)
       expect(result.b).toBe("")
@@ -251,6 +277,8 @@ describe("datalad files", () => {
         urls: [
           "https://s3.amazonaws.com/private-bucket/data.nii.gz?versionId=v1",
         ],
+        symlink: false,
+        annexed: false,
       }
       expect(workerFileToEntry(file, true).p).toBe(true)
       expect(workerFileToEntry(file, false).p).toBe(false)
@@ -262,6 +290,8 @@ describe("datalad files", () => {
         directory: false,
         size: 1000,
         urls: [],
+        symlink: false,
+        annexed: false,
       }
       const result = workerFileToEntry(file, false)
       expect(result.k).toBe("")

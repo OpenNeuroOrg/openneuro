@@ -86,6 +86,8 @@ export type DatasetFile = {
   directory: boolean
   size: number
   urls: string[]
+  symlink: boolean
+  annexed: boolean
 }
 
 /**
@@ -140,6 +142,8 @@ export function workerFileToEntry(
       b: "",
       p: false,
       d: true,
+      a: false,
+      l: false,
     }
   }
   const parsed = file.urls[0] ? parseS3Url(file.urls[0]) : null
@@ -155,6 +159,8 @@ export function workerFileToEntry(
     b: bucket,
     p: needsPresign,
     d: false,
+    a: file.annexed,
+    l: file.symlink,
   }
 }
 
@@ -170,6 +176,8 @@ export async function entryToDatasetFile(
       directory: true,
       size: 0,
       urls: [],
+      symlink: false,
+      annexed: false,
     }
   }
   let url: string
@@ -189,6 +197,8 @@ export async function entryToDatasetFile(
     directory: false,
     size: entry.s,
     urls: [url],
+    symlink: entry.l,
+    annexed: entry.a,
   }
 }
 
@@ -409,6 +419,8 @@ async function reconstructFromTrees(
       directory: false,
       size: entry.s,
       urls: [],
+      symlink: entry.l,
+      annexed: entry.a,
     }
     if (entry.p && entry.k && entry.v) {
       // To be presigned

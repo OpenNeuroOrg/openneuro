@@ -19,6 +19,10 @@ export interface TreeEntry {
   p: boolean
   /** is directory */
   d: boolean
+  /** is annexed */
+  a: boolean
+  /** is a symlink */
+  l: boolean
 }
 
 function treeKey(hash: string): string {
