@@ -82,7 +82,7 @@ export async function getPresignedUrl(
 }
 
 /**
- * Bulk-resolve presigned URLs for many files in two pipelined Redis calls.
+ * Bulk-resolve presigned URLs for many files in pipelined Redis calls.
  * Returns an array of resolved URLs matching the input order.
  */
 export async function getPresignedUrlsBulk(
@@ -96,29 +96,41 @@ export async function getPresignedUrlsBulk(
     bucket: resolveBucket(item.bucket),
   }))
   const keys = resolved.map((r) => presignKey(r.bucket, r.s3Key, r.versionId))
-  const cached = await redis.mget(...keys)
 
-  // Fill hits from cache, sign misses and queue them for write-back
   const hmac = await getHMAC()
   const expires = Math.floor(Date.now() / 1000) + PRESIGN_EXPIRATION
-  const writePipeline = redis.pipeline()
-  let misses = 0
+  const results: string[] = []
+  const CHUNK_SIZE = 1000
 
-  const results = cached.map((val, i) => {
-    if (val) return val
-    misses++
-    const url = presignV2(
-      hmac,
-      resolved[i].bucket,
-      resolved[i].s3Key,
-      resolved[i].versionId,
-      expires,
-    )
-    writePipeline.setex(keys[i], PRESIGN_TTL, url)
-    return url
-  })
+  // Process in chunks to avoid blocking Redis
+  for (let i = 0; i < keys.length; i += CHUNK_SIZE) {
+    const chunkKeys = keys.slice(i, i + CHUNK_SIZE)
+    const chunkResolved = resolved.slice(i, i + CHUNK_SIZE)
+    const cached = await redis.mget(chunkKeys)
+    const writePipeline = redis.pipeline()
+    let misses = 0
 
-  if (misses > 0) await writePipeline.exec()
+    for (let j = 0; j < chunkKeys.length; j++) {
+      let val = cached[j]
+      if (!val) {
+        misses++
+        val = presignV2(
+          hmac,
+          chunkResolved[j].bucket,
+          chunkResolved[j].s3Key,
+          chunkResolved[j].versionId,
+          expires,
+        )
+        writePipeline.setex(chunkKeys[j], PRESIGN_TTL, val)
+      }
+      results.push(val)
+    }
+
+    if (misses > 0) {
+      await writePipeline.exec()
+    }
+  }
+
   return results
 }
 
