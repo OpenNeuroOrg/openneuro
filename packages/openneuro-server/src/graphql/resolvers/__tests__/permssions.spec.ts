@@ -1,5 +1,6 @@
 import { vi } from "vitest"
 import { updatePermissions } from "../permissions"
+import type { GraphQLContext } from "../../builder"
 
 vi.mock("ioredis")
 vi.mock("../../permissions", () => ({
@@ -23,7 +24,7 @@ describe("permissions resolvers", () => {
         await updatePermissions(
           {},
           { datasetId: "ds01234", userEmail: "fake@test.com", level: "ro" },
-          { user: "1234", userInfo: { id: "1234" } } as never,
+          { user: "1234", userInfo: { id: "1234" } } as GraphQLContext,
         )
       } catch (err) {
         error = err

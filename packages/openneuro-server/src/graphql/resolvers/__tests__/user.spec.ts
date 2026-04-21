@@ -110,12 +110,22 @@ const testUsersSeedData = [
 // Admin context for tests
 const adminContext = {
   user: "admin-user",
-  userInfo: { id: "admin-user", userId: "admin-user", admin: true, username: "adminUser" },
+  userInfo: {
+    id: "admin-user",
+    userId: "admin-user",
+    admin: true,
+    username: "adminUser",
+  },
 } as GraphQLContext
 // Non-admin context for tests
 const nonAdminContext = {
   user: "normal-user",
-  userInfo: { id: "normal-user", userId: "normal-user", admin: false, username: "normalUser" },
+  userInfo: {
+    id: "normal-user",
+    userId: "normal-user",
+    admin: false,
+    username: "normalUser",
+  },
 } as GraphQLContext
 
 describe("user resolvers", () => {
@@ -394,14 +404,26 @@ describe("user resolvers", () => {
       const result = await notifications(
         { id: "reviewer" },
         null,
-        { userInfo: { id: "reviewer", userId: "reviewer", reviewer: true, admin: false, blocked: false } } as never,
+        {
+          userInfo: {
+            id: "reviewer",
+            userId: "reviewer",
+            reviewer: true,
+            admin: false,
+            blocked: false,
+          },
+        } as GraphQLContext,
       )
       expect(result).toEqual([])
     })
 
     it("does not crash when userInfo is undefined", async () => {
       await expect(
-        notifications({ id: "u1" }, null, { userInfo: undefined } as never),
+        notifications(
+          { id: "u1" },
+          null,
+          { userInfo: undefined } as GraphQLContext,
+        ),
       ).rejects.toThrow("Not authorized to view these notifications.")
     })
 
@@ -424,7 +446,9 @@ describe("user resolvers", () => {
       const result = await notifications(
         { id: "u1" },
         null,
-        { userInfo: { id: "u1", admin: false, userId: "u1" } } as never,
+        {
+          userInfo: { id: "u1", admin: false, userId: "u1" },
+        } as GraphQLContext,
       )
       expect(result.length).toBe(1)
       expect(result[0].id).toBe("event-1")
@@ -436,7 +460,9 @@ describe("user resolvers", () => {
         notifications(
           { id: "u1" },
           null,
-          { userInfo: { id: "u2", admin: false, userId: "u2" } } as never,
+          {
+            userInfo: { id: "u2", admin: false, userId: "u2" },
+          } as GraphQLContext,
         ),
       ).rejects.toThrow("Not authorized to view these notifications.")
     })

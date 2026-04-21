@@ -3,6 +3,7 @@ import { connect } from "mongoose"
 import { deleteComment, flatten } from "../resolvers/comment"
 import { MongoMemoryServer } from "mongodb-memory-server"
 import Comment from "../../models/comment"
+import type { GraphQLContext } from "../builder"
 
 vi.mock("ioredis")
 
@@ -12,11 +13,11 @@ describe("comment resolver helpers", () => {
     const adminUser = {
       user: "1234",
       userInfo: { admin: true },
-    } as never
+    } as GraphQLContext
     const nonAdminUser = {
       user: "5678",
       userInfo: { admin: false },
-    } as never
+    } as GraphQLContext
     let mongod
     beforeAll(async () => {
       // Setup MongoDB with mongodb-memory-server

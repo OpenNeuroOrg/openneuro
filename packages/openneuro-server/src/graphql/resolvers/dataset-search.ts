@@ -57,7 +57,7 @@ export const elasticRelayConnection = (
         const node = childResolvers.dataset(
           null,
           { id: hit._source.id },
-          { user, userInfo } as never,
+          { user, userInfo } as GraphQLContext,
         )
         return { id: hit._source.id, node }
       }),
