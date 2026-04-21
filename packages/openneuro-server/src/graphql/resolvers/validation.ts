@@ -10,7 +10,7 @@ import type { GraphQLContext } from "../builder"
 /**
  * Issues resolver for schema validator
  */
-export const validation = async (dataset, _, { userInfo }: Pick<GraphQLContext, "userInfo">) => {
+export const validation = async (dataset, _, { userInfo }: GraphQLContext) => {
   const cache = new CacheItem(
     redis,
     CacheType.validation,
@@ -80,7 +80,7 @@ export const validation = async (dataset, _, { userInfo }: Pick<GraphQLContext, 
 /**
  * Snapshot issues resolver for schema validator
  */
-export const snapshotValidation = async (snapshot, _, context: Pick<GraphQLContext, "userInfo">) => {
+export const snapshotValidation = async (snapshot, _, context: GraphQLContext) => {
   const dataset = {
     id: snapshot.id.split(":")[0],
     revision: snapshot.hexsha,

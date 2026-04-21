@@ -60,7 +60,7 @@ export const addComment = (
     parentId?: string
     comment: string
   },
-  { user }: Pick<GraphQLContext, "user">,
+  { user }: GraphQLContext,
 ) => {
   if (!user) {
     return Promise.reject(
@@ -82,7 +82,7 @@ export const addComment = (
 export const editComment = async (
   obj: unknown,
   { commentId, comment: text }: { commentId: string; comment: string },
-  { user }: Pick<GraphQLContext, "user">,
+  { user }: GraphQLContext,
 ) => {
   const existingComment = await Comment.findById(commentId).exec()
   // You may only edit your own comments

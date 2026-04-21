@@ -109,7 +109,7 @@ export const DatasetEventDescriptionTypeResolvers = {
 export async function createContributorRequestEvent(
   obj: unknown,
   { datasetId }: { datasetId: string },
-  { user }: Pick<GraphQLContext, "user">,
+  { user }: GraphQLContext,
 ) {
   if (!user) {
     throw new Error("Authentication required to request contributor status.")
@@ -300,7 +300,7 @@ export async function processContributorRequest(
 export async function updateEventStatus(
   obj: unknown,
   { eventId, status }: { eventId: string; status: string },
-  { user }: Pick<GraphQLContext, "user">,
+  { user }: GraphQLContext,
 ) {
   if (!user) throw new Error("Authentication required.")
   return await UserNotificationStatus.findOneAndUpdate(
@@ -330,7 +330,7 @@ export async function createContributorCitationEvent(
       familyName?: string
     }
   },
-  { user }: Pick<GraphQLContext, "user">,
+  { user }: GraphQLContext,
 ) {
   if (!user) throw new Error("Authentication required.")
 

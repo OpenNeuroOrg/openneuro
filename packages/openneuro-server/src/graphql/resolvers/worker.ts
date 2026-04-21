@@ -7,7 +7,7 @@ import type { GraphQLContext } from "../builder"
  *
  * This can be called for new tasks, or to update existing tasks.
  */
-export const updateWorkerTask = async (obj, args, { userInfo }: Pick<GraphQLContext, "userInfo">) => {
+export const updateWorkerTask = async (obj, args, { userInfo }: GraphQLContext) => {
   checkWorker(userInfo)
   const { id, ...updateData } = args
 
