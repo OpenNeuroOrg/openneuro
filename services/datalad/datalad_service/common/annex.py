@@ -168,7 +168,7 @@ def get_repo_urls(repo, files):
     # Build rmet lookup
     rmet_files = defaultdict(list)
     for f in files:
-        if f.get('annexed'):
+        if not f.get('directory'):
             rmet_path = compute_rmet(f['id'])
             rmet_files[rmet_path].append(f)
 

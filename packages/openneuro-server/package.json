@@ -1,6 +1,6 @@
 {
   "name": "@openneuro/server",
-  "version": "5.0.0-alpha.0",
+  "version": "5.0.1",
   "description": "Core service for the OpenNeuro platform.",
   "license": "MIT",
   "main": "src/server.js",
@@ -22,7 +22,7 @@
     "@elastic/elasticsearch": "8.13.1",
     "@graphql-tools/schema": "^10.0.0",
     "@keyv/redis": "^4.5.0",
-    "@openneuro/search": "^5.0.0-alpha.0",
+    "@openneuro/search": "^5.0.1",
     "@pothos/core": "^4.12.0",
     "@pothos/plugin-directives": "^4.3.0",
     "@pothos/plugin-simple-objects": "^4.1.3",
@@ -95,5 +95,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "760dc8c0771dd7353f8b68ff5e0f912a24ad2130"
+  "gitHead": "15f9911c5c97d2c1acc93e55d1ba5dd89facb20d"
 }
