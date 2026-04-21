@@ -35,6 +35,7 @@ from datalad_service.handlers.reset import ResetResource
 from datalad_service.handlers.remote_import import RemoteImportResource
 from datalad_service.handlers.info import InfoResource
 from datalad_service.handlers.fsck import FsckResource
+from datalad_service.handlers.refs import RefsResource
 from datalad_service.middleware.auth import AuthenticateMiddleware
 from datalad_service.middleware.error import CustomErrorHandlerMiddleware
 
@@ -118,6 +119,7 @@ def create_app():
     dataset_remote_import_resource = RemoteImportResource(store)
     dataset_info_resource = InfoResource(store)
     dataset_fsck_resource = FsckResource(store)
+    dataset_refs_resource = RefsResource(store)
 
     app.add_route('/heartbeat', heartbeat)
 
@@ -181,6 +183,7 @@ def create_app():
     app.add_route(
         '/datasets/{dataset:dataset}/import/{import_id}', dataset_remote_import_resource
     )
+    app.add_route('/datasets/{dataset:dataset}/refs/{treeish}', dataset_refs_resource)
 
     if 'pytest' in sys.modules:
         return app  # Do not wrap in Sentry middleware during tests

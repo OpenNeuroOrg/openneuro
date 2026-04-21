@@ -16,4 +16,5 @@ export enum CacheType {
   brainInitiative = "brainInitiative",
   validation = "validation",
   dataciteYml = "dataciteYml",
+  gitRef = "ref",
 }
