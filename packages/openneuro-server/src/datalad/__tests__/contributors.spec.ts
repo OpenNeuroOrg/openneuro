@@ -3,7 +3,8 @@ import yaml from "js-yaml"
 import * as Sentry from "@sentry/node"
 import CacheItem from "../../cache/item"
 import { fileUrl } from "../files"
-import { datasetOrSnapshot } from "../../utils/datasetOrSnapshot"
+import { resolveCommit } from "../../utils/datasetOrSnapshot"
+import { description } from "../description"
 import { contributors } from "../contributors"
 
 vi.mock("../../config.ts")
@@ -29,12 +30,14 @@ vi.mock("../../utils/datasetOrSnapshot")
 vi.mock("../libs/redis", () => ({
   redis: vi.fn(),
 }))
+vi.mock("../description")
 
 const mockYamlLoad = vi.mocked(yaml.load)
 const mockSentryCaptureMessage = vi.mocked(Sentry.captureMessage)
 const mockSentryCaptureException = vi.mocked(Sentry.captureException)
 const mockFileUrl = vi.mocked(fileUrl)
-const mockDatasetOrSnapshot = vi.mocked(datasetOrSnapshot)
+const mockResolveCommit = vi.mocked(resolveCommit)
+const mockDescription = vi.mocked(description)
 
 const mockFetch = vi.fn()
 global.fetch = mockFetch
@@ -54,7 +57,7 @@ describe("contributors (core functionality)", () => {
   beforeEach(() => {
     vi.clearAllMocks()
 
-    mockDatasetOrSnapshot.mockReturnValue({
+    mockResolveCommit.mockResolvedValue({
       datasetId: MOCK_DATASET_ID,
       revision: MOCK_REVISION,
     })
@@ -62,19 +65,12 @@ describe("contributors (core functionality)", () => {
       (datasetId, path, filename, revision) =>
         `http://example.com/${datasetId}/${revision}/${filename}`,
     )
-
+    mockDescription.mockResolvedValue(null)
     mockCacheItemGet.mockImplementation((fetcher) => fetcher())
   })
 
-  it("should return empty array if both datacite file and dataset_description.json fail", async () => {
-    mockFetch.mockResolvedValueOnce({
-      status: 500,
-      headers: new Headers(),
-      text: () => Promise.resolve("Server Error"),
-    })
-    mockCacheItemGet.mockImplementationOnce((fetcher) =>
-      fetcher().catch(() => null)
-    )
+  it("should return empty array and capture exception if cache throws unexpectedly", async () => {
+    mockCacheItemGet.mockRejectedValueOnce(new Error("Unexpected cache error"))
     const result = await contributors({
       id: MOCK_DATASET_ID,
       revision: MOCK_REVISION,

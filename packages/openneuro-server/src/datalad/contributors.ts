@@ -3,7 +3,7 @@ import CacheItem, { CacheType } from "../cache/item"
 import { redis } from "../libs/redis"
 import {
   type DatasetOrSnapshot,
-  datasetOrSnapshot,
+  resolveCommit,
 } from "../utils/datasetOrSnapshot"
 import {
   getDataciteYml,
@@ -22,10 +22,19 @@ export const contributors = async (
 ): Promise<Contributor[]> => {
   if (!obj) return []
 
-  const { datasetId, revision } = datasetOrSnapshot(obj)
+  let datasetId: string
+  let revision: string
+  try {
+    ;({ datasetId, revision } = await resolveCommit(obj))
+  } catch (err) {
+    Sentry.captureException(err)
+    return []
+  }
+
   if (!datasetId) return []
 
-  const revisionShort = revision ? revision.substring(0, 7) : "HEAD"
+  const revisionShort = revision.substring(0, 7)
+
   const dataciteCache = new CacheItem(redis, CacheType.dataciteYml, [
     datasetId,
     revisionShort,

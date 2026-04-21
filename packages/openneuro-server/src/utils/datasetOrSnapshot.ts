@@ -1,3 +1,5 @@
+import { getDraftRevision } from "../datalad/draft"
+
 export interface HasId {
   id: string
   revision: string
@@ -39,4 +41,19 @@ export function datasetOrSnapshot(
  */
 export function getDatasetFromSnapshotId(snapshotId: string): string {
   return snapshotId.split(":")[0]
+}
+
+/**
+ * Resolve a dataset or snapshot to a dataset ID and a concrete draft hexsha (if revision is HEAD or missing)
+ * @param {DatasetOrSnapshot} obj A snapshot or dataset parent object
+ */
+export async function resolveCommit(
+  obj: DatasetOrSnapshot,
+): Promise<DatasetRevisionReference> {
+  let { datasetId, revision } = datasetOrSnapshot(obj)
+  revision = await revision
+  if (!revision || revision === "HEAD") {
+    revision = await getDraftRevision(datasetId)
+  }
+  return { datasetId, revision }
 }

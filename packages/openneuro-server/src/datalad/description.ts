@@ -9,7 +9,7 @@ import { fileUrl } from "./files"
 import { generateDataladCookie } from "../libs/authentication/jwt"
 import { getDatasetWorker } from "../libs/datalad-service"
 import CacheItem, { CacheType } from "../cache/item"
-import { datasetOrSnapshot } from "../utils/datasetOrSnapshot"
+import { datasetOrSnapshot, resolveCommit } from "../utils/datasetOrSnapshot"
 
 /**
  * Checks if all elements in an array are strings.
@@ -129,12 +129,21 @@ export const appendSeniorAuthor = (description) => {
  */
 export const description = async (obj) => {
   // Obtain datasetId from Dataset or Snapshot objects
-  const { datasetId, revision } = datasetOrSnapshot(obj)
+  const { datasetId } = datasetOrSnapshot(obj)
   // Default fallback if dataset_description.json is not valid or missing
   const defaultDescription = {
     Name: datasetId,
     BIDSVersion: "1.8.0",
   }
+
+  let revision
+  try {
+    const resolved = await resolveCommit(obj)
+    revision = resolved.revision
+  } catch (_err) {
+    return defaultDescription
+  }
+
   const cache = new CacheItem(redis, CacheType.datasetDescription, [
     datasetId,
     revision.substring(0, 7),
