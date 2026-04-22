@@ -1,3 +1,11 @@
+/**
+ * Script to dump the GraphQL schema to a file.
+ * This was written during the transition to Pothos-generated schema,
+ * for comparison with the hand-written schema.
+ *
+ * It is written as a test because the schema's imports are entangled
+ * with the rest of the server code, and this allows us to mock out the dependencies.
+ */
 import { vi } from "vitest"
 
 vi.mock("ioredis", () => {
