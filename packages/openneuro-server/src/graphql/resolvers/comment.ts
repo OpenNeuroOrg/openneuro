@@ -40,7 +40,7 @@ export const flatten = (arr) => [].concat(...arr)
  * @param {import('../../models/comment').CommentDocument} obj
  * @returns {Promise<import('../../models/comment').CommentDocument[]>}
  */
-const allNestedReplies = async (obj: { _id: string }) => {
+const allNestedReplies = async (obj: CommentDocument) => {
   const replies = await Comment.find({ parentId: obj._id }).exec()
   if (!replies.length) {
     return replies
