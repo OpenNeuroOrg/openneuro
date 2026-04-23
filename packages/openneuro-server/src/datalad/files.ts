@@ -15,7 +15,9 @@ import {
   setTree,
   type TreeEntry,
 } from "../cache/tree"
+import CacheItem, { CacheType } from "../cache/item"
 import { join } from "node:path"
+import { captureException } from "@sentry/node"
 
 /**
  * Convert to URL compatible path
@@ -272,6 +274,37 @@ async function cacheWorkerTrees(
 }
 
 /**
+ * Resolve a git reference (branch, tag, or short commit hash) to a full commit hash.
+ * @param datasetId The dataset ID.
+ * @param treeish The git reference to resolve.
+ * @returns The full commit hash.
+ */
+export const resolveGitRef = async (
+  datasetId: string,
+  treeish: string,
+): Promise<string> => {
+  const cache = new CacheItem(redis, CacheType.gitRef, [datasetId, treeish])
+  return cache.get(async () => {
+    const url = `http://${
+      getDatasetWorker(datasetId)
+    }/datasets/${datasetId}/refs/${treeish}`
+    const response = await fetch(url)
+    if (!response.ok) {
+      throw new Error(
+        `Failed to resolve git reference ${treeish}: ${response.statusText}`,
+      )
+    }
+    const data = await response.json()
+    if (!data.hash) {
+      throw new Error(
+        `Invalid response from datalad worker for git reference ${treeish}`,
+      )
+    }
+    return data.hash
+  })
+}
+
+/**
  * Get files for a specific revision (tree hash or commit hash).
  * Uses content-addressed caching keyed by full git hash.
  */
@@ -279,6 +312,17 @@ export const getFiles = async (
   datasetId: string,
   treeish: string,
 ): Promise<DatasetFile[]> => {
+  // Guard against requests without a full git hash (40 = SHA-1, 64 = SHA-256)
+  if (treeish.length !== 40 && treeish.length !== 64) {
+    try {
+      treeish = await resolveGitRef(datasetId, treeish)
+    } catch (error) {
+      captureException(error, {
+        tags: { datasetId, treeish, source: "resolveGitRef" },
+      })
+      throw new Error(`Invalid git reference: ${treeish}`)
+    }
+  }
   // Try cache first
   const cached = await getTree(redis, treeish)
   if (cached) {
