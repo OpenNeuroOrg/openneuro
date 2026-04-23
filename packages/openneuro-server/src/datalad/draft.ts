@@ -13,7 +13,7 @@ type DraftInfo = {
   hexsha: string // Duplicate of ref for backwards compatibility
   tree: string
   message: string
-  modified: Date
+  modified: string
 }
 
 export const getDraftRevision = async (datasetId): Promise<string> => {

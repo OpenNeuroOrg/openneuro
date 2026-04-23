@@ -4,6 +4,7 @@ import { getDatasetWorker } from "../../libs/datalad-service"
 import { generateDataladCookie } from "../../libs/authentication/jwt"
 import notifications from "../../libs/notifications"
 import config from "../../config"
+import type { GraphQLContext } from "../builder"
 
 /**
  * Test if a URL is allowed to be imported
@@ -34,7 +35,7 @@ export function allowedImportUrl(raw: string): boolean {
 export async function importRemoteDataset(
   _: Record<string, unknown>,
   { datasetId, url }: { datasetId: string; url: string },
-  { user, userInfo }: { user: string; userInfo: Record<string, unknown> },
+  { user, userInfo }: GraphQLContext,
 ): Promise<string | null> {
   await checkDatasetWrite(datasetId, user, userInfo)
   if (!allowedImportUrl(url)) {
@@ -66,7 +67,7 @@ export async function finishImportRemoteDataset(
   _: Record<string, unknown>,
   { id, success, message }: { id: string; success: boolean; message: string },
   /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
-  { user, userInfo }: { user: string; userInfo: Record<string, unknown> },
+  { user, userInfo }: GraphQLContext,
 ): Promise<boolean> {
   const ingest = await IngestDataset.findById(id)
   ingest.imported = success

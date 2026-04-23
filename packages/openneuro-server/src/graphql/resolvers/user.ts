@@ -2,19 +2,18 @@ import type { PipelineStage } from "mongoose"
 import User from "../../models/user"
 import DatasetEvent from "../../models/datasetEvents"
 import type { UserNotificationStatusDocument } from "../../models/userNotificationStatus"
-
 function isValidOrcid(orcid: string): boolean {
   return /^[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{3}[0-9X]$/.test(orcid || "")
 }
 
 // TODO - Use GraphQL codegen
-type GraphQLUserType = {
+export type GraphQLUserType = {
   id: string
   provider: "orcid" | "google"
   avatar: string
   orcid: string
   created: Date
-  modified: Date
+  updatedAt: Date
   lastSeen: Date
   email: string
   name: string
@@ -24,16 +23,16 @@ type GraphQLUserType = {
   institution: string
   github: string
   githubSynced: Date
-  links: [string]
-  notifications: [Record<string, unknown>]
-  orcidConsent: boolean
+  links: string[]
+  orcidConsent: boolean | null
 }
 
+
 export async function user(
-  obj,
-  { id },
-  { userInfo }: { userInfo?: Record<string, unknown> } = {},
-): Promise<Partial<GraphQLUserType> | null> {
+  obj: unknown,
+  { id }: { id: string },
+  { userInfo }: Partial<GraphQLContext> = {},
+): Promise<GraphQLUserType | null> {
   if (userInfo?.reviewer) {
     const oneWeekAgo = new Date()
     oneWeekAgo.setDate(oneWeekAgo.getDate() - 7)
@@ -42,15 +41,19 @@ export async function user(
       name: "Anonymous Reviewer",
       email: "reviewer@openneuro.org",
       provider: "orcid",
+      avatar: "",
       orcid: "0000-0000-0000-0000",
       admin: false,
       blocked: false,
       location: "",
       institution: "",
+      github: "",
+      githubSynced: oneWeekAgo,
+      links: [],
       orcidConsent: true,
       created: oneWeekAgo,
       lastSeen: new Date(),
-      modified: oneWeekAgo,
+      updatedAt: oneWeekAgo,
     }
   }
 
@@ -76,19 +79,7 @@ export async function user(
   }
 }
 
-export interface UserInfo {
-  userId: string
-  admin: boolean
-  username?: string
-  provider?: string
-  providerId?: string
-  blocked?: boolean
-  orcidConsent?: boolean | null
-}
-
-export interface GraphQLContext {
-  userInfo: UserInfo | null
-}
+import type { GraphQLContext } from "../builder"
 
 type MongoOperatorValue =
   | string
@@ -202,7 +193,11 @@ export const users = async (
   }
 }
 
-export const removeUser = (obj, { id }, { userInfo }) => {
+export const removeUser = (
+  obj: unknown,
+  { id }: { id: string },
+  { userInfo }: GraphQLContext,
+) => {
   if (userInfo.admin) {
     return User.findByIdAndDelete(id).exec()
   } else {
@@ -210,7 +205,11 @@ export const removeUser = (obj, { id }, { userInfo }) => {
   }
 }
 
-export const setAdmin = (obj, { id, admin }, { userInfo }) => {
+export const setAdmin = (
+  obj: unknown,
+  { id, admin }: { id: string; admin: boolean },
+  { userInfo }: GraphQLContext,
+) => {
   if (userInfo.admin) {
     return User.findOneAndUpdate({ id }, { admin }).exec()
   } else {
@@ -220,7 +219,11 @@ export const setAdmin = (obj, { id, admin }, { userInfo }) => {
   }
 }
 
-export const setBlocked = (obj, { id, blocked }, { userInfo }) => {
+export const setBlocked = (
+  obj: unknown,
+  { id, blocked }: { id: string; blocked: boolean },
+  { userInfo }: GraphQLContext,
+) => {
   if (userInfo.admin) {
     return User.findOneAndUpdate({ id }, { blocked }).exec()
   } else {
@@ -229,9 +232,15 @@ export const setBlocked = (obj, { id, blocked }, { userInfo }) => {
 }
 
 export const updateUser = async (
-  obj,
-  { id, location, institution, links, orcidConsent },
-  { userInfo },
+  obj: unknown,
+  { id, location, institution, links, orcidConsent }: {
+    id: string
+    location?: string
+    institution?: string
+    links?: string[]
+    orcidConsent?: boolean
+  },
+  { userInfo }: GraphQLContext,
 ) => {
   if (!userInfo) {
     throw new Error("You must be logged in to update a user")
@@ -275,7 +284,11 @@ export const updateUser = async (
  * Get all events associated with a specific user (for their notifications feed).
  * Uses a single aggregation pipeline for improved performance.
  */
-export async function notifications(obj, _, { userInfo }) {
+export async function notifications(
+  obj: Pick<GraphQLUserType, "id">,
+  _: unknown,
+  { userInfo }: GraphQLContext,
+) {
   const userId = obj.id
 
   // Reviewers never have notifications

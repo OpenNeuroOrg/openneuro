@@ -5,7 +5,7 @@ import Dataset from "../../models/dataset"
  * Requires site admin access.
  */
 export async function holdDeletion(
-  _obj: Record<string, unknown>,
+  _obj: unknown,
   { datasetId, hold }: { datasetId: string; hold: boolean },
   { userInfo }: { userInfo: { admin: boolean } },
 ): Promise<boolean> {

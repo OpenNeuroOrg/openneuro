@@ -1,5 +1,6 @@
 import { createEvent } from "../../libs/events"
 import { checkDatasetWrite } from "../permissions"
+import type { GraphQLContext } from "../builder"
 
 /**
  * Create a git event
@@ -7,7 +8,7 @@ import { checkDatasetWrite } from "../permissions"
 export const createGitEvent = async (
   obj,
   { datasetId, commit, reference },
-  { user, userInfo },
+  { user, userInfo }: GraphQLContext,
 ) => {
   await checkDatasetWrite(datasetId, user, userInfo)
   const event = await createEvent(

@@ -4,11 +4,12 @@ import { getDatasetWorker } from "../../libs/datalad-service"
 import { redlock } from "../../libs/redis"
 import FileCheck from "../../models/fileCheck"
 import { checkDatasetAdmin, checkDatasetWrite } from "../permissions"
+import type { GraphQLContext } from "../builder"
 
 export const updateFileCheck = async (
   obj,
   { datasetId, hexsha, refs, remote, annexFsck },
-  { user, userInfo },
+  { user, userInfo }: GraphQLContext,
 ) => {
   await checkDatasetAdmin(datasetId, user, userInfo)
   return await FileCheck.findOneAndUpdate(
@@ -28,7 +29,7 @@ export const fsckUrl = (datasetId) => {
   }/datasets/${datasetId}/fsck`
 }
 
-export const fsckDataset = async (_, { datasetId }, { user, userInfo }) => {
+export const fsckDataset = async (_, { datasetId }, { user, userInfo }: GraphQLContext) => {
   // Anonymous users can't trigger fsck
   try {
     await checkDatasetWrite(datasetId, user, userInfo)

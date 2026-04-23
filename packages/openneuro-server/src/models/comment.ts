@@ -1,5 +1,6 @@
 import mongoose from "mongoose"
 import type { Document } from "mongoose"
+import type { UserDocument } from "./user"
 const { Schema, model } = mongoose
 
 export interface CommentDocument extends Document {
@@ -7,9 +8,7 @@ export interface CommentDocument extends Document {
   createDate: Date
   datasetId: string
   datasetLabel: string
-  user: {
-    _id: string
-  }
+  user: UserDocument
   parentId: string
   text: string
 }

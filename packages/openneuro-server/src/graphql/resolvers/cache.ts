@@ -1,13 +1,14 @@
 import { redis } from "../../libs/redis.js"
 import { clearDatasetTrees } from "../../cache/tree"
+import type { GraphQLContext } from "../builder"
 
 /**
  * Clear all cache entries for a given datasetId
  */
 export async function cacheClear(
-  obj: Record<string, unknown>,
+  obj: unknown,
   { datasetId }: { datasetId: string },
-  { userInfo }: { userInfo: { admin: boolean } },
+  { userInfo }: GraphQLContext,
 ): Promise<boolean> {
   // Check for admin and validate datasetId argument
   if (userInfo?.admin && datasetId.length == 8 && datasetId.startsWith("ds")) {

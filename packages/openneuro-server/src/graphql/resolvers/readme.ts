@@ -4,13 +4,14 @@
  */
 import { setReadme } from "../../datalad/readme"
 import { checkDatasetWrite } from "../permissions"
+import type { GraphQLContext } from "../builder"
 export { readme } from "../../datalad/readme"
 import { draftFiles } from "./draft"
 
 export async function updateReadme(
   obj,
   { datasetId, value },
-  { user, userInfo },
+  { user, userInfo }: GraphQLContext,
 ) {
   await checkDatasetWrite(datasetId, user, userInfo)
   const files = await draftFiles({ id: datasetId }, { tree: "HEAD" }, {

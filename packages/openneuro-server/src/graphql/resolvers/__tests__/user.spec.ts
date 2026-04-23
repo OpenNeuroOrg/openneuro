@@ -12,7 +12,7 @@ import mongoose, { Types } from "mongoose"
 import User from "../../../models/user"
 import DatasetEvent from "../../../models/datasetEvents"
 import { notifications, user, users } from "../user.js"
-import type { GraphQLContext } from "../user.js"
+import type { GraphQLContext } from "../../builder"
 
 vi.mock("ioredis")
 
@@ -108,13 +108,25 @@ const testUsersSeedData = [
 ]
 
 // Admin context for tests
-const adminContext: GraphQLContext = {
-  userInfo: { userId: "admin-user", admin: true, username: "adminUser" },
-}
+const adminContext = {
+  user: "admin-user",
+  userInfo: {
+    id: "admin-user",
+    userId: "admin-user",
+    admin: true,
+    username: "adminUser",
+  },
+} as GraphQLContext
 // Non-admin context for tests
-const nonAdminContext: GraphQLContext = {
-  userInfo: { userId: "normal-user", admin: false, username: "normalUser" },
-}
+const nonAdminContext = {
+  user: "normal-user",
+  userInfo: {
+    id: "normal-user",
+    userId: "normal-user",
+    admin: false,
+    username: "normalUser",
+  },
+} as GraphQLContext
 
 describe("user resolvers", () => {
   beforeAll(async () => {
@@ -392,14 +404,26 @@ describe("user resolvers", () => {
       const result = await notifications(
         { id: "reviewer" },
         null,
-        { userInfo: { reviewer: true, admin: false, blocked: false } },
+        {
+          userInfo: {
+            id: "reviewer",
+            userId: "reviewer",
+            reviewer: true,
+            admin: false,
+            blocked: false,
+          },
+        } as GraphQLContext,
       )
       expect(result).toEqual([])
     })
 
     it("does not crash when userInfo is undefined", async () => {
       await expect(
-        notifications({ id: "u1" }, null, { userInfo: undefined }),
+        notifications(
+          { id: "u1" },
+          null,
+          { userInfo: undefined } as GraphQLContext,
+        ),
       ).rejects.toThrow("Not authorized to view these notifications.")
     })
 
@@ -422,7 +446,9 @@ describe("user resolvers", () => {
       const result = await notifications(
         { id: "u1" },
         null,
-        { userInfo: { id: "u1", admin: false, userId: "u1" } },
+        {
+          userInfo: { id: "u1", admin: false, userId: "u1" },
+        } as GraphQLContext,
       )
       expect(result.length).toBe(1)
       expect(result[0].id).toBe("event-1")
@@ -434,7 +460,9 @@ describe("user resolvers", () => {
         notifications(
           { id: "u1" },
           null,
-          { userInfo: { id: "u2", admin: false, userId: "u2" } },
+          {
+            userInfo: { id: "u2", admin: false, userId: "u2" },
+          } as GraphQLContext,
         ),
       ).rejects.toThrow("Not authorized to view these notifications.")
     })
