@@ -1,31 +1,29 @@
 import { gql } from "@apollo/client"
 
 export const DOWNLOAD_DATASET = gql`
-query downloadDraft($datasetId: ID!, $tree: String) {
-  dataset(id: $datasetId) {
-    id
-    draft {
+  query downloadDraft($datasetId: ID!) {
+    dataset(id: $datasetId) {
       id
-      files(tree: $tree) {
+      draft {
         id
-        key
-        directory
-        filename
-        size
-        urls
+        files(recursive: true) {
+          id
+          directory
+          filename
+          size
+          urls
+        }
       }
     }
   }
-}
 `
 
 export const DOWNLOAD_SNAPSHOT = gql`
-  query downloadSnapshot($datasetId: ID!, $tag: String!, $tree: String) {
+  query downloadSnapshot($datasetId: ID!, $tag: String!) {
     snapshot(datasetId: $datasetId, tag: $tag) {
       id
-      files(tree: $tree) {
+      files(recursive: true) {
         id
-        key
         directory
         filename
         size
@@ -36,14 +34,13 @@ export const DOWNLOAD_SNAPSHOT = gql`
 `
 
 export const downloadDataset =
-  (client) => async ({ datasetId, snapshotTag, tree = null }) => {
+  (client) => async ({ datasetId, snapshotTag }) => {
     if (snapshotTag) {
       const { data } = await client.query({
         query: DOWNLOAD_SNAPSHOT,
         variables: {
           datasetId,
           tag: snapshotTag,
-          tree: tree,
         },
       })
       return data.snapshot.files
@@ -52,7 +49,6 @@ export const downloadDataset =
         query: DOWNLOAD_DATASET,
         variables: {
           datasetId,
-          tree,
         },
       })
       return data.dataset.draft.files
