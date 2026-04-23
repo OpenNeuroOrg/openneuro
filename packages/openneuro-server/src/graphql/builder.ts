@@ -28,7 +28,7 @@ export const builder = new SchemaBuilder<{
     ID: { Input: string; Output: string }
     Date: { Input: string; Output: Date }
     DateTime: { Input: string; Output: Date }
-    BigInt: { Input: string; Output: string }
+    BigInt: { Input: number; Output: number }
     JSON: { Input: unknown; Output: unknown }
   }
   DefaultFieldNullability: true
