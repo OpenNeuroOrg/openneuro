@@ -45,7 +45,7 @@ export async function deleteReviewer(
 export function reviewers(
   obj: { id: string },
   _: unknown,
-  { user: _user, userInfo: _userInfo }: GraphQLContext,
+  _ctx: GraphQLContext,
 ) {
   return Reviewer.find({ datasetId: obj.id }).lean().exec()
 }
