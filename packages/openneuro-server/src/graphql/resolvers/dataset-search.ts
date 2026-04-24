@@ -1,5 +1,5 @@
 import * as Sentry from "@sentry/node"
-import { elasticClient } from "../../elasticsearch/elastic-client"
+import { getElasticClient } from "../../elasticsearch/elastic-client"
 import { dataset } from "./dataset"
 import Star from "../../models/stars"
 import Subscription from "../../models/subscription"
@@ -17,7 +17,7 @@ const elasticIndex = "datasets"
  * @returns {Promise}
  */
 export const removeDatasetSearchDocument = (id) =>
-  elasticClient.delete({ id, index: elasticIndex })
+  getElasticClient().delete({ id, index: elasticIndex })
 
 /**
  * Accepts an array of fields representing the sort order for the search
@@ -101,7 +101,7 @@ export const datasetSearchConnection = async (
       // Don't include search_after if parsing fails
     }
   }
-  await elasticClient.search({
+  await getElasticClient().search({
     index: elasticIndex,
     size: first,
     q: `${q} AND public:true`,
@@ -270,7 +270,7 @@ export const advancedDatasetSearchConnection = async (
     search_after,
   }
   // Run the query
-  const result = await elasticClient.search(requestBody)
+  const result = await getElasticClient().search(requestBody)
   // Extend with relay connection pagination
   return elasticRelayConnection(
     result,
