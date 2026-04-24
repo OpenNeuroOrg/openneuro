@@ -1685,6 +1685,222 @@ export type Recently_Published_DatasetsQuery = {
   } | null
 }
 
+export type GetDatasetEventsQueryVariables = Exact<{
+  datasetId: Scalars["ID"]["input"]
+}>
+
+export type GetDatasetEventsQuery = {
+  __typename?: "Query"
+  dataset?: {
+    __typename?: "Dataset"
+    events?:
+      | Array<
+        {
+          __typename?: "DatasetEvent"
+          id?: string | null
+          note?: string | null
+          success?: boolean | null
+          timestamp?: string | null
+          hasBeenRespondedTo?: boolean | null
+          responseStatus?: ResponseStatusType | null
+          user?: {
+            __typename?: "User"
+            email?: string | null
+            name?: string | null
+            orcid?: string | null
+            id?: string | null
+          } | null
+          event?: {
+            __typename?: "DatasetEventDescription"
+            type?: string | null
+            requestId?: string | null
+            targetUserId?: string | null
+            resolutionStatus?: ResponseStatusType | null
+          } | null
+        } | null
+      >
+      | null
+  } | null
+}
+
+export type SaveAdminNoteMutationVariables = Exact<{
+  datasetId: Scalars["ID"]["input"]
+  note: Scalars["String"]["input"]
+}>
+
+export type SaveAdminNoteMutation = {
+  __typename?: "Mutation"
+  saveAdminNote?: { __typename?: "DatasetEvent"; note?: string | null } | null
+}
+
+export type UpdateAdminNoteMutationVariables = Exact<{
+  note: Scalars["String"]["input"]
+  datasetId: Scalars["ID"]["input"]
+  saveAdminNoteId?: InputMaybe<Scalars["ID"]["input"]>
+}>
+
+export type UpdateAdminNoteMutation = {
+  __typename?: "Mutation"
+  saveAdminNote?: {
+    __typename?: "DatasetEvent"
+    id?: string | null
+    note?: string | null
+  } | null
+}
+
+export type ProcessContributorRequestMutationVariables = Exact<{
+  datasetId: Scalars["ID"]["input"]
+  requestId: Scalars["ID"]["input"]
+  targetUserId: Scalars["ID"]["input"]
+  resolutionStatus: ResponseStatusType
+  reason?: InputMaybe<Scalars["String"]["input"]>
+}>
+
+export type ProcessContributorRequestMutation = {
+  __typename?: "Mutation"
+  processContributorRequest?: {
+    __typename?: "DatasetEvent"
+    id?: string | null
+    note?: string | null
+    event?: {
+      __typename?: "DatasetEventDescription"
+      type?: string | null
+      requestId?: string | null
+      resolutionStatus?: ResponseStatusType | null
+    } | null
+  } | null
+}
+
+export type UpdateEventStatusMutationVariables = Exact<{
+  eventId: Scalars["ID"]["input"]
+  status: NotificationStatusType
+}>
+
+export type UpdateEventStatusMutation = {
+  __typename?: "Mutation"
+  updateEventStatus?: {
+    __typename?: "UserNotificationStatus"
+    status: NotificationStatusType
+  } | null
+}
+
+export type CreateContributorRequestEventMutationVariables = Exact<{
+  datasetId: Scalars["ID"]["input"]
+}>
+
+export type CreateContributorRequestEventMutation = {
+  __typename?: "Mutation"
+  createContributorRequestEvent?: {
+    __typename?: "DatasetEvent"
+    id?: string | null
+    timestamp?: string | null
+    success?: boolean | null
+    note?: string | null
+    event?:
+      | { __typename?: "DatasetEventDescription"; type?: string | null }
+      | null
+  } | null
+}
+
+export type DatasetEventsQueryVariables = Exact<{
+  datasetId: Scalars["ID"]["input"]
+}>
+
+export type DatasetEventsQuery = {
+  __typename?: "Query"
+  dataset?: {
+    __typename?: "Dataset"
+    id: string
+    events?:
+      | Array<
+        {
+          __typename?: "DatasetEvent"
+          id?: string | null
+          timestamp?: string | null
+          success?: boolean | null
+          note?: string | null
+          user?: {
+            __typename?: "User"
+            id?: string | null
+            name?: string | null
+          } | null
+          event?: {
+            __typename?: "DatasetEventDescription"
+            type?: string | null
+          } | null
+        } | null
+      >
+      | null
+  } | null
+}
+
+export type CreateContributorCitationEventMutationVariables = Exact<{
+  datasetId: Scalars["ID"]["input"]
+  targetUserId: Scalars["ID"]["input"]
+  contributorData: ContributorInput
+}>
+
+export type CreateContributorCitationEventMutation = {
+  __typename?: "Mutation"
+  createContributorCitationEvent?: {
+    __typename?: "DatasetEvent"
+    id?: string | null
+    timestamp?: string | null
+    success?: boolean | null
+    note?: string | null
+    user?:
+      | { __typename?: "User"; id?: string | null; name?: string | null }
+      | null
+    event?: {
+      __typename?: "DatasetEventDescription"
+      type?: string | null
+      resolutionStatus?: ResponseStatusType | null
+      contributorData?: {
+        __typename?: "Contributor"
+        name: string
+        givenName?: string | null
+        familyName?: string | null
+        orcid?: string | null
+        contributorType: string
+        order?: number | null
+      } | null
+    } | null
+  } | null
+}
+
+export type ProcessContributorCitationMutationVariables = Exact<{
+  eventId: Scalars["ID"]["input"]
+  status: ResponseStatusType
+}>
+
+export type ProcessContributorCitationMutation = {
+  __typename?: "Mutation"
+  processContributorCitation?: {
+    __typename?: "DatasetEvent"
+    id?: string | null
+    timestamp?: string | null
+    success?: boolean | null
+    user?:
+      | { __typename?: "User"; id?: string | null; name?: string | null }
+      | null
+    event?: {
+      __typename?: "DatasetEventDescription"
+      type?: string | null
+      targetUserId?: string | null
+      resolutionStatus?: ResponseStatusType | null
+      contributorData?: {
+        __typename?: "Contributor"
+        name: string
+        givenName?: string | null
+        familyName?: string | null
+        orcid?: string | null
+        contributorType: string
+        order?: number | null
+      } | null
+    } | null
+  } | null
+}
+
 export type UserQueryVariables = Exact<{
   userId: Scalars["ID"]["input"]
 }>
@@ -3949,6 +4165,891 @@ export const Recently_Published_DatasetsDocument = {
 } as unknown as DocumentNode<
   Recently_Published_DatasetsQuery,
   Recently_Published_DatasetsQueryVariables
+>
+export const GetDatasetEventsDocument = {
+  "kind": "Document",
+  "definitions": [{
+    "kind": "OperationDefinition",
+    "operation": "query",
+    "name": { "kind": "Name", "value": "GetDatasetEvents" },
+    "variableDefinitions": [{
+      "kind": "VariableDefinition",
+      "variable": {
+        "kind": "Variable",
+        "name": { "kind": "Name", "value": "datasetId" },
+      },
+      "type": {
+        "kind": "NonNullType",
+        "type": {
+          "kind": "NamedType",
+          "name": { "kind": "Name", "value": "ID" },
+        },
+      },
+    }],
+    "selectionSet": {
+      "kind": "SelectionSet",
+      "selections": [{
+        "kind": "Field",
+        "name": { "kind": "Name", "value": "dataset" },
+        "arguments": [{
+          "kind": "Argument",
+          "name": { "kind": "Name", "value": "id" },
+          "value": {
+            "kind": "Variable",
+            "name": { "kind": "Name", "value": "datasetId" },
+          },
+        }],
+        "selectionSet": {
+          "kind": "SelectionSet",
+          "selections": [{
+            "kind": "Field",
+            "name": { "kind": "Name", "value": "events" },
+            "selectionSet": {
+              "kind": "SelectionSet",
+              "selections": [{
+                "kind": "Field",
+                "name": { "kind": "Name", "value": "id" },
+              }, {
+                "kind": "Field",
+                "name": { "kind": "Name", "value": "note" },
+              }, {
+                "kind": "Field",
+                "name": { "kind": "Name", "value": "success" },
+              }, {
+                "kind": "Field",
+                "name": { "kind": "Name", "value": "timestamp" },
+              }, {
+                "kind": "Field",
+                "name": { "kind": "Name", "value": "user" },
+                "selectionSet": {
+                  "kind": "SelectionSet",
+                  "selections": [{
+                    "kind": "Field",
+                    "name": { "kind": "Name", "value": "email" },
+                  }, {
+                    "kind": "Field",
+                    "name": { "kind": "Name", "value": "name" },
+                  }, {
+                    "kind": "Field",
+                    "name": { "kind": "Name", "value": "orcid" },
+                  }, {
+                    "kind": "Field",
+                    "name": { "kind": "Name", "value": "id" },
+                  }],
+                },
+              }, {
+                "kind": "Field",
+                "name": { "kind": "Name", "value": "event" },
+                "selectionSet": {
+                  "kind": "SelectionSet",
+                  "selections": [{
+                    "kind": "Field",
+                    "name": { "kind": "Name", "value": "type" },
+                  }, {
+                    "kind": "Field",
+                    "name": { "kind": "Name", "value": "requestId" },
+                  }, {
+                    "kind": "Field",
+                    "name": { "kind": "Name", "value": "targetUserId" },
+                  }, {
+                    "kind": "Field",
+                    "name": { "kind": "Name", "value": "resolutionStatus" },
+                  }],
+                },
+              }, {
+                "kind": "Field",
+                "name": { "kind": "Name", "value": "hasBeenRespondedTo" },
+              }, {
+                "kind": "Field",
+                "name": { "kind": "Name", "value": "responseStatus" },
+              }],
+            },
+          }],
+        },
+      }],
+    },
+  }],
+} as unknown as DocumentNode<
+  GetDatasetEventsQuery,
+  GetDatasetEventsQueryVariables
+>
+export const SaveAdminNoteDocument = {
+  "kind": "Document",
+  "definitions": [{
+    "kind": "OperationDefinition",
+    "operation": "mutation",
+    "name": { "kind": "Name", "value": "SaveAdminNote" },
+    "variableDefinitions": [{
+      "kind": "VariableDefinition",
+      "variable": {
+        "kind": "Variable",
+        "name": { "kind": "Name", "value": "datasetId" },
+      },
+      "type": {
+        "kind": "NonNullType",
+        "type": {
+          "kind": "NamedType",
+          "name": { "kind": "Name", "value": "ID" },
+        },
+      },
+    }, {
+      "kind": "VariableDefinition",
+      "variable": {
+        "kind": "Variable",
+        "name": { "kind": "Name", "value": "note" },
+      },
+      "type": {
+        "kind": "NonNullType",
+        "type": {
+          "kind": "NamedType",
+          "name": { "kind": "Name", "value": "String" },
+        },
+      },
+    }],
+    "selectionSet": {
+      "kind": "SelectionSet",
+      "selections": [{
+        "kind": "Field",
+        "name": { "kind": "Name", "value": "saveAdminNote" },
+        "arguments": [{
+          "kind": "Argument",
+          "name": { "kind": "Name", "value": "datasetId" },
+          "value": {
+            "kind": "Variable",
+            "name": { "kind": "Name", "value": "datasetId" },
+          },
+        }, {
+          "kind": "Argument",
+          "name": { "kind": "Name", "value": "note" },
+          "value": {
+            "kind": "Variable",
+            "name": { "kind": "Name", "value": "note" },
+          },
+        }],
+        "selectionSet": {
+          "kind": "SelectionSet",
+          "selections": [{
+            "kind": "Field",
+            "name": { "kind": "Name", "value": "note" },
+          }],
+        },
+      }],
+    },
+  }],
+} as unknown as DocumentNode<
+  SaveAdminNoteMutation,
+  SaveAdminNoteMutationVariables
+>
+export const UpdateAdminNoteDocument = {
+  "kind": "Document",
+  "definitions": [{
+    "kind": "OperationDefinition",
+    "operation": "mutation",
+    "name": { "kind": "Name", "value": "UpdateAdminNote" },
+    "variableDefinitions": [{
+      "kind": "VariableDefinition",
+      "variable": {
+        "kind": "Variable",
+        "name": { "kind": "Name", "value": "note" },
+      },
+      "type": {
+        "kind": "NonNullType",
+        "type": {
+          "kind": "NamedType",
+          "name": { "kind": "Name", "value": "String" },
+        },
+      },
+    }, {
+      "kind": "VariableDefinition",
+      "variable": {
+        "kind": "Variable",
+        "name": { "kind": "Name", "value": "datasetId" },
+      },
+      "type": {
+        "kind": "NonNullType",
+        "type": {
+          "kind": "NamedType",
+          "name": { "kind": "Name", "value": "ID" },
+        },
+      },
+    }, {
+      "kind": "VariableDefinition",
+      "variable": {
+        "kind": "Variable",
+        "name": { "kind": "Name", "value": "saveAdminNoteId" },
+      },
+      "type": {
+        "kind": "NamedType",
+        "name": { "kind": "Name", "value": "ID" },
+      },
+    }],
+    "selectionSet": {
+      "kind": "SelectionSet",
+      "selections": [{
+        "kind": "Field",
+        "name": { "kind": "Name", "value": "saveAdminNote" },
+        "arguments": [{
+          "kind": "Argument",
+          "name": { "kind": "Name", "value": "note" },
+          "value": {
+            "kind": "Variable",
+            "name": { "kind": "Name", "value": "note" },
+          },
+        }, {
+          "kind": "Argument",
+          "name": { "kind": "Name", "value": "datasetId" },
+          "value": {
+            "kind": "Variable",
+            "name": { "kind": "Name", "value": "datasetId" },
+          },
+        }, {
+          "kind": "Argument",
+          "name": { "kind": "Name", "value": "id" },
+          "value": {
+            "kind": "Variable",
+            "name": { "kind": "Name", "value": "saveAdminNoteId" },
+          },
+        }],
+        "selectionSet": {
+          "kind": "SelectionSet",
+          "selections": [{
+            "kind": "Field",
+            "name": { "kind": "Name", "value": "id" },
+          }, { "kind": "Field", "name": { "kind": "Name", "value": "note" } }],
+        },
+      }],
+    },
+  }],
+} as unknown as DocumentNode<
+  UpdateAdminNoteMutation,
+  UpdateAdminNoteMutationVariables
+>
+export const ProcessContributorRequestDocument = {
+  "kind": "Document",
+  "definitions": [{
+    "kind": "OperationDefinition",
+    "operation": "mutation",
+    "name": { "kind": "Name", "value": "ProcessContributorRequest" },
+    "variableDefinitions": [{
+      "kind": "VariableDefinition",
+      "variable": {
+        "kind": "Variable",
+        "name": { "kind": "Name", "value": "datasetId" },
+      },
+      "type": {
+        "kind": "NonNullType",
+        "type": {
+          "kind": "NamedType",
+          "name": { "kind": "Name", "value": "ID" },
+        },
+      },
+    }, {
+      "kind": "VariableDefinition",
+      "variable": {
+        "kind": "Variable",
+        "name": { "kind": "Name", "value": "requestId" },
+      },
+      "type": {
+        "kind": "NonNullType",
+        "type": {
+          "kind": "NamedType",
+          "name": { "kind": "Name", "value": "ID" },
+        },
+      },
+    }, {
+      "kind": "VariableDefinition",
+      "variable": {
+        "kind": "Variable",
+        "name": { "kind": "Name", "value": "targetUserId" },
+      },
+      "type": {
+        "kind": "NonNullType",
+        "type": {
+          "kind": "NamedType",
+          "name": { "kind": "Name", "value": "ID" },
+        },
+      },
+    }, {
+      "kind": "VariableDefinition",
+      "variable": {
+        "kind": "Variable",
+        "name": { "kind": "Name", "value": "resolutionStatus" },
+      },
+      "type": {
+        "kind": "NonNullType",
+        "type": {
+          "kind": "NamedType",
+          "name": { "kind": "Name", "value": "ResponseStatusType" },
+        },
+      },
+    }, {
+      "kind": "VariableDefinition",
+      "variable": {
+        "kind": "Variable",
+        "name": { "kind": "Name", "value": "reason" },
+      },
+      "type": {
+        "kind": "NamedType",
+        "name": { "kind": "Name", "value": "String" },
+      },
+    }],
+    "selectionSet": {
+      "kind": "SelectionSet",
+      "selections": [{
+        "kind": "Field",
+        "name": { "kind": "Name", "value": "processContributorRequest" },
+        "arguments": [{
+          "kind": "Argument",
+          "name": { "kind": "Name", "value": "datasetId" },
+          "value": {
+            "kind": "Variable",
+            "name": { "kind": "Name", "value": "datasetId" },
+          },
+        }, {
+          "kind": "Argument",
+          "name": { "kind": "Name", "value": "requestId" },
+          "value": {
+            "kind": "Variable",
+            "name": { "kind": "Name", "value": "requestId" },
+          },
+        }, {
+          "kind": "Argument",
+          "name": { "kind": "Name", "value": "targetUserId" },
+          "value": {
+            "kind": "Variable",
+            "name": { "kind": "Name", "value": "targetUserId" },
+          },
+        }, {
+          "kind": "Argument",
+          "name": { "kind": "Name", "value": "resolutionStatus" },
+          "value": {
+            "kind": "Variable",
+            "name": { "kind": "Name", "value": "resolutionStatus" },
+          },
+        }, {
+          "kind": "Argument",
+          "name": { "kind": "Name", "value": "reason" },
+          "value": {
+            "kind": "Variable",
+            "name": { "kind": "Name", "value": "reason" },
+          },
+        }],
+        "selectionSet": {
+          "kind": "SelectionSet",
+          "selections": [{
+            "kind": "Field",
+            "name": { "kind": "Name", "value": "id" },
+          }, {
+            "kind": "Field",
+            "name": { "kind": "Name", "value": "event" },
+            "selectionSet": {
+              "kind": "SelectionSet",
+              "selections": [{
+                "kind": "Field",
+                "name": { "kind": "Name", "value": "type" },
+              }, {
+                "kind": "Field",
+                "name": { "kind": "Name", "value": "requestId" },
+              }, {
+                "kind": "Field",
+                "name": { "kind": "Name", "value": "resolutionStatus" },
+              }],
+            },
+          }, { "kind": "Field", "name": { "kind": "Name", "value": "note" } }],
+        },
+      }],
+    },
+  }],
+} as unknown as DocumentNode<
+  ProcessContributorRequestMutation,
+  ProcessContributorRequestMutationVariables
+>
+export const UpdateEventStatusDocument = {
+  "kind": "Document",
+  "definitions": [{
+    "kind": "OperationDefinition",
+    "operation": "mutation",
+    "name": { "kind": "Name", "value": "UpdateEventStatus" },
+    "variableDefinitions": [{
+      "kind": "VariableDefinition",
+      "variable": {
+        "kind": "Variable",
+        "name": { "kind": "Name", "value": "eventId" },
+      },
+      "type": {
+        "kind": "NonNullType",
+        "type": {
+          "kind": "NamedType",
+          "name": { "kind": "Name", "value": "ID" },
+        },
+      },
+    }, {
+      "kind": "VariableDefinition",
+      "variable": {
+        "kind": "Variable",
+        "name": { "kind": "Name", "value": "status" },
+      },
+      "type": {
+        "kind": "NonNullType",
+        "type": {
+          "kind": "NamedType",
+          "name": { "kind": "Name", "value": "NotificationStatusType" },
+        },
+      },
+    }],
+    "selectionSet": {
+      "kind": "SelectionSet",
+      "selections": [{
+        "kind": "Field",
+        "name": { "kind": "Name", "value": "updateEventStatus" },
+        "arguments": [{
+          "kind": "Argument",
+          "name": { "kind": "Name", "value": "eventId" },
+          "value": {
+            "kind": "Variable",
+            "name": { "kind": "Name", "value": "eventId" },
+          },
+        }, {
+          "kind": "Argument",
+          "name": { "kind": "Name", "value": "status" },
+          "value": {
+            "kind": "Variable",
+            "name": { "kind": "Name", "value": "status" },
+          },
+        }],
+        "selectionSet": {
+          "kind": "SelectionSet",
+          "selections": [{
+            "kind": "Field",
+            "name": { "kind": "Name", "value": "status" },
+          }],
+        },
+      }],
+    },
+  }],
+} as unknown as DocumentNode<
+  UpdateEventStatusMutation,
+  UpdateEventStatusMutationVariables
+>
+export const CreateContributorRequestEventDocument = {
+  "kind": "Document",
+  "definitions": [{
+    "kind": "OperationDefinition",
+    "operation": "mutation",
+    "name": { "kind": "Name", "value": "CreateContributorRequestEvent" },
+    "variableDefinitions": [{
+      "kind": "VariableDefinition",
+      "variable": {
+        "kind": "Variable",
+        "name": { "kind": "Name", "value": "datasetId" },
+      },
+      "type": {
+        "kind": "NonNullType",
+        "type": {
+          "kind": "NamedType",
+          "name": { "kind": "Name", "value": "ID" },
+        },
+      },
+    }],
+    "selectionSet": {
+      "kind": "SelectionSet",
+      "selections": [{
+        "kind": "Field",
+        "name": { "kind": "Name", "value": "createContributorRequestEvent" },
+        "arguments": [{
+          "kind": "Argument",
+          "name": { "kind": "Name", "value": "datasetId" },
+          "value": {
+            "kind": "Variable",
+            "name": { "kind": "Name", "value": "datasetId" },
+          },
+        }],
+        "selectionSet": {
+          "kind": "SelectionSet",
+          "selections": [{
+            "kind": "Field",
+            "name": { "kind": "Name", "value": "id" },
+          }, {
+            "kind": "Field",
+            "name": { "kind": "Name", "value": "timestamp" },
+          }, {
+            "kind": "Field",
+            "name": { "kind": "Name", "value": "event" },
+            "selectionSet": {
+              "kind": "SelectionSet",
+              "selections": [{
+                "kind": "Field",
+                "name": { "kind": "Name", "value": "type" },
+              }],
+            },
+          }, {
+            "kind": "Field",
+            "name": { "kind": "Name", "value": "success" },
+          }, { "kind": "Field", "name": { "kind": "Name", "value": "note" } }],
+        },
+      }],
+    },
+  }],
+} as unknown as DocumentNode<
+  CreateContributorRequestEventMutation,
+  CreateContributorRequestEventMutationVariables
+>
+export const DatasetEventsDocument = {
+  "kind": "Document",
+  "definitions": [{
+    "kind": "OperationDefinition",
+    "operation": "query",
+    "name": { "kind": "Name", "value": "DatasetEvents" },
+    "variableDefinitions": [{
+      "kind": "VariableDefinition",
+      "variable": {
+        "kind": "Variable",
+        "name": { "kind": "Name", "value": "datasetId" },
+      },
+      "type": {
+        "kind": "NonNullType",
+        "type": {
+          "kind": "NamedType",
+          "name": { "kind": "Name", "value": "ID" },
+        },
+      },
+    }],
+    "selectionSet": {
+      "kind": "SelectionSet",
+      "selections": [{
+        "kind": "Field",
+        "name": { "kind": "Name", "value": "dataset" },
+        "arguments": [{
+          "kind": "Argument",
+          "name": { "kind": "Name", "value": "id" },
+          "value": {
+            "kind": "Variable",
+            "name": { "kind": "Name", "value": "datasetId" },
+          },
+        }],
+        "selectionSet": {
+          "kind": "SelectionSet",
+          "selections": [{
+            "kind": "Field",
+            "name": { "kind": "Name", "value": "id" },
+          }, {
+            "kind": "Field",
+            "name": { "kind": "Name", "value": "events" },
+            "selectionSet": {
+              "kind": "SelectionSet",
+              "selections": [{
+                "kind": "Field",
+                "name": { "kind": "Name", "value": "id" },
+              }, {
+                "kind": "Field",
+                "name": { "kind": "Name", "value": "timestamp" },
+              }, {
+                "kind": "Field",
+                "name": { "kind": "Name", "value": "user" },
+                "selectionSet": {
+                  "kind": "SelectionSet",
+                  "selections": [{
+                    "kind": "Field",
+                    "name": { "kind": "Name", "value": "id" },
+                  }, {
+                    "kind": "Field",
+                    "name": { "kind": "Name", "value": "name" },
+                  }],
+                },
+              }, {
+                "kind": "Field",
+                "name": { "kind": "Name", "value": "event" },
+                "selectionSet": {
+                  "kind": "SelectionSet",
+                  "selections": [{
+                    "kind": "Field",
+                    "name": { "kind": "Name", "value": "type" },
+                  }],
+                },
+              }, {
+                "kind": "Field",
+                "name": { "kind": "Name", "value": "success" },
+              }, {
+                "kind": "Field",
+                "name": { "kind": "Name", "value": "note" },
+              }],
+            },
+          }],
+        },
+      }],
+    },
+  }],
+} as unknown as DocumentNode<DatasetEventsQuery, DatasetEventsQueryVariables>
+export const CreateContributorCitationEventDocument = {
+  "kind": "Document",
+  "definitions": [{
+    "kind": "OperationDefinition",
+    "operation": "mutation",
+    "name": { "kind": "Name", "value": "CreateContributorCitationEvent" },
+    "variableDefinitions": [{
+      "kind": "VariableDefinition",
+      "variable": {
+        "kind": "Variable",
+        "name": { "kind": "Name", "value": "datasetId" },
+      },
+      "type": {
+        "kind": "NonNullType",
+        "type": {
+          "kind": "NamedType",
+          "name": { "kind": "Name", "value": "ID" },
+        },
+      },
+    }, {
+      "kind": "VariableDefinition",
+      "variable": {
+        "kind": "Variable",
+        "name": { "kind": "Name", "value": "targetUserId" },
+      },
+      "type": {
+        "kind": "NonNullType",
+        "type": {
+          "kind": "NamedType",
+          "name": { "kind": "Name", "value": "ID" },
+        },
+      },
+    }, {
+      "kind": "VariableDefinition",
+      "variable": {
+        "kind": "Variable",
+        "name": { "kind": "Name", "value": "contributorData" },
+      },
+      "type": {
+        "kind": "NonNullType",
+        "type": {
+          "kind": "NamedType",
+          "name": { "kind": "Name", "value": "ContributorInput" },
+        },
+      },
+    }],
+    "selectionSet": {
+      "kind": "SelectionSet",
+      "selections": [{
+        "kind": "Field",
+        "name": { "kind": "Name", "value": "createContributorCitationEvent" },
+        "arguments": [{
+          "kind": "Argument",
+          "name": { "kind": "Name", "value": "datasetId" },
+          "value": {
+            "kind": "Variable",
+            "name": { "kind": "Name", "value": "datasetId" },
+          },
+        }, {
+          "kind": "Argument",
+          "name": { "kind": "Name", "value": "targetUserId" },
+          "value": {
+            "kind": "Variable",
+            "name": { "kind": "Name", "value": "targetUserId" },
+          },
+        }, {
+          "kind": "Argument",
+          "name": { "kind": "Name", "value": "contributorData" },
+          "value": {
+            "kind": "Variable",
+            "name": { "kind": "Name", "value": "contributorData" },
+          },
+        }],
+        "selectionSet": {
+          "kind": "SelectionSet",
+          "selections": [{
+            "kind": "Field",
+            "name": { "kind": "Name", "value": "id" },
+          }, {
+            "kind": "Field",
+            "name": { "kind": "Name", "value": "timestamp" },
+          }, {
+            "kind": "Field",
+            "name": { "kind": "Name", "value": "success" },
+          }, {
+            "kind": "Field",
+            "name": { "kind": "Name", "value": "user" },
+            "selectionSet": {
+              "kind": "SelectionSet",
+              "selections": [{
+                "kind": "Field",
+                "name": { "kind": "Name", "value": "id" },
+              }, {
+                "kind": "Field",
+                "name": { "kind": "Name", "value": "name" },
+              }],
+            },
+          }, {
+            "kind": "Field",
+            "name": { "kind": "Name", "value": "event" },
+            "selectionSet": {
+              "kind": "SelectionSet",
+              "selections": [{
+                "kind": "Field",
+                "name": { "kind": "Name", "value": "type" },
+              }, {
+                "kind": "Field",
+                "name": { "kind": "Name", "value": "resolutionStatus" },
+              }, {
+                "kind": "Field",
+                "name": { "kind": "Name", "value": "contributorData" },
+                "selectionSet": {
+                  "kind": "SelectionSet",
+                  "selections": [{
+                    "kind": "Field",
+                    "name": { "kind": "Name", "value": "name" },
+                  }, {
+                    "kind": "Field",
+                    "name": { "kind": "Name", "value": "givenName" },
+                  }, {
+                    "kind": "Field",
+                    "name": { "kind": "Name", "value": "familyName" },
+                  }, {
+                    "kind": "Field",
+                    "name": { "kind": "Name", "value": "orcid" },
+                  }, {
+                    "kind": "Field",
+                    "name": { "kind": "Name", "value": "contributorType" },
+                  }, {
+                    "kind": "Field",
+                    "name": { "kind": "Name", "value": "order" },
+                  }],
+                },
+              }],
+            },
+          }, { "kind": "Field", "name": { "kind": "Name", "value": "note" } }],
+        },
+      }],
+    },
+  }],
+} as unknown as DocumentNode<
+  CreateContributorCitationEventMutation,
+  CreateContributorCitationEventMutationVariables
+>
+export const ProcessContributorCitationDocument = {
+  "kind": "Document",
+  "definitions": [{
+    "kind": "OperationDefinition",
+    "operation": "mutation",
+    "name": { "kind": "Name", "value": "ProcessContributorCitation" },
+    "variableDefinitions": [{
+      "kind": "VariableDefinition",
+      "variable": {
+        "kind": "Variable",
+        "name": { "kind": "Name", "value": "eventId" },
+      },
+      "type": {
+        "kind": "NonNullType",
+        "type": {
+          "kind": "NamedType",
+          "name": { "kind": "Name", "value": "ID" },
+        },
+      },
+    }, {
+      "kind": "VariableDefinition",
+      "variable": {
+        "kind": "Variable",
+        "name": { "kind": "Name", "value": "status" },
+      },
+      "type": {
+        "kind": "NonNullType",
+        "type": {
+          "kind": "NamedType",
+          "name": { "kind": "Name", "value": "ResponseStatusType" },
+        },
+      },
+    }],
+    "selectionSet": {
+      "kind": "SelectionSet",
+      "selections": [{
+        "kind": "Field",
+        "name": { "kind": "Name", "value": "processContributorCitation" },
+        "arguments": [{
+          "kind": "Argument",
+          "name": { "kind": "Name", "value": "eventId" },
+          "value": {
+            "kind": "Variable",
+            "name": { "kind": "Name", "value": "eventId" },
+          },
+        }, {
+          "kind": "Argument",
+          "name": { "kind": "Name", "value": "status" },
+          "value": {
+            "kind": "Variable",
+            "name": { "kind": "Name", "value": "status" },
+          },
+        }],
+        "selectionSet": {
+          "kind": "SelectionSet",
+          "selections": [{
+            "kind": "Field",
+            "name": { "kind": "Name", "value": "id" },
+          }, {
+            "kind": "Field",
+            "name": { "kind": "Name", "value": "timestamp" },
+          }, {
+            "kind": "Field",
+            "name": { "kind": "Name", "value": "success" },
+          }, {
+            "kind": "Field",
+            "name": { "kind": "Name", "value": "user" },
+            "selectionSet": {
+              "kind": "SelectionSet",
+              "selections": [{
+                "kind": "Field",
+                "name": { "kind": "Name", "value": "id" },
+              }, {
+                "kind": "Field",
+                "name": { "kind": "Name", "value": "name" },
+              }],
+            },
+          }, {
+            "kind": "Field",
+            "name": { "kind": "Name", "value": "event" },
+            "selectionSet": {
+              "kind": "SelectionSet",
+              "selections": [{
+                "kind": "Field",
+                "name": { "kind": "Name", "value": "type" },
+              }, {
+                "kind": "Field",
+                "name": { "kind": "Name", "value": "targetUserId" },
+              }, {
+                "kind": "Field",
+                "name": { "kind": "Name", "value": "contributorData" },
+                "selectionSet": {
+                  "kind": "SelectionSet",
+                  "selections": [{
+                    "kind": "Field",
+                    "name": { "kind": "Name", "value": "name" },
+                  }, {
+                    "kind": "Field",
+                    "name": { "kind": "Name", "value": "givenName" },
+                  }, {
+                    "kind": "Field",
+                    "name": { "kind": "Name", "value": "familyName" },
+                  }, {
+                    "kind": "Field",
+                    "name": { "kind": "Name", "value": "orcid" },
+                  }, {
+                    "kind": "Field",
+                    "name": { "kind": "Name", "value": "contributorType" },
+                  }, {
+                    "kind": "Field",
+                    "name": { "kind": "Name", "value": "order" },
+                  }],
+                },
+              }, {
+                "kind": "Field",
+                "name": { "kind": "Name", "value": "resolutionStatus" },
+              }],
+            },
+          }],
+        },
+      }],
+    },
+  }],
+} as unknown as DocumentNode<
+  ProcessContributorCitationMutation,
+  ProcessContributorCitationMutationVariables
 >
 export const UserDocument = {
   "kind": "Document",

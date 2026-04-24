@@ -70,6 +70,24 @@ type Documents = {
     typeof types.Top_Viewed_DatasetsDocument
   "\n  query recently_published_datasets {\n    datasets(\n      first: 12\n      orderBy: { publishDate: descending }\n      filterBy: { public: true }\n    ) {\n      edges {\n        node {\n          id\n          publishDate\n          latestSnapshot {\n            tag\n            summary {\n              primaryModality\n            }\n            description {\n              Name\n            }\n          }\n        }\n      }\n    }\n  }\n":
     typeof types.Recently_Published_DatasetsDocument
+  "\n  query GetDatasetEvents($datasetId: ID!) {\n    dataset(id: $datasetId) {\n      events {\n        id\n        note\n        success\n        timestamp\n        user {\n          email\n          name\n          orcid\n          id\n        }\n        event {\n          type\n          requestId\n          targetUserId\n          resolutionStatus\n        }\n        hasBeenRespondedTo\n        responseStatus\n      }\n    }\n  }\n":
+    typeof types.GetDatasetEventsDocument
+  "\n  mutation SaveAdminNote($datasetId: ID!, $note: String!) {\n    saveAdminNote(datasetId: $datasetId, note: $note) {\n      note\n    }\n  }\n":
+    typeof types.SaveAdminNoteDocument
+  "\n  mutation UpdateAdminNote(\n    $note: String!\n    $datasetId: ID!\n    $saveAdminNoteId: ID\n  ) {\n    saveAdminNote(note: $note, datasetId: $datasetId, id: $saveAdminNoteId) {\n      id\n      note\n    }\n  }\n":
+    typeof types.UpdateAdminNoteDocument
+  "\n  mutation ProcessContributorRequest(\n    $datasetId: ID!\n    $requestId: ID!\n    $targetUserId: ID!\n    $resolutionStatus: ResponseStatusType!\n    $reason: String\n  ) {\n    processContributorRequest(\n      datasetId: $datasetId\n      requestId: $requestId\n      targetUserId: $targetUserId\n      resolutionStatus: $resolutionStatus\n      reason: $reason\n    ) {\n      id\n      event {\n        type\n        requestId\n        resolutionStatus\n      }\n      note\n    }\n  }\n":
+    typeof types.ProcessContributorRequestDocument
+  "\n  mutation UpdateEventStatus($eventId: ID!, $status: NotificationStatusType!) {\n    updateEventStatus(eventId: $eventId, status: $status) {\n      status\n    }\n  }\n":
+    typeof types.UpdateEventStatusDocument
+  "\n  mutation CreateContributorRequestEvent($datasetId: ID!) {\n    createContributorRequestEvent(datasetId: $datasetId) {\n      id\n      timestamp\n      event {\n        type\n      }\n      success\n      note\n    }\n  }\n":
+    typeof types.CreateContributorRequestEventDocument
+  "\n  query DatasetEvents($datasetId: ID!) {\n    dataset(id: $datasetId) {\n      id\n      events {\n        id\n        timestamp\n        user {\n          id\n          name\n        }\n        event {\n          type\n        }\n        success\n        note\n      }\n    }\n  }\n":
+    typeof types.DatasetEventsDocument
+  "\n  mutation CreateContributorCitationEvent(\n    $datasetId: ID!\n    $targetUserId: ID!\n    $contributorData: ContributorInput!\n  ) {\n    createContributorCitationEvent(\n      datasetId: $datasetId\n      targetUserId: $targetUserId\n      contributorData: $contributorData\n    ) {\n      id\n      timestamp\n      success\n      user {\n        id\n        name\n      }\n      event {\n        type\n        resolutionStatus\n        contributorData {\n          name\n          givenName\n          familyName\n          orcid\n          contributorType\n          order\n        }\n      }\n      note\n    }\n  }\n":
+    typeof types.CreateContributorCitationEventDocument
+  "\n  mutation ProcessContributorCitation($eventId: ID!, $status: ResponseStatusType!) {\n    processContributorCitation(eventId: $eventId, status: $status) {\n      id\n      timestamp\n      success\n      user {\n        id\n        name\n      }\n      event {\n        type\n        targetUserId\n        contributorData {\n          name\n          givenName\n          familyName\n          orcid\n          contributorType\n          order\n        }\n        resolutionStatus\n      }\n    }\n  }\n":
+    typeof types.ProcessContributorCitationDocument
   "\n  query User($userId: ID!) {\n    user(id: $userId) {\n      id\n      name\n      orcid\n      email\n      avatar\n      location\n      institution\n      links\n      provider\n      admin\n      created\n      lastSeen\n      blocked\n      githubSynced\n      github\n      notifications {\n        id\n        timestamp\n        note\n        success\n        user { \n          id\n          name\n          email\n          orcid\n        }\n        event {\n          type\n          version\n          public\n          level\n          ref\n          message\n          requestId\n          targetUserId\n          reason\n          datasetId\n          resolutionStatus\n          target { \n            id\n            name\n            email\n            orcid\n          }\n          contributorData { \n            name\n            givenName\n            familyName\n            orcid\n            contributorType\n            order\n          }\n        }\n        notificationStatus {\n          status\n        }\n      }\n      orcidConsent\n    }\n  }\n":
     typeof types.UserDocument
   "\n  mutation updateUser(\n    $id: ID!\n    $location: String\n    $links: [String!]\n    $institution: String\n    $orcidConsent: Boolean \n  ) {\n    updateUser(\n      id: $id\n      location: $location\n      links: $links\n      institution: $institution\n      orcidConsent: $orcidConsent \n    ) {\n      id\n      location\n      links\n      institution\n      orcidConsent\n    }\n  }\n":
@@ -142,6 +160,24 @@ const documents: Documents = {
     types.Top_Viewed_DatasetsDocument,
   "\n  query recently_published_datasets {\n    datasets(\n      first: 12\n      orderBy: { publishDate: descending }\n      filterBy: { public: true }\n    ) {\n      edges {\n        node {\n          id\n          publishDate\n          latestSnapshot {\n            tag\n            summary {\n              primaryModality\n            }\n            description {\n              Name\n            }\n          }\n        }\n      }\n    }\n  }\n":
     types.Recently_Published_DatasetsDocument,
+  "\n  query GetDatasetEvents($datasetId: ID!) {\n    dataset(id: $datasetId) {\n      events {\n        id\n        note\n        success\n        timestamp\n        user {\n          email\n          name\n          orcid\n          id\n        }\n        event {\n          type\n          requestId\n          targetUserId\n          resolutionStatus\n        }\n        hasBeenRespondedTo\n        responseStatus\n      }\n    }\n  }\n":
+    types.GetDatasetEventsDocument,
+  "\n  mutation SaveAdminNote($datasetId: ID!, $note: String!) {\n    saveAdminNote(datasetId: $datasetId, note: $note) {\n      note\n    }\n  }\n":
+    types.SaveAdminNoteDocument,
+  "\n  mutation UpdateAdminNote(\n    $note: String!\n    $datasetId: ID!\n    $saveAdminNoteId: ID\n  ) {\n    saveAdminNote(note: $note, datasetId: $datasetId, id: $saveAdminNoteId) {\n      id\n      note\n    }\n  }\n":
+    types.UpdateAdminNoteDocument,
+  "\n  mutation ProcessContributorRequest(\n    $datasetId: ID!\n    $requestId: ID!\n    $targetUserId: ID!\n    $resolutionStatus: ResponseStatusType!\n    $reason: String\n  ) {\n    processContributorRequest(\n      datasetId: $datasetId\n      requestId: $requestId\n      targetUserId: $targetUserId\n      resolutionStatus: $resolutionStatus\n      reason: $reason\n    ) {\n      id\n      event {\n        type\n        requestId\n        resolutionStatus\n      }\n      note\n    }\n  }\n":
+    types.ProcessContributorRequestDocument,
+  "\n  mutation UpdateEventStatus($eventId: ID!, $status: NotificationStatusType!) {\n    updateEventStatus(eventId: $eventId, status: $status) {\n      status\n    }\n  }\n":
+    types.UpdateEventStatusDocument,
+  "\n  mutation CreateContributorRequestEvent($datasetId: ID!) {\n    createContributorRequestEvent(datasetId: $datasetId) {\n      id\n      timestamp\n      event {\n        type\n      }\n      success\n      note\n    }\n  }\n":
+    types.CreateContributorRequestEventDocument,
+  "\n  query DatasetEvents($datasetId: ID!) {\n    dataset(id: $datasetId) {\n      id\n      events {\n        id\n        timestamp\n        user {\n          id\n          name\n        }\n        event {\n          type\n        }\n        success\n        note\n      }\n    }\n  }\n":
+    types.DatasetEventsDocument,
+  "\n  mutation CreateContributorCitationEvent(\n    $datasetId: ID!\n    $targetUserId: ID!\n    $contributorData: ContributorInput!\n  ) {\n    createContributorCitationEvent(\n      datasetId: $datasetId\n      targetUserId: $targetUserId\n      contributorData: $contributorData\n    ) {\n      id\n      timestamp\n      success\n      user {\n        id\n        name\n      }\n      event {\n        type\n        resolutionStatus\n        contributorData {\n          name\n          givenName\n          familyName\n          orcid\n          contributorType\n          order\n        }\n      }\n      note\n    }\n  }\n":
+    types.CreateContributorCitationEventDocument,
+  "\n  mutation ProcessContributorCitation($eventId: ID!, $status: ResponseStatusType!) {\n    processContributorCitation(eventId: $eventId, status: $status) {\n      id\n      timestamp\n      success\n      user {\n        id\n        name\n      }\n      event {\n        type\n        targetUserId\n        contributorData {\n          name\n          givenName\n          familyName\n          orcid\n          contributorType\n          order\n        }\n        resolutionStatus\n      }\n    }\n  }\n":
+    types.ProcessContributorCitationDocument,
   "\n  query User($userId: ID!) {\n    user(id: $userId) {\n      id\n      name\n      orcid\n      email\n      avatar\n      location\n      institution\n      links\n      provider\n      admin\n      created\n      lastSeen\n      blocked\n      githubSynced\n      github\n      notifications {\n        id\n        timestamp\n        note\n        success\n        user { \n          id\n          name\n          email\n          orcid\n        }\n        event {\n          type\n          version\n          public\n          level\n          ref\n          message\n          requestId\n          targetUserId\n          reason\n          datasetId\n          resolutionStatus\n          target { \n            id\n            name\n            email\n            orcid\n          }\n          contributorData { \n            name\n            givenName\n            familyName\n            orcid\n            contributorType\n            order\n          }\n        }\n        notificationStatus {\n          status\n        }\n      }\n      orcidConsent\n    }\n  }\n":
     types.UserDocument,
   "\n  mutation updateUser(\n    $id: ID!\n    $location: String\n    $links: [String!]\n    $institution: String\n    $orcidConsent: Boolean \n  ) {\n    updateUser(\n      id: $id\n      location: $location\n      links: $links\n      institution: $institution\n      orcidConsent: $orcidConsent \n    ) {\n      id\n      location\n      links\n      institution\n      orcidConsent\n    }\n  }\n":
@@ -421,6 +457,87 @@ export function graphql(
     "\n  query recently_published_datasets {\n    datasets(\n      first: 12\n      orderBy: { publishDate: descending }\n      filterBy: { public: true }\n    ) {\n      edges {\n        node {\n          id\n          publishDate\n          latestSnapshot {\n            tag\n            summary {\n              primaryModality\n            }\n            description {\n              Name\n            }\n          }\n        }\n      }\n    }\n  }\n",
 ): (typeof documents)[
   "\n  query recently_published_datasets {\n    datasets(\n      first: 12\n      orderBy: { publishDate: descending }\n      filterBy: { public: true }\n    ) {\n      edges {\n        node {\n          id\n          publishDate\n          latestSnapshot {\n            tag\n            summary {\n              primaryModality\n            }\n            description {\n              Name\n            }\n          }\n        }\n      }\n    }\n  }\n"
+]
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source:
+    "\n  query GetDatasetEvents($datasetId: ID!) {\n    dataset(id: $datasetId) {\n      events {\n        id\n        note\n        success\n        timestamp\n        user {\n          email\n          name\n          orcid\n          id\n        }\n        event {\n          type\n          requestId\n          targetUserId\n          resolutionStatus\n        }\n        hasBeenRespondedTo\n        responseStatus\n      }\n    }\n  }\n",
+): (typeof documents)[
+  "\n  query GetDatasetEvents($datasetId: ID!) {\n    dataset(id: $datasetId) {\n      events {\n        id\n        note\n        success\n        timestamp\n        user {\n          email\n          name\n          orcid\n          id\n        }\n        event {\n          type\n          requestId\n          targetUserId\n          resolutionStatus\n        }\n        hasBeenRespondedTo\n        responseStatus\n      }\n    }\n  }\n"
+]
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source:
+    "\n  mutation SaveAdminNote($datasetId: ID!, $note: String!) {\n    saveAdminNote(datasetId: $datasetId, note: $note) {\n      note\n    }\n  }\n",
+): (typeof documents)[
+  "\n  mutation SaveAdminNote($datasetId: ID!, $note: String!) {\n    saveAdminNote(datasetId: $datasetId, note: $note) {\n      note\n    }\n  }\n"
+]
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source:
+    "\n  mutation UpdateAdminNote(\n    $note: String!\n    $datasetId: ID!\n    $saveAdminNoteId: ID\n  ) {\n    saveAdminNote(note: $note, datasetId: $datasetId, id: $saveAdminNoteId) {\n      id\n      note\n    }\n  }\n",
+): (typeof documents)[
+  "\n  mutation UpdateAdminNote(\n    $note: String!\n    $datasetId: ID!\n    $saveAdminNoteId: ID\n  ) {\n    saveAdminNote(note: $note, datasetId: $datasetId, id: $saveAdminNoteId) {\n      id\n      note\n    }\n  }\n"
+]
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source:
+    "\n  mutation ProcessContributorRequest(\n    $datasetId: ID!\n    $requestId: ID!\n    $targetUserId: ID!\n    $resolutionStatus: ResponseStatusType!\n    $reason: String\n  ) {\n    processContributorRequest(\n      datasetId: $datasetId\n      requestId: $requestId\n      targetUserId: $targetUserId\n      resolutionStatus: $resolutionStatus\n      reason: $reason\n    ) {\n      id\n      event {\n        type\n        requestId\n        resolutionStatus\n      }\n      note\n    }\n  }\n",
+): (typeof documents)[
+  "\n  mutation ProcessContributorRequest(\n    $datasetId: ID!\n    $requestId: ID!\n    $targetUserId: ID!\n    $resolutionStatus: ResponseStatusType!\n    $reason: String\n  ) {\n    processContributorRequest(\n      datasetId: $datasetId\n      requestId: $requestId\n      targetUserId: $targetUserId\n      resolutionStatus: $resolutionStatus\n      reason: $reason\n    ) {\n      id\n      event {\n        type\n        requestId\n        resolutionStatus\n      }\n      note\n    }\n  }\n"
+]
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source:
+    "\n  mutation UpdateEventStatus($eventId: ID!, $status: NotificationStatusType!) {\n    updateEventStatus(eventId: $eventId, status: $status) {\n      status\n    }\n  }\n",
+): (typeof documents)[
+  "\n  mutation UpdateEventStatus($eventId: ID!, $status: NotificationStatusType!) {\n    updateEventStatus(eventId: $eventId, status: $status) {\n      status\n    }\n  }\n"
+]
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source:
+    "\n  mutation CreateContributorRequestEvent($datasetId: ID!) {\n    createContributorRequestEvent(datasetId: $datasetId) {\n      id\n      timestamp\n      event {\n        type\n      }\n      success\n      note\n    }\n  }\n",
+): (typeof documents)[
+  "\n  mutation CreateContributorRequestEvent($datasetId: ID!) {\n    createContributorRequestEvent(datasetId: $datasetId) {\n      id\n      timestamp\n      event {\n        type\n      }\n      success\n      note\n    }\n  }\n"
+]
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source:
+    "\n  query DatasetEvents($datasetId: ID!) {\n    dataset(id: $datasetId) {\n      id\n      events {\n        id\n        timestamp\n        user {\n          id\n          name\n        }\n        event {\n          type\n        }\n        success\n        note\n      }\n    }\n  }\n",
+): (typeof documents)[
+  "\n  query DatasetEvents($datasetId: ID!) {\n    dataset(id: $datasetId) {\n      id\n      events {\n        id\n        timestamp\n        user {\n          id\n          name\n        }\n        event {\n          type\n        }\n        success\n        note\n      }\n    }\n  }\n"
+]
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source:
+    "\n  mutation CreateContributorCitationEvent(\n    $datasetId: ID!\n    $targetUserId: ID!\n    $contributorData: ContributorInput!\n  ) {\n    createContributorCitationEvent(\n      datasetId: $datasetId\n      targetUserId: $targetUserId\n      contributorData: $contributorData\n    ) {\n      id\n      timestamp\n      success\n      user {\n        id\n        name\n      }\n      event {\n        type\n        resolutionStatus\n        contributorData {\n          name\n          givenName\n          familyName\n          orcid\n          contributorType\n          order\n        }\n      }\n      note\n    }\n  }\n",
+): (typeof documents)[
+  "\n  mutation CreateContributorCitationEvent(\n    $datasetId: ID!\n    $targetUserId: ID!\n    $contributorData: ContributorInput!\n  ) {\n    createContributorCitationEvent(\n      datasetId: $datasetId\n      targetUserId: $targetUserId\n      contributorData: $contributorData\n    ) {\n      id\n      timestamp\n      success\n      user {\n        id\n        name\n      }\n      event {\n        type\n        resolutionStatus\n        contributorData {\n          name\n          givenName\n          familyName\n          orcid\n          contributorType\n          order\n        }\n      }\n      note\n    }\n  }\n"
+]
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source:
+    "\n  mutation ProcessContributorCitation($eventId: ID!, $status: ResponseStatusType!) {\n    processContributorCitation(eventId: $eventId, status: $status) {\n      id\n      timestamp\n      success\n      user {\n        id\n        name\n      }\n      event {\n        type\n        targetUserId\n        contributorData {\n          name\n          givenName\n          familyName\n          orcid\n          contributorType\n          order\n        }\n        resolutionStatus\n      }\n    }\n  }\n",
+): (typeof documents)[
+  "\n  mutation ProcessContributorCitation($eventId: ID!, $status: ResponseStatusType!) {\n    processContributorCitation(eventId: $eventId, status: $status) {\n      id\n      timestamp\n      success\n      user {\n        id\n        name\n      }\n      event {\n        type\n        targetUserId\n        contributorData {\n          name\n          givenName\n          familyName\n          orcid\n          contributorType\n          order\n        }\n        resolutionStatus\n      }\n    }\n  }\n"
 ]
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.

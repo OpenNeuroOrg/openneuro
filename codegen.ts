@@ -20,7 +20,6 @@ const config: CodegenConfig = {
     "!packages/openneuro-app/src/scripts/search/use-search-results.tsx",
     // Intra-file duplicates (two operations share a name):
     "!packages/openneuro-app/src/scripts/queries/dataset.ts",
-    "!packages/openneuro-app/src/scripts/queries/datasetEvents.ts",
     // Type mismatches (nullable list items vs non-nullable schema):
     "!packages/openneuro-app/src/scripts/dataset/files/files.tsx",
   ],
