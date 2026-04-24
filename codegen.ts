@@ -23,7 +23,6 @@ const config: CodegenConfig = {
     "!packages/openneuro-app/src/scripts/queries/datasetEvents.ts",
     // Type mismatches (nullable list items vs non-nullable schema):
     "!packages/openneuro-app/src/scripts/dataset/files/files.tsx",
-    "!packages/openneuro-app/src/scripts/queries/user.ts",
   ],
   generates: {
     "packages/openneuro-app/src/gql/": {

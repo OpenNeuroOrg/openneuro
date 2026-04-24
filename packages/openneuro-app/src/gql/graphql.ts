@@ -1685,6 +1685,260 @@ export type Recently_Published_DatasetsQuery = {
   } | null
 }
 
+export type UserQueryVariables = Exact<{
+  userId: Scalars["ID"]["input"]
+}>
+
+export type UserQuery = {
+  __typename?: "Query"
+  user?: {
+    __typename?: "User"
+    id?: string | null
+    name?: string | null
+    orcid?: string | null
+    email?: string | null
+    avatar?: string | null
+    location?: string | null
+    institution?: string | null
+    links?: Array<string | null> | null
+    provider?: UserProvider | null
+    admin?: boolean | null
+    created: string
+    lastSeen?: string | null
+    blocked?: boolean | null
+    githubSynced?: string | null
+    github?: string | null
+    orcidConsent?: boolean | null
+    notifications?:
+      | Array<
+        {
+          __typename?: "DatasetEvent"
+          id?: string | null
+          timestamp?: string | null
+          note?: string | null
+          success?: boolean | null
+          user?: {
+            __typename?: "User"
+            id?: string | null
+            name?: string | null
+            email?: string | null
+            orcid?: string | null
+          } | null
+          event?: {
+            __typename?: "DatasetEventDescription"
+            type?: string | null
+            version?: string | null
+            public?: boolean | null
+            level?: string | null
+            ref?: string | null
+            message?: string | null
+            requestId?: string | null
+            targetUserId?: string | null
+            reason?: string | null
+            datasetId?: string | null
+            resolutionStatus?: ResponseStatusType | null
+            target?: {
+              __typename?: "User"
+              id?: string | null
+              name?: string | null
+              email?: string | null
+              orcid?: string | null
+            } | null
+            contributorData?: {
+              __typename?: "Contributor"
+              name: string
+              givenName?: string | null
+              familyName?: string | null
+              orcid?: string | null
+              contributorType: string
+              order?: number | null
+            } | null
+          } | null
+          notificationStatus?: {
+            __typename?: "UserNotificationStatus"
+            status: NotificationStatusType
+          } | null
+        }
+      >
+      | null
+  } | null
+}
+
+export type UpdateUserMutationVariables = Exact<{
+  id: Scalars["ID"]["input"]
+  location?: InputMaybe<Scalars["String"]["input"]>
+  links?: InputMaybe<
+    Array<Scalars["String"]["input"]> | Scalars["String"]["input"]
+  >
+  institution?: InputMaybe<Scalars["String"]["input"]>
+  orcidConsent?: InputMaybe<Scalars["Boolean"]["input"]>
+}>
+
+export type UpdateUserMutation = {
+  __typename?: "Mutation"
+  updateUser?: {
+    __typename?: "User"
+    id?: string | null
+    location?: string | null
+    links?: Array<string | null> | null
+    institution?: string | null
+    orcidConsent?: boolean | null
+  } | null
+}
+
+export type UserAdvancedSearchDatasetsQueryVariables = Exact<{
+  query: DatasetSearchInput
+  cursor?: InputMaybe<Scalars["String"]["input"]>
+  allDatasets?: InputMaybe<Scalars["Boolean"]["input"]>
+  datasetStatus?: InputMaybe<Scalars["String"]["input"]>
+  first: Scalars["Int"]["input"]
+}>
+
+export type UserAdvancedSearchDatasetsQuery = {
+  __typename?: "Query"
+  datasets?: {
+    __typename?: "DatasetConnection"
+    edges?:
+      | Array<
+        {
+          __typename?: "DatasetEdge"
+          id: string
+          node: {
+            __typename?: "Dataset"
+            id: string
+            created: string
+            name?: string | null
+            public?: boolean | null
+            uploader?: {
+              __typename?: "User"
+              id?: string | null
+              name?: string | null
+              orcid?: string | null
+            } | null
+            permissions?: {
+              __typename?: "DatasetPermissions"
+              id: string
+              userPermissions?:
+                | Array<
+                  {
+                    __typename?: "Permission"
+                    userId: string
+                    level: string
+                    access: string
+                    user?: {
+                      __typename?: "User"
+                      id?: string | null
+                      name?: string | null
+                      email?: string | null
+                      provider?: UserProvider | null
+                    } | null
+                  } | null
+                >
+                | null
+            } | null
+            metadata?: {
+              __typename?: "Metadata"
+              ages?: Array<number | null> | null
+            } | null
+            latestSnapshot: {
+              __typename?: "Snapshot"
+              size?: number | null
+              summary?: {
+                __typename?: "Summary"
+                modalities?: Array<string | null> | null
+                secondaryModalities?: Array<string | null> | null
+                sessions?: Array<string | null> | null
+                subjects?: Array<string | null> | null
+                tasks?: Array<string | null> | null
+                size: number
+                totalFiles: number
+                dataProcessed?: boolean | null
+                primaryModality?: string | null
+                subjectMetadata?:
+                  | Array<
+                    {
+                      __typename?: "SubjectMetadata"
+                      participantId: string
+                      age?: number | null
+                      sex?: string | null
+                      group?: string | null
+                    } | null
+                  >
+                  | null
+                pet?: {
+                  __typename?: "SummaryPetFields"
+                  BodyPart?: Array<string | null> | null
+                  ScannerManufacturer?: Array<string | null> | null
+                  ScannerManufacturersModelName?: Array<string | null> | null
+                  TracerName?: Array<string | null> | null
+                  TracerRadionuclide?: Array<string | null> | null
+                } | null
+              } | null
+              issues?:
+                | Array<
+                  { __typename?: "ValidationIssue"; severity: Severity } | null
+                >
+                | null
+              validation?: {
+                __typename?: "DatasetValidation"
+                errors?: number | null
+                warnings?: number | null
+              } | null
+              description?: {
+                __typename?: "Description"
+                Name: string
+                Authors?: Array<string | null> | null
+                DatasetDOI?: string | null
+              } | null
+            }
+            analytics?: {
+              __typename?: "Analytic"
+              views?: number | null
+              downloads?: number | null
+            } | null
+            stars?:
+              | Array<
+                {
+                  __typename?: "Star"
+                  userId?: string | null
+                  datasetId?: string | null
+                } | null
+              >
+              | null
+            followers?:
+              | Array<
+                {
+                  __typename?: "Follower"
+                  userId?: string | null
+                  datasetId?: string | null
+                } | null
+              >
+              | null
+            snapshots?:
+              | Array<
+                {
+                  __typename?: "Snapshot"
+                  id: string
+                  created?: string | null
+                  tag: string
+                } | null
+              >
+              | null
+          }
+        } | null
+      >
+      | null
+    pageInfo: {
+      __typename?: "PageInfo"
+      startCursor?: string | null
+      endCursor?: string | null
+      hasPreviousPage: boolean
+      hasNextPage: boolean
+      count?: number | null
+    }
+  } | null
+}
+
 export type UserFieldsFragment = {
   __typename?: "User"
   id?: string | null
@@ -3695,6 +3949,793 @@ export const Recently_Published_DatasetsDocument = {
 } as unknown as DocumentNode<
   Recently_Published_DatasetsQuery,
   Recently_Published_DatasetsQueryVariables
+>
+export const UserDocument = {
+  "kind": "Document",
+  "definitions": [{
+    "kind": "OperationDefinition",
+    "operation": "query",
+    "name": { "kind": "Name", "value": "User" },
+    "variableDefinitions": [{
+      "kind": "VariableDefinition",
+      "variable": {
+        "kind": "Variable",
+        "name": { "kind": "Name", "value": "userId" },
+      },
+      "type": {
+        "kind": "NonNullType",
+        "type": {
+          "kind": "NamedType",
+          "name": { "kind": "Name", "value": "ID" },
+        },
+      },
+    }],
+    "selectionSet": {
+      "kind": "SelectionSet",
+      "selections": [{
+        "kind": "Field",
+        "name": { "kind": "Name", "value": "user" },
+        "arguments": [{
+          "kind": "Argument",
+          "name": { "kind": "Name", "value": "id" },
+          "value": {
+            "kind": "Variable",
+            "name": { "kind": "Name", "value": "userId" },
+          },
+        }],
+        "selectionSet": {
+          "kind": "SelectionSet",
+          "selections": [
+            { "kind": "Field", "name": { "kind": "Name", "value": "id" } },
+            { "kind": "Field", "name": { "kind": "Name", "value": "name" } },
+            { "kind": "Field", "name": { "kind": "Name", "value": "orcid" } },
+            { "kind": "Field", "name": { "kind": "Name", "value": "email" } },
+            { "kind": "Field", "name": { "kind": "Name", "value": "avatar" } },
+            {
+              "kind": "Field",
+              "name": { "kind": "Name", "value": "location" },
+            },
+            {
+              "kind": "Field",
+              "name": { "kind": "Name", "value": "institution" },
+            },
+            { "kind": "Field", "name": { "kind": "Name", "value": "links" } },
+            {
+              "kind": "Field",
+              "name": { "kind": "Name", "value": "provider" },
+            },
+            { "kind": "Field", "name": { "kind": "Name", "value": "admin" } },
+            { "kind": "Field", "name": { "kind": "Name", "value": "created" } },
+            {
+              "kind": "Field",
+              "name": { "kind": "Name", "value": "lastSeen" },
+            },
+            { "kind": "Field", "name": { "kind": "Name", "value": "blocked" } },
+            {
+              "kind": "Field",
+              "name": { "kind": "Name", "value": "githubSynced" },
+            },
+            { "kind": "Field", "name": { "kind": "Name", "value": "github" } },
+            {
+              "kind": "Field",
+              "name": { "kind": "Name", "value": "notifications" },
+              "selectionSet": {
+                "kind": "SelectionSet",
+                "selections": [{
+                  "kind": "Field",
+                  "name": { "kind": "Name", "value": "id" },
+                }, {
+                  "kind": "Field",
+                  "name": { "kind": "Name", "value": "timestamp" },
+                }, {
+                  "kind": "Field",
+                  "name": { "kind": "Name", "value": "note" },
+                }, {
+                  "kind": "Field",
+                  "name": { "kind": "Name", "value": "success" },
+                }, {
+                  "kind": "Field",
+                  "name": { "kind": "Name", "value": "user" },
+                  "selectionSet": {
+                    "kind": "SelectionSet",
+                    "selections": [{
+                      "kind": "Field",
+                      "name": { "kind": "Name", "value": "id" },
+                    }, {
+                      "kind": "Field",
+                      "name": { "kind": "Name", "value": "name" },
+                    }, {
+                      "kind": "Field",
+                      "name": { "kind": "Name", "value": "email" },
+                    }, {
+                      "kind": "Field",
+                      "name": { "kind": "Name", "value": "orcid" },
+                    }],
+                  },
+                }, {
+                  "kind": "Field",
+                  "name": { "kind": "Name", "value": "event" },
+                  "selectionSet": {
+                    "kind": "SelectionSet",
+                    "selections": [{
+                      "kind": "Field",
+                      "name": { "kind": "Name", "value": "type" },
+                    }, {
+                      "kind": "Field",
+                      "name": { "kind": "Name", "value": "version" },
+                    }, {
+                      "kind": "Field",
+                      "name": { "kind": "Name", "value": "public" },
+                    }, {
+                      "kind": "Field",
+                      "name": { "kind": "Name", "value": "level" },
+                    }, {
+                      "kind": "Field",
+                      "name": { "kind": "Name", "value": "ref" },
+                    }, {
+                      "kind": "Field",
+                      "name": { "kind": "Name", "value": "message" },
+                    }, {
+                      "kind": "Field",
+                      "name": { "kind": "Name", "value": "requestId" },
+                    }, {
+                      "kind": "Field",
+                      "name": { "kind": "Name", "value": "targetUserId" },
+                    }, {
+                      "kind": "Field",
+                      "name": { "kind": "Name", "value": "reason" },
+                    }, {
+                      "kind": "Field",
+                      "name": { "kind": "Name", "value": "datasetId" },
+                    }, {
+                      "kind": "Field",
+                      "name": { "kind": "Name", "value": "resolutionStatus" },
+                    }, {
+                      "kind": "Field",
+                      "name": { "kind": "Name", "value": "target" },
+                      "selectionSet": {
+                        "kind": "SelectionSet",
+                        "selections": [{
+                          "kind": "Field",
+                          "name": { "kind": "Name", "value": "id" },
+                        }, {
+                          "kind": "Field",
+                          "name": { "kind": "Name", "value": "name" },
+                        }, {
+                          "kind": "Field",
+                          "name": { "kind": "Name", "value": "email" },
+                        }, {
+                          "kind": "Field",
+                          "name": { "kind": "Name", "value": "orcid" },
+                        }],
+                      },
+                    }, {
+                      "kind": "Field",
+                      "name": { "kind": "Name", "value": "contributorData" },
+                      "selectionSet": {
+                        "kind": "SelectionSet",
+                        "selections": [{
+                          "kind": "Field",
+                          "name": { "kind": "Name", "value": "name" },
+                        }, {
+                          "kind": "Field",
+                          "name": { "kind": "Name", "value": "givenName" },
+                        }, {
+                          "kind": "Field",
+                          "name": { "kind": "Name", "value": "familyName" },
+                        }, {
+                          "kind": "Field",
+                          "name": { "kind": "Name", "value": "orcid" },
+                        }, {
+                          "kind": "Field",
+                          "name": {
+                            "kind": "Name",
+                            "value": "contributorType",
+                          },
+                        }, {
+                          "kind": "Field",
+                          "name": { "kind": "Name", "value": "order" },
+                        }],
+                      },
+                    }],
+                  },
+                }, {
+                  "kind": "Field",
+                  "name": { "kind": "Name", "value": "notificationStatus" },
+                  "selectionSet": {
+                    "kind": "SelectionSet",
+                    "selections": [{
+                      "kind": "Field",
+                      "name": { "kind": "Name", "value": "status" },
+                    }],
+                  },
+                }],
+              },
+            },
+            {
+              "kind": "Field",
+              "name": { "kind": "Name", "value": "orcidConsent" },
+            },
+          ],
+        },
+      }],
+    },
+  }],
+} as unknown as DocumentNode<UserQuery, UserQueryVariables>
+export const UpdateUserDocument = {
+  "kind": "Document",
+  "definitions": [{
+    "kind": "OperationDefinition",
+    "operation": "mutation",
+    "name": { "kind": "Name", "value": "updateUser" },
+    "variableDefinitions": [{
+      "kind": "VariableDefinition",
+      "variable": {
+        "kind": "Variable",
+        "name": { "kind": "Name", "value": "id" },
+      },
+      "type": {
+        "kind": "NonNullType",
+        "type": {
+          "kind": "NamedType",
+          "name": { "kind": "Name", "value": "ID" },
+        },
+      },
+    }, {
+      "kind": "VariableDefinition",
+      "variable": {
+        "kind": "Variable",
+        "name": { "kind": "Name", "value": "location" },
+      },
+      "type": {
+        "kind": "NamedType",
+        "name": { "kind": "Name", "value": "String" },
+      },
+    }, {
+      "kind": "VariableDefinition",
+      "variable": {
+        "kind": "Variable",
+        "name": { "kind": "Name", "value": "links" },
+      },
+      "type": {
+        "kind": "ListType",
+        "type": {
+          "kind": "NonNullType",
+          "type": {
+            "kind": "NamedType",
+            "name": { "kind": "Name", "value": "String" },
+          },
+        },
+      },
+    }, {
+      "kind": "VariableDefinition",
+      "variable": {
+        "kind": "Variable",
+        "name": { "kind": "Name", "value": "institution" },
+      },
+      "type": {
+        "kind": "NamedType",
+        "name": { "kind": "Name", "value": "String" },
+      },
+    }, {
+      "kind": "VariableDefinition",
+      "variable": {
+        "kind": "Variable",
+        "name": { "kind": "Name", "value": "orcidConsent" },
+      },
+      "type": {
+        "kind": "NamedType",
+        "name": { "kind": "Name", "value": "Boolean" },
+      },
+    }],
+    "selectionSet": {
+      "kind": "SelectionSet",
+      "selections": [{
+        "kind": "Field",
+        "name": { "kind": "Name", "value": "updateUser" },
+        "arguments": [{
+          "kind": "Argument",
+          "name": { "kind": "Name", "value": "id" },
+          "value": {
+            "kind": "Variable",
+            "name": { "kind": "Name", "value": "id" },
+          },
+        }, {
+          "kind": "Argument",
+          "name": { "kind": "Name", "value": "location" },
+          "value": {
+            "kind": "Variable",
+            "name": { "kind": "Name", "value": "location" },
+          },
+        }, {
+          "kind": "Argument",
+          "name": { "kind": "Name", "value": "links" },
+          "value": {
+            "kind": "Variable",
+            "name": { "kind": "Name", "value": "links" },
+          },
+        }, {
+          "kind": "Argument",
+          "name": { "kind": "Name", "value": "institution" },
+          "value": {
+            "kind": "Variable",
+            "name": { "kind": "Name", "value": "institution" },
+          },
+        }, {
+          "kind": "Argument",
+          "name": { "kind": "Name", "value": "orcidConsent" },
+          "value": {
+            "kind": "Variable",
+            "name": { "kind": "Name", "value": "orcidConsent" },
+          },
+        }],
+        "selectionSet": {
+          "kind": "SelectionSet",
+          "selections": [
+            { "kind": "Field", "name": { "kind": "Name", "value": "id" } },
+            {
+              "kind": "Field",
+              "name": { "kind": "Name", "value": "location" },
+            },
+            { "kind": "Field", "name": { "kind": "Name", "value": "links" } },
+            {
+              "kind": "Field",
+              "name": { "kind": "Name", "value": "institution" },
+            },
+            {
+              "kind": "Field",
+              "name": { "kind": "Name", "value": "orcidConsent" },
+            },
+          ],
+        },
+      }],
+    },
+  }],
+} as unknown as DocumentNode<UpdateUserMutation, UpdateUserMutationVariables>
+export const UserAdvancedSearchDatasetsDocument = {
+  "kind": "Document",
+  "definitions": [{
+    "kind": "OperationDefinition",
+    "operation": "query",
+    "name": { "kind": "Name", "value": "UserAdvancedSearchDatasets" },
+    "variableDefinitions": [{
+      "kind": "VariableDefinition",
+      "variable": {
+        "kind": "Variable",
+        "name": { "kind": "Name", "value": "query" },
+      },
+      "type": {
+        "kind": "NonNullType",
+        "type": {
+          "kind": "NamedType",
+          "name": { "kind": "Name", "value": "DatasetSearchInput" },
+        },
+      },
+    }, {
+      "kind": "VariableDefinition",
+      "variable": {
+        "kind": "Variable",
+        "name": { "kind": "Name", "value": "cursor" },
+      },
+      "type": {
+        "kind": "NamedType",
+        "name": { "kind": "Name", "value": "String" },
+      },
+    }, {
+      "kind": "VariableDefinition",
+      "variable": {
+        "kind": "Variable",
+        "name": { "kind": "Name", "value": "allDatasets" },
+      },
+      "type": {
+        "kind": "NamedType",
+        "name": { "kind": "Name", "value": "Boolean" },
+      },
+    }, {
+      "kind": "VariableDefinition",
+      "variable": {
+        "kind": "Variable",
+        "name": { "kind": "Name", "value": "datasetStatus" },
+      },
+      "type": {
+        "kind": "NamedType",
+        "name": { "kind": "Name", "value": "String" },
+      },
+    }, {
+      "kind": "VariableDefinition",
+      "variable": {
+        "kind": "Variable",
+        "name": { "kind": "Name", "value": "first" },
+      },
+      "type": {
+        "kind": "NonNullType",
+        "type": {
+          "kind": "NamedType",
+          "name": { "kind": "Name", "value": "Int" },
+        },
+      },
+    }],
+    "selectionSet": {
+      "kind": "SelectionSet",
+      "selections": [{
+        "kind": "Field",
+        "alias": { "kind": "Name", "value": "datasets" },
+        "name": { "kind": "Name", "value": "advancedSearch" },
+        "arguments": [{
+          "kind": "Argument",
+          "name": { "kind": "Name", "value": "query" },
+          "value": {
+            "kind": "Variable",
+            "name": { "kind": "Name", "value": "query" },
+          },
+        }, {
+          "kind": "Argument",
+          "name": { "kind": "Name", "value": "allDatasets" },
+          "value": {
+            "kind": "Variable",
+            "name": { "kind": "Name", "value": "allDatasets" },
+          },
+        }, {
+          "kind": "Argument",
+          "name": { "kind": "Name", "value": "datasetStatus" },
+          "value": {
+            "kind": "Variable",
+            "name": { "kind": "Name", "value": "datasetStatus" },
+          },
+        }, {
+          "kind": "Argument",
+          "name": { "kind": "Name", "value": "first" },
+          "value": {
+            "kind": "Variable",
+            "name": { "kind": "Name", "value": "first" },
+          },
+        }, {
+          "kind": "Argument",
+          "name": { "kind": "Name", "value": "after" },
+          "value": {
+            "kind": "Variable",
+            "name": { "kind": "Name", "value": "cursor" },
+          },
+        }],
+        "selectionSet": {
+          "kind": "SelectionSet",
+          "selections": [{
+            "kind": "Field",
+            "name": { "kind": "Name", "value": "edges" },
+            "selectionSet": {
+              "kind": "SelectionSet",
+              "selections": [{
+                "kind": "Field",
+                "name": { "kind": "Name", "value": "id" },
+              }, {
+                "kind": "Field",
+                "name": { "kind": "Name", "value": "node" },
+                "selectionSet": {
+                  "kind": "SelectionSet",
+                  "selections": [{
+                    "kind": "Field",
+                    "name": { "kind": "Name", "value": "id" },
+                  }, {
+                    "kind": "Field",
+                    "name": { "kind": "Name", "value": "created" },
+                  }, {
+                    "kind": "Field",
+                    "name": { "kind": "Name", "value": "name" },
+                  }, {
+                    "kind": "Field",
+                    "name": { "kind": "Name", "value": "uploader" },
+                    "selectionSet": {
+                      "kind": "SelectionSet",
+                      "selections": [{
+                        "kind": "Field",
+                        "name": { "kind": "Name", "value": "id" },
+                      }, {
+                        "kind": "Field",
+                        "name": { "kind": "Name", "value": "name" },
+                      }, {
+                        "kind": "Field",
+                        "name": { "kind": "Name", "value": "orcid" },
+                      }],
+                    },
+                  }, {
+                    "kind": "Field",
+                    "name": { "kind": "Name", "value": "public" },
+                  }, {
+                    "kind": "Field",
+                    "name": { "kind": "Name", "value": "permissions" },
+                    "selectionSet": {
+                      "kind": "SelectionSet",
+                      "selections": [{
+                        "kind": "Field",
+                        "name": { "kind": "Name", "value": "id" },
+                      }, {
+                        "kind": "Field",
+                        "name": { "kind": "Name", "value": "userPermissions" },
+                        "selectionSet": {
+                          "kind": "SelectionSet",
+                          "selections": [{
+                            "kind": "Field",
+                            "name": { "kind": "Name", "value": "userId" },
+                          }, {
+                            "kind": "Field",
+                            "name": { "kind": "Name", "value": "level" },
+                          }, {
+                            "kind": "Field",
+                            "alias": { "kind": "Name", "value": "access" },
+                            "name": { "kind": "Name", "value": "level" },
+                          }, {
+                            "kind": "Field",
+                            "name": { "kind": "Name", "value": "user" },
+                            "selectionSet": {
+                              "kind": "SelectionSet",
+                              "selections": [{
+                                "kind": "Field",
+                                "name": { "kind": "Name", "value": "id" },
+                              }, {
+                                "kind": "Field",
+                                "name": { "kind": "Name", "value": "name" },
+                              }, {
+                                "kind": "Field",
+                                "name": { "kind": "Name", "value": "email" },
+                              }, {
+                                "kind": "Field",
+                                "name": { "kind": "Name", "value": "provider" },
+                              }],
+                            },
+                          }],
+                        },
+                      }],
+                    },
+                  }, {
+                    "kind": "Field",
+                    "name": { "kind": "Name", "value": "metadata" },
+                    "selectionSet": {
+                      "kind": "SelectionSet",
+                      "selections": [{
+                        "kind": "Field",
+                        "name": { "kind": "Name", "value": "ages" },
+                      }],
+                    },
+                  }, {
+                    "kind": "Field",
+                    "name": { "kind": "Name", "value": "latestSnapshot" },
+                    "selectionSet": {
+                      "kind": "SelectionSet",
+                      "selections": [{
+                        "kind": "Field",
+                        "name": { "kind": "Name", "value": "size" },
+                      }, {
+                        "kind": "Field",
+                        "name": { "kind": "Name", "value": "summary" },
+                        "selectionSet": {
+                          "kind": "SelectionSet",
+                          "selections": [{
+                            "kind": "Field",
+                            "name": { "kind": "Name", "value": "modalities" },
+                          }, {
+                            "kind": "Field",
+                            "name": {
+                              "kind": "Name",
+                              "value": "secondaryModalities",
+                            },
+                          }, {
+                            "kind": "Field",
+                            "name": { "kind": "Name", "value": "sessions" },
+                          }, {
+                            "kind": "Field",
+                            "name": { "kind": "Name", "value": "subjects" },
+                          }, {
+                            "kind": "Field",
+                            "name": {
+                              "kind": "Name",
+                              "value": "subjectMetadata",
+                            },
+                            "selectionSet": {
+                              "kind": "SelectionSet",
+                              "selections": [{
+                                "kind": "Field",
+                                "name": {
+                                  "kind": "Name",
+                                  "value": "participantId",
+                                },
+                              }, {
+                                "kind": "Field",
+                                "name": { "kind": "Name", "value": "age" },
+                              }, {
+                                "kind": "Field",
+                                "name": { "kind": "Name", "value": "sex" },
+                              }, {
+                                "kind": "Field",
+                                "name": { "kind": "Name", "value": "group" },
+                              }],
+                            },
+                          }, {
+                            "kind": "Field",
+                            "name": { "kind": "Name", "value": "tasks" },
+                          }, {
+                            "kind": "Field",
+                            "name": { "kind": "Name", "value": "size" },
+                          }, {
+                            "kind": "Field",
+                            "name": { "kind": "Name", "value": "totalFiles" },
+                          }, {
+                            "kind": "Field",
+                            "name": {
+                              "kind": "Name",
+                              "value": "dataProcessed",
+                            },
+                          }, {
+                            "kind": "Field",
+                            "name": { "kind": "Name", "value": "pet" },
+                            "selectionSet": {
+                              "kind": "SelectionSet",
+                              "selections": [{
+                                "kind": "Field",
+                                "name": { "kind": "Name", "value": "BodyPart" },
+                              }, {
+                                "kind": "Field",
+                                "name": {
+                                  "kind": "Name",
+                                  "value": "ScannerManufacturer",
+                                },
+                              }, {
+                                "kind": "Field",
+                                "name": {
+                                  "kind": "Name",
+                                  "value": "ScannerManufacturersModelName",
+                                },
+                              }, {
+                                "kind": "Field",
+                                "name": {
+                                  "kind": "Name",
+                                  "value": "TracerName",
+                                },
+                              }, {
+                                "kind": "Field",
+                                "name": {
+                                  "kind": "Name",
+                                  "value": "TracerRadionuclide",
+                                },
+                              }],
+                            },
+                          }, {
+                            "kind": "Field",
+                            "name": {
+                              "kind": "Name",
+                              "value": "primaryModality",
+                            },
+                          }],
+                        },
+                      }, {
+                        "kind": "Field",
+                        "name": { "kind": "Name", "value": "issues" },
+                        "selectionSet": {
+                          "kind": "SelectionSet",
+                          "selections": [{
+                            "kind": "Field",
+                            "name": { "kind": "Name", "value": "severity" },
+                          }],
+                        },
+                      }, {
+                        "kind": "Field",
+                        "name": { "kind": "Name", "value": "validation" },
+                        "selectionSet": {
+                          "kind": "SelectionSet",
+                          "selections": [{
+                            "kind": "Field",
+                            "name": { "kind": "Name", "value": "errors" },
+                          }, {
+                            "kind": "Field",
+                            "name": { "kind": "Name", "value": "warnings" },
+                          }],
+                        },
+                      }, {
+                        "kind": "Field",
+                        "name": { "kind": "Name", "value": "description" },
+                        "selectionSet": {
+                          "kind": "SelectionSet",
+                          "selections": [{
+                            "kind": "Field",
+                            "name": { "kind": "Name", "value": "Name" },
+                          }, {
+                            "kind": "Field",
+                            "name": { "kind": "Name", "value": "Authors" },
+                          }, {
+                            "kind": "Field",
+                            "name": { "kind": "Name", "value": "DatasetDOI" },
+                          }],
+                        },
+                      }],
+                    },
+                  }, {
+                    "kind": "Field",
+                    "name": { "kind": "Name", "value": "analytics" },
+                    "selectionSet": {
+                      "kind": "SelectionSet",
+                      "selections": [{
+                        "kind": "Field",
+                        "name": { "kind": "Name", "value": "views" },
+                      }, {
+                        "kind": "Field",
+                        "name": { "kind": "Name", "value": "downloads" },
+                      }],
+                    },
+                  }, {
+                    "kind": "Field",
+                    "name": { "kind": "Name", "value": "stars" },
+                    "selectionSet": {
+                      "kind": "SelectionSet",
+                      "selections": [{
+                        "kind": "Field",
+                        "name": { "kind": "Name", "value": "userId" },
+                      }, {
+                        "kind": "Field",
+                        "name": { "kind": "Name", "value": "datasetId" },
+                      }],
+                    },
+                  }, {
+                    "kind": "Field",
+                    "name": { "kind": "Name", "value": "followers" },
+                    "selectionSet": {
+                      "kind": "SelectionSet",
+                      "selections": [{
+                        "kind": "Field",
+                        "name": { "kind": "Name", "value": "userId" },
+                      }, {
+                        "kind": "Field",
+                        "name": { "kind": "Name", "value": "datasetId" },
+                      }],
+                    },
+                  }, {
+                    "kind": "Field",
+                    "name": { "kind": "Name", "value": "snapshots" },
+                    "selectionSet": {
+                      "kind": "SelectionSet",
+                      "selections": [{
+                        "kind": "Field",
+                        "name": { "kind": "Name", "value": "id" },
+                      }, {
+                        "kind": "Field",
+                        "name": { "kind": "Name", "value": "created" },
+                      }, {
+                        "kind": "Field",
+                        "name": { "kind": "Name", "value": "tag" },
+                      }],
+                    },
+                  }],
+                },
+              }],
+            },
+          }, {
+            "kind": "Field",
+            "name": { "kind": "Name", "value": "pageInfo" },
+            "selectionSet": {
+              "kind": "SelectionSet",
+              "selections": [{
+                "kind": "Field",
+                "name": { "kind": "Name", "value": "startCursor" },
+              }, {
+                "kind": "Field",
+                "name": { "kind": "Name", "value": "endCursor" },
+              }, {
+                "kind": "Field",
+                "name": { "kind": "Name", "value": "hasPreviousPage" },
+              }, {
+                "kind": "Field",
+                "name": { "kind": "Name", "value": "hasNextPage" },
+              }, {
+                "kind": "Field",
+                "name": { "kind": "Name", "value": "count" },
+              }],
+            },
+          }],
+        },
+      }],
+    },
+  }],
+} as unknown as DocumentNode<
+  UserAdvancedSearchDatasetsQuery,
+  UserAdvancedSearchDatasetsQueryVariables
 >
 export const GetUsersDocument = {
   "kind": "Document",
