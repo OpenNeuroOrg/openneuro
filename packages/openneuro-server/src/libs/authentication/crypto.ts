@@ -1,16 +1,21 @@
 import crypto from "crypto"
 import config from "../../config"
 
-const secret = config.auth.jwt.secret
 const algorithm = "aes256"
-const key = crypto
-  .createHash("sha256")
-  .update(secret)
-  .digest("base64")
-  .substr(0, 32)
-
 const delimiter = "."
 const encoding = "base64"
+
+let _key: string | null = null
+function getKey(): string {
+  if (!_key) {
+    _key = crypto
+      .createHash("sha256")
+      .update(config.auth.jwt.secret)
+      .digest("base64")
+      .substr(0, 32)
+  }
+  return _key
+}
 
 const pack = (iv, encrypted) => iv.toString(encoding) + delimiter + encrypted
 
@@ -22,7 +27,7 @@ const unpack = (encryptedPackage) => {
 
 export const encrypt = (plainText) => {
   const iv = crypto.randomBytes(16)
-  const cipher = crypto.createCipheriv(algorithm, key, iv)
+  const cipher = crypto.createCipheriv(algorithm, getKey(), iv)
   const encryptedText = cipher.update(plainText, "utf8", "hex") +
     cipher.final("hex")
   const encryptedPackage = pack(iv, encryptedText)
@@ -31,7 +36,7 @@ export const encrypt = (plainText) => {
 
 export const decrypt = (encryptedPackage) => {
   const [iv, encryptedText] = unpack(encryptedPackage)
-  const decipher = crypto.createDecipheriv(algorithm, key, iv)
+  const decipher = crypto.createDecipheriv(algorithm, getKey(), iv)
   const decryptedText = decipher.update(encryptedText, "hex", "utf8") +
     decipher.final("utf8")
   return decryptedText
