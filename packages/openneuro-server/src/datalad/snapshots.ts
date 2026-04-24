@@ -6,10 +6,7 @@ import request from "superagent"
 import { redis, redlock } from "../libs/redis"
 import CacheItem, { CacheType } from "../cache/item"
 import config from "../config"
-import {
-  snapshotCreationComparison,
-  updateDatasetName,
-} from "../graphql/resolvers/dataset"
+import { snapshotCreationComparison } from "../utils/snapshots"
 import { createDraftDoi } from "../libs/doi/index"
 import { assembleMetadata } from "../libs/doi/metadata"
 import Doi from "../models/doi"
@@ -182,7 +179,10 @@ export const createSnapshot = async (
       createSnapshotMetadata(datasetId, tag, snapshot.hexsha, snapshot.created),
 
       // Trigger an async update for the name field (cache for sorting)
-      updateDatasetName(datasetId),
+      // Dynamic import breaks circular dependency: datalad/snapshots → resolvers/dataset
+      import("../graphql/resolvers/dataset").then((m) =>
+        m.updateDatasetName(datasetId)
+      ),
     ])
 
     const snapshotListCache = new CacheItem(redis, CacheType.snapshot, [

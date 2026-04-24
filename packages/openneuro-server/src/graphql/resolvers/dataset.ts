@@ -1,5 +1,6 @@
 import * as datalad from "../../datalad/dataset"
 import { removeDatasetSearchDocument } from "./dataset-search"
+import { snapshotCreationComparison } from "../../utils/snapshots"
 import { latestSnapshot, snapshots } from "./snapshots"
 import { description } from "./description"
 import {
@@ -23,7 +24,6 @@ import { brainInitiative } from "./brainInitiative"
 import { derivatives } from "./derivatives"
 import { promiseTimeout } from "../../utils/promiseTimeout"
 import { datasetEvents } from "./datasetEvents"
-import semver from "semver"
 import { getDraftInfo } from "../../datalad/draft"
 import type { GraphQLContext } from "../builder"
 import type { DatasetDocument } from "../../models/dataset"
@@ -50,17 +50,6 @@ export const datasets = (
     })
   } else {
     return datalad.getDatasets({ ...args, indexing: userInfo?.indexer })
-  }
-}
-
-export const snapshotCreationComparison = (
-  { created: a, tag: a_tag }: { created: Date | string; tag: string },
-  { created: b, tag: b_tag }: { created: Date | string; tag: string },
-) => {
-  if (semver.valid(a_tag) && semver.valid(b_tag)) {
-    return semver.compare(a_tag, b_tag)
-  } else {
-    return new Date(a).getTime() - new Date(b).getTime()
   }
 }
 
@@ -330,8 +319,9 @@ const Dataset = {
       modified: draftHead.modified,
     }
   },
-  snapshots,
-  latestSnapshot,
+  // Wrapper functions defer access to break the resolvers/dataset ↔ resolvers/snapshots cycle
+  snapshots: (obj) => snapshots(obj),
+  latestSnapshot: (obj, args, context) => latestSnapshot(obj, args, context),
   analytics,
   stars,
   followers,
