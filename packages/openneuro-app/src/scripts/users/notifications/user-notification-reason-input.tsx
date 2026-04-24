@@ -1,11 +1,15 @@
 import React from "react"
-import { formatStatusForDisplay } from "../../types/event-types"
+import type { ResponseStatusType } from "../../../gql/graphql"
+import { formatStatusForDisplay } from "./notification-mapper"
 import styles from "./scss/usernotifications.module.scss"
 
 interface NotificationReasonInputProps {
   reasonInput: string
   setReasonInput: (reason: string) => void
-  currentApprovalAction: "ACCEPTED" | "DENIED" | null
+  currentApprovalAction:
+    | ResponseStatusType.Accepted
+    | ResponseStatusType.Denied
+    | null
   handleReasonCancel: () => void
   handleReasonSubmit: () => void
   isProcessing: boolean

@@ -4,8 +4,11 @@ import { vi } from "vitest"
 import { MemoryRouter, Outlet } from "react-router-dom"
 import { MockedProvider } from "@apollo/client/testing"
 import { UserRoutes } from "../user-routes"
-import type { Event, MappedNotification } from "../../types/event-types"
-import type { UserQuery } from "../../../gql/graphql"
+import type {
+  MappedNotification,
+  Notification,
+} from "../notifications/notification-mapper"
+import { NotificationStatusType, type UserQuery } from "../../../gql/graphql"
 import type { OutletContextType } from "../user-routes"
 
 type User = NonNullable<UserQuery["user"]>
@@ -151,12 +154,11 @@ vi.mock("./user-notifications-tab-content", () => ({
 
 // Mock the UserNotificationsView
 vi.mock("./user-notifications-view", () => {
-  const baseDatasetEvent: Event = {
+  const baseDatasetEvent: Notification = {
     id: "1",
     timestamp: "2023-01-01T12:00:00Z",
     event: { type: "published", message: "A dataset has been published." },
-    // The status field is nested here now
-    notificationStatus: { status: "UNREAD" },
+    notificationStatus: { status: NotificationStatusType.Unread },
   }
 
   const mockNotifications: MappedNotification[] = [
@@ -169,7 +171,7 @@ vi.mock("./user-notifications-view", () => {
       originalNotification: {
         ...baseDatasetEvent,
         id: "1",
-        notificationStatus: { status: "UNREAD" },
+        notificationStatus: { status: NotificationStatusType.Unread },
       },
     },
     {
@@ -181,7 +183,7 @@ vi.mock("./user-notifications-view", () => {
       originalNotification: {
         ...baseDatasetEvent,
         id: "2",
-        notificationStatus: { status: "SAVED" },
+        notificationStatus: { status: NotificationStatusType.Saved },
       },
     },
     {
@@ -193,7 +195,7 @@ vi.mock("./user-notifications-view", () => {
       originalNotification: {
         ...baseDatasetEvent,
         id: "3",
-        notificationStatus: { status: "ARCHIVED" },
+        notificationStatus: { status: NotificationStatusType.Archived },
       },
     },
   ]

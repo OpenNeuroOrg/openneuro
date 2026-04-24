@@ -1,6 +1,6 @@
 import React from "react"
 import { Username } from "../username"
-import type { MappedNotification } from "../../types/event-types"
+import type { MappedNotification } from "./notification-mapper"
 
 interface NotificationBodyContentProps {
   notification: MappedNotification

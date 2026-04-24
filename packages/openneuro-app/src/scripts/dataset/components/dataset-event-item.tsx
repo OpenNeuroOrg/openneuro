@@ -3,14 +3,15 @@ import { useMutation, useQuery } from "@apollo/client"
 import { toast } from "react-toastify"
 import ToastContent from "../../common/partials/toast-content.jsx"
 import * as Sentry from "@sentry/react"
-import { type Event } from "../../types/event-types"
+import { ResponseStatusType } from "../../../gql/graphql"
+import type { DatasetEvent } from "../../users/notifications/notification-mapper"
 import styles from "./scss/dataset-events.module.scss"
 import { PROCESS_CONTRIBUTOR_REQUEST_MUTATION } from "../../queries/datasetEvents.js"
 import { Username } from "../../users/username.js"
 import { GET_USER } from "../../queries/user.js"
 
 interface DatasetEventItemProps {
-  event: Event
+  event: DatasetEvent
   datasetId: string
   editingNoteId: string | null
   updatedNote: string
@@ -160,7 +161,9 @@ export const DatasetEventItem: React.FC<DatasetEventItemProps> = ({
     }
   }
 
-  const handleSaveOrProcessRequest = async (status?: "ACCEPTED" | "DENIED") => {
+  const handleSaveOrProcessRequest = async (
+    status?: ResponseStatusType.Accepted | ResponseStatusType.Denied,
+  ) => {
     if (status) {
       if (!event.user?.id) {
         toast.error("Cannot process request: User ID not found.")
@@ -239,14 +242,16 @@ export const DatasetEventItem: React.FC<DatasetEventItemProps> = ({
               {editingNoteId === event.id && (
                 <>
                   <button
-                    onClick={() => handleSaveOrProcessRequest("ACCEPTED")}
+                    onClick={() =>
+                      handleSaveOrProcessRequest(ResponseStatusType.Accepted)}
                     className={`${styles.eventActionButton} on-button on-button--small on-button--secondary`}
                     style={{ marginBottom: "5px" }}
                   >
                     Accept
                   </button>
                   <button
-                    onClick={() => handleSaveOrProcessRequest("DENIED")}
+                    onClick={() =>
+                      handleSaveOrProcessRequest(ResponseStatusType.Denied)}
                     className={`${styles.eventActionButton} on-button on-button--small`}
                   >
                     Deny

@@ -7,12 +7,12 @@ import React, {
 } from "react"
 import * as Sentry from "@sentry/react"
 import { useMutation } from "@apollo/client"
+import type { NotificationStatusType } from "../../../gql/graphql"
 import { UPDATE_NOTIFICATION_STATUS_MUTATION } from "../../queries/datasetEvents"
 import {
-  type Event,
   type MappedNotification,
   mapRawEventToMappedNotification,
-} from "../../types/event-types"
+} from "./notification-mapper"
 import { useUser } from "../../queries/user"
 
 interface NotificationsContextValue {
@@ -42,7 +42,7 @@ export const NotificationsProvider: React.FC<NotificationsProviderProps> = ({
 
   useEffect(() => {
     const mapped = user?.notifications?.map((n) =>
-      mapRawEventToMappedNotification(n as unknown as Event)
+      mapRawEventToMappedNotification(n)
     ) ?? []
     setNotifications(mapped)
   }, [user?.notifications])
@@ -59,7 +59,10 @@ export const NotificationsProvider: React.FC<NotificationsProviderProps> = ({
       if (updates.status) {
         try {
           await updateEventStatus({
-            variables: { eventId: id, status: updates.status.toUpperCase() },
+            variables: {
+              eventId: id,
+              status: updates.status.toUpperCase() as NotificationStatusType,
+            },
           })
         } catch (err) {
           Sentry.captureException(err)

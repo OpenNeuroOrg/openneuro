@@ -11,7 +11,7 @@ import {
   SavedNotifications,
   UnreadNotifications,
 } from "./notifications/user-notifications-tab-content"
-import type { MappedNotification } from "../types/event-types"
+import type { MappedNotification } from "./notifications/notification-mapper"
 import type { UserQuery } from "../../gql/graphql"
 import { OrcidConsentModal } from "./user-orcid-consent-modal"
 

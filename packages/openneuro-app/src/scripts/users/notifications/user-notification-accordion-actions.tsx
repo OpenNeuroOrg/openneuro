@@ -1,5 +1,6 @@
 import React from "react"
-import type { MappedNotification } from "../../types/event-types"
+import { ResponseStatusType } from "../../../gql/graphql"
+import type { MappedNotification } from "./notification-mapper"
 import { StatusActionButton } from "./status-action-buttons"
 import iconUnread from "../../../assets/icon-unread.png"
 import iconSaved from "../../../assets/icon-saved.png"
@@ -10,7 +11,9 @@ interface NotificationActionButtonsProps {
   notification: MappedNotification
   isProcessing: boolean
   onUpdate: (id: string, updates: Partial<MappedNotification>) => void
-  handleProcessAction: (action: "ACCEPTED" | "DENIED") => void
+  handleProcessAction: (
+    action: ResponseStatusType.Accepted | ResponseStatusType.Denied,
+  ) => void
   handleStatusChange: (
     newStatus: "unread" | "saved" | "archived",
   ) => Promise<void>
@@ -32,16 +35,16 @@ export const NotificationActionButtons: React.FC<
         <>
           <button
             className={`${styles.notificationapprove}`}
-            onClick={() => handleProcessAction("ACCEPTED")}
-            disabled={approval === "ACCEPTED" || isProcessing}
+            onClick={() => handleProcessAction(ResponseStatusType.Accepted)}
+            disabled={approval === ResponseStatusType.Accepted || isProcessing}
           >
             <i className="fa fa-check" /> Accept
           </button>
 
           <button
             className={`${styles.notificationdeny}`}
-            onClick={() => handleProcessAction("DENIED")}
-            disabled={approval === "DENIED" || isProcessing}
+            onClick={() => handleProcessAction(ResponseStatusType.Denied)}
+            disabled={approval === ResponseStatusType.Denied || isProcessing}
           >
             <i className="fa fa-times" /> Deny
           </button>

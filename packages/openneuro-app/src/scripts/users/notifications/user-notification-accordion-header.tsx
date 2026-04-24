@@ -1,5 +1,5 @@
 import React from "react"
-import { formatStatusForDisplay } from "../../types/event-types"
+import { formatStatusForDisplay } from "./notification-mapper"
 // Minimal user shape accepted by Username component, compatible with both
 // generated (UserQuery) and hand-written (event-types) User types.
 interface User {
