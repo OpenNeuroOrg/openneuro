@@ -5,5 +5,15 @@ import Redis from "ioredis"
 import Redlock from "redlock"
 import config from "../config"
 
-export const redis = new Redis(config.redis)
-export const redlock = new Redlock([redis])
+let _redis: Redis | null = null
+let _redlock: Redlock | null = null
+
+export function getRedis(): Redis {
+  if (!_redis) _redis = new Redis(config.redis)
+  return _redis
+}
+
+export function getRedlock(): Redlock {
+  if (!_redlock) _redlock = new Redlock([getRedis()])
+  return _redlock
+}

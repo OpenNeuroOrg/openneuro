@@ -1,4 +1,4 @@
-import { redis } from "../../libs/redis.js"
+import { getRedis } from "../../libs/redis.js"
 import { clearDatasetTrees } from "../../cache/tree"
 import type { GraphQLContext } from "../builder"
 
@@ -14,13 +14,13 @@ export async function cacheClear(
   if (userInfo?.admin && datasetId.length == 8 && datasetId.startsWith("ds")) {
     try {
       // Clear tree cache entries via the dataset-to-trees index
-      await clearDatasetTrees(redis, datasetId)
+      await clearDatasetTrees(getRedis(), datasetId)
 
       // Also clear non-tree cache keys (descriptions, snapshots, etc.)
-      const stream = redis.scanStream({
+      const stream = getRedis().scanStream({
         match: `*${datasetId}*`,
       })
-      const pipeline = redis.pipeline()
+      const pipeline = getRedis().pipeline()
       for await (const keys of stream) {
         for (const key of keys) {
           pipeline.del(key)

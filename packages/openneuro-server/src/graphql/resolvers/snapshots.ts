@@ -12,7 +12,7 @@ import Summary from "../../models/summary"
 import DatasetModel from "../../models/dataset"
 import { filterRemovedAnnexObjects } from "../utils/file"
 import DeprecatedSnapshot from "../../models/deprecatedSnapshot"
-import { redis } from "../../libs/redis"
+import { getRedis } from "../../libs/redis"
 import CacheItem, { CacheType } from "../../cache/item"
 import { normalizeDOI } from "../../libs/doi/normalize"
 import { snapshotValidation } from "./validation"
@@ -175,7 +175,7 @@ const brainInitiativeQuery = {
 export const participantCount = (obj, { modality }) => {
   const cacheKey = modality || "all"
   const cache = new CacheItem(
-    redis,
+    getRedis(),
     CacheType.participantCount,
     [cacheKey],
     86400,

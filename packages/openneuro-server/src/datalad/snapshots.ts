@@ -3,7 +3,7 @@
  */
 import * as Sentry from "@sentry/node"
 import request from "superagent"
-import { redis, redlock } from "../libs/redis"
+import { getRedis, getRedlock } from "../libs/redis"
 import CacheItem, { CacheType } from "../cache/item"
 import config from "../config"
 import { snapshotCreationComparison } from "../utils/snapshots"
@@ -22,7 +22,7 @@ import { createEvent, updateEvent } from "../libs/events"
 import { queueIndexDataset } from "../queues/producer-methods"
 
 const lockSnapshot = (datasetId, tag) => {
-  return redlock.lock(
+  return getRedlock().lock(
     `openneuro:create-snapshot-lock:${datasetId}:${tag}`,
     1800000,
   )
@@ -107,7 +107,12 @@ const postSnapshot = async (
 export const getSnapshots = async (datasetId): Promise<SnapshotDocument[]> => {
   const dataset = await Dataset.findOne({ id: datasetId })
   if (!dataset) return null
-  const cache = new CacheItem(redis, CacheType.snapshot, [datasetId], 432000)
+  const cache = new CacheItem(
+    getRedis(),
+    CacheType.snapshot,
+    [datasetId],
+    432000,
+  )
   return cache.get(() => {
     const url = `${getDatasetWorker(datasetId)}/datasets/${datasetId}/snapshots`
     return request
@@ -141,7 +146,7 @@ export const createSnapshot = async (
   descriptionFieldUpdates = {},
   snapshotChanges = [],
 ) => {
-  const snapshotCache = new CacheItem(redis, CacheType.snapshot, [
+  const snapshotCache = new CacheItem(getRedis(), CacheType.snapshot, [
     datasetId,
     tag,
   ])
@@ -185,7 +190,7 @@ export const createSnapshot = async (
       ),
     ])
 
-    const snapshotListCache = new CacheItem(redis, CacheType.snapshot, [
+    const snapshotListCache = new CacheItem(getRedis(), CacheType.snapshot, [
       datasetId,
     ])
     await snapshotListCache.drop()
@@ -215,12 +220,12 @@ export const deleteSnapshot = (datasetId, tag) => {
     )
   }/datasets/${datasetId}/snapshots/${tag}`
   return request.del(url).then(async ({ body }) => {
-    const snapshotCache = new CacheItem(redis, CacheType.snapshot, [
+    const snapshotCache = new CacheItem(getRedis(), CacheType.snapshot, [
       datasetId,
       tag,
     ])
     await snapshotCache.drop()
-    const snapshotListCache = new CacheItem(redis, CacheType.snapshot, [
+    const snapshotListCache = new CacheItem(getRedis(), CacheType.snapshot, [
       datasetId,
     ])
     await snapshotListCache.drop()
@@ -244,7 +249,7 @@ export const getSnapshot = (
     )
   }/datasets/${datasetId}/snapshots/${commitRef}`
   const cache = new CacheItem(
-    redis,
+    getRedis(),
     CacheType.snapshot,
     [datasetId, commitRef],
     432000,

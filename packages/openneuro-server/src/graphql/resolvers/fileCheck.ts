@@ -1,7 +1,7 @@
 import config from "../../config"
 import { generateDataladCookie } from "../../libs/authentication/jwt"
 import { getDatasetWorker } from "../../libs/datalad-service"
-import { redlock } from "../../libs/redis"
+import { getRedlock } from "../../libs/redis"
 import FileCheck from "../../models/fileCheck"
 import { checkDatasetAdmin, checkDatasetWrite } from "../permissions"
 import type { GraphQLContext } from "../builder"
@@ -38,7 +38,7 @@ export const fsckDataset = async (_, { datasetId }, { user, userInfo }: GraphQLC
   }
   try {
     // Lock for 30 minutes to avoid stacking fsck requests
-    await redlock.lock(`openneuro:fsck-local-lock:${datasetId}`, 1800000)
+    await getRedlock().lock(`openneuro:fsck-local-lock:${datasetId}`, 1800000)
     const response = await fetch(fsckUrl(datasetId), {
       method: "POST",
       body: JSON.stringify({}),

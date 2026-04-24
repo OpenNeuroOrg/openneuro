@@ -1,5 +1,5 @@
 import { addFileString, commitFiles } from "./dataset"
-import { redis } from "../libs/redis"
+import { getRedis } from "../libs/redis"
 import CacheItem, { CacheType } from "../cache/item"
 import { getDatasetWorker } from "../libs/datalad-service"
 import { datasetOrSnapshot } from "../utils/datasetOrSnapshot"
@@ -14,7 +14,7 @@ export const readmeUrl = (datasetId, revision) => {
 
 export const readme = (obj) => {
   const { datasetId, revision } = datasetOrSnapshot(obj)
-  const cache = new CacheItem(redis, CacheType.readme, [
+  const cache = new CacheItem(getRedis(), CacheType.readme, [
     datasetId,
     revision.substring(0, 7),
   ])

@@ -1,4 +1,4 @@
-import { redis } from "../libs/redis"
+import { getRedis } from "../libs/redis"
 import { getDatasetWorker } from "../libs/datalad-service"
 import {
   getPresignedUrl,
@@ -184,7 +184,7 @@ export async function entryToDatasetFile(
   }
   let url: string
   if (entry.p && entry.k && entry.v) {
-    url = await getPresignedUrl(redis, entry.b, entry.k, entry.v)
+    url = await getPresignedUrl(getRedis(), entry.b, entry.k, entry.v)
   } else if (entry.k && entry.v) {
     url = publicS3Url(entry.b, entry.k, entry.v)
   } else {
@@ -260,15 +260,15 @@ async function cacheWorkerTrees(
         (f) => f.directory || f.urls[0]?.includes("s3.amazonaws.com"),
       )
       if (allExported) {
-        void setTree(redis, hash, entries)
+        void setTree(getRedis(), hash, entries)
         permanentHashes.push(hash)
       } else {
-        void setTree(redis, hash, entries, 600)
+        void setTree(getRedis(), hash, entries, 600)
       }
     }
   }
   if (permanentHashes.length > 0) {
-    void addDatasetTrees(redis, datasetId, permanentHashes)
+    void addDatasetTrees(getRedis(), datasetId, permanentHashes)
   }
   return result
 }
@@ -283,7 +283,10 @@ export const resolveGitRef = async (
   datasetId: string,
   treeish: string,
 ): Promise<string> => {
-  const cache = new CacheItem(redis, CacheType.gitRef, [datasetId, treeish])
+  const cache = new CacheItem(getRedis(), CacheType.gitRef, [
+    datasetId,
+    treeish,
+  ])
   return cache.get(async () => {
     const url = `http://${
       getDatasetWorker(datasetId)
@@ -324,7 +327,7 @@ export const getFiles = async (
     }
   }
   // Try cache first
-  const cached = await getTree(redis, treeish)
+  const cached = await getTree(getRedis(), treeish)
   if (cached) {
     return entriesToDatasetFiles(cached, datasetId)
   }
@@ -354,10 +357,10 @@ export async function getFilesRecursive(
 ): Promise<DatasetFile[]> {
   const needsPresign = await datasetNeedsPresign(datasetId)
   // Check for cached commit-to-trees mapping
-  const cachedTreeHashes = await getCommitTrees(redis, tree)
+  const cachedTreeHashes = await getCommitTrees(getRedis(), tree)
   if (cachedTreeHashes) {
     // Bulk-fetch all trees in one pipeline
-    const treesMap = await getTreesBulk(redis, cachedTreeHashes)
+    const treesMap = await getTreesBulk(getRedis(), cachedTreeHashes)
     if (treesMap.size < cachedTreeHashes.length) {
       // Batch-fetch all missing trees from the worker in one request
       const missingHashes = cachedTreeHashes.filter((h) => !treesMap.has(h))
@@ -381,7 +384,7 @@ export async function getFilesRecursive(
 
   while (pendingHashes.length > 0) {
     // Check cache for all pending hashes
-    const cached = await getTreesBulk(redis, pendingHashes)
+    const cached = await getTreesBulk(getRedis(), pendingHashes)
     const uncached = pendingHashes.filter((h) => !cached.has(h))
 
     // Fetch all uncached trees in one worker request
@@ -417,8 +420,8 @@ export async function getFilesRecursive(
   // Cache the commit-to-trees mapping for next time
   if (collectedHashes.size > 0) {
     const hashArray = [...collectedHashes]
-    void setCommitTrees(redis, tree, hashArray)
-    void addDatasetTrees(redis, datasetId, hashArray)
+    void setCommitTrees(getRedis(), tree, hashArray)
+    void addDatasetTrees(getRedis(), datasetId, hashArray)
   }
 
   return reconstructFromTrees(treesMap, tree, path, datasetId)
@@ -485,7 +488,7 @@ async function reconstructFromTrees(
   // Bulk-resolve presigned URLs in minimal Redis requests
   if (presignIndices.length > 0) {
     const urls = await getPresignedUrlsBulk(
-      redis,
+      getRedis(),
       presignIndices.map((i) => ({
         bucket: fileEntries[i].entry.b,
         s3Key: fileEntries[i].entry.k,

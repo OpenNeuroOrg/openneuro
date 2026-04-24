@@ -13,7 +13,7 @@ import type { TreeEntry } from "../../cache/tree"
 
 vi.mock("ioredis")
 vi.mock("../../config.ts")
-vi.mock("../../libs/redis", () => ({ redis: {} }))
+vi.mock("../../libs/redis", () => ({ getRedis: () => ({}) }))
 vi.mock("../../libs/presign", () => ({
   getPresignedUrl: vi.fn().mockResolvedValue(
     "https://s3.amazonaws.com/bucket/key?presigned=true",

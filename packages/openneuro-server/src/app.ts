@@ -22,7 +22,7 @@ import * as jwt from "./libs/authentication/jwt"
 import * as auth from "./libs/authentication/states"
 import { sitemapHandler } from "./handlers/sitemap"
 import { setupPassportAuth } from "./libs/authentication/passport"
-import { redis } from "./libs/redis"
+import { getRedis } from "./libs/redis"
 import { version } from "./lerna.json"
 export { Express } from "express-serve-static-core"
 
@@ -67,7 +67,7 @@ export async function expressApolloSetup() {
     // Always allow introspection - our schema is public
     introspection: true,
     // @ts-expect-error Type mismatch for keyv and ioredis recent releases
-    cache: new KeyvAdapter(new Keyv({ store: new KeyvRedis(redis) })),
+    cache: new KeyvAdapter(new Keyv({ store: new KeyvRedis(getRedis()) })),
     plugins: [
       ApolloServerPluginLandingPageLocalDefault(),
       ApolloServerPluginDrainHttpServer({

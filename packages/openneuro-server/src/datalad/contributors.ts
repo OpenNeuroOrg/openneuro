@@ -1,6 +1,6 @@
 import * as Sentry from "@sentry/node"
 import CacheItem, { CacheType } from "../cache/item"
-import { redis } from "../libs/redis"
+import { getRedis } from "../libs/redis"
 import {
   type DatasetOrSnapshot,
   datasetOrSnapshot,
@@ -26,7 +26,7 @@ export const contributors = async (
   if (!datasetId) return []
 
   const revisionShort = revision ? revision.substring(0, 7) : "HEAD"
-  const dataciteCache = new CacheItem(redis, CacheType.dataciteYml, [
+  const dataciteCache = new CacheItem(getRedis(), CacheType.dataciteYml, [
     datasetId,
     revisionShort,
   ])
