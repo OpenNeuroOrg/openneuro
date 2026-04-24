@@ -1,4 +1,5 @@
-import type { User } from "./user-types"
+import type { UserQuery } from "../../gql/graphql"
+type User = NonNullable<UserQuery["user"]>
 
 export type RequestStatus = "PENDING" | "ACCEPTED" | "DENIED"
 
@@ -122,7 +123,7 @@ export const mapRawEventToMappedNotification = (
             name: "Unknown",
             email: "",
             orcid: "",
-          })
+          } as User)
       approval = resolutionStatus ?? "PENDING"
       needsReview = approval === "PENDING"
       break
