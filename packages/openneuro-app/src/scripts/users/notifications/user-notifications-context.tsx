@@ -9,6 +9,7 @@ import * as Sentry from "@sentry/react"
 import { useMutation } from "@apollo/client"
 import { UPDATE_NOTIFICATION_STATUS_MUTATION } from "../../queries/datasetEvents"
 import {
+  type Event,
   type MappedNotification,
   mapRawEventToMappedNotification,
 } from "../../types/event-types"
@@ -40,8 +41,9 @@ export const NotificationsProvider: React.FC<NotificationsProviderProps> = ({
   const [notifications, setNotifications] = useState<MappedNotification[]>([])
 
   useEffect(() => {
-    const mapped = user?.notifications?.map(mapRawEventToMappedNotification) ??
-      []
+    const mapped = user?.notifications?.map((n) =>
+      mapRawEventToMappedNotification(n as unknown as Event)
+    ) ?? []
     setNotifications(mapped)
   }, [user?.notifications])
   const [updateEventStatus] = useMutation(UPDATE_NOTIFICATION_STATUS_MUTATION)

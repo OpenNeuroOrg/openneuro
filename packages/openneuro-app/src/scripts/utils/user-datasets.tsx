@@ -1,4 +1,8 @@
-import type { Dataset } from "../types/user-types"
+import type { UserAdvancedSearchDatasetsQuery } from "../../gql/graphql"
+
+type Dataset = NonNullable<
+  NonNullable<UserAdvancedSearchDatasetsQuery["datasets"]>["edges"]
+>[number]["node"]
 export interface FilterOptions {
   searchQuery: string
   publicFilter: string
@@ -26,10 +30,6 @@ export function filterAndSortDatasets(
   const sortedDatasets = filteredDatasets.sort((a, b) => {
     let comparisonResult = 0
 
-    // Move declarations outside the switch block
-    let aUpdated: Date | string
-    let bUpdated: Date | string
-
     switch (sortOrder) {
       case "name-asc":
         comparisonResult = (a.name || "").localeCompare(b.name || "")
@@ -38,15 +38,12 @@ export function filterAndSortDatasets(
         comparisonResult = (b.name || "").localeCompare(a.name || "")
         break
       case "date-newest":
-        comparisonResult =
-          new Date(b.latestSnapshot?.created || b.created).getTime() -
-          new Date(a.latestSnapshot?.created || a.created).getTime()
+        comparisonResult = new Date(b.created).getTime() -
+          new Date(a.created).getTime()
         break
       case "date-updated":
-        aUpdated = a.latestSnapshot?.created || a.created
-        bUpdated = b.latestSnapshot?.created || b.created
-        comparisonResult = new Date(bUpdated).getTime() -
-          new Date(aUpdated).getTime()
+        comparisonResult = new Date(b.created).getTime() -
+          new Date(a.created).getTime()
         break
       default:
         comparisonResult = 0

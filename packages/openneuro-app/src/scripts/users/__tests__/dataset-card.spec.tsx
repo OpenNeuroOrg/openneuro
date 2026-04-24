@@ -1,5 +1,6 @@
 import React from "react"
 import { render, screen } from "@testing-library/react"
+import { Severity, UserProvider } from "../../../gql/graphql"
 import DatasetCard from "../dataset-card"
 
 const mockDataset = {
@@ -19,21 +20,17 @@ const mockDataset = {
     { userId: "user1", datasetId: "ds000001" },
   ],
   latestSnapshot: {
-    id: "ds000001:1.0.0",
     size: 1024 ** 3,
-    issues: [{ severity: "low" }],
-    created: "2025-01-01T00:00:00Z",
+    issues: [{ severity: Severity.Warning }],
     description: {
       Name: "Test Dataset Description",
       Authors: ["John Doe"],
-      SeniorAuthor: "Dr. Smith",
-      DatasetType: "fMRI",
     },
     summary: {
       modalities: ["fMRI"],
       secondaryModalities: [],
-      sessions: 1,
-      subjects: 1,
+      sessions: ["1"],
+      subjects: ["1"],
       subjectMetadata: [],
       tasks: ["rest"],
       size: 1024 ** 3,
@@ -43,8 +40,8 @@ const mockDataset = {
       primaryModality: "MRI",
     },
     validation: {
-      errors: [],
-      warnings: [],
+      errors: 0,
+      warnings: 0,
     },
   },
   uploader: {
@@ -63,7 +60,7 @@ const mockDataset = {
           id: "someUser",
           name: "Some User",
           email: "some@user.com",
-          provider: "github",
+          provider: UserProvider.Orcid,
         },
       },
     ],
@@ -118,7 +115,7 @@ describe("DatasetCard", () => {
   it("should display 'Unknown size' if latestSnapshot or size is missing", () => {
     const datasetWithoutSize = {
       ...mockDataset,
-      latestSnapshot: { ...mockDataset.latestSnapshot, size: undefined },
+      latestSnapshot: { ...mockDataset.latestSnapshot, size: null },
     }
     render(<DatasetCard dataset={datasetWithoutSize} hasEdit={false} />)
     expect(screen.getByText("Dataset Size:")).toHaveTextContent(

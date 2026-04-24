@@ -4,7 +4,16 @@ import activityPulseIcon from "../../assets/activity-icon.png"
 import { Tooltip } from "../components/tooltip/Tooltip"
 import { Icon } from "../components/icon/Icon"
 import styles from "./scss/datasetcard.module.scss"
-import type { DatasetCardProps } from "../types/user-types"
+import type { UserAdvancedSearchDatasetsQuery } from "../../gql/graphql"
+
+type Dataset = NonNullable<
+  NonNullable<UserAdvancedSearchDatasetsQuery["datasets"]>["edges"]
+>[number]["node"]
+
+interface DatasetCardProps {
+  dataset: Dataset
+  hasEdit: boolean
+}
 import { ModalityHexagon } from "../components/modality-cube/ModalityHexagon"
 import { SearchResultsCitation } from "../components/citation/search-results-citation"
 
@@ -76,6 +85,8 @@ export const DatasetCard: React.FC<DatasetCardProps> = (
   )
 
   const sizeInBytes = dataset.latestSnapshot?.size
+    ? Number(dataset.latestSnapshot.size)
+    : null
   let datasetSize = "Unknown size"
 
   if (sizeInBytes) {

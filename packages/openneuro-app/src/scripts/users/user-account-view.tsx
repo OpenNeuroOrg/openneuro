@@ -6,7 +6,13 @@ import { EditableContent } from "./components/editable-content"
 import { GET_USER, UPDATE_USER } from "../queries/user"
 import styles from "./scss/useraccountview.module.scss"
 import { GitHubAuthButton } from "./github-auth-button"
-import type { UserAccountViewProps } from "../types/user-types"
+import type { UserQuery } from "../../gql/graphql"
+
+type User = NonNullable<UserQuery["user"]>
+
+interface UserAccountViewProps {
+  orcidUser: User
+}
 import { OrcidConsentForm } from "./components/orcid-consent-form"
 import { validateHttpHttpsUrl } from "../utils/validationUtils"
 import { pageTitle } from "../resources/strings.js"
@@ -89,7 +95,7 @@ export const UserAccountView: React.FC<UserAccountViewProps> = ({
     <>
       <Helmet>
         <title>
-            {orcidUser.name || "User"} profile - {pageTitle}
+          {orcidUser.name || "User"} profile - {pageTitle}
         </title>
       </Helmet>
       <div data-testid="user-account-view" className={styles.useraccountview}>

@@ -1,6 +1,13 @@
 import React from "react"
 import { formatStatusForDisplay } from "../../types/event-types"
-import type { User } from "../../types/user-types"
+// Minimal user shape accepted by Username component, compatible with both
+// generated (UserQuery) and hand-written (event-types) User types.
+interface User {
+  id?: string | null
+  name?: string | null
+  orcid?: string | null
+  email?: string | null
+}
 import { Username } from "../username"
 import styles from "./scss/usernotifications.module.scss"
 

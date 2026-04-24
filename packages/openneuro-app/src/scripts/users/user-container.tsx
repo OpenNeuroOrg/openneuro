@@ -3,7 +3,15 @@ import { Outlet } from "react-router-dom"
 import { UserCard } from "./user-card"
 import { UserAccountTabs } from "./user-tabs"
 import styles from "./scss/usercontainer.module.scss"
-import type { AccountContainerProps } from "../types/user-types"
+import type { UserQuery } from "../../gql/graphql"
+
+type User = NonNullable<UserQuery["user"]>
+
+interface AccountContainerProps {
+  orcidUser: User
+  hasEdit: boolean
+  isUser: boolean
+}
 
 export const UserAccountContainer: React.FC<AccountContainerProps> = ({
   orcidUser,

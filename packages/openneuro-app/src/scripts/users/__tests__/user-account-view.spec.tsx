@@ -8,7 +8,9 @@ import {
   within,
 } from "@testing-library/react"
 import { UserAccountView } from "../user-account-view"
-import type { User } from "../../types/user-types"
+import { UserProvider, type UserQuery } from "../../../gql/graphql"
+
+type User = NonNullable<UserQuery["user"]>
 import * as userQueries from "../../queries/user"
 import { BrowserRouter } from "react-router-dom"
 
@@ -23,7 +25,7 @@ const baseUser: User = {
   orcid: "0000-0000-0000-0000",
   links: [],
   admin: false,
-  provider: "orcid",
+  provider: UserProvider.Orcid,
   created: new Date("2025-05-20T14:50:32.424Z").toISOString(),
   lastSeen: new Date("2025-05-20T14:50:32.424Z").toISOString(),
   blocked: false,

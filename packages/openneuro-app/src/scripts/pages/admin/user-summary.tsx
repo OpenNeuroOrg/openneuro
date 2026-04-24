@@ -2,7 +2,12 @@ import React from "react"
 import parseISO from "date-fns/parseISO"
 import formatDistanceToNow from "date-fns/formatDistanceToNow"
 import { formatDate } from "../../utils/date.js"
-import type { User } from "../../types/user-types"
+import type { UserQuery } from "../../../gql/graphql"
+
+// Admin user list includes `modified` which isn't in the single-user query
+type User = NonNullable<UserQuery["user"]> & {
+  modified?: string | null
+}
 import styles from "./users.module.scss"
 import { Tooltip } from "../../components/tooltip/Tooltip"
 import { UserTools } from "./user-tools.js"

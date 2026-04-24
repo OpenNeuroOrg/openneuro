@@ -5,11 +5,14 @@ import { MemoryRouter, Outlet } from "react-router-dom"
 import { MockedProvider } from "@apollo/client/testing"
 import { UserRoutes } from "../user-routes"
 import type { Event, MappedNotification } from "../../types/event-types"
-import type { OutletContextType, User } from "../../types/user-types"
+import type { UserQuery } from "../../../gql/graphql"
+import type { OutletContextType } from "../user-routes"
+
+type User = NonNullable<UserQuery["user"]>
 import { ADVANCED_SEARCH_DATASETS_QUERY, GET_USER } from "../../queries/user"
 
 // A minimal test user object, replacing the need for an external "testUser" import
-const testUser = {
+const testUser: User = {
   id: "1",
   name: "John Doe",
   location: "Unknown",
@@ -20,6 +23,7 @@ const testUser = {
   orcid: "0000-0000-0000-0000",
   links: [],
   notifications: [],
+  created: "2025-01-01T00:00:00Z",
 }
 
 const setupUserRoutes = (
@@ -213,7 +217,7 @@ vi.mock("./user-notifications-view", () => {
 })
 
 describe("UserRoutes Component", () => {
-  const userToPass: User = testUser
+  const userToPass = testUser
 
   afterEach(() => {
     cleanup()

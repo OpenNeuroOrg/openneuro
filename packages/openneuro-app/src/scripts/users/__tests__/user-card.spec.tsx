@@ -1,7 +1,9 @@
 import React from "react"
 import { render, screen } from "@testing-library/react"
 import { UserCard } from "../user-card"
-import type { User } from "../../types/user-types"
+import type { UserQuery } from "../../../gql/graphql"
+
+type User = NonNullable<UserQuery["user"]>
 
 describe("UserCard Component", () => {
   const baseUser: User = {
@@ -14,6 +16,7 @@ describe("UserCard Component", () => {
     links: ["https://example.com", "https://example.org"],
     github: "johndoe",
     avatar: "https://example.com/avatar.jpg",
+    created: "2025-01-01T00:00:00Z",
   }
 
   it("renders all user details when all data is provided", () => {
@@ -54,6 +57,7 @@ describe("UserCard Component", () => {
       avatar: "https://example.com/avatar.jpg",
       location: "",
       institution: "",
+      created: "2025-01-01T00:00:00Z",
     }
 
     render(<UserCard orcidUser={minimalUser} />)
@@ -84,6 +88,7 @@ describe("UserCard Component", () => {
       avatar: "https://example.com/avatar.jpg",
       location: "New York, NY",
       institution: "NYU",
+      created: "2025-01-01T00:00:00Z",
     }
 
     render(<UserCard orcidUser={userWithEmptyLinks} />)
@@ -104,6 +109,7 @@ describe("UserCard Component", () => {
       avatar: "https://example.com/avatar.jpg",
       location: "",
       institution: "",
+      created: "2025-01-01T00:00:00Z",
     }
 
     render(<UserCard orcidUser={userWithoutLocationAndInstitution} />)

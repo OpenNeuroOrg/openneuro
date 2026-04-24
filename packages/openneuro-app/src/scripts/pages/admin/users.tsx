@@ -4,7 +4,12 @@ import React, { useCallback, useEffect, useState } from "react"
 import { Loading } from "../../components/loading/Loading"
 import Helmet from "react-helmet"
 import { pageTitle } from "../../resources/strings.js"
-import type { User } from "../../types/user-types"
+import type { UserQuery } from "../../../gql/graphql"
+
+// Admin user list includes `modified` which isn't in the single-user query
+type User = NonNullable<UserQuery["user"]> & {
+  modified?: string | null
+}
 import styles from "./users.module.scss"
 import { useUsers } from "../../queries/users"
 import UserSummary from "./user-summary"

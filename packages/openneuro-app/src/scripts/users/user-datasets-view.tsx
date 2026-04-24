@@ -6,14 +6,23 @@ import { UserDatasetFilters } from "./components/user-dataset-filters"
 import { ADVANCED_SEARCH_DATASETS_QUERY } from "../queries/user"
 import { Button } from "../components/button/Button"
 import { Loading } from "../components/loading/Loading"
-import type { Dataset, UserDatasetsViewProps } from "../types/user-types"
+import {
+  type DatasetSearchInput,
+  SearchSortOption,
+  type UserAdvancedSearchDatasetsQuery,
+  type UserQuery,
+} from "../../gql/graphql"
 import styles from "./scss/datasetcard.module.scss"
 
-interface SearchInput {
-  keywords?: string[]
-  userId?: string
-  publicOnly?: boolean
-  sortBy?: string
+type User = NonNullable<UserQuery["user"]>
+
+type Dataset = NonNullable<
+  NonNullable<UserAdvancedSearchDatasetsQuery["datasets"]>["edges"]
+>[number]["node"]
+
+interface UserDatasetsViewProps {
+  orcidUser: User
+  hasEdit: boolean
 }
 
 const buildSearchInput = (
@@ -21,9 +30,9 @@ const buildSearchInput = (
   publicFilter: string,
   userId: string | undefined,
   hasEdit: boolean,
-  sortBy: string | undefined,
-): SearchInput => {
-  const input: SearchInput = {}
+  sortBy: SearchSortOption | undefined,
+): DatasetSearchInput => {
+  const input: DatasetSearchInput = {}
 
   if (userId) {
     input.userId = userId
@@ -48,12 +57,12 @@ const buildSearchInput = (
   return input
 }
 
-const SORT_MAP: Record<string, string | undefined> = {
-  "name-asc": "name_asc",
-  "name-desc": "name_desc",
-  "date-newest": "newest",
-  "date-oldest": "oldest",
-  "date-updated": "last_updated",
+const SORT_MAP: Record<string, SearchSortOption | undefined> = {
+  "name-asc": SearchSortOption.NameAsc,
+  "name-desc": SearchSortOption.NameDesc,
+  "date-newest": SearchSortOption.Newest,
+  "date-oldest": SearchSortOption.Oldest,
+  "date-updated": SearchSortOption.LastUpdated,
 }
 
 export const UserDatasetsView: React.FC<UserDatasetsViewProps> = ({
@@ -71,7 +80,7 @@ export const UserDatasetsView: React.FC<UserDatasetsViewProps> = ({
 
   const sortByValue = SORT_MAP[sortOrder]
 
-  const [searchInput, setSearchInput] = useState(() =>
+  const [searchInput, setSearchInput] = useState<DatasetSearchInput>(() =>
     buildSearchInput("", "all", orcidUser?.id, hasEdit, sortByValue)
   )
 

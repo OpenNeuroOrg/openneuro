@@ -1,5 +1,9 @@
 import { filterAndSortDatasets } from "../user-datasets"
-import type { Dataset } from "../../types/user-types"
+import type { UserAdvancedSearchDatasetsQuery } from "../../../gql/graphql"
+
+type Dataset = NonNullable<
+  NonNullable<UserAdvancedSearchDatasetsQuery["datasets"]>["edges"]
+>[number]["node"]
 
 describe("filterAndSortDatasets", () => {
   const datasets: Dataset[] = [
@@ -8,10 +12,7 @@ describe("filterAndSortDatasets", () => {
       name: "Dataset Bel",
       created: "2025-01-21T12:00:00Z",
       latestSnapshot: {
-        id: "1.0.0",
         size: 1024,
-        issues: [{ severity: "low" }],
-        created: "2025-01-22T12:00:00Z",
       },
       public: true,
       analytics: { downloads: 0, views: 10 },
@@ -21,10 +22,7 @@ describe("filterAndSortDatasets", () => {
       name: "Dataset Ael",
       created: "2025-01-22T12:00:00Z",
       latestSnapshot: {
-        id: "2.0.0",
         size: 2048,
-        issues: [{ severity: "high" }],
-        created: "2025-01-23T12:00:00Z",
       },
       public: false,
       analytics: { downloads: 5, views: 20 },
@@ -34,10 +32,7 @@ describe("filterAndSortDatasets", () => {
       name: "Dataset Cel",
       created: "2025-01-20T12:00:00Z",
       latestSnapshot: {
-        id: "3.0.0",
         size: 4096,
-        issues: [{ severity: "medium" }],
-        created: "2025-01-20T12:00:00Z",
       },
       public: true,
       analytics: { downloads: 15, views: 30 },
