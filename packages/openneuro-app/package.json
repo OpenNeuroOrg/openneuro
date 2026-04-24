@@ -20,6 +20,7 @@
     "@bids/validator": "npm:@jsr/bids__validator@^2.3.2",
     "@emotion/react": "11.11.1",
     "@emotion/styled": "11.11.0",
+    "@graphql-typed-document-node/core": "^3.2.0",
     "@niivue/niivue": "0.57.0",
     "@openneuro/components": "^4.33.4",
     "@sentry/react": "^10.37.0",
