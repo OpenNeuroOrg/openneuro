@@ -8,7 +8,7 @@ interface CitationDataset {
   latestSnapshot?: {
     description?: {
       Name?: string | null
-      Authors?: Array<string | null> | null
+      Authors?: string[] | null
       DatasetDOI?: string | null
     } | null
   } | null

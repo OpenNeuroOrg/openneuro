@@ -15,7 +15,7 @@ import { NotificationActionButtons } from "./user-notification-accordion-actions
 import ToastContent from "../../common/partials/toast-content"
 import styles from "./scss/usernotifications.module.scss"
 
-import {
+import type {
   NotificationStatusType,
   ResponseStatusType,
 } from "../../../gql/graphql"
