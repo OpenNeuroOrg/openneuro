@@ -25,3 +25,6 @@ jobs:
         run: yarn build
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      # Requires yarn build, so convenient to run here
+      - name: Codegen freshness
+        run: yarn codegen:check
