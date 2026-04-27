@@ -14,7 +14,13 @@ import {
   NotificationsProvider,
   useNotifications,
 } from "./user-notifications-context"
-import type { UserNotificationsViewProps } from "../../types/user-types"
+import type { UserQuery } from "../../../gql/graphql"
+
+type User = NonNullable<UserQuery["user"]>
+
+interface UserNotificationsViewProps {
+  orcidUser: User
+}
 
 export const UserNotificationsView: React.FC<UserNotificationsViewProps> = (
   { orcidUser },

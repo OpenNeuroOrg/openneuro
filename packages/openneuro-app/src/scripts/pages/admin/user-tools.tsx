@@ -4,7 +4,12 @@ import { useMutation } from "@apollo/client"
 import { WarnButton } from "../../components/warn-button/WarnButton"
 import { getProfile } from "../../authentication/profile"
 import { useCookies } from "react-cookie"
-import type { User } from "../../types/user-types"
+import type { UserQuery } from "../../../gql/graphql"
+
+// Admin user list includes `modified` which isn't in the single-user query
+type User = NonNullable<UserQuery["user"]> & {
+  modified?: string | null
+}
 import styles from "./users.module.scss"
 import * as Sentry from "@sentry/react"
 

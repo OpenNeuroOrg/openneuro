@@ -1,6 +1,22 @@
-import type { User } from "./user-types"
+import type {
+  GetDatasetEventsQuery,
+  ResponseStatusType,
+  UserQuery,
+} from "../../../gql/graphql"
 
-export type RequestStatus = "PENDING" | "ACCEPTED" | "DENIED"
+type User = NonNullable<UserQuery["user"]>
+
+/** A single notification from the UserQuery result. */
+export type Notification = NonNullable<
+  NonNullable<UserQuery["user"]>["notifications"]
+>[number]
+
+/** A single dataset event from the GetDatasetEventsQuery result. */
+export type DatasetEvent = NonNullable<
+  NonNullable<
+    NonNullable<GetDatasetEventsQuery["dataset"]>["events"]
+  >[number]
+>
 
 /**
  * Format a RequestStatus or compatible string for display in user-facing UI.
@@ -15,75 +31,29 @@ export function formatStatusForDisplay(
   return status ? status.toLowerCase() : ""
 }
 
-export interface ContributorData {
-  name?: string
-  givenName?: string
-  familyName?: string | null
-  orcid?: string
-  contributorType?: string
-  order?: number | null
-}
-
-export interface EventDescription {
-  type: string
-  targetUserId?: string
-  status?: RequestStatus
-  requestId?: string
-  message?: string
-  reason?: string
-  datasetId?: string
-  resolutionStatus?: RequestStatus
-  target?: User
-  version?: string
-  public?: boolean
-  level?: string
-  ref?: string
-  contributorData?: ContributorData | null
-}
-
-export interface Event {
-  id: string
-  timestamp: string
-  note?: string
-  success?: boolean
-  event: EventDescription
-  user?: User
-  hasBeenRespondedTo?: boolean
-  responseStatus?: string
-  dataset?: {
-    id: string
-    name?: string
-  }
-  datasetId?: string
-  notificationStatus?: {
-    status: "UNREAD" | "SAVED" | "ARCHIVED"
-  }
-}
-
 export interface MappedNotification {
   id: string
   title: string
   content: string
   status: "unread" | "saved" | "archived"
-  type: EventDescription["type"]
-  approval?: RequestStatus
-  originalNotification: Event
+  type: string
+  approval?: ResponseStatusType | null
+  originalNotification: Notification
   datasetId?: string
   needsReview?: boolean
-  requestId?: string
+  requestId?: string | null
   targetUser?: User
-  targetUserId?: string
+  targetUserId?: string | null
   requesterUser?: User
   adminUser?: User
-  reason?: string
-  resStatus?: string
+  reason?: string | null
+  resStatus?: string | null
 }
 
 export const mapRawEventToMappedNotification = (
-  rawNotification: Event,
+  rawNotification: Notification,
 ): MappedNotification => {
-  const { event, note, user, dataset, datasetId: rawDatasetId } =
-    rawNotification
+  const { event, note, user } = rawNotification
   const {
     type,
     resolutionStatus,
@@ -91,59 +61,60 @@ export const mapRawEventToMappedNotification = (
     targetUserId: eventTargetUserId,
     target,
     reason,
-  } = event
+    datasetId: eventDatasetId,
+  } = event ?? {}
 
   let title = "General Notification"
-  const mappedType: MappedNotification["type"] = type
+  const mappedType: string = type ?? ""
   let approval: MappedNotification["approval"]
   let requesterUser: User | undefined
   let adminUser: User | undefined
   let targetUser: User | undefined
   let needsReview = false
-  let resStatus = resolutionStatus
+  let resStatus: string | null | undefined = resolutionStatus
 
   switch (type) {
     case "contributorRequest":
       title = "is requesting to be added to"
-      requesterUser = user // user initiating the request (admin)
-      targetUser = target || rawNotification.user // fallback
-      approval = resolutionStatus ?? "PENDING"
+      requesterUser = user as User // user initiating the request (admin)
+      targetUser = (target as User) || (rawNotification.user as User) // fallback
+      approval = resolutionStatus ?? "PENDING" as ResponseStatusType
       needsReview = approval === "PENDING"
       break
     case "contributorCitation":
       title = "added"
-      adminUser = user
+      adminUser = user as User
       // fallback to rawNotification.user if target is missing (but not the admin)
-      targetUser = target ||
-        (rawNotification.user && rawNotification.user.id !== user.id
-          ? rawNotification.user
+      targetUser = (target as User) ||
+        (rawNotification.user && rawNotification.user.id !== user?.id
+          ? (rawNotification.user as User)
           : {
             id: eventTargetUserId || "",
             name: "Unknown",
             email: "",
             orcid: "",
-          })
-      approval = resolutionStatus ?? "PENDING"
+          } as User)
+      approval = resolutionStatus ?? "PENDING" as ResponseStatusType
       needsReview = approval === "PENDING"
       break
 
     case "contributorRequestResponse":
       title = "responded to a contributor request"
-      adminUser = user
-      targetUser = target
-      approval = resolutionStatus ?? "PENDING"
+      adminUser = user as User
+      targetUser = target as User
+      approval = resolutionStatus ?? "PENDING" as ResponseStatusType
       break
 
     case "contributorCitationResponse":
       title = "had their citation request for"
-      adminUser = user
-      targetUser = target
-      approval = resolutionStatus ?? "PENDING"
+      adminUser = user as User
+      targetUser = target as User
+      approval = resolutionStatus ?? "PENDING" as ResponseStatusType
       break
 
     case "note":
       title = "Admin note on"
-      adminUser = user
+      adminUser = user as User
       resStatus = null
       break
 
@@ -152,7 +123,7 @@ export const mapRawEventToMappedNotification = (
       break
   }
 
-  const datasetId = dataset?.id || rawDatasetId || event.datasetId || ""
+  const datasetId = eventDatasetId || ""
 
   const notificationStatus =
     (rawNotification.notificationStatus?.status?.toLowerCase() as
@@ -161,7 +132,7 @@ export const mapRawEventToMappedNotification = (
       | "archived") ?? "unread"
 
   return {
-    id: rawNotification.id,
+    id: rawNotification.id ?? "",
     title,
     content: note || "",
     status: notificationStatus,

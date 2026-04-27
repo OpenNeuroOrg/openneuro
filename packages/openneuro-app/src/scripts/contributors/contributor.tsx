@@ -2,12 +2,12 @@ import React from "react"
 import { Link } from "react-router-dom"
 import { useUser } from "../queries/user"
 import type { Contributor } from "../types/datacite"
-import type { RequestStatus } from "../types/event-types.ts"
+import type { ResponseStatusType } from "../../gql/graphql"
 import ORCIDiDLogo from "../../assets/ORCIDiD_iconvector.svg"
 
 interface SingleContributorDisplayProps {
   contributor: Contributor & {
-    resolutionStatus?: RequestStatus
+    resolutionStatus?: ResponseStatusType
   }
   isLast: boolean
   separator: React.ReactNode

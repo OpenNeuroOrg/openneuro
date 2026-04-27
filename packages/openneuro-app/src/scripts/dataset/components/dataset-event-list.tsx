@@ -1,9 +1,9 @@
 import React from "react"
-import type { Event } from "../../types/event-types"
+import type { DatasetEvent } from "../../users/notifications/notification-mapper"
 import { DatasetEventItem } from "./dataset-event-item"
 
 interface DatasetEventListProps {
-  events: Event[]
+  events: DatasetEvent[]
   datasetId: string
   editingNoteId: string | null
   updatedNote: string

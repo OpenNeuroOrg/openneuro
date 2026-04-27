@@ -8,7 +8,7 @@ import { SingleContributorDisplay } from "../contributor"
 // --- Mock Dependencies ---
 vi.mock("../../queries/user", () => ({
   useUser: vi.fn(() => ({
-    user: null,
+    user: undefined,
     loading: false,
     error: undefined,
   })),
@@ -44,12 +44,16 @@ describe("SingleContributorDisplay - Basic Loading", () => {
     vi.mocked(useUser).mockImplementation((userId) => {
       if (userId) {
         return {
-          user: { id: userId, name: `Mock User ${userId}` },
+          user: {
+            id: userId,
+            name: `Mock User ${userId}`,
+            created: "2025-01-01T00:00:00Z",
+          },
           loading: false,
           error: undefined,
         }
       }
-      return { user: null, loading: false, error: undefined }
+      return { user: undefined, loading: false, error: undefined }
     })
   })
 

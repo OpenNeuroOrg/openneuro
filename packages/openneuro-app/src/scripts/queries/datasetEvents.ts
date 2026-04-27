@@ -1,6 +1,6 @@
-import { gql } from "@apollo/client"
+import { graphql } from "../../gql"
 
-export const GET_DATASET_EVENTS = gql`
+export const GET_DATASET_EVENTS = graphql(/* GraphQL */ `
   query GetDatasetEvents($datasetId: ID!) {
     dataset(id: $datasetId) {
       events {
@@ -16,7 +16,7 @@ export const GET_DATASET_EVENTS = gql`
         }
         event {
           type
-          requestId 
+          requestId
           targetUserId
           resolutionStatus
         }
@@ -25,18 +25,18 @@ export const GET_DATASET_EVENTS = gql`
       }
     }
   }
-`
+`)
 
-export const SAVE_ADMIN_NOTE_MUTATION = gql`
+export const SAVE_ADMIN_NOTE_MUTATION = graphql(/* GraphQL */ `
   mutation SaveAdminNote($datasetId: ID!, $note: String!) {
     saveAdminNote(datasetId: $datasetId, note: $note) {
       note
     }
   }
-`
+`)
 
-export const UPDATE_ADMIN_NOTE_MUTATION = gql`
-  mutation SaveAdminNote(
+export const UPDATE_ADMIN_NOTE_MUTATION = graphql(/* GraphQL */ `
+  mutation UpdateAdminNote(
     $note: String!
     $datasetId: ID!
     $saveAdminNoteId: ID
@@ -46,9 +46,9 @@ export const UPDATE_ADMIN_NOTE_MUTATION = gql`
       note
     }
   }
-`
+`)
 
-export const PROCESS_CONTRIBUTOR_REQUEST_MUTATION = gql`
+export const PROCESS_CONTRIBUTOR_REQUEST_MUTATION = graphql(/* GraphQL */ `
   mutation ProcessContributorRequest(
     $datasetId: ID!
     $requestId: ID!
@@ -72,17 +72,17 @@ export const PROCESS_CONTRIBUTOR_REQUEST_MUTATION = gql`
       note
     }
   }
-`
+`)
 
-export const UPDATE_NOTIFICATION_STATUS_MUTATION = gql`
+export const UPDATE_NOTIFICATION_STATUS_MUTATION = graphql(/* GraphQL */ `
   mutation UpdateEventStatus($eventId: ID!, $status: NotificationStatusType!) {
     updateEventStatus(eventId: $eventId, status: $status) {
       status
     }
   }
-`
+`)
 
-export const CREATE_CONTRIBUTOR_REQUEST_EVENT = gql`
+export const CREATE_CONTRIBUTOR_REQUEST_EVENT = graphql(/* GraphQL */ `
   mutation CreateContributorRequestEvent($datasetId: ID!) {
     createContributorRequestEvent(datasetId: $datasetId) {
       id
@@ -94,9 +94,9 @@ export const CREATE_CONTRIBUTOR_REQUEST_EVENT = gql`
       note
     }
   }
-`
+`)
 
-export const DATASET_EVENTS_QUERY = gql`
+export const DATASET_EVENTS_QUERY = graphql(/* GraphQL */ `
   query DatasetEvents($datasetId: ID!) {
     dataset(id: $datasetId) {
       id
@@ -115,9 +115,9 @@ export const DATASET_EVENTS_QUERY = gql`
       }
     }
   }
-`
+`)
 
-export const CREATE_CONTRIBUTOR_CITATION_EVENT = gql`
+export const CREATE_CONTRIBUTOR_CITATION_EVENT = graphql(/* GraphQL */ `
   mutation CreateContributorCitationEvent(
     $datasetId: ID!
     $targetUserId: ID!
@@ -150,9 +150,9 @@ export const CREATE_CONTRIBUTOR_CITATION_EVENT = gql`
       note
     }
   }
-`
+`)
 
-export const PROCESS_CONTRIBUTOR_CITATION_MUTATION = gql`
+export const PROCESS_CONTRIBUTOR_CITATION_MUTATION = graphql(/* GraphQL */ `
   mutation ProcessContributorCitation($eventId: ID!, $status: ResponseStatusType!) {
     processContributorCitation(eventId: $eventId, status: $status) {
       id
@@ -177,4 +177,4 @@ export const PROCESS_CONTRIBUTOR_CITATION_MUTATION = gql`
       }
     }
   }
-`
+`)

@@ -1,6 +1,12 @@
 import React from "react"
 import styles from "./scss/usercard.module.scss"
-import type { UserCardProps } from "../types/user-types"
+import type { UserQuery } from "../../gql/graphql"
+
+type User = NonNullable<UserQuery["user"]>
+
+interface UserCardProps {
+  orcidUser: User
+}
 
 export const UserCard: React.FC<UserCardProps> = ({ orcidUser }) => {
   const { location, institution, email, orcid, links = [], github, name } =

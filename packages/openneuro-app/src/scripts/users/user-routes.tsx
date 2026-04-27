@@ -11,8 +11,25 @@ import {
   SavedNotifications,
   UnreadNotifications,
 } from "./notifications/user-notifications-tab-content"
-import type { OutletContextType, UserRoutesProps } from "../types/user-types"
+import type { MappedNotification } from "./notifications/notification-mapper"
+import type { UserQuery } from "../../gql/graphql"
 import { OrcidConsentModal } from "./user-orcid-consent-modal"
+
+type User = NonNullable<UserQuery["user"]>
+
+export interface UserRoutesProps {
+  orcidUser: User
+  hasEdit: boolean
+  isUser: boolean
+}
+
+export type OutletContextType = {
+  notifications: MappedNotification[]
+  handleUpdateNotification: (
+    id: string,
+    updates: Partial<MappedNotification>,
+  ) => void
+}
 
 // This context is for managing notifications state
 export const NotificationsContext = createContext<OutletContextType | null>(

@@ -15,10 +15,14 @@ import { NotificationActionButtons } from "./user-notification-accordion-actions
 import ToastContent from "../../common/partials/toast-content"
 import styles from "./scss/usernotifications.module.scss"
 
+import type {
+  NotificationStatusType,
+  ResponseStatusType,
+} from "../../../gql/graphql"
 import {
   formatStatusForDisplay,
   type MappedNotification,
-} from "../../types/event-types"
+} from "./notification-mapper"
 
 export const NotificationAccordion = ({
   notification,
@@ -56,7 +60,7 @@ export const NotificationAccordion = ({
   const [showReasonInput, setShowReasonInput] = useState(false)
   const [reasonInput, setReasonInput] = useState("")
   const [currentApprovalAction, setCurrentApprovalAction] = useState<
-    "ACCEPTED" | "DENIED" | null
+    ResponseStatusType.Accepted | ResponseStatusType.Denied | null
   >(null)
 
   const [processContributorRequest, { loading: processRequestLoading }] =
@@ -81,12 +85,15 @@ export const NotificationAccordion = ({
     }
   }, [isOpen])
 
-  const handleProcessAction = useCallback((action: "ACCEPTED" | "DENIED") => {
-    setIsOpen(true)
-    setShowReasonInput(true)
-    setReasonInput("")
-    setCurrentApprovalAction(action)
-  }, [])
+  const handleProcessAction = useCallback(
+    (action: ResponseStatusType.Accepted | ResponseStatusType.Denied) => {
+      setIsOpen(true)
+      setShowReasonInput(true)
+      setReasonInput("")
+      setCurrentApprovalAction(action)
+    },
+    [],
+  )
 
   const handleReasonSubmit = useCallback(async () => {
     if (!reasonInput.trim()) {
@@ -142,7 +149,6 @@ export const NotificationAccordion = ({
           variables: {
             eventId,
             status: currentApprovalAction,
-            reason: reasonInput,
           },
         })
 
@@ -193,7 +199,7 @@ export const NotificationAccordion = ({
       onUpdate(id, { status: newStatus })
 
       try {
-        const backendStatus = newStatus.toUpperCase()
+        const backendStatus = newStatus.toUpperCase() as NotificationStatusType
 
         await updateNotificationStatus({
           variables: { eventId: id, status: backendStatus },

@@ -6,7 +6,7 @@ import { toast } from "react-toastify"
 import { useSearchParams } from "react-router-dom" // React Router for URL parsing
 
 interface GitHubAuthButtonProps {
-  sync: Date | null
+  sync: string | Date | null | undefined
 }
 
 const GithubSyncDiv = styled.div`
@@ -19,7 +19,7 @@ const GithubSyncDiv = styled.div`
 
     &:hover {
       background-color: var(--current-theme-primary-ultralight);
-       color: var(--current-theme-primary);
+      color: var(--current-theme-primary);
     }
     &.active {
       background-color: transparent;

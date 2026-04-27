@@ -1,7 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import { gql, useQuery } from "@apollo/client"
 import * as Sentry from "@sentry/react"
-import type { User } from "../types/user-types"
+import type { UserQuery } from "../../gql/graphql"
+
+// Admin user list (GET_USERS) includes fields not in the single-user query,
+// such as `modified`. Extend the generated type until GET_USERS is migrated.
+type User = NonNullable<UserQuery["user"]> & {
+  modified?: string | null
+}
 
 // --- Fragments ---
 export const USER_FRAGMENT = gql`
