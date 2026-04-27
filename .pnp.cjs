@@ -19702,12 +19702,12 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["postcss", [\
-      ["npm:8.5.6", {\
-        "packageLocation": "./.yarn/cache/postcss-npm-8.5.6-e7f126c6f3-9e4fbe9757.zip/node_modules/postcss/",\
+      ["npm:8.5.12", {\
+        "packageLocation": "./.yarn/cache/postcss-npm-8.5.12-9e3c2c1a24-ec6b79b68c.zip/node_modules/postcss/",\
         "packageDependencies": [\
           ["nanoid", "npm:3.3.11"],\
           ["picocolors", "npm:1.1.1"],\
-          ["postcss", "npm:8.5.6"],\
+          ["postcss", "npm:8.5.12"],\
           ["source-map-js", "npm:1.2.1"]\
         ],\
         "linkType": "HARD"\
@@ -24565,7 +24565,7 @@ const RAW_RUNTIME_STATE =
           ["less", null],\
           ["lightningcss", null],\
           ["picomatch", "npm:4.0.3"],\
-          ["postcss", "npm:8.5.6"],\
+          ["postcss", "npm:8.5.12"],\
           ["rollup", "npm:4.59.0"],\
           ["sass", null],\
           ["sass-embedded", null],\
@@ -24623,7 +24623,7 @@ const RAW_RUNTIME_STATE =
           ["less", null],\
           ["lightningcss", null],\
           ["picomatch", "npm:4.0.3"],\
-          ["postcss", "npm:8.5.6"],\
+          ["postcss", "npm:8.5.12"],\
           ["rollup", "npm:4.59.0"],\
           ["sass", "npm:1.93.2"],\
           ["sass-embedded", null],\
@@ -24681,7 +24681,7 @@ const RAW_RUNTIME_STATE =
           ["less", null],\
           ["lightningcss", null],\
           ["picomatch", "npm:4.0.3"],\
-          ["postcss", "npm:8.5.6"],\
+          ["postcss", "npm:8.5.12"],\
           ["rollup", "npm:4.59.0"],\
           ["sass", null],\
           ["sass-embedded", null],\
@@ -24739,7 +24739,7 @@ const RAW_RUNTIME_STATE =
           ["less", null],\
           ["lightningcss", null],\
           ["picomatch", "npm:4.0.3"],\
-          ["postcss", "npm:8.5.6"],\
+          ["postcss", "npm:8.5.12"],\
           ["rollup", "npm:4.59.0"],\
           ["sass", "npm:1.93.2"],\
           ["sass-embedded", null],\
