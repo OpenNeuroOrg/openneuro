@@ -12,7 +12,7 @@ import type * as Mongoose from "mongoose"
 import config from "../config"
 import * as subscriptions from "../handlers/subscriptions"
 import { generateDataladCookie } from "../libs/authentication/jwt"
-import { redis } from "../libs/redis"
+import { getRedis } from "../libs/redis"
 import CacheItem, { CacheType } from "../cache/item"
 import { getDraftRevision, updateDatasetRevision } from "./draft"
 import { encodeFilePath, filesUrl, fileUrl, getFileName } from "./files"
@@ -114,7 +114,7 @@ export const deleteDataset = async (datasetId, user) => {
 export const cacheDatasetConnection = (options) => (connectionArguments) => {
   const connection = datasetsConnection(options)
   const cache = new CacheItem(
-    redis,
+    getRedis(),
     CacheType.datasetsConnection,
     [objectHash(options)],
     60,

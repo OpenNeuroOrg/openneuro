@@ -27,7 +27,7 @@ vi.mock("../../cache/item")
 vi.mock("../files")
 vi.mock("../../utils/datasetOrSnapshot")
 vi.mock("../libs/redis", () => ({
-  redis: vi.fn(),
+  getRedis: vi.fn(),
 }))
 
 const mockYamlLoad = vi.mocked(yaml.load)

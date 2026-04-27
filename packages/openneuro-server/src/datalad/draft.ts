@@ -5,7 +5,7 @@ import request from "superagent"
 import Dataset from "../models/dataset"
 import { getDatasetWorker } from "../libs/datalad-service"
 import CacheItem, { CacheType } from "../cache/item"
-import { redis } from "../libs/redis"
+import { getRedis } from "../libs/redis"
 
 // Draft info resolver
 type DraftInfo = {
@@ -22,7 +22,12 @@ export const getDraftRevision = async (datasetId): Promise<string> => {
 }
 
 export const getDraftInfo = async (datasetId) => {
-  const cache = new CacheItem(redis, CacheType.draftRevision, [datasetId], 10)
+  const cache = new CacheItem(
+    getRedis(),
+    CacheType.draftRevision,
+    [datasetId],
+    10,
+  )
   return cache.get(async (_doNotCache): Promise<DraftInfo> => {
     const draftUrl = `http://${
       getDatasetWorker(

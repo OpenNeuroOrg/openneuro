@@ -10,12 +10,12 @@ import { connect } from "mongoose"
 // Mock requests to Datalad service
 vi.mock("superagent")
 vi.mock("../../libs/redis.js", () => ({
-  redis: {
+  getRedis: () => ({
     del: vi.fn(),
-  },
-  redlock: {
+  }),
+  getRedlock: () => ({
     lock: vi.fn().mockImplementation(() => ({ unlock: vi.fn() })),
-  },
+  }),
 }))
 // Mock draft files calls
 vi.mock("../draft.ts", () => ({

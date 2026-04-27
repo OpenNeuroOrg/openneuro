@@ -1,4 +1,4 @@
-import { redis } from "../../libs/redis"
+import { getRedis } from "../../libs/redis"
 import type { DatasetOrSnapshot } from "../../utils/datasetOrSnapshot"
 import { latestSnapshot } from "./snapshots"
 import { description } from "../../datalad/description"
@@ -23,7 +23,7 @@ export const brainInitiative = async (
   context: GraphQLContext,
 ): Promise<boolean> => {
   const cache = new CacheItem(
-    redis,
+    getRedis(),
     CacheType.brainInitiative,
     [dataset.id],
     86400,

@@ -3,7 +3,7 @@
  */
 import config from "../config"
 import request from "superagent"
-import { redis } from "../libs/redis"
+import { getRedis } from "../libs/redis"
 import { commitFiles } from "./dataset"
 import { fileUrl } from "./files"
 import { generateDataladCookie } from "../libs/authentication/jwt"
@@ -135,7 +135,7 @@ export const description = async (obj) => {
     Name: datasetId,
     BIDSVersion: "1.8.0",
   }
-  const cache = new CacheItem(redis, CacheType.datasetDescription, [
+  const cache = new CacheItem(getRedis(), CacheType.datasetDescription, [
     datasetId,
     revision.substring(0, 7),
   ])
