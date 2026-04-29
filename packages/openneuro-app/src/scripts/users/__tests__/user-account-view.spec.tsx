@@ -68,7 +68,7 @@ describe("<UserAccountView />", () => {
     render(
       <BrowserRouter>
         <MockedProvider mocks={mocks} addTypename={false}>
-          <UserAccountView orcidUser={baseUser} />
+          <UserAccountView orcidUser={baseUser} hasEdit={true} />
         </MockedProvider>
       </BrowserRouter>,
     )
@@ -106,7 +106,7 @@ describe("<UserAccountView />", () => {
     render(
       <BrowserRouter>
         <MockedProvider mocks={mocks} addTypename={false}>
-          <UserAccountView orcidUser={baseUser} />
+          <UserAccountView orcidUser={baseUser} hasEdit={true} />
         </MockedProvider>
       </BrowserRouter>,
     )
@@ -146,7 +146,7 @@ describe("<UserAccountView />", () => {
     render(
       <BrowserRouter>
         <MockedProvider mocks={mocks} addTypename={false}>
-          <UserAccountView orcidUser={baseUser} />
+          <UserAccountView orcidUser={baseUser} hasEdit={true} />
         </MockedProvider>,
       </BrowserRouter>,
     )
@@ -186,7 +186,7 @@ describe("<UserAccountView />", () => {
     render(
       <BrowserRouter>
         <MockedProvider mocks={mocks} addTypename={false}>
-          <UserAccountView orcidUser={baseUser} />
+          <UserAccountView orcidUser={baseUser} hasEdit={true} />
         </MockedProvider>,
       </BrowserRouter>,
     )
@@ -226,7 +226,7 @@ describe("<UserAccountView />", () => {
     render(
       <BrowserRouter>
         <MockedProvider mocks={mocks} addTypename={false}>
-          <UserAccountView orcidUser={baseUser} />
+          <UserAccountView orcidUser={baseUser} hasEdit={true} />
         </MockedProvider>,
       </BrowserRouter>,
     )

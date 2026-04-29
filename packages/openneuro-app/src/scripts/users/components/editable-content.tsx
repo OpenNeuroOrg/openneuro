@@ -13,6 +13,7 @@ interface EditableContentProps {
   heading: string
   validation?: RegExp | ((value: string) => boolean)
   validationMessage?: string
+  hasEdit?: boolean
   "data-testid"?: string
 }
 
@@ -23,6 +24,7 @@ export const EditableContent: React.FC<EditableContentProps> = ({
   heading,
   validation,
   validationMessage,
+  hasEdit,
   "data-testid": testId,
 }) => {
   const [editing, setEditing] = useState(false)
@@ -52,7 +54,7 @@ export const EditableContent: React.FC<EditableContentProps> = ({
         <h4>{heading}</h4>
         {editing
           ? <CloseButton action={closeEditing} />
-          : <EditButton action={() => setEditing(true)} />}
+          : hasEdit && <EditButton action={() => setEditing(true)} />}
       </span>
       {editing
         ? (

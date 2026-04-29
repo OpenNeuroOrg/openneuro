@@ -13,6 +13,7 @@ import { pageTitle } from "../resources/strings.js"
 
 export const UserAccountView: React.FC<UserAccountViewProps> = ({
   orcidUser,
+  hasEdit,
 }) => {
   const [userLinks, setLinks] = useState<string[]>(orcidUser.links ?? [])
   const [userLocation, setLocation] = useState<string>(
@@ -89,7 +90,7 @@ export const UserAccountView: React.FC<UserAccountViewProps> = ({
     <>
       <Helmet>
         <title>
-            {orcidUser.name || "User"} profile - {pageTitle}
+          {orcidUser.name || "User"} profile - {pageTitle}
         </title>
       </Helmet>
       <div data-testid="user-account-view" className={styles.useraccountview}>
@@ -126,9 +127,10 @@ export const UserAccountView: React.FC<UserAccountViewProps> = ({
           validation={validateHttpHttpsUrl}
           validationMessage="Invalid URL format. Please start with http:// or https://"
           data-testid="links-section"
+          hasEdit={hasEdit}
         />
 
-        {orcidUser.orcid !== undefined && (
+        {hasEdit && orcidUser.orcid !== undefined && (
           <div className={styles.umbOrcidConsent}>
             <div className={styles.umbOrcidHeading}>
               <h4>ORCID Integration</h4>
@@ -144,11 +146,13 @@ export const UserAccountView: React.FC<UserAccountViewProps> = ({
           editableContent={userLocation}
           setRows={handleLocationChange}
           heading="Location"
+          hasEdit={hasEdit}
           data-testid="location-section"
         />
         <EditableContent
           editableContent={userInstitution}
           setRows={handleInstitutionChange}
+          hasEdit={hasEdit}
           heading="Institution"
           data-testid="institution-section"
         />

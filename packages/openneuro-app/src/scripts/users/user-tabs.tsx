@@ -29,8 +29,6 @@ export const UserAccountTabs: React.FC<UserAccountTabsProps> = (
     setClicked(true)
   }
 
-  if (!hasEdit) return null
-
   return (
     <div className={styles.userAccountTabLinks}>
       <ul
@@ -50,16 +48,19 @@ export const UserAccountTabs: React.FC<UserAccountTabsProps> = (
             {isUser ? "My" : "User"} Datasets
           </NavLink>
         </li>
-        <li>
-          <NavLink
-            data-testid="user-notifications-tab"
-            to="notifications"
-            className={({ isActive }) => (isActive ? styles.active : "")}
-            onClick={handleClick}
-          >
-            Notifications
-          </NavLink>
-        </li>
+
+        {hasEdit && (
+          <li>
+            <NavLink
+              data-testid="user-notifications-tab"
+              to="notifications"
+              className={({ isActive }) => (isActive ? styles.active : "")}
+              onClick={handleClick}
+            >
+              Notifications
+            </NavLink>
+          </li>
+        )}
 
         <li>
           <NavLink

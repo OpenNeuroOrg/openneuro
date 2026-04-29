@@ -285,11 +285,6 @@ describe("UserRoutes Component", () => {
     expect(await screen.findByTestId("404-page")).toBeInTheDocument()
   })
 
-  it("renders FourOThreePage for restricted route /account when hasEdit is false", async () => {
-    setupUserRoutes(userToPass, "/account", false, true)
-    expect(await screen.findByTestId("403-page")).toBeInTheDocument()
-  })
-
   it("renders FourOThreePage for restricted route /notifications when hasEdit is false", async () => {
     setupUserRoutes(userToPass, "/notifications", false, true)
     expect(await screen.findByTestId("403-page")).toBeInTheDocument()
