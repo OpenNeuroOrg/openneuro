@@ -33,6 +33,7 @@ export interface UserCardProps {
 
 export interface UserAccountViewProps {
   orcidUser: User
+  hasEdit: boolean
 }
 
 /** ------------------ Dataset ------------------ */

@@ -207,8 +207,15 @@ export const ADVANCED_SEARCH_DATASETS_QUERY = gql`
   }
 `
 
+interface UseUserOptions {
+  errorPolicy: "none" | "ignore" | "all"
+}
+
 // Reusable hook to fetch user data
-export const useUser = (userId?: string) => {
+export const useUser = (
+  userId?: string,
+  options: UseUserOptions = { errorPolicy: "none" },
+) => {
   const [cookies] = useCookies()
   const profile = getProfile(cookies)
   const profileSub = profile?.sub
@@ -222,6 +229,7 @@ export const useUser = (userId?: string) => {
   } = useQuery(GET_USER, {
     variables: { userId: finalUserId },
     skip: !finalUserId,
+    errorPolicy: options.errorPolicy,
   })
 
   if (userError) {
