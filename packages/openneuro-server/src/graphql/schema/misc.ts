@@ -84,13 +84,6 @@ export const DatasetCommit = builder.simpleObject("DatasetCommit", {
     authorEmail: t.string(),
     message: t.string(),
     references: t.string(),
-    files: t.field({
-      type: [DiffFiles],
-      nullable: { list: true, items: true },
-    }),
-    filesChanged: t.int(),
-    insertions: t.int(),
-    deletions: t.int(),
   }),
 })
 

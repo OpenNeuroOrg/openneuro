@@ -18,36 +18,23 @@ class HistoryResource:
             tags = git_tag(repo)
             head = repo[repo.head.target]
             log = []
+
+            # Pre-compute a mapping of commit IDs to their tag names
+            tag_map = {}
+            for tag in tags:
+                tag_map.setdefault(str(tag.target), []).append(tag.name)
+
             for commit in repo.walk(head.id, pygit2.GIT_SORT_TIME):
-                references = []
-                for tag in tags:
-                    if str(tag.target) == str(commit.id):
-                        references.append(tag.name)
-                file_changes = []
-                if commit.parents:
-                    diff = commit.tree.diff_to_tree(commit.parents[0].tree)
-                else:
-                    diff = commit.tree.diff_to_tree()
-                for delta in diff.deltas:
-                    changes = {
-                        'old': delta.old_file.path,
-                        'new': delta.new_file.path,
-                        'mode': delta.new_file.mode,
-                        'binary': delta.is_binary,
-                        'status': delta.status_char(),
-                    }
-                    file_changes.append(changes)
+                commit_id_str = str(commit.id)
+                references = tag_map.get(commit_id_str, [])
+
                 new_log = {
-                    'id': str(commit.id),
+                    'id': commit_id_str,
                     'date': commit.commit_time,
                     'authorName': commit.author.name,
                     'authorEmail': commit.author.email,
                     'message': commit.message,
                     'references': ','.join(references),
-                    'files': file_changes,
-                    'filesChanged': diff.stats.files_changed,
-                    'insertions': diff.stats.insertions,
-                    'deletions': diff.stats.deletions,
                 }
                 log.append(new_log)
             resp.media = {'log': log}
