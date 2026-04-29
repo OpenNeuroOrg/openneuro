@@ -3,6 +3,7 @@ import { Link } from "react-router-dom"
 import { Dropdown } from "../components/dropdown/Dropdown"
 import { useUser } from "../queries/user"
 import { useNotifications } from "./notifications/user-notifications-context"
+import orcidIcon from "../../assets/orcid_24x24.png"
 import "./scss/user-menu.scss"
 
 interface UserMenuListProps {
@@ -101,10 +102,18 @@ export const UserMenu: React.FC<UserMenuProps> = ({ signOutAndRedirect }) => {
               <p>
                 <span>Hello</span> <br />
                 {user.name} <br />
-                {user.email}
               </p>
               <p>
                 <span>signed in via {user.provider}</span>
+                {user?.orcid && (
+                      <a
+                        href={`https://orcid.org/${user.orcid}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <img src={orcidIcon} alt="ORCID iD" /> {user.orcid}
+                      </a>
+                    ) || user.email}
               </p>
             </li>
 
