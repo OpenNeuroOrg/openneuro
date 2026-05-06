@@ -28,11 +28,13 @@ async def update_description(store, dataset, description_fields, name=None, emai
     if description_fields is not None and any(description_fields):
         updated = edit_description(description_json, description_fields)
         path = os.path.join(store.get_dataset_path(dataset), 'dataset_description.json')
-        await edit_annexed_file(
-            path, description, json.dumps(updated, indent=4, ensure_ascii=False)
-        )
+        new_content = json.dumps(updated, indent=4, ensure_ascii=False)
+        new_content += '\n'
+        await edit_annexed_file(path, description, new_content)
         # Commit new content, run validator
-        await commit_files(store, dataset, ['dataset_description.json'])
+        await commit_files(
+            store, dataset, ['dataset_description.json'], name=name, email=email
+        )
         return updated
     else:
         return description_json
