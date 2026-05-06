@@ -3,7 +3,7 @@ import pluralize from "pluralize"
 import { Loading } from "../components/loading/Loading"
 import { ValidationResultsDisplay } from "../validation/validation-results"
 import UploaderContext from "./uploader-context.js"
-import type { ValidationResult } from "@bids/validator/main"
+import type { ValidationResult } from "@bids/validator/validate"
 import { DatasetIssues } from "@bids/validator/issues"
 
 interface UploadValidationStatusProps {
