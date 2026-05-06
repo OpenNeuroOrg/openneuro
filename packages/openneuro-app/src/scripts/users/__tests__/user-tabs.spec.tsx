@@ -23,14 +23,14 @@ const UserAccountTabsWrapper: React.FC = () => {
 }
 
 describe("UserAccountTabs Component", () => {
-  it("should not render tabs when hasEdit is false", () => {
+  it("should not notification render tab when hasEdit is false", () => {
     render(<UserAccountTabsWrapper />)
 
     expect(screen.getByText("My Datasets")).toBeInTheDocument()
 
     fireEvent.click(screen.getByText("Toggle hasEdit"))
 
-    expect(screen.queryByText("My Datasets")).not.toBeInTheDocument()
+    expect(screen.queryByText("Notifications")).not.toBeInTheDocument()
   })
 
   it("should render tabs when hasEdit is toggled back to true", () => {
@@ -39,10 +39,10 @@ describe("UserAccountTabs Component", () => {
     expect(screen.getByText("My Datasets")).toBeInTheDocument()
 
     fireEvent.click(screen.getByText("Toggle hasEdit"))
-    expect(screen.queryByText("My Datasets")).not.toBeInTheDocument()
+    expect(screen.queryByText("Notifications")).not.toBeInTheDocument()
 
     fireEvent.click(screen.getByText("Toggle hasEdit"))
-    expect(screen.getByText("My Datasets")).toBeInTheDocument()
+    expect(screen.getByText("Notifications")).toBeInTheDocument()
   })
 
   it("should update active class on the correct NavLink based on route", () => {

@@ -60,9 +60,9 @@ export const UserRoutes: React.FC<UserRoutesProps> = (
           {/* This route handles the user account page */}
           <Route
             path="account"
-            element={hasEdit
-              ? <UserAccountView orcidUser={orcidUser} />
-              : <FourOThreePage />}
+            element={
+              <UserAccountView orcidUser={orcidUser} hasEdit={hasEdit} />
+            }
           />
           {/* This route handles the user notifications and its sub-routes */}
           <Route

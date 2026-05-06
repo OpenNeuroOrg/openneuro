@@ -10,22 +10,17 @@ import { useUser } from "../queries/user"
 
 export const UserQuery: React.FC = () => {
   const { orcid } = useParams()
-  const isOrcidValid = orcid && isValidOrcid(orcid)
-  const { user, loading, error } = useUser(orcid)
+  const { user, loading } = useUser(orcid, { errorPolicy: "all" })
 
   const [cookies] = useCookies()
   const profile = getProfile(cookies)
   const isAdminUser = isAdmin()
 
-  if (!isOrcidValid) {
+  if (!isValidOrcid(orcid)) {
     return <FourOFourPage />
   }
 
   if (loading) return <div>Loading...</div>
-
-  if (error || !user) {
-    return <FourOFourPage />
-  }
 
   // is admin or profile matches id from the user data being returned
   const isUser = (user?.id === profile?.sub) ? true : false
