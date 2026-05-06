@@ -9,6 +9,7 @@ from sentry_sdk.integrations.asgi import SentryAsgiMiddleware
 import datalad_service.config
 import datalad_service.version
 from datalad_service.datalad import DataladStore
+from datalad_service.broker.get_docker_scale import get_docker_scale
 from datalad_service.handlers.dataset import DatasetResource
 from datalad_service.handlers.draft import DraftResource
 from datalad_service.handlers.drop import DropResource
@@ -38,6 +39,7 @@ from datalad_service.handlers.fsck import FsckResource
 from datalad_service.handlers.refs import RefsResource
 from datalad_service.middleware.auth import AuthenticateMiddleware
 from datalad_service.middleware.error import CustomErrorHandlerMiddleware
+from datalad_service.common.dataset_hash import hash_dataset_to_range
 
 
 def before_send(event):
@@ -75,10 +77,31 @@ class PathConverter(falcon.routing.converters.BaseConverter):
 class DatasetIDConverter(falcon.routing.converters.BaseConverter):
     """Limit dataset ID to ds###### format."""
 
+    def __init__(self):
+        super().__init__()
+        self.worker_id = get_docker_scale()
+
     def convert(self, value):
+        # Format validation
         if len(value) != 8 or not value.startswith('ds') or not value[2:].isdigit():
             return None
+        # Validate this is the correct worker for this dataset id
+        expected_worker = hash_dataset_to_range(
+            value, datalad_service.config.DATALAD_WORKERS
+        )
+        if self.worker_id is not None and expected_worker != self.worker_id:
+            return None
         return value
+
+
+class WorkerIDConverter(falcon.routing.converters.BaseConverter):
+    """Limit worker ID to the current worker."""
+
+    def convert(self, value):
+        if value.isdigit():
+            return value
+        else:
+            return None
 
 
 def create_app():
@@ -92,6 +115,7 @@ def create_app():
     app = falcon.asgi.App(middleware=middleware)
     app.router_options.converters['path'] = PathConverter
     app.router_options.converters['dataset'] = DatasetIDConverter
+    app.router_options.converters['worker'] = WorkerIDConverter
 
     store = DataladStore(datalad_service.config.DATALAD_DATASET_PATH)
 
@@ -161,21 +185,23 @@ def create_app():
 
     app.add_route('/datasets/{dataset:dataset}/upload/{upload}', dataset_upload)
     app.add_route(
-        '/uploads/{worker}/{dataset:dataset}/{upload}/{filename:path}',
+        '/uploads/{worker:worker}/{dataset:dataset}/{upload}/{filename:path}',
         dataset_upload_file,
     )
 
     app.add_route(
-        '/git/{worker}/{dataset:dataset}/info/refs', dataset_git_refs_resource
+        '/git/{worker:worker}/{dataset:dataset}/info/refs', dataset_git_refs_resource
     )
     app.add_route(
-        '/git/{worker}/{dataset:dataset}/git-receive-pack', dataset_git_receive_resource
+        '/git/{worker:worker}/{dataset:dataset}/git-receive-pack',
+        dataset_git_receive_resource,
     )
     app.add_route(
-        '/git/{worker}/{dataset:dataset}/git-upload-pack', dataset_git_upload_resource
+        '/git/{worker:worker}/{dataset:dataset}/git-upload-pack',
+        dataset_git_upload_resource,
     )
     app.add_route(
-        '/git/{worker}/{dataset:dataset}/annex/{key}', dataset_git_annex_resource
+        '/git/{worker:worker}/{dataset:dataset}/annex/{key}', dataset_git_annex_resource
     )
     # Serving keys internally as well (read only)
     app.add_route('/datasets/{dataset:dataset}/annex/{key}', dataset_git_annex_resource)
