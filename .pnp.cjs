@@ -3437,10 +3437,10 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "HARD"\
       }],\
-      ["npm:1.1.9", {\
-        "packageLocation": "./.yarn/cache/@mongodb-js-saslprep-npm-1.1.9-33fa4a74a7-6a0d5e9068.zip/node_modules/@mongodb-js/saslprep/",\
+      ["npm:1.4.11", {\
+        "packageLocation": "./.yarn/cache/@mongodb-js-saslprep-npm-1.4.11-03cf6e8ece-433bc0a325.zip/node_modules/@mongodb-js/saslprep/",\
         "packageDependencies": [\
-          ["@mongodb-js/saslprep", "npm:1.1.9"],\
+          ["@mongodb-js/saslprep", "npm:1.4.11"],\
           ["sparse-bitfield", "npm:3.0.3"]\
         ],\
         "linkType": "HARD"\
@@ -4443,7 +4443,7 @@ const RAW_RUNTIME_STATE =
           ["keyv", "npm:5.3.4"],\
           ["mime-types", "npm:2.1.32"],\
           ["mongodb-memory-server", "npm:9.2.0"],\
-          ["mongoose", "npm:8.9.5"],\
+          ["mongoose", "npm:8.23.1"],\
           ["morgan", "npm:1.10.0"],\
           ["msgpackr", "npm:1.11.9"],\
           ["node-mailjet", "npm:3.3.5"],\
@@ -9047,10 +9047,10 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "HARD"\
       }],\
-      ["npm:6.10.1", {\
-        "packageLocation": "./.yarn/cache/bson-npm-6.10.1-ce7e3d7ed8-7b6d2a4c87.zip/node_modules/bson/",\
+      ["npm:6.10.4", {\
+        "packageLocation": "./.yarn/cache/bson-npm-6.10.4-954d1ea0b0-8a79a45221.zip/node_modules/bson/",\
         "packageDependencies": [\
-          ["bson", "npm:6.10.1"]\
+          ["bson", "npm:6.10.4"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -17650,10 +17650,10 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "SOFT"\
       }],\
-      ["npm:6.12.0", {\
-        "packageLocation": "./.yarn/cache/mongodb-npm-6.12.0-2698c6b153-482c00f12d.zip/node_modules/mongodb/",\
+      ["npm:6.20.0", {\
+        "packageLocation": "./.yarn/cache/mongodb-npm-6.20.0-5d66340ebb-2718cdd443.zip/node_modules/mongodb/",\
         "packageDependencies": [\
-          ["mongodb", "npm:6.12.0"]\
+          ["mongodb", "npm:6.20.0"]\
         ],\
         "linkType": "SOFT"\
       }],\
@@ -17690,11 +17690,11 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "HARD"\
       }],\
-      ["virtual:46ee8d4aeb5f33f08ac650667dab939467f1ccc6d248fea8e167323d53cfc7cd1b69eb26c55b5d54a3cb42516e693d500940716295c512d9bd5018e6b696fdcf#npm:6.12.0", {\
-        "packageLocation": "./.yarn/__virtual__/mongodb-virtual-4c65c5322f/0/cache/mongodb-npm-6.12.0-2698c6b153-482c00f12d.zip/node_modules/mongodb/",\
+      ["virtual:17921316e101ac6d93a8fa758f03525d59c3467c7e3e856f7f4b686501c89a77b1204e1b02b82d0e315ea9212fbb1a6a384b2fcd4ab9a22add8ded9a6b58ffad#npm:6.20.0", {\
+        "packageLocation": "./.yarn/__virtual__/mongodb-virtual-a8f6594d81/0/cache/mongodb-npm-6.20.0-5d66340ebb-2718cdd443.zip/node_modules/mongodb/",\
         "packageDependencies": [\
           ["@aws-sdk/credential-providers", null],\
-          ["@mongodb-js/saslprep", "npm:1.1.9"],\
+          ["@mongodb-js/saslprep", "npm:1.4.11"],\
           ["@mongodb-js/zstd", null],\
           ["@types/aws-sdk__credential-providers", null],\
           ["@types/gcp-metadata", null],\
@@ -17703,10 +17703,10 @@ const RAW_RUNTIME_STATE =
           ["@types/mongodb-js__zstd", null],\
           ["@types/snappy", null],\
           ["@types/socks", null],\
-          ["bson", "npm:6.10.1"],\
+          ["bson", "npm:6.10.4"],\
           ["gcp-metadata", null],\
           ["kerberos", null],\
-          ["mongodb", "virtual:46ee8d4aeb5f33f08ac650667dab939467f1ccc6d248fea8e167323d53cfc7cd1b69eb26c55b5d54a3cb42516e693d500940716295c512d9bd5018e6b696fdcf#npm:6.12.0"],\
+          ["mongodb", "virtual:17921316e101ac6d93a8fa758f03525d59c3467c7e3e856f7f4b686501c89a77b1204e1b02b82d0e315ea9212fbb1a6a384b2fcd4ab9a22add8ded9a6b58ffad#npm:6.20.0"],\
           ["mongodb-client-encryption", null],\
           ["mongodb-connection-string-url", "npm:3.0.2"],\
           ["snappy", null],\
@@ -17784,13 +17784,13 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["mongoose", [\
-      ["npm:8.9.5", {\
-        "packageLocation": "./.yarn/cache/mongoose-npm-8.9.5-46ee8d4aeb-74f38844ef.zip/node_modules/mongoose/",\
+      ["npm:8.23.1", {\
+        "packageLocation": "./.yarn/cache/mongoose-npm-8.23.1-17921316e1-954485485c.zip/node_modules/mongoose/",\
         "packageDependencies": [\
-          ["bson", "npm:6.10.1"],\
+          ["bson", "npm:6.10.4"],\
           ["kareem", "npm:2.6.3"],\
-          ["mongodb", "virtual:46ee8d4aeb5f33f08ac650667dab939467f1ccc6d248fea8e167323d53cfc7cd1b69eb26c55b5d54a3cb42516e693d500940716295c512d9bd5018e6b696fdcf#npm:6.12.0"],\
-          ["mongoose", "npm:8.9.5"],\
+          ["mongodb", "virtual:17921316e101ac6d93a8fa758f03525d59c3467c7e3e856f7f4b686501c89a77b1204e1b02b82d0e315ea9212fbb1a6a384b2fcd4ab9a22add8ded9a6b58ffad#npm:6.20.0"],\
+          ["mongoose", "npm:8.23.1"],\
           ["mpath", "npm:0.9.0"],\
           ["mquery", "npm:5.0.0"],\
           ["ms", "npm:2.1.3"],\
