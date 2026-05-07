@@ -20,7 +20,7 @@ export const generateApiKey = (user) => {
       id: userId,
       hash: token,
     },
-    { upsert: true, new: true },
+    { upsert: true },
   )
     .exec()
     .then(() => ({ key: token }))
