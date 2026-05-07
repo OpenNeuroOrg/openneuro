@@ -212,6 +212,7 @@ export const SearchResultItem = ({
     </Tooltip>
   )
 
+  // eslint-disable-next-line no-useless-assignment
   let invalid = false
   if (node.latestSnapshot.issues) {
     invalid = node.latestSnapshot.issues.some(

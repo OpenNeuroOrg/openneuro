@@ -204,6 +204,7 @@ export const participantCount = (obj, { modality }) => {
         if (!results.pageInfo.hasNextPage) {
           break
         } else {
+          // eslint-disable-next-line no-useless-assignment
           after = results.pageInfo.endCursor
         }
       }
@@ -319,7 +320,11 @@ export const createSnapshot = (
 /**
  * Remove a tag from a dataset
  */
-export const deleteSnapshot = (obj, { datasetId, tag }, { user, userInfo }: GraphQLContext) => {
+export const deleteSnapshot = (
+  obj,
+  { datasetId, tag },
+  { user, userInfo }: GraphQLContext,
+) => {
   return checkDatasetWrite(datasetId, user, userInfo).then(() => {
     return datalad.deleteSnapshot(datasetId, tag)
   })

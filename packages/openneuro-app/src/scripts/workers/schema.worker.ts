@@ -1,4 +1,3 @@
-/* eslint-env worker */
 import { fileListToTree, validate } from "@bids/validator/main"
 import type { ValidationResult } from "@bids/validator/main"
 import type { Config, ValidatorOptions } from "@bids/validator/options"
