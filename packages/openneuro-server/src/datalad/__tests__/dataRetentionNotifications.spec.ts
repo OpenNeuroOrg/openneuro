@@ -89,7 +89,7 @@ describe("checkDataRetentionNotifications", () => {
     await Deletion.create({
       datasetId: TEST_DATASET,
       reason: "test deletion",
-      user: { _id: TEST_USER.id },
+      user: { id: TEST_USER.id },
     })
     mockDraft(daysAgo(15))
     mockSnapshots([{ hexsha: "other" }])
@@ -131,7 +131,7 @@ describe("checkDataRetentionNotifications", () => {
     expect(notifications.send).toHaveBeenCalledTimes(1)
     expect(notifications.send).toHaveBeenCalledWith(
       expect.objectContaining({
-        _id: expect.stringContaining("no_snapshot_reminder"),
+        id: expect.stringContaining("no_snapshot_reminder"),
       }),
     )
   })
@@ -145,7 +145,7 @@ describe("checkDataRetentionNotifications", () => {
     expect(notifications.send).toHaveBeenCalledTimes(1)
     expect(notifications.send).toHaveBeenCalledWith(
       expect.objectContaining({
-        _id: expect.stringContaining("retention_14day"),
+        id: expect.stringContaining("retention_14day"),
       }),
     )
   })
@@ -158,7 +158,7 @@ describe("checkDataRetentionNotifications", () => {
     expect(notifications.send).toHaveBeenCalledTimes(1)
     expect(notifications.send).toHaveBeenCalledWith(
       expect.objectContaining({
-        _id: expect.stringContaining("retention_14day"),
+        id: expect.stringContaining("retention_14day"),
       }),
     )
   })
@@ -172,7 +172,7 @@ describe("checkDataRetentionNotifications", () => {
     expect(notifications.send).toHaveBeenCalledTimes(1)
     expect(notifications.send).toHaveBeenCalledWith(
       expect.objectContaining({
-        _id: expect.stringContaining("retention_14day"),
+        id: expect.stringContaining("retention_14day"),
       }),
     )
 
@@ -214,7 +214,7 @@ describe("checkDataRetentionNotifications", () => {
     expect(notifications.send).toHaveBeenCalledTimes(1)
     expect(notifications.send).toHaveBeenCalledWith(
       expect.objectContaining({
-        _id: expect.stringContaining("retention_7day"),
+        id: expect.stringContaining("retention_7day"),
       }),
     )
   })
@@ -235,7 +235,7 @@ describe("checkDataRetentionNotifications", () => {
     expect(notifications.send).toHaveBeenCalledTimes(1)
     expect(notifications.send).toHaveBeenCalledWith(
       expect.objectContaining({
-        _id: expect.stringContaining("retention_deletion"),
+        id: expect.stringContaining("retention_deletion"),
       }),
     )
   })
@@ -274,7 +274,7 @@ describe("checkDataRetentionNotifications", () => {
     expect(notifications.send).toHaveBeenCalledTimes(1)
     expect(notifications.send).toHaveBeenCalledWith(
       expect.objectContaining({
-        _id: expect.stringContaining("retention_14day"),
+        id: expect.stringContaining("retention_14day"),
       }),
     )
 
@@ -295,7 +295,7 @@ describe("checkDataRetentionNotifications", () => {
     expect(notifications.send).toHaveBeenCalledTimes(1)
     expect(notifications.send).toHaveBeenLastCalledWith(
       expect.objectContaining({
-        _id: expect.stringContaining("retention_14day"),
+        id: expect.stringContaining("retention_14day"),
       }),
     )
 
@@ -312,7 +312,7 @@ describe("checkDataRetentionNotifications", () => {
     expect(notifications.send).toHaveBeenCalledTimes(1)
     expect(notifications.send).toHaveBeenLastCalledWith(
       expect.objectContaining({
-        _id: expect.stringContaining("retention_7day"),
+        id: expect.stringContaining("retention_7day"),
       }),
     )
 
@@ -329,7 +329,7 @@ describe("checkDataRetentionNotifications", () => {
     expect(notifications.send).toHaveBeenCalledTimes(1)
     expect(notifications.send).toHaveBeenLastCalledWith(
       expect.objectContaining({
-        _id: expect.stringContaining("retention_deletion"),
+        id: expect.stringContaining("retention_deletion"),
       }),
     )
 

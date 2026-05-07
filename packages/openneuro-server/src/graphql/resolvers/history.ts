@@ -1,7 +1,8 @@
+import { FlattenMaps } from "mongoose"
 import { getDatasetWorker } from "../../libs/datalad-service"
 import type { DatasetDocument } from "../../models/dataset"
 
-export const history = async (obj: DatasetDocument) => {
+export const history = async (obj: FlattenMaps<DatasetDocument>) => {
   const datasetId = obj.id
   const historyUrl = `http://${
     getDatasetWorker(

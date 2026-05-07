@@ -17,7 +17,7 @@ import CacheItem, { CacheType } from "../cache/item"
 import { getDraftRevision, updateDatasetRevision } from "./draft"
 import { encodeFilePath, filesUrl, fileUrl, getFileName } from "./files"
 import { getAccessionNumber } from "../libs/dataset"
-import Dataset from "../models/dataset"
+import Dataset, { type DatasetDocument } from "../models/dataset"
 import Metadata from "../models/metadata"
 import Permission from "../models/permission"
 import Star from "../models/stars"
@@ -80,12 +80,16 @@ export const createDataset = async (
   }
 }
 
+type DatasetWithRevision = Mongoose.FlattenMaps<DatasetDocument> & {
+  revision: Promise<string>
+}
+
 /**
  * Fetch dataset document and related fields
  */
-export const getDataset = async (id) => {
+export const getDataset = async (id): Promise<DatasetWithRevision | null> => {
   const dataset = await Dataset.findOne({ id }).lean()
-  return {
+  return dataset && {
     ...dataset,
     revision: getDraftRevision(id),
   }

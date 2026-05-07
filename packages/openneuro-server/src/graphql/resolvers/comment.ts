@@ -75,7 +75,7 @@ export const addComment = (
   })
   return newComment.save().then((commentInsert) => {
     notifications.commentCreated(commentInsert)
-    return commentInsert._id
+    return commentInsert._id.toString()
   })
 }
 
@@ -86,7 +86,7 @@ export const editComment = async (
 ) => {
   const existingComment = await Comment.findById(commentId).exec()
   // You may only edit your own comments
-  if (existingComment.user._id === user) {
+  if (existingComment.user._id.toString() === user) {
     existingComment.text = text
     return existingComment.save().then(() => true)
   } else {
@@ -109,7 +109,7 @@ export const deleteComment = async (
   if (deleteChildren) {
     targetComments.push(...(await allNestedReplies(existingComment)))
   }
-  const deletedCommentIds = targetComments.map((c) => c._id)
+  const deletedCommentIds = targetComments.map((c) => c._id.toString())
   return Comment.deleteMany({
     _id: {
       $in: deletedCommentIds,
@@ -121,7 +121,7 @@ export const deleteComment = async (
 const CommentFields = {
   parent: (obj: CommentDocument) => comment(obj, { id: obj.parentId }),
   replies,
-  user: (obj: CommentDocument) => user(obj, { id: obj.user._id }),
+  user: (obj: CommentDocument) => user(obj, { id: obj.user._id.toString() }),
 }
 
 export default CommentFields

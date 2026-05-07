@@ -5,7 +5,6 @@ const { Schema, model } = mongoose
 export type NotificationStatusType = "UNREAD" | "SAVED" | "ARCHIVED"
 
 export interface UserNotificationStatusDocument extends Document {
-  _id: string
   userId: string
   datasetEventId: string
   status: NotificationStatusType

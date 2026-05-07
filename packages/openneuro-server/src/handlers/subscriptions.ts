@@ -64,7 +64,7 @@ export const deleteAll = (req, res, next) => {
     .then((subscriptions) => {
       subscriptions.forEach((subscription) => {
         Subscription.deleteOne({
-          _id: new ObjectID(subscription._id),
+          _id: new ObjectID(subscription._id.toString()),
         })
       })
       return res.send()
