@@ -18,7 +18,7 @@ const DAY = 24 * 60 * 60 * 1000
  */
 async function notifyWriteUsers(
   datasetId: string,
-  makeEmail: (user: { _id: string; email: string; name: string }) => object,
+  makeEmail: (user: { id: string; email: string; name: string }) => object,
 ) {
   const permissions = await Permission.find({
     datasetId,
@@ -86,7 +86,7 @@ export async function checkDataRetentionNotifications(
     !lastSnapshot && age >= DAY && age < 14 * DAY && !record.notifiedNoSnapshot
   ) {
     await notifyWriteUsers(datasetId, (user) => ({
-      _id: `${datasetId}_${user._id}_no_snapshot_reminder`,
+      id: `${datasetId}_${user.id}_no_snapshot_reminder`,
       type: "email",
       email: {
         to: user.email,
@@ -107,7 +107,7 @@ export async function checkDataRetentionNotifications(
   // Retention warnings sent in order from 14 days, 7 days, and 0 days.
   if (age >= 14 * DAY && !record.notifiedAt14Days) {
     await notifyWriteUsers(datasetId, (user) => ({
-      _id: `${datasetId}_${user._id}_retention_14day`,
+      id: `${datasetId}_${user.id}_retention_14day`,
       type: "email",
       email: {
         to: user.email,
@@ -129,7 +129,7 @@ export async function checkDataRetentionNotifications(
     now.getTime() - new Date(record.notifiedAt14Days).getTime() >= 7 * DAY
   ) {
     await notifyWriteUsers(datasetId, (user) => ({
-      _id: `${datasetId}_${user._id}_retention_7day`,
+      id: `${datasetId}_${user.id}_retention_7day`,
       type: "email",
       email: {
         to: user.email,
@@ -151,7 +151,7 @@ export async function checkDataRetentionNotifications(
     now.getTime() - new Date(record.notifiedAt7Days).getTime() >= 7 * DAY
   ) {
     await notifyWriteUsers(datasetId, (user) => ({
-      _id: `${datasetId}_${user._id}_retention_deletion`,
+      id: `${datasetId}_${user.id}_retention_deletion`,
       type: "email",
       email: {
         to: user.email,

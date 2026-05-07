@@ -1,4 +1,5 @@
 import { builder } from "../builder"
+import type { FlattenMaps } from "mongoose"
 import type { CommentDocument } from "../../models/comment"
 import type { DatasetDocument } from "../../models/dataset"
 import type { DatasetEventType } from "../../models/datasetEvents"
@@ -8,7 +9,9 @@ import type { SnapshotShape } from "../resolvers/snapshots"
 import type { DraftShape } from "../resolvers/draft"
 
 export const UserRef = builder.objectRef<GraphQLUserType>("User")
-export const DatasetRef = builder.objectRef<DatasetDocument>("Dataset")
+export const DatasetRef = builder.objectRef<FlattenMaps<DatasetDocument>>(
+  "Dataset",
+)
 export const DraftRef = builder.objectRef<DraftShape>("Draft")
 export const SnapshotRef = builder.objectRef<SnapshotShape>("Snapshot")
 export const CommentRef = builder.objectRef<CommentDocument>("Comment")

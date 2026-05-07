@@ -141,7 +141,7 @@ const notifications = {
                     from: "reply-" +
                       encodeURIComponent(comment._id) +
                       "-" +
-                      encodeURIComponent(user._id),
+                      encodeURIComponent(user._id.toString()),
                     subject: "Comment Created",
                     html: commentCreated({
                       name: user.name,
