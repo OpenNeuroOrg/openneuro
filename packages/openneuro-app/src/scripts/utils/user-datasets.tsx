@@ -24,6 +24,7 @@ export function filterAndSortDatasets(
   })
 
   const sortedDatasets = filteredDatasets.sort((a, b) => {
+    // eslint-disable-next-line no-useless-assignment
     let comparisonResult = 0
 
     // Move declarations outside the switch block

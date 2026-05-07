@@ -1,4 +1,4 @@
-import { FlattenMaps } from "mongoose"
+import type { FlattenMaps } from "mongoose"
 import { getDatasetWorker } from "../../libs/datalad-service"
 import type { DatasetDocument } from "../../models/dataset"
 

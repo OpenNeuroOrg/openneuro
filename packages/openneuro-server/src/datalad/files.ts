@@ -323,7 +323,7 @@ export const getFiles = async (
       captureException(error, {
         tags: { datasetId, treeish, source: "resolveGitRef" },
       })
-      throw new Error(`Invalid git reference: ${treeish}`)
+      throw new Error(`Invalid git reference: ${treeish}`, { cause: error })
     }
   }
   // Try cache first

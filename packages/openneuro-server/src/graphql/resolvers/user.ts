@@ -27,7 +27,6 @@ export type GraphQLUserType = {
   orcidConsent: boolean | null
 }
 
-
 export async function user(
   obj: unknown,
   { id }: { id: string },
@@ -276,7 +275,7 @@ export const updateUser = async (
 
     return user
   } catch (err) {
-    throw new Error("Failed to update user: " + err.message)
+    throw new Error("Failed to update user: " + err.message, { cause: err })
   }
 }
 

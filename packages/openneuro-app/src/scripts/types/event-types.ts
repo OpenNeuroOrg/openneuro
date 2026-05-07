@@ -93,6 +93,7 @@ export const mapRawEventToMappedNotification = (
     reason,
   } = event
 
+  // eslint-disable-next-line no-useless-assignment
   let title = "General Notification"
   const mappedType: MappedNotification["type"] = type
   let approval: MappedNotification["approval"]

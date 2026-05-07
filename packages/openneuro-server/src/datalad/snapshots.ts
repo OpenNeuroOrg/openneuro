@@ -73,7 +73,7 @@ const createIfNotExistsDoi = async (
     Sentry.captureException(err)
     // eslint-disable-next-line no-console
     console.error(err)
-    throw new Error(`DOI minting failed: ${err.message}`)
+    throw new Error(`DOI minting failed: ${err.message}`, { cause: err })
   }
 }
 
