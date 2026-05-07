@@ -3,7 +3,6 @@ import type { Document } from "mongoose"
 const { Schema, model } = mongoose
 
 export interface NotificationDocument extends Document {
-  _id: string
   type: string
   email: {
     to: string
@@ -38,7 +37,6 @@ export interface NotificationDocument extends Document {
 }
 
 const notificationSchema = new Schema({
-  _id: String,
   type: String,
   email: {
     to: String,

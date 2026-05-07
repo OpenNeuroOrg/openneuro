@@ -4,7 +4,6 @@ import type { UserDocument } from "./user"
 const { Schema, model } = mongoose
 
 export interface CommentDocument extends Document {
-  _id: string
   createDate: Date
   datasetId: string
   datasetLabel: string

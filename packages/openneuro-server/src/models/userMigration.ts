@@ -4,7 +4,7 @@ import type { Document } from "mongoose"
 const { Schema, model } = mongoose
 
 export interface UserMigrationDocument extends Document {
-  _id: string
+  id: string
   orcid: string
   google: string
   users: object[]

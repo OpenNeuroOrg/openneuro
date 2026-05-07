@@ -2,12 +2,11 @@
  * Model for ingest of new datasets from a remote URL (zip/tarball)
  */
 import mongoose from "mongoose"
-import type { Document, ObjectId } from "mongoose"
+import type { Document } from "mongoose"
 const { Schema, model } = mongoose
 import { validateUrl } from "../utils/validateUrl"
 
 export interface IngestDatasetDocument extends Document {
-  _id: ObjectId
   datasetId: string
   userId: string
   url: string

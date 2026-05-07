@@ -4,7 +4,6 @@ import type { Document } from "mongoose"
 const { Schema, model } = mongoose
 
 export interface UserDocument extends Document {
-  _id: string
   // OpenNeuro specific user uuid
   id: string
   // Best contact email for the user (notifications)
