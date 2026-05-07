@@ -2,10 +2,12 @@ import mongoose from "mongoose"
 import type { Document } from "mongoose"
 const { Schema, model } = mongoose
 
-export interface CounterDocument extends Document {
+export interface CounterDocument extends Omit<Document, "_id"> {
+  _id: string
   sequence_value: number
 }
 const countersSchema = new Schema({
+  _id: { type: String, required: true },
   sequence_value: { type: Number, default: 0 },
 })
 
