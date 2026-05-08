@@ -12394,11 +12394,12 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["fast-xml-builder", [\
-      ["npm:1.1.5", {\
-        "packageLocation": "./.yarn/cache/fast-xml-builder-npm-1.1.5-960811683a-377c4ef816.zip/node_modules/fast-xml-builder/",\
+      ["npm:1.2.0", {\
+        "packageLocation": "./.yarn/cache/fast-xml-builder-npm-1.2.0-7008dbf494-5948add779.zip/node_modules/fast-xml-builder/",\
         "packageDependencies": [\
-          ["fast-xml-builder", "npm:1.1.5"],\
-          ["path-expression-matcher", "npm:1.1.3"]\
+          ["fast-xml-builder", "npm:1.2.0"],\
+          ["path-expression-matcher", "npm:1.5.0"],\
+          ["xml-naming", "npm:0.1.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -12408,7 +12409,7 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/fast-xml-parser-npm-5.7.1-94929a6c96-ce7de013ca.zip/node_modules/fast-xml-parser/",\
         "packageDependencies": [\
           ["@nodable/entities", "npm:2.1.0"],\
-          ["fast-xml-builder", "npm:1.1.5"],\
+          ["fast-xml-builder", "npm:1.2.0"],\
           ["fast-xml-parser", "npm:5.7.1"],\
           ["path-expression-matcher", "npm:1.5.0"],\
           ["strnum", "npm:2.2.3"]\
@@ -19528,13 +19529,6 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["path-expression-matcher", [\
-      ["npm:1.1.3", {\
-        "packageLocation": "./.yarn/cache/path-expression-matcher-npm-1.1.3-ea64bf895d-9a607d0bf9.zip/node_modules/path-expression-matcher/",\
-        "packageDependencies": [\
-          ["path-expression-matcher", "npm:1.1.3"]\
-        ],\
-        "linkType": "HARD"\
-      }],\
       ["npm:1.5.0", {\
         "packageLocation": "./.yarn/cache/path-expression-matcher-npm-1.5.0-73d258a112-28303bb9ee.zip/node_modules/path-expression-matcher/",\
         "packageDependencies": [\
@@ -25682,6 +25676,15 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/xml-name-validator-npm-5.0.0-0e0ec66944-43f30f3f67.zip/node_modules/xml-name-validator/",\
         "packageDependencies": [\
           ["xml-name-validator", "npm:5.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["xml-naming", [\
+      ["npm:0.1.0", {\
+        "packageLocation": "./.yarn/cache/xml-naming-npm-0.1.0-6def6e9a28-45abd94ba6.zip/node_modules/xml-naming/",\
+        "packageDependencies": [\
+          ["xml-naming", "npm:0.1.0"]\
         ],\
         "linkType": "HARD"\
       }]\
