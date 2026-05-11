@@ -20,6 +20,7 @@ export interface User {
   githubSynced?: Date
   notifications?: Event[]
   orcidConsent?: boolean | null
+  profilePrivate?: boolean
 }
 
 export interface UserRoutesProps {

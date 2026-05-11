@@ -25,7 +25,7 @@ import {
   ValidatorInput,
 } from "./inputs"
 
-import Mutation from '../resolvers/mutation'
+import Mutation from "../resolvers/mutation"
 
 builder.mutationType({
   fields: (t) => ({
@@ -142,7 +142,8 @@ builder.mutationType({
         datasetId: t.arg.id({ required: true }),
         userId: t.arg.string({ required: true }),
       },
-      resolve: (root, args) => Mutation.removePermissions(root, args as never) as never,
+      resolve: (root, args) =>
+        Mutation.removePermissions(root, args as never) as never,
     }),
     removeUser: t.boolean({
       args: {
@@ -177,6 +178,7 @@ builder.mutationType({
         institution: t.arg.string(),
         links: t.arg.stringList(),
         orcidConsent: t.arg.boolean(),
+        profilePrivate: t.arg.boolean(),
       },
       resolve: (root, args, ctx) =>
         Mutation.updateUser(root, args as never, ctx),

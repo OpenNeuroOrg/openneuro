@@ -25,6 +25,7 @@ export type GraphQLUserType = {
   githubSynced: Date
   links: string[]
   orcidConsent: boolean | null
+  profilePrivate: boolean
 }
 
 export async function user(
@@ -50,6 +51,7 @@ export async function user(
       githubSynced: oneWeekAgo,
       links: [],
       orcidConsent: true,
+      profilePrivate: false,
       created: oneWeekAgo,
       lastSeen: new Date(),
       updatedAt: oneWeekAgo,
@@ -232,12 +234,13 @@ export const setBlocked = (
 
 export const updateUser = async (
   obj: unknown,
-  { id, location, institution, links, orcidConsent }: {
+  { id, location, institution, links, orcidConsent, profilePrivate }: {
     id: string
     location?: string
     institution?: string
     links?: string[]
     orcidConsent?: boolean
+    profilePrivate?: boolean
   },
   { userInfo }: GraphQLContext,
 ) => {
@@ -270,6 +273,7 @@ export const updateUser = async (
     if (institution !== undefined) user.institution = institution
     if (links !== undefined) user.links = links
     if (orcidConsent !== undefined) user.orcidConsent = orcidConsent
+    if (profilePrivate !== undefined) user.profilePrivate = profilePrivate
 
     await user.save()
 

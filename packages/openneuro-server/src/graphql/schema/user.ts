@@ -47,6 +47,7 @@ UserRef.implement({
       resolve: (obj, args, ctx) => notifications(obj, args, ctx),
     }),
     orcidConsent: t.boolean({ resolve: (obj) => obj.orcidConsent }),
+    profilePrivate: t.boolean({ resolve: (obj) => obj.profilePrivate }),
   }),
 })
 

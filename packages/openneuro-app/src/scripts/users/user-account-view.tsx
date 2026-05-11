@@ -8,6 +8,7 @@ import styles from "./scss/useraccountview.module.scss"
 import { GitHubAuthButton } from "./github-auth-button"
 import type { UserAccountViewProps } from "../types/user-types"
 import { OrcidConsentForm } from "./components/orcid-consent-form"
+import { ProfilePrivacy } from "./components/profile-privacy"
 import { validateHttpHttpsUrl } from "../utils/validationUtils"
 import { pageTitle } from "../resources/strings.js"
 
@@ -122,15 +123,17 @@ export const UserAccountView: React.FC<UserAccountViewProps> = ({
           )}
         </ul>
 
-        <EditableContent
-          editableContent={userLinks}
-          setRows={handleLinksChange}
-          heading="Links"
-          validation={validateHttpHttpsUrl}
-          validationMessage="Invalid URL format. Please start with http:// or https://"
-          data-testid="links-section"
-          hasEdit={hasEdit}
-        />
+        {hasEdit && (
+          <div className={styles.umbOrcidConsent}>
+            <div className={styles.umbOrcidHeading}>
+              <h4>Profile Privacy</h4>
+            </div>
+            <ProfilePrivacy
+              userId={orcidUser.id}
+              initialProfilePrivate={orcidUser.profilePrivate ?? false}
+            />
+          </div>
+        )}
 
         {hasEdit && orcidUser.orcid !== undefined && (
           <div className={styles.umbOrcidConsent}>
@@ -144,6 +147,15 @@ export const UserAccountView: React.FC<UserAccountViewProps> = ({
           </div>
         )}
 
+        <EditableContent
+          editableContent={userLinks}
+          setRows={handleLinksChange}
+          heading="Links"
+          validation={validateHttpHttpsUrl}
+          validationMessage="Invalid URL format. Please start with http:// or https://"
+          data-testid="links-section"
+          hasEdit={hasEdit}
+        />
         <EditableContent
           editableContent={userLocation}
           setRows={handleLocationChange}

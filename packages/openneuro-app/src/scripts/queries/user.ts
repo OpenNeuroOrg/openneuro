@@ -64,7 +64,8 @@ export const GET_USER = gql`
           status
         }
       }
-      orcidConsent 
+      orcidConsent
+      profilePrivate
     }
   }
 `
@@ -74,22 +75,25 @@ export const UPDATE_USER = gql`
   mutation updateUser(
     $id: ID!
     $location: String
-    $links: [String]
+    $links: [String!]
     $institution: String
-    $orcidConsent: Boolean 
+    $orcidConsent: Boolean
+    $profilePrivate: Boolean
   ) {
     updateUser(
       id: $id
       location: $location
       links: $links
       institution: $institution
-      orcidConsent: $orcidConsent 
+      orcidConsent: $orcidConsent
+      profilePrivate: $profilePrivate
     ) {
       id
       location
       links
       institution
       orcidConsent
+      profilePrivate
     }
   }
 `
