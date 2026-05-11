@@ -28,6 +28,7 @@ import { getDatasetWorker } from "../libs/datalad-service"
 import { createEvent, updateEvent } from "../libs/events"
 import Doi from "../models/doi"
 import { hideDoi, publishDoi } from "../libs/doi/index"
+import type { UserInfo } from "../graphql/builder"
 
 export const giveUploaderPermission = (datasetId, userId) => {
   const permission = new Permission({ datasetId, userId, level: "admin" })
@@ -498,7 +499,11 @@ export const flagAnnexObject = (
 /**
  * Update public state and transition DOI states accordingly.
  */
-export async function updatePublic(datasetId, publicFlag, user) {
+export async function updatePublic(
+  datasetId: string,
+  publicFlag: boolean,
+  user: UserInfo,
+) {
   const event = await createEvent(
     datasetId,
     user.id,
