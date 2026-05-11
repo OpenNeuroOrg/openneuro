@@ -220,7 +220,7 @@ export const updatePublic = (
   { user, userInfo }: GraphQLContext,
 ) => {
   return checkDatasetWrite(datasetId, user, userInfo).then(() => {
-    return datalad.updatePublic(datasetId, publicFlag, user)
+    return datalad.updatePublic(datasetId, publicFlag, userInfo)
   })
 }
 
