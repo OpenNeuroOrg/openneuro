@@ -67,6 +67,8 @@ async def validate_dataset_deno_call(dataset_path, ref, logger=logger):
             'micr',
             '--datasetTypes',
             'raw,derivative',
+            '--git-ref',
+            'ref',
             '--schema',
             f'file://{str(schema_path)}',
         ],
