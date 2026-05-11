@@ -1,6 +1,8 @@
 import React, { useCallback, useEffect, useState } from "react"
 import { useQuery } from "@apollo/client"
 import * as Sentry from "@sentry/react"
+import Helmet from "react-helmet"
+import { pageTitle } from "../resources/strings"
 import { DatasetCard } from "./dataset-card"
 import { UserDatasetFilters } from "./components/user-dataset-filters"
 import { ADVANCED_SEARCH_DATASETS_QUERY } from "../queries/user"
@@ -260,6 +262,11 @@ export const UserDatasetsView: React.FC<UserDatasetsViewProps> = ({
       className={styles.userDatasetsWrapper}
       data-testid="user-datasets-view"
     >
+      <Helmet>
+        <title>
+          {orcidUser.name || "User"}'s Datasets - {pageTitle}
+        </title>
+      </Helmet>
       <h3>{orcidUser.name}'s Datasets</h3>
 
       <UserDatasetFilters
