@@ -115,9 +115,11 @@ export const UserAccountView: React.FC<UserAccountViewProps> = ({
                 {orcidUser.github}
               </li>
             )}
-          <li>
-            <GitHubAuthButton sync={orcidUser.githubSynced} />
-          </li>
+          {hasEdit && (
+            <li>
+              <GitHubAuthButton sync={orcidUser.githubSynced} />
+            </li>
+          )}
         </ul>
 
         <EditableContent
