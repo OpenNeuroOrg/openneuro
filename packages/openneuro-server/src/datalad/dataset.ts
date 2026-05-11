@@ -30,7 +30,7 @@ import Doi from "../models/doi"
 import { hideDoi, publishDoi } from "../libs/doi/index"
 import type { UserInfo } from "../graphql/builder"
 
-export const giveUploaderPermission = (datasetId, userId) => {
+export const giveUploaderPermission = (datasetId: string, userId: string) => {
   const permission = new Permission({ datasetId, userId, level: "admin" })
   return permission.save()
 }
@@ -47,8 +47,11 @@ export const giveUploaderPermission = (datasetId, userId) => {
  */
 export const createDataset = async (
   uploader: string,
-  userInfo,
-  { affirmedDefaced, affirmedConsent },
+  userInfo: UserInfo,
+  { affirmedDefaced, affirmedConsent }: {
+    affirmedDefaced: boolean
+    affirmedConsent: boolean
+  },
 ) => {
   // Obtain an accession number
   const datasetId = await getAccessionNumber()
@@ -88,7 +91,7 @@ type DatasetWithRevision = Mongoose.FlattenMaps<DatasetDocument> & {
 /**
  * Fetch dataset document and related fields
  */
-export const getDataset = async (id): Promise<DatasetWithRevision | null> => {
+export const getDataset = async (id: string): Promise<DatasetWithRevision | null> => {
   const dataset = await Dataset.findOne({ id }).lean()
   return dataset && {
     ...dataset,
@@ -99,7 +102,7 @@ export const getDataset = async (id): Promise<DatasetWithRevision | null> => {
 /**
  * Delete dataset and associated documents
  */
-export const deleteDataset = async (datasetId, user) => {
+export const deleteDataset = async (datasetId: string, user: UserInfo) => {
   const event = await createEvent(
     datasetId,
     user.id,
