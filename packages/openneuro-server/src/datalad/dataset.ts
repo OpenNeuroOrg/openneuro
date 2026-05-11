@@ -91,7 +91,9 @@ type DatasetWithRevision = Mongoose.FlattenMaps<DatasetDocument> & {
 /**
  * Fetch dataset document and related fields
  */
-export const getDataset = async (id: string): Promise<DatasetWithRevision | null> => {
+export const getDataset = async (
+  id: string,
+): Promise<DatasetWithRevision | null> => {
   const dataset = await Dataset.findOne({ id }).lean()
   return dataset && {
     ...dataset,
@@ -506,7 +508,7 @@ export async function updatePublic(
   datasetId: string,
   publicFlag: boolean,
   user: UserInfo,
-) {
+): Promise<boolean> {
   const event = await createEvent(
     datasetId,
     user.id,
@@ -543,6 +545,8 @@ export async function updatePublic(
   } catch (err) {
     Sentry.captureException(err)
   }
+  // Return the new public state
+  return publicFlag
 }
 
 export const getDatasetAnalytics = (datasetId, _tag) => {
