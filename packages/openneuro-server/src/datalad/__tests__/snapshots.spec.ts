@@ -34,7 +34,7 @@ describe("snapshot model operations", () => {
       connect(mongod.getUri())
     })
     it("posts to the DataLad /datasets/{dsId}/snapshots/{snapshot} endpoint", async () => {
-      const user = { id: "1234" }
+      const user = { id: "1234", userId: "1234", admin: false }
       const tag = "snapshot"
       const { id: dsId } = await createDataset(user.id, user, {
         affirmedDefaced: true,

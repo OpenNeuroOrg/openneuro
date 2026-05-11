@@ -23,7 +23,7 @@ describe("dataset model operations", () => {
       connect(mongod.getUri())
     })
     it("resolves to dataset id string", async () => {
-      const user = { id: "1234" }
+      const user = { id: "1234", userId: "1234", admin: false }
       const { id: dsId } = await createDataset(user.id, user, {
         affirmedDefaced: true,
         affirmedConsent: true,
@@ -32,7 +32,7 @@ describe("dataset model operations", () => {
       expect(dsId.slice(0, 2)).toBe("ds")
     })
     it("posts to the DataLad /datasets/{dsId} endpoint", async () => {
-      const user = { id: "1234" }
+      const user = { id: "1234", userId: "1234", admin: false }
       // Reset call count for request.post
       request.post.mockClear()
       const { id: dsId } = await createDataset(user.id, user, {
