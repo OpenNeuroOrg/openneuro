@@ -7,6 +7,7 @@ import { isAdmin } from "../authentication/admin-user"
 import { useCookies } from "react-cookie"
 import { getProfile } from "../authentication/profile"
 import { useUser } from "../queries/user"
+import FourOThreePage from "../errors/403page"
 
 export const UserQuery: React.FC = () => {
   const { orcid } = useParams()
@@ -21,6 +22,10 @@ export const UserQuery: React.FC = () => {
   }
 
   if (loading) return <div>Loading...</div>
+
+  if (!profile?.admin && user.profilePrivate) {
+    return <FourOThreePage />
+  }
 
   // is admin or profile matches id from the user data being returned
   const isUser = (user?.id === profile?.sub) ? true : false

@@ -45,6 +45,8 @@ export interface UserDocument extends Document {
   githubSynced: Date
   // Defaults to NULL populated from ORCID Consent Form Mutation
   orcidConsent?: boolean | null
+  // Whether the user has opted out of public profile visibility
+  profilePrivate?: boolean
   givenName?: string
   familyName?: string
 }
@@ -72,6 +74,10 @@ const userSchema = new Schema({
   orcidConsent: {
     type: Boolean,
     default: null,
+  },
+  profilePrivate: {
+    type: Boolean,
+    default: false,
   },
 }, { timestamps: { createdAt: false, updatedAt: true } })
 
