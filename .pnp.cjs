@@ -466,7 +466,7 @@ const RAW_RUNTIME_STATE =
           ["@protobufjs/inquire", "npm:1.1.0"],\
           ["@protobufjs/path", "npm:1.1.2"],\
           ["@protobufjs/pool", "npm:1.1.0"],\
-          ["@protobufjs/utf8", "npm:1.1.0"],\
+          ["@protobufjs/utf8", "npm:1.1.1"],\
           ["@types/long", "npm:4.0.1"],\
           ["long", "npm:4.0.0"]\
         ],\
@@ -5599,10 +5599,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["@protobufjs/utf8", [\
-      ["npm:1.1.0", {\
-        "packageLocation": "./.yarn/cache/@protobufjs-utf8-npm-1.1.0-02c590807c-131e289c57.zip/node_modules/@protobufjs/utf8/",\
+      ["npm:1.1.1", {\
+        "packageLocation": "./.yarn/cache/@protobufjs-utf8-npm-1.1.1-77a500f5e9-ed0c3f9ff1.zip/node_modules/@protobufjs/utf8/",\
         "packageDependencies": [\
-          ["@protobufjs/utf8", "npm:1.1.0"]\
+          ["@protobufjs/utf8", "npm:1.1.1"]\
         ],\
         "linkType": "HARD"\
       }]\
