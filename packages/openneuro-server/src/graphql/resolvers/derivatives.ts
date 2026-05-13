@@ -6,7 +6,7 @@ const S3_BUCKET = "openneuro-derivatives"
 const GITHUB_ORGANIZATION = "OpenNeuroDerivatives"
 
 // Available derivatives at this time
-type GitHubDerivative = "mriqc" | "fmriprep"
+type GitHubDerivative = "mriqc" | "fmriprep" | "fitlins"
 
 /**
  * Test for a derivative on GitHub via API
@@ -90,5 +90,9 @@ export const derivatives = async (
   if (await githubDerivative(datasetId, "fmriprep")) {
     available.push(derivativeObject(datasetId, "fmriprep"))
   }
+  if (await githubDerivative(datasetId, "fitlins")) {
+    available.push(derivativeObject(datasetId, "fitlins"))
+  }
+
   return available
 }
