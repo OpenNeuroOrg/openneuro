@@ -33,7 +33,7 @@ describe("GraphQL derivatives", () => {
       })
     })
   })
-  it("returns expected values for fmriprep", () => {
+  it("returns expected values for fitlins", () => {
       expect(derivativeObject("ds000002", "fitlins")).toEqual({
         dataladUrl: new URL(
           "https://github.com/OpenNeuroDerivatives/ds000002-fitlins.git",
