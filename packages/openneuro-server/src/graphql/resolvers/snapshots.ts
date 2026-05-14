@@ -54,7 +54,6 @@ export const snapshot = (obj, { datasetId, tag }, context: GraphQLContext) => {
     () => {
       return datalad.getSnapshot(datasetId, tag).then((snapshot) => ({
         ...snapshot,
-        created: snapshot.created ? new Date(snapshot.created) : undefined,
         datasetId,
         dataset: () => dataset(snapshot, { id: datasetId }, context),
         description: () => description(snapshot),
