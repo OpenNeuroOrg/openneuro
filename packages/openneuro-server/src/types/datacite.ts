@@ -70,7 +70,7 @@ export interface RawDataciteYml {
     attributes: Partial<
       Pick<
         DataCite,
-        "contributors" | "creators" | "types" | "descriptions"
+        "contributors" | "creators" | "types" | "descriptions" | "titles"
       >
     >
   }

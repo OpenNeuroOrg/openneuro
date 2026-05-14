@@ -37,21 +37,31 @@ export async function assembleMetadata(
   let contributors: DataCite["contributors"]
   let resourceType: string | undefined
 
+  const desc = await description({
+    id: datasetId,
+    revision: revision || "HEAD",
+  })
+
   if (hasDataciteCreators) {
-    // Use datacite.yml metadata
     creators = ymlAttrs.creators
-    titles = ymlAttrs.descriptions?.length
-      ? [{ title: ymlAttrs.descriptions[0].description }]
-      : []
+    titles = ymlAttrs.titles?.length
+      ? ymlAttrs.titles
+      : [{ title: desc.Name || datasetId }]
     descriptions = ymlAttrs.descriptions
-    contributors = ymlAttrs.contributors
+    // Strip empty givenName/familyName and the internal `order` field
+    contributors = ymlAttrs.contributors?.map((c) => {
+      const { givenName, familyName, ...rest } = c as typeof c & {
+        order?: number
+      }
+      return {
+        ...rest,
+        ...(givenName?.trim() ? { givenName } : {}),
+        ...(familyName?.trim() ? { familyName } : {}),
+      }
+    })
     resourceType = ymlAttrs.types?.resourceType
   } else {
     // Fall back to BIDS dataset_description.json
-    const desc = await description({
-      id: datasetId,
-      revision: revision || "HEAD",
-    })
     creators = (desc.Authors || [])
       .filter((author: string) => author)
       .map((author: string) => ({
@@ -64,15 +74,6 @@ export async function assembleMetadata(
       : undefined
     contributors = undefined
     resourceType = await getPrimaryModality(datasetId)
-  }
-
-  // If datacite.yml had titles via a different path, use them
-  if (hasDataciteCreators && titles.length === 0) {
-    const desc = await description({
-      id: datasetId,
-      revision: revision || "HEAD",
-    })
-    titles = [{ title: desc.Name || datasetId }]
   }
 
   const attributes: DataCite = {
