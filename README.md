@@ -21,8 +21,15 @@ Before starting up the services, you will need to copy the example `.env.example
 
 - `JWT_SECRET` in `config.env` must be set to a large random string.
 - `PERSISTENT_DIR` in `.env` is an absolute path to a directory that will be used to store datasets. This should be a git-annex compatible filesystem and large enough to store some test datasets.
+- ORCID oauth is required. [Setup a sandbox app here.](https://info.orcid.org/register-a-client-application-sandbox-member-api/)
 
-To setup Google as an authentication provider, [register a new client app](https://developers.google.com/identity/protocols/oauth2/javascript-implicit-flow) and set the following variables. For development use, you will create a new Google project with oauth credentials for a JavaScript client side app. "Authorized JavaScript Origins" is set to `http://localhost:9876` and "Authorized Redirect URIs" is set to `http://localhost:9876/crn/auth/google/callback` for a site accessible at `http://localhost:9876`.
+```
+ORCID_CLIENT_ID=
+ORCID_CLIENT_SECRET=
+ORCID_API_ENDPOINT=https://api.sandbox.orcid.org
+```
+
+Google oauth now migrates accounts to ORCID only and configuration is optional for testing. To setup Google as an authentication provider, [register a new client app](https://developers.google.com/identity/protocols/oauth2/javascript-implicit-flow) and set the following variables. For development use, you will create a new Google project with oauth credentials for a JavaScript client side app. "Authorized JavaScript Origins" is set to `http://localhost:9876` and "Authorized Redirect URIs" is set to `http://localhost:9876/crn/auth/google/callback` for a site accessible at `http://localhost:9876`.
 
 ```
 # Ending in .apps.googleusercontent.com
