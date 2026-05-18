@@ -81,7 +81,7 @@ const mockDataset = {
 describe("DatasetCard", () => {
   it("should render dataset information correctly", () => {
     render(<DatasetCard dataset={mockDataset} hasEdit={false} />)
-    expect(screen.getByText("Test Dataset")).toBeInTheDocument()
+    expect(screen.getByText("Test Dataset Description")).toBeInTheDocument()
     expect(screen.getByText("ds000001")).toBeInTheDocument()
   })
 
@@ -96,7 +96,7 @@ describe("DatasetCard", () => {
   it("should show the dataset if not public but hasEdit is true", () => {
     const privateDataset = { ...mockDataset, public: false }
     render(<DatasetCard dataset={privateDataset} hasEdit={true} />)
-    expect(screen.getByText("Test Dataset")).toBeInTheDocument()
+    expect(screen.getByText("Test Dataset Description")).toBeInTheDocument()
   })
 
   it("should render activity details correctly", () => {

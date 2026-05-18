@@ -68,6 +68,7 @@ export interface DatasetSnapshot {
     DatasetDOI?: string | null
     Name: string
   }
+  readme?: string
   summary?: {
     primaryModality?: string
   }
