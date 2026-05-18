@@ -48,17 +48,19 @@ export async function assembleMetadata(
       ? ymlAttrs.titles
       : [{ title: desc.Name || datasetId }]
     descriptions = ymlAttrs.descriptions
-    // Strip empty givenName/familyName and the internal `order` field
-    contributors = ymlAttrs.contributors?.map((c) => {
-      const { givenName, familyName, ...rest } = c as typeof c & {
-        order?: number
-      }
-      return {
-        ...rest,
-        ...(givenName?.trim() ? { givenName } : {}),
-        ...(familyName?.trim() ? { familyName } : {}),
-      }
-    })
+    // Strip empty givenName/familyName and the internal `order` field.
+    // Also filter out contributors whose name contains more than one comma,
+    // which indicates multiple names were concatenated into a single string.
+    contributors = ymlAttrs.contributors
+      ?.filter((c) => (c.name?.split(",").length ?? 1) <= 2)
+      .map((c) => {
+        const { givenName, familyName, order: _order, ...rest } = c
+        return {
+          ...rest,
+          ...(givenName?.trim() ? { givenName } : {}),
+          ...(familyName?.trim() ? { familyName } : {}),
+        }
+      })
     resourceType = ymlAttrs.types?.resourceType
   } else {
     // Fall back to BIDS dataset_description.json
