@@ -98,7 +98,8 @@ export const DatasetCard: React.FC<DatasetCardProps> = (
     >
       <h4>
         <a href={`/datasets/${dataset.id}`}>
-          {dataset.name ? dataset.name : dataset.id}
+          {dataset.latestSnapshot?.description?.Name || dataset.name ||
+            dataset.id}
         </a>
       </h4>
       <div className={styles.userDsBody}>

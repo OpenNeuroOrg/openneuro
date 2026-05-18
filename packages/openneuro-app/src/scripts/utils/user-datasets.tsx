@@ -10,9 +10,19 @@ export function filterAndSortDatasets(
   { searchQuery, publicFilter, sortOrder }: FilterOptions,
 ): Dataset[] {
   const filteredDatasets = datasets.filter((dataset) => {
+    const datasetName = dataset.latestSnapshot?.description?.Name ||
+      dataset.name
+    const datasetAuthors = dataset.latestSnapshot?.description?.Authors || []
+    const datasetReadme = dataset.latestSnapshot?.readme || ""
+
     const matchesSearch = searchQuery === "" ||
-      (dataset.name &&
-        dataset.name.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (datasetName &&
+        datasetName.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      datasetAuthors.some((author: string) =>
+        author.toLowerCase().includes(searchQuery.toLowerCase())
+      ) ||
+      (datasetReadme &&
+        datasetReadme.toLowerCase().includes(searchQuery.toLowerCase())) ||
       (dataset.id &&
         dataset.id.toLowerCase().includes(searchQuery.toLowerCase()))
 
@@ -30,13 +40,19 @@ export function filterAndSortDatasets(
     // Move declarations outside the switch block
     let aUpdated: Date | string
     let bUpdated: Date | string
+    let aName: string
+    let bName: string
 
     switch (sortOrder) {
       case "name-asc":
-        comparisonResult = (a.name || "").localeCompare(b.name || "")
+        aName = a.latestSnapshot?.description?.Name || a.name || ""
+        bName = b.latestSnapshot?.description?.Name || b.name || ""
+        comparisonResult = aName.localeCompare(bName)
         break
       case "name-desc":
-        comparisonResult = (b.name || "").localeCompare(a.name || "")
+        aName = a.latestSnapshot?.description?.Name || a.name || ""
+        bName = b.latestSnapshot?.description?.Name || b.name || ""
+        comparisonResult = bName.localeCompare(aName)
         break
       case "date-newest":
         comparisonResult =
