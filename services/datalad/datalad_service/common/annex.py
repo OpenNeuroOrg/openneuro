@@ -338,7 +338,7 @@ def test_key_remote(dataset_path, key, remote_name='s3-PUBLIC'):
                 rmet = git_show(repo, 'git-annex', rmet_path)
             except KeyError:
                 return None
-            for line in rmet:
+            for line in rmet.splitlines():
                 if remote['uuid'] in line:
                     return parse_rmet_line(remote, line)
     return None

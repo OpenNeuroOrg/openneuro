@@ -1,9 +1,12 @@
+from unittest import mock
+
 from datalad_service.common.annex import (
     compute_rmet,
     parse_remote_line,
     parse_rmet_line,
     read_rmet_blob,
     encode_remote_url,
+    test_key_remote as annex_test_key_remote,
 )
 
 
@@ -105,6 +108,39 @@ def test_read_rmet_blob():
         'https://s3.amazonaws.com/a-fake-test-public-bucket/ds002778/dataset_description.json?versionId=iVcEk18e3J2WQys4zr_ANaTPfpUufW4Y'
         in url
     )
+
+
+def test_key_remote_finds_s3_url(monkeypatch):
+    """Keys not stored locally should resolve to their S3 URL via the rmet log."""
+    key = 'SHA256E-s4266076--9952d0328f159fdabbcdc8928411bfe02c74d321c75c7a396664866c3387a236.pial.sub-0475_acq-t1mprtrap2iso_run-1_T1w.gii'
+    remote_uuid = '57894849-d0c8-4c62-8418-3627be18a196'
+    remote_log = (
+        f'{remote_uuid} autoenable=true bucket=openneuro.org datacenter=US '
+        'encryption=none exporttree=yes fileprefix=ds000001/ host=s3.amazonaws.com '
+        'name=s3-PUBLIC partsize=1GiB port=80 public=yes '
+        'publicurl=http://openneuro.org.s3.amazonaws.com/ storageclass=STANDARD '
+        'type=S3 versioning=yes timestamp=1588743361.538097946s'
+    )
+    rmet_content = (
+        f'1590213748.042921433s {remote_uuid}:V '
+        '+iVcEk18e3J2WQys4zr_ANaTPfpUufW4Y'
+        '#ds000001/sub-0475/anat/sub-0475_acq-t1mprtrap2iso_run-1_T1w.gii\n'
+    )
+
+    def mock_git_show(repo, committish, obj):
+        if obj == 'remote.log':
+            return remote_log
+        return rmet_content
+
+    monkeypatch.setattr(
+        'datalad_service.common.annex.pygit2.Repository', lambda _: mock.MagicMock()
+    )
+    monkeypatch.setattr('datalad_service.common.annex.git_show', mock_git_show)
+
+    result = annex_test_key_remote('/fake/path', key)
+    assert result is not None
+    assert 'ds000001' in result
+    assert 'sub-0475' in result
 
 
 def test_remote_url_encoding():
