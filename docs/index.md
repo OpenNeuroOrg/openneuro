@@ -90,6 +90,7 @@ structure of our package and hosting setup may be interested in the following se
 :maxdepth: 1
 
 architecture
+dataset-lifecycle
 maintenance
 Source repository (GitHub) <https://github.com/OpenNeuroOrg/openneuro>
 ```
