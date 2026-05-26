@@ -4,7 +4,7 @@ import { gql, useMutation } from "@apollo/client"
 import { WarnButton } from "../../components/warn-button/WarnButton"
 
 const DELETE_FILE = gql`
-  mutation deleteFiles($datasetId: ID!, $files: [DeleteFile]) {
+  mutation deleteFiles($datasetId: ID!, $files: [DeleteFile!]) {
     deleteFiles(datasetId: $datasetId, files: $files)
   }
 `
