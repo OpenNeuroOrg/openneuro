@@ -28,7 +28,7 @@ const StyleWrapper = styled.div`
 `
 
 const DELETE_FILES = gql`
-  mutation deleteFiles($datasetId: ID!, $files: [DeleteFile]) {
+  mutation deleteFiles($datasetId: ID!, $files: [DeleteFile!]) {
     deleteFiles(datasetId: $datasetId, files: $files)
   }
 `
