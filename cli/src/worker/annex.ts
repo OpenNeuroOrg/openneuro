@@ -94,7 +94,14 @@ export async function annexAdd(
   let extension = ""
   if (hash.endsWith("E")) {
     const filename = basename(relativePath)
-    extension = filename.substring(filename.indexOf("."))
+    const dotIndex = filename.indexOf(".")
+    if (dotIndex !== -1) {
+      extension = filename.substring(dotIndex)
+      // Prevent excessively long extensions from violating OS file path limits
+      if (extension.length > 32) {
+        extension = filename.substring(filename.lastIndexOf(".")).slice(0, 32)
+      }
+    }
   }
   // Compute hash
   const computeHash = hash.startsWith("MD5")
