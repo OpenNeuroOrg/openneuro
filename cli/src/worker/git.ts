@@ -466,7 +466,7 @@ async function push() {
     logger.info("Pushing git-annex branch...")
     // Git push git-annex
     await git.push(
-      { ...context.config(), ref: "git-annex" },
+      { ...context.config(), ref: "git-annex", onMessage: console.log },
     )
   }
 
@@ -499,7 +499,7 @@ async function push() {
     console.log("Pushing changes...")
     // Git push
     await git.push(
-      context.config(),
+      { ...context.config(), onMessage: console.log },
     )
     const url = new URL(context.repoEndpoint)
     console.log(
