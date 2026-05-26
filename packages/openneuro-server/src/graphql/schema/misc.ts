@@ -152,3 +152,29 @@ export const DatasetDerivatives = builder.simpleObject("DatasetDerivatives", {
     dataladUrl: t.string(),
   }),
 })
+
+export const SnapshotDoiSyncResult = builder.simpleObject(
+  "SnapshotDoiSyncResult",
+  {
+    fields: (t) => ({
+      tag: t.string({ nullable: false }),
+      doi: t.string(),
+      deprecated: t.boolean({ nullable: false }),
+      action: t.string({ nullable: false }),
+      datacite: t.field({ type: "JSON" }),
+      error: t.string(),
+    }),
+  },
+)
+
+export const SyncDatasetDoisPayload = builder.simpleObject(
+  "SyncDatasetDoisPayload",
+  {
+    fields: (t) => ({
+      snapshots: t.field({
+        type: [SnapshotDoiSyncResult],
+        nullable: false,
+      }),
+    }),
+  },
+)

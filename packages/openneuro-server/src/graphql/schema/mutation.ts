@@ -5,7 +5,12 @@ import { Description, UpdateContributorsPayload } from "./description"
 import { Summary } from "./metadata"
 import { Metadata } from "./metadata"
 import { UploadMetadata } from "./upload"
-import { FileCheck, RepoMetadata, UserNotificationStatus } from "./misc"
+import {
+  FileCheck,
+  RepoMetadata,
+  SyncDatasetDoisPayload,
+  UserNotificationStatus,
+} from "./misc"
 import { DatasetReviewer } from "./reviewer"
 import { WorkerTask } from "./worker"
 import { FollowDatasetResponse, StarDatasetResponse } from "./misc"
@@ -546,6 +551,16 @@ builder.mutationType({
       },
       resolve: (root, args, ctx) =>
         Mutation.updateWorkerTask(root, args as never, ctx),
+    }),
+    syncDatasetDois: t.field({
+      type: SyncDatasetDoisPayload,
+      nullable: false,
+      args: {
+        datasetId: t.arg.id({ required: true }),
+        dryRun: t.arg.boolean(),
+      },
+      resolve: (root, args, ctx) =>
+        Mutation.syncDatasetDois(root, args as never, ctx) as never,
     }),
   }),
 })

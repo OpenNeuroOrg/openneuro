@@ -56,6 +56,7 @@ import { fsckDataset, updateFileCheck } from "./fileCheck"
 import { holdDeletion } from "./holdDeletion"
 import { updateContributors } from "../../datalad/contributors"
 import { updateWorkerTask } from "./worker"
+import { syncDatasetDois } from "./doi"
 
 const Mutation = {
   createDataset,
@@ -114,6 +115,7 @@ const Mutation = {
   updateEventStatus,
   updateContributors,
   updateWorkerTask,
+  syncDatasetDois,
 }
 
 export default Mutation
