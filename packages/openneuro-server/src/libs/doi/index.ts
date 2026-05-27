@@ -1,5 +1,9 @@
 import config from "../../config"
-import type { DataCite, DataciteDoiRequest } from "../../types/datacite"
+import type {
+  DataCite,
+  DataciteDoiRequest,
+  DoiState,
+} from "../../types/datacite"
 
 /**
  * @param {Object} doiConfig
@@ -120,4 +124,31 @@ export async function publishDoi(doi: string): Promise<void> {
  */
 export async function hideDoi(doi: string): Promise<void> {
   await updateDoiState(doi, "hide")
+}
+
+/**
+ * Fetch a DOI record from DataCite. Returns the DOI string and state if it
+ * exists, or null if it does not (404). Throws on other errors.
+ */
+export async function fetchDoiFromDatacite(
+  doi: string,
+): Promise<{ doi: string; state: DoiState } | null> {
+  const url = `${config.doi.url}dois/${encodeURIComponent(doi)}`
+  const response = await fetch(url, {
+    headers: { Authorization: formatBasicAuth(config.doi) },
+  })
+  if (response.status === 404) return null
+  if (!response.ok) {
+    const body = await response.text()
+    throw new Error(
+      `Datacite API error ${response.status} fetching ${doi}: ${body}`,
+    )
+  }
+  const json = (await response.json()) as {
+    data: { attributes: { doi: string; state: string } }
+  }
+  return {
+    doi: json.data.attributes.doi,
+    state: json.data.attributes.state as DoiState,
+  }
 }
