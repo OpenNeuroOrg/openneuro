@@ -4,7 +4,14 @@ import { getSnapshots } from "../../datalad/snapshots"
 import Doi from "../../models/doi"
 import DeprecatedSnapshot from "../../models/deprecatedSnapshot"
 import { assembleMetadata } from "../../libs/doi/metadata"
-import { buildPayload, hideDoi, upsertDoi } from "../../libs/doi/index"
+import type { DoiState } from "../../types/datacite"
+import {
+  buildPayload,
+  createDOI,
+  fetchDoiFromDatacite,
+  hideDoi,
+  upsertDoi,
+} from "../../libs/doi/index"
 
 export interface SnapshotDoiSyncResult {
   tag: string
@@ -31,19 +38,51 @@ export const syncDatasetDois = async (
     const { tag } = snapshot
     const deprecatedSnapshotId = `${datasetId}:${tag}`
 
-    const doiRecord = await Doi.findOne({ datasetId, snapshotId: tag })
+    let doiRecord = await Doi.findOne({ datasetId, snapshotId: tag })
       .lean()
       .exec()
     if (!doiRecord) {
-      results.push({
-        tag,
-        doi: null,
-        deprecated: false,
-        action: "skip",
-        datacite: null,
-        error: null,
-      })
-      continue
+      const expectedDoi = createDOI(datasetId, tag)
+      // eslint-disable-next-line no-useless-assignment
+      let dataciteRecord: { doi: string; state: DoiState } | null = null
+      try {
+        dataciteRecord = await fetchDoiFromDatacite(expectedDoi)
+      } catch (e) {
+        results.push({
+          tag,
+          doi: null,
+          deprecated: false,
+          action: "error",
+          datacite: null,
+          error: String(e),
+        })
+        continue
+      }
+      if (!dataciteRecord) {
+        results.push({
+          tag,
+          doi: null,
+          deprecated: false,
+          action: "skip",
+          datacite: null,
+          error: null,
+        })
+        continue
+      }
+      if (!dryRun) {
+        await Doi.create({
+          datasetId,
+          snapshotId: tag,
+          doi: dataciteRecord.doi,
+          state: dataciteRecord.state,
+        })
+      }
+      doiRecord = {
+        datasetId,
+        snapshotId: tag,
+        doi: dataciteRecord.doi,
+        state: dataciteRecord.state,
+      } as typeof doiRecord
     }
 
     const deprecatedRecord = await DeprecatedSnapshot.findOne({
