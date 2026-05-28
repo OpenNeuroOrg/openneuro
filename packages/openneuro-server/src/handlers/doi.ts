@@ -26,7 +26,12 @@ export async function createSnapshotDoi(req, res) {
   }
 
   try {
-    const attributes = await assembleMetadata(datasetId, snapshotId)
+    const attributes = await assembleMetadata(
+      datasetId,
+      snapshotId,
+      snapshotId,
+      snapExists.created,
+    )
     const doi = await createDraftDoi(attributes)
 
     await Doi.updateOne(
