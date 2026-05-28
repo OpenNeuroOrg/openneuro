@@ -117,7 +117,12 @@ export const syncDatasetDois = async (
     } else {
       action = "update_metadata"
       try {
-        const attributes = await assembleMetadata(datasetId, tag, tag)
+        const attributes = await assembleMetadata(
+          datasetId,
+          tag,
+          tag,
+          snapshot.created,
+        )
         datacite = attributes
         if (!dryRun) {
           const payload = buildPayload(attributes)
