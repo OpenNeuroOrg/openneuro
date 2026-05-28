@@ -20,7 +20,7 @@ export async function assembleMetadata(
   datasetId: string,
   snapshotId: string,
   revision?: string,
-  snapshotDate?: Date,
+  snapshotDate?: Date | string,
 ): Promise<DataCite> {
   const doi = createDOI(datasetId, snapshotId)
   const url = `${config.url}/datasets/${datasetId}/versions/${snapshotId}`
@@ -85,7 +85,8 @@ export async function assembleMetadata(
     creators: creators as DataCite["creators"],
     titles: titles as DataCite["titles"],
     publisher: { name: "OpenNeuro" },
-    publicationYear: String((snapshotDate ?? new Date()).getFullYear()),
+    publicationYear: (snapshotDate ? new Date(snapshotDate) : new Date())
+      .getFullYear().toString(),
     types: {
       resourceTypeGeneral: "Dataset",
       ...(resourceType ? { resourceType } : {}),
