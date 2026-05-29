@@ -20,7 +20,7 @@ export async function assembleMetadata(
   datasetId: string,
   snapshotId: string,
   revision?: string,
-  snapshotDate?: Date | string,
+  snapshotDate?: Date | number,
 ): Promise<DataCite> {
   const doi = createDOI(datasetId, snapshotId)
   const url = `${config.url}/datasets/${datasetId}/versions/${snapshotId}`
@@ -79,14 +79,19 @@ export async function assembleMetadata(
     resourceType = await getPrimaryModality(datasetId)
   }
 
+  // Workaround for worker returning unix timestamps in the created field
+  const publicationDate = typeof snapshotDate === "number"
+    ? new Date(snapshotDate * 1000)
+    : snapshotDate ||
+      new Date()
+
   const attributes: DataCite = {
     doi,
     url,
     creators: creators as DataCite["creators"],
     titles: titles as DataCite["titles"],
     publisher: { name: "OpenNeuro" },
-    publicationYear: (snapshotDate ? new Date(snapshotDate) : new Date())
-      .getFullYear().toString(),
+    publicationYear: publicationDate.getFullYear().toString(),
     types: {
       resourceTypeGeneral: "Dataset",
       ...(resourceType ? { resourceType } : {}),
