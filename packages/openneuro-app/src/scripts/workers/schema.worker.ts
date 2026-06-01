@@ -1,6 +1,9 @@
 import { fileListToTree, validate } from "@bids/validator/main"
-import type { ValidationResult } from "@bids/validator/main"
-import type { Config, ValidatorOptions } from "@bids/validator/options"
+import type {
+  Config,
+  ValidationResult,
+  ValidatorOptions,
+} from "@bids/validator/validate"
 import validatorConfig from "./validator-config.json" with { type: "json" }
 import "./schema-1.1.1-datacite.json" with { type: "json" }
 
