@@ -7,7 +7,7 @@ import { getRedis, getRedlock } from "../libs/redis"
 import CacheItem, { CacheType } from "../cache/item"
 import config from "../config"
 import { snapshotCreationComparison } from "../utils/snapshots"
-import { createDraftDoi } from "../libs/doi/index"
+import { createDraftDoi, publishDoi } from "../libs/doi/index"
 import { assembleMetadata } from "../libs/doi/metadata"
 import Doi from "../models/doi"
 import { getFiles } from "./files"
@@ -61,10 +61,16 @@ const createIfNotExistsDoi = async (
     const attributes = await assembleMetadata(datasetId, tag, "HEAD")
     const doi = await createDraftDoi(attributes)
 
-    // Persist to MongoDB
+    const dataset = await Dataset.findOne({ id: datasetId }, "public")
+    let state = "draft"
+    if (dataset?.public) {
+      await publishDoi(doi)
+      state = "findable"
+    }
+
     await Doi.updateOne(
       { datasetId, snapshotId: tag },
-      { $set: { doi, state: "draft" } },
+      { $set: { doi, state } },
       { upsert: true },
     )
 
