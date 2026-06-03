@@ -27,7 +27,13 @@ import { datasetsConnection } from "./pagination"
 import { getDatasetWorker } from "../libs/datalad-service"
 import { createEvent, updateEvent } from "../libs/events"
 import Doi from "../models/doi"
-import { hideDoi, publishDoi } from "../libs/doi/index"
+import {
+  createDOI,
+  fetchDoiFromDatacite,
+  hideDoi,
+  publishDoi,
+} from "../libs/doi/index"
+import { getSnapshots } from "./snapshots"
 import type { UserInfo } from "../graphql/builder"
 
 export const giveUploaderPermission = (datasetId: string, userId: string) => {
@@ -522,24 +528,25 @@ export async function updatePublic(
 
   // Transition DOI states
   try {
-    if (publicFlag) {
-      // Draft transition to Findable for all DOIs on this dataset
-      const draftDois = await Doi.find({ datasetId, state: "draft" })
-      for (const record of draftDois) {
-        await publishDoi(record.doi)
-        record.state = "findable"
-        await record.save()
-      }
-    } else {
-      // Findable transition to Registered when unpublishing
-      const findableDois = await Doi.find({
-        datasetId,
-        state: { $in: ["findable", null] },
-      })
-      for (const record of findableDois) {
-        await hideDoi(record.doi)
-        record.state = "registered"
-        await record.save()
+    const snapshots = await getSnapshots(datasetId)
+    if (snapshots) {
+      for (const snapshot of snapshots) {
+        const doi = createDOI(datasetId, snapshot.tag)
+        const remote = await fetchDoiFromDatacite(doi)
+        if (!remote) continue
+        if (publicFlag && remote.state === "draft") {
+          await publishDoi(doi)
+          await Doi.updateOne(
+            { datasetId, snapshotId: snapshot.tag },
+            { state: "findable" },
+          )
+        } else if (!publicFlag && remote.state === "findable") {
+          await hideDoi(doi)
+          await Doi.updateOne(
+            { datasetId, snapshotId: snapshot.tag },
+            { state: "registered" },
+          )
+        }
       }
     }
   } catch (err) {
