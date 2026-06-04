@@ -176,59 +176,49 @@ async function shouldBeAnnexed(
  * git-annex add equivalent
  */
 async function add(event: GitWorkerEventAdd) {
-  let size
-  try {
-    const stats = await context.fs.promises.stat(event.data.path)
-    size = stats.size
-  } catch (_err) {
-    console.log(
-      `${event.data.relativePath} could not be added, check if this file is accessible and not a broken symlink.`,
-    )
-    return await done()
-  }
-  const annexed = await shouldBeAnnexed(
-    event.data.relativePath,
-    size,
-  )
-  if (annexed === "GIT") {
-    // Simple add case
-    const options = {
-      ...context.config(),
-      filepath: event.data.relativePath,
-    }
-    const targetPath = join(context.repoPath, event.data.relativePath)
-    // Verify parent directories exist
-    await context.fs.promises.mkdir(dirname(targetPath), { recursive: true })
-    // Apply .gitattributes eol filter
-    const gitAttributes = await getGitAttributes()
-    const attributes = matchGitAttributes(
-      gitAttributes,
-      event.data.relativePath,
-    )
-    if (attributes.text === "auto" || attributes.eol) {
-      logger.info(`EOL\t${event.data.relativePath}`)
-      const fileHandle = await context.fs.promises.open(event.data.path, "r")
-      const targetHandle = await context.fs.promises.open(targetPath, "w")
-      await transformEol(fileHandle, targetHandle)
-    } else {
-      // Copy all other non-annexed files for git index creation
-      await context.fs.promises.copyFile(event.data.path, targetPath)
-    }
-    await git.add(options)
-    logger.info(`Add\t${event.data.relativePath}`)
-  } else {
-    if (
-      await annexAdd(
-        annexed,
-        event.data.path,
-        event.data.relativePath,
-        size,
-        context,
+  for (const file of event.data.paths) {
+    let size
+    try {
+      const stats = await context.fs.promises.stat(file.path)
+      size = stats.size
+    } catch (_err) {
+      console.log(
+        `${file.relativePath} could not be added, check if this file is accessible and not a broken symlink.`,
       )
-    ) {
-      logger.info(`Annexed\t${event.data.relativePath}`)
+      continue
+    }
+    const annexed = await shouldBeAnnexed(file.relativePath, size)
+    if (annexed === "GIT") {
+      // Simple add case
+      const options = {
+        ...context.config(),
+        filepath: file.relativePath,
+      }
+      const targetPath = join(context.repoPath, file.relativePath)
+      // Verify parent directories exist
+      await context.fs.promises.mkdir(dirname(targetPath), { recursive: true })
+      // Apply .gitattributes eol filter
+      const gitAttributes = await getGitAttributes()
+      const attributes = matchGitAttributes(gitAttributes, file.relativePath)
+      if (attributes.text === "auto" || attributes.eol) {
+        logger.info(`EOL\t${file.relativePath}`)
+        const fileHandle = await context.fs.promises.open(file.path, "r")
+        const targetHandle = await context.fs.promises.open(targetPath, "w")
+        await transformEol(fileHandle, targetHandle)
+      } else {
+        // Copy all other non-annexed files for git index creation
+        await context.fs.promises.copyFile(file.path, targetPath)
+      }
+      await git.add(options)
+      logger.info(`Add\t${file.relativePath}`)
     } else {
-      logger.info(`Unchanged\t${event.data.relativePath}`)
+      if (
+        await annexAdd(annexed, file.path, file.relativePath, size, context)
+      ) {
+        logger.info(`Annexed\t${file.relativePath}`)
+      } else {
+        logger.info(`Unchanged\t${file.relativePath}`)
+      }
     }
   }
 }

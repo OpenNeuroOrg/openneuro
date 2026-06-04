@@ -34,7 +34,7 @@ export async function addGitFiles(
   worker: Worker,
   dataset_directory_abs: string,
 ) {
-  // Upload all files
+  const paths: Array<{ path: string; relativePath: string }> = []
   for await (
     const walkEntry of walk(dataset_directory_abs, {
       includeDirs: false,
@@ -46,15 +46,12 @@ export async function addGitFiles(
       relativePath === ".bidsignore" ||
       !relativePath.startsWith(".")
     ) {
-      worker.postMessage({
-        "command": "add",
-        "path": walkEntry.path,
-        "relativePath": relativePath,
-      })
+      paths.push({ path: walkEntry.path, relativePath })
     } else {
       logger.warn(`Skipped file "${relativePath}"`)
     }
   }
+  worker.postMessage({ "command": "add", "paths": paths })
 }
 
 export async function uploadAction(
