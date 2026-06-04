@@ -46,6 +46,10 @@ export async function commandLine(
 ): Promise<OpenNeuroOptions> {
   const { args, options } = await openneuroCommand.parse(argumentOverride)
 
+  if (args.length === 0) {
+    openneuroCommand.showHelp()
+    Deno.exit(1)
+  }
   return {
     datasetPath: args[0] as string,
     ...options,
