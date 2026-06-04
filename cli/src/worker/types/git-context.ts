@@ -89,14 +89,16 @@ export interface GitWorkerEventSetup {
   data: GitWorkerEventSetupData
 }
 
-/** Add event to add one file */
+/** Add event to add a batch of files */
 export interface GitWorkerEventAdd {
   data: {
     command: "add"
-    // Absolute path on the local system
-    path: string
-    // Dataset relative path
-    relativePath: string
+    paths: Array<{
+      // Absolute path on the local system
+      path: string
+      // Dataset relative path
+      relativePath: string
+    }>
   }
 }
 
