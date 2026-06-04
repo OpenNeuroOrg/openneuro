@@ -28,8 +28,6 @@ const workerTaskSchema = new Schema({
   executionTime: { type: Number },
 })
 
-workerTaskSchema.index({ id: 1 })
-
 const WorkerTaskModel = model<WorkerTaskDocument>(
   "WorkerTask",
   workerTaskSchema,
