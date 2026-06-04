@@ -3,7 +3,13 @@ import { assembleMetadata } from "../metadata.js"
 
 vi.mock("ioredis")
 vi.mock("../../../config", () => ({
-  default: { url: "https://openneuro.org" },
+  default: {
+    url: "https://openneuro.org",
+    redis: {
+      host: "localhost",
+      port: 6379,
+    },
+  },
 }))
 vi.mock("../index", () => ({
   createDOI: (datasetId: string, snapshotId: string) =>
