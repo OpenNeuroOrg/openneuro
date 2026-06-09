@@ -23,7 +23,7 @@ export const UserQuery: React.FC = () => {
 
   if (loading) return <div>Loading...</div>
 
-  if (!profile?.admin && user.profilePrivate) {
+  if (!profile?.admin && user.id !== profile?.sub && user.profilePrivate) {
     return <FourOThreePage />
   }
 
