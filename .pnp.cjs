@@ -4498,7 +4498,7 @@ const RAW_RUNTIME_STATE =
           ["tsc-watch", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:4.5.0"],\
           ["typescript", "patch:typescript@npm%3A5.6.3#optional!builtin<compat/typescript>::version=5.6.3&hash=8c6c40"],\
           ["underscore", "npm:1.13.8"],\
-          ["uuid", "npm:11.1.1"],\
+          ["uuid", "npm:14.0.0"],\
           ["vitest", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:3.2.6"],\
           ["xmldoc", "npm:1.1.2"]\
         ],\
@@ -24606,10 +24606,10 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "HARD"\
       }],\
-      ["npm:11.1.1", {\
-        "packageLocation": "./.yarn/cache/uuid-npm-11.1.1-311687c807-16411d3dc1.zip/node_modules/uuid/",\
+      ["npm:14.0.0", {\
+        "packageLocation": "./.yarn/cache/uuid-npm-14.0.0-5e662e945a-8ee9b98f96.zip/node_modules/uuid/",\
         "packageDependencies": [\
-          ["uuid", "npm:11.1.1"]\
+          ["uuid", "npm:14.0.0"]\
         ],\
         "linkType": "HARD"\
       }],\
