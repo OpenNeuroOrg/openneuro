@@ -11005,7 +11005,7 @@ const RAW_RUNTIME_STATE =
           ["degenerator", "npm:3.0.1"],\
           ["escodegen", "npm:1.14.3"],\
           ["esprima", "npm:4.0.1"],\
-          ["vm2", "npm:3.11.3"]\
+          ["vm2", "npm:3.11.5"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -25264,12 +25264,12 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["vm2", [\
-      ["npm:3.11.3", {\
-        "packageLocation": "./.yarn/cache/vm2-npm-3.11.3-2914db46a8-e75fc8d2ed.zip/node_modules/vm2/",\
+      ["npm:3.11.5", {\
+        "packageLocation": "./.yarn/cache/vm2-npm-3.11.5-7ac4ed706c-aaaea54b3c.zip/node_modules/vm2/",\
         "packageDependencies": [\
           ["acorn", "npm:8.15.0"],\
           ["acorn-walk", "npm:8.3.4"],\
-          ["vm2", "npm:3.11.3"]\
+          ["vm2", "npm:3.11.5"]\
         ],\
         "linkType": "HARD"\
       }]\
