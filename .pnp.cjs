@@ -4466,7 +4466,7 @@ const RAW_RUNTIME_STATE =
           ["immutable", "npm:4.3.8"],\
           ["ioredis", "npm:5.6.1"],\
           ["ioredis-mock", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:8.8.1"],\
-          ["js-yaml", "npm:4.2.0"],\
+          ["js-yaml", "npm:4.3.0"],\
           ["jsdom", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:24.0.0"],\
           ["jsonwebtoken", "npm:9.0.0"],\
           ["keyv", "npm:5.3.4"],\
@@ -10367,7 +10367,7 @@ const RAW_RUNTIME_STATE =
           ["cosmiconfig", "virtual:48cf5841a6aad0576ceed76e68678118054158f280f0bb77f86f2395a749ce5d7be64bbd13cd9228e748bf7935c931407d4279a23e86339fd7257d8bc1314844#npm:9.0.0"],\
           ["env-paths", "npm:2.2.1"],\
           ["import-fresh", "npm:3.3.1"],\
-          ["js-yaml", "npm:4.2.0"],\
+          ["js-yaml", "npm:4.3.0"],\
           ["parse-json", "npm:5.2.0"],\
           ["typescript", "patch:typescript@npm%3A5.9.3#optional!builtin<compat/typescript>::version=5.9.3&hash=5786d5"]\
         ],\
@@ -10384,7 +10384,7 @@ const RAW_RUNTIME_STATE =
           ["cosmiconfig", "virtual:4bc9e43706f978ea052b769cca68ecc3544125a79cd0ba1116c4bfc67d05e99388d0949a1b4aec45d0b280bf83ec5575a4ad53a24e88d5e243e98a2e4f476148#npm:9.0.0"],\
           ["env-paths", "npm:2.2.1"],\
           ["import-fresh", "npm:3.3.1"],\
-          ["js-yaml", "npm:4.2.0"],\
+          ["js-yaml", "npm:4.3.0"],\
           ["parse-json", "npm:5.2.0"],\
           ["typescript", null]\
         ],\
@@ -15589,11 +15589,11 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "HARD"\
       }],\
-      ["npm:4.2.0", {\
-        "packageLocation": "./.yarn/cache/js-yaml-npm-4.2.0-0ab78512c1-51de2067a2.zip/node_modules/js-yaml/",\
+      ["npm:4.3.0", {\
+        "packageLocation": "./.yarn/cache/js-yaml-npm-4.3.0-1586601382-2bcec3a811.zip/node_modules/js-yaml/",\
         "packageDependencies": [\
           ["argparse", "npm:2.0.1"],\
-          ["js-yaml", "npm:4.2.0"]\
+          ["js-yaml", "npm:4.3.0"]\
         ],\
         "linkType": "HARD"\
       }]\
