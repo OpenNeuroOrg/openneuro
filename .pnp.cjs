@@ -79,7 +79,7 @@ const RAW_RUNTIME_STATE =
           ["tsx", "npm:3.14.0"],\
           ["typescript", "patch:typescript@npm%3A5.6.3#optional!builtin<compat/typescript>::version=5.6.3&hash=8c6c40"],\
           ["typescript-eslint", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:8.59.2"],\
-          ["vite", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:7.3.2"],\
+          ["vite", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:7.3.5"],\
           ["vitest", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:3.2.6"]\
         ],\
         "linkType": "SOFT"\
@@ -21885,7 +21885,7 @@ const RAW_RUNTIME_STATE =
           ["tsx", "npm:3.14.0"],\
           ["typescript", "patch:typescript@npm%3A5.6.3#optional!builtin<compat/typescript>::version=5.6.3&hash=8c6c40"],\
           ["typescript-eslint", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:8.59.2"],\
-          ["vite", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:7.3.2"],\
+          ["vite", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:7.3.5"],\
           ["vitest", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:3.2.6"]\
         ],\
         "linkType": "SOFT"\
@@ -24762,6 +24762,13 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "SOFT"\
       }],\
+      ["npm:7.3.5", {\
+        "packageLocation": "./.yarn/cache/vite-npm-7.3.5-7e5ada74fe-2e1337510d.zip/node_modules/vite/",\
+        "packageDependencies": [\
+          ["vite", "npm:7.3.5"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
       ["virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:7.3.2", {\
         "packageLocation": "./.yarn/__virtual__/vite-virtual-d061bf70d2/0/cache/vite-npm-7.3.2-20decd81df-c5f7a9a600.zip/node_modules/vite/",\
         "packageDependencies": [\
@@ -24936,8 +24943,8 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "HARD"\
       }],\
-      ["virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:7.3.2", {\
-        "packageLocation": "./.yarn/__virtual__/vite-virtual-2d7b66141c/0/cache/vite-npm-7.3.2-20decd81df-c5f7a9a600.zip/node_modules/vite/",\
+      ["virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:7.3.5", {\
+        "packageLocation": "./.yarn/__virtual__/vite-virtual-56c508f13a/0/cache/vite-npm-7.3.5-7e5ada74fe-2e1337510d.zip/node_modules/vite/",\
         "packageDependencies": [\
           ["@types/jiti", null],\
           ["@types/less", null],\
@@ -24966,7 +24973,7 @@ const RAW_RUNTIME_STATE =
           ["terser", null],\
           ["tinyglobby", "npm:0.2.15"],\
           ["tsx", "npm:3.14.0"],\
-          ["vite", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:7.3.2"],\
+          ["vite", "virtual:dc3fc578bfa5e06182a4d2be39ede0bc5b74940b1ffe0d70c26892ab140a4699787750fba175dc306292e80b4aa2c8c5f68c2a821e69b2c37e360c0dff36ff66#npm:7.3.5"],\
           ["yaml", null]\
         ],\
         "packagePeers": [\
