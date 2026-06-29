@@ -6173,10 +6173,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["@sigstore/core", [\
-      ["npm:3.1.0", {\
-        "packageLocation": "./.yarn/cache/@sigstore-core-npm-3.1.0-f44e85e3b4-c7a2e2d32f.zip/node_modules/@sigstore/core/",\
+      ["npm:3.2.1", {\
+        "packageLocation": "./.yarn/cache/@sigstore-core-npm-3.2.1-766d2753dd-2f6c1ced55.zip/node_modules/@sigstore/core/",\
         "packageDependencies": [\
-          ["@sigstore/core", "npm:3.1.0"]\
+          ["@sigstore/core", "npm:3.2.1"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -6195,7 +6195,7 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/@sigstore-sign-npm-4.1.0-63a85b0d9f-e5441d4cac.zip/node_modules/@sigstore/sign/",\
         "packageDependencies": [\
           ["@sigstore/bundle", "npm:4.0.0"],\
-          ["@sigstore/core", "npm:3.1.0"],\
+          ["@sigstore/core", "npm:3.2.1"],\
           ["@sigstore/protobuf-specs", "npm:0.5.0"],\
           ["@sigstore/sign", "npm:4.1.0"],\
           ["make-fetch-happen", "npm:15.0.3"],\
@@ -6221,7 +6221,7 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/@sigstore-verify-npm-3.1.0-bb4bf8821b-c85713cc32.zip/node_modules/@sigstore/verify/",\
         "packageDependencies": [\
           ["@sigstore/bundle", "npm:4.0.0"],\
-          ["@sigstore/core", "npm:3.1.0"],\
+          ["@sigstore/core", "npm:3.2.1"],\
           ["@sigstore/protobuf-specs", "npm:0.5.0"],\
           ["@sigstore/verify", "npm:3.1.0"]\
         ],\
@@ -22326,7 +22326,7 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/sigstore-npm-4.1.0-c356de95f4-7312eed22f.zip/node_modules/sigstore/",\
         "packageDependencies": [\
           ["@sigstore/bundle", "npm:4.0.0"],\
-          ["@sigstore/core", "npm:3.1.0"],\
+          ["@sigstore/core", "npm:3.2.1"],\
           ["@sigstore/protobuf-specs", "npm:0.5.0"],\
           ["@sigstore/sign", "npm:4.1.0"],\
           ["@sigstore/tuf", "npm:4.0.1"],\
