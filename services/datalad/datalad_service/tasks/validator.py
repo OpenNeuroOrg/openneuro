@@ -68,7 +68,7 @@ async def validate_dataset_deno_call(dataset_path, ref, logger=logger):
             '--datasetTypes',
             'raw,derivative',
             '--git-ref',
-            'ref',
+            ref,
             '--schema',
             f'file://{str(schema_path)}',
         ],
@@ -91,9 +91,7 @@ def sanitize_subject_metadata(subject_metadata):
     """Sanitize subjectMetadata ages before sending to GraphQL."""
     if not subject_metadata:
         return subject_metadata
-    return [
-        {**s, 'age': sanitize_age(s.get('age'))} for s in subject_metadata
-    ]
+    return [{**s, 'age': sanitize_age(s.get('age'))} for s in subject_metadata]
 
 
 def summary_mutation(dataset_id, ref, validator_output, validator_metadata):
