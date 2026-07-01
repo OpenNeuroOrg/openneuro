@@ -31,7 +31,7 @@ jobs:
       - name: Collect coverage
         run: deno task coverage
         if: ${{ always() }}
-      - uses: codecov/codecov-action@v6
+      - uses: codecov/codecov-action@v7
         if: ${{ always() }}
         with:
           files: cli/coverage.lcov
