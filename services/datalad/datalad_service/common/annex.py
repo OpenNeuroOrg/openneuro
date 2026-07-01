@@ -117,7 +117,7 @@ def read_rmet_blob(remote, blob_data):
     url = None
     for line in blob_data.decode('utf-8').splitlines():
         if remote['uuid'] in line:
-            url = parse_rmet_line(remote, line)
+            url = encode_remote_url(parse_rmet_line(remote, line))
     return url
 
 
