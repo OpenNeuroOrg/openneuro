@@ -138,6 +138,9 @@ a {
         &.meg {
           color: lighten($meg-theme, 10%);
         }
+        &.nirs {
+          color: lighten($nirs-theme, 10%);
+        }
       }
     }
   }
