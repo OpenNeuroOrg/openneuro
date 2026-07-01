@@ -6238,6 +6238,13 @@ const RAW_RUNTIME_STATE =
           ["@sigstore/core", "npm:3.2.1"]\
         ],\
         "linkType": "HARD"\
+      }],\
+      ["npm:3.2.1", {\
+        "packageLocation": "./.yarn/cache/@sigstore-core-npm-3.2.1-766d2753dd-2f6c1ced55.zip/node_modules/@sigstore/core/",\
+        "packageDependencies": [\
+          ["@sigstore/core", "npm:3.2.1"]\
+        ],\
+        "linkType": "HARD"\
       }]\
     ]],\
     ["@sigstore/protobuf-specs", [\
@@ -6276,13 +6283,13 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["@sigstore/verify", [\
-      ["npm:3.1.0", {\
-        "packageLocation": "./.yarn/cache/@sigstore-verify-npm-3.1.0-bb4bf8821b-c85713cc32.zip/node_modules/@sigstore/verify/",\
+      ["npm:3.1.1", {\
+        "packageLocation": "./.yarn/cache/@sigstore-verify-npm-3.1.1-fea273058f-4cb24b0e62.zip/node_modules/@sigstore/verify/",\
         "packageDependencies": [\
           ["@sigstore/bundle", "npm:4.0.0"],\
           ["@sigstore/core", "npm:3.2.1"],\
           ["@sigstore/protobuf-specs", "npm:0.5.0"],\
-          ["@sigstore/verify", "npm:3.1.0"]\
+          ["@sigstore/verify", "npm:3.1.1"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -22389,7 +22396,7 @@ const RAW_RUNTIME_STATE =
           ["@sigstore/protobuf-specs", "npm:0.5.0"],\
           ["@sigstore/sign", "npm:4.1.0"],\
           ["@sigstore/tuf", "npm:4.0.1"],\
-          ["@sigstore/verify", "npm:3.1.0"],\
+          ["@sigstore/verify", "npm:3.1.1"],\
           ["sigstore", "npm:4.1.0"]\
         ],\
         "linkType": "HARD"\
