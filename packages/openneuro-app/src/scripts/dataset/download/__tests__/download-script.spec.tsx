@@ -56,7 +56,7 @@ describe("DownloadScript", () => {
   describe("generateDownloadScript()", () => {
     it("generates output grouped in an accession number directory", async () => {
       const script = generateDownloadScript(mockData)
-      expect(script).toContain("-o ds000001-1.0.0/stimuli/meg/f074.bmp")
+      expect(script).toContain("-o 'ds000001-1.0.0/stimuli/meg/f074.bmp'")
     })
   })
 })

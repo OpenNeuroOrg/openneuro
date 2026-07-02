@@ -25,7 +25,9 @@ export function generateDownloadScript(data): string {
   const directory = data.snapshot.id.split(":").join("-")
   let script = "#!/bin/sh\n"
   for (const f of data.snapshot.files) {
-    script += `curl --create-dirs ${f.urls[0]} -o ${directory}/${f.filename}\n`
+    script += `curl --create-dirs '${
+      f.urls[0]
+    }' -o '${directory}/${f.filename}'\n`
   }
   return script
 }
