@@ -35,3 +35,18 @@ def test_get_draft(client, new_dataset):
     response = client.simulate_get(f'/datasets/{ds_id}/draft')
     assert response.status == falcon.HTTP_OK
     assert len(json.loads(response.content)['hexsha']) == 40
+
+
+def test_draft_commit_runs_validation(client, new_dataset, mock_validate_dataset_task):
+    ds_id = os.path.basename(new_dataset.path)
+    response = client.simulate_post(
+        f'/datasets/{ds_id}/files/NEW_FILE', body='new file contents'
+    )
+    assert response.status == falcon.HTTP_OK
+    mock_validate_dataset_task.reset_mock()
+    response = client.simulate_post(f'/datasets/{ds_id}/draft')
+    assert response.status == falcon.HTTP_OK
+    ref = json.loads(response.content)['ref']
+    dataset_id, dataset_path, validated_ref = mock_validate_dataset_task.call_args.args
+    assert dataset_id == ds_id
+    assert validated_ref == ref

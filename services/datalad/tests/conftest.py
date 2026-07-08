@@ -246,16 +246,13 @@ def mock_validate_dataset_task(monkeypatch):
     """
     Mocks the validate_dataset task to prevent event loop errors in tests.
     """
-
-    async def async_noop_validator(*args, **kwargs):
-        return None
-
-    # Mock task kiq for taskiq
-    async_noop_validator.kiq = async_noop_validator
-
+    mock_kiq = mock.AsyncMock()
+    # The kiq method is what's called to enqueue the task.
+    # We mock it on the task object itself.
     monkeypatch.setattr(
-        'datalad_service.tasks.files.validate_dataset', async_noop_validator
+        'datalad_service.tasks.validator.validate_dataset.kiq', mock_kiq
     )
+    yield mock_kiq
 
 
 @pytest.fixture(autouse=True)

@@ -5,10 +5,9 @@ import re
 import pygit2
 
 from datalad_service.common.annex import edit_annexed_file
-from datalad_service.common.git import git_show, git_show_content, git_tag
+from datalad_service.common.git import git_commit, git_show, git_show_content, git_tag
 from datalad_service.tasks.dataset import create_datalad_config
 from datalad_service.tasks.description import update_description
-from datalad_service.tasks.files import commit_files
 from datalad_service.common.onchange import on_tag
 
 
@@ -131,8 +130,7 @@ async def update_changes(store, dataset, tag, new_changes):
     if new_changes is not None and len(new_changes) > 0:
         current_date = datetime.today().strftime('%Y-%m-%d')
         updated = await write_new_changes(dataset_path, tag, new_changes, current_date)
-        # Commit new content, run validator
-        await commit_files(store, dataset, ['CHANGES'])
+        await git_commit(pygit2.Repository(dataset_path), ['CHANGES'])
         return updated
     else:
         return await get_head_changes(dataset_path)
@@ -154,7 +152,7 @@ async def validate_datalad_config(store, dataset):
         git_show(repo, 'HEAD', '.datalad/config')
     except KeyError:
         create_datalad_config(dataset_path)
-        await commit_files(store, dataset, ['.datalad/config'])
+        await git_commit(repo, ['.datalad/config'])
 
 
 async def save_snapshot(store, dataset, snapshot):

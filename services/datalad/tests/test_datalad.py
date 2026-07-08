@@ -8,9 +8,8 @@ import pygit2
 from datalad.api import Dataset
 
 from datalad_service.common.annex import init_annex
-from datalad_service.common.git import OpenNeuroGitError
+from datalad_service.common.git import OpenNeuroGitError, git_commit
 from datalad_service.tasks.dataset import create_dataset, delete_dataset
-from datalad_service.tasks.files import commit_files
 
 
 async def test_create_dataset(datalad_store):
@@ -45,7 +44,7 @@ async def test_create_dataset_master(datalad_store):
     file_path = os.path.join(ds.path, 'LICENSE')
     with open(file_path, 'w') as fd:
         fd.write("""MIT""")
-    await commit_files(datalad_store, ds_id, ['LICENSE'])
+    await git_commit(repo, ['LICENSE'])
     # Verify the branch is now set to main
     assert ds.repo.get_active_branch() == 'main'
 
@@ -71,6 +70,6 @@ async def test_commit_file(datalad_store, new_dataset):
     file_path = os.path.join(new_dataset.path, 'LICENSE')
     with open(file_path, 'w') as fd:
         fd.write("""GPL""")
-    await commit_files(datalad_store, ds_id, ['LICENSE'])
+    await git_commit(pygit2.Repository(new_dataset.path), ['LICENSE'])
     dataset = Dataset(os.path.join(datalad_store.annex_path, ds_id))
     assert not dataset.repo.dirty
