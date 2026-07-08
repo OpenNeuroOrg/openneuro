@@ -1,3 +1,4 @@
+import asyncio
 import os
 import shutil
 import traceback
@@ -13,9 +14,7 @@ def download_file(url, destination_filename):
             shutil.copyfileobj(r.raw, f)
 
 
-def remote_dataset_import(
-    dataset_path, upload_path, import_id, url, name, email, cookies
-):
+def remote_dataset_import(dataset_path, upload_path, import_id, url, name, email):
     """Given a zip file URL, download and unpack the URL into a dataset."""
     download_path = os.path.join(upload_path, f'{import_id}.zip')
     os.makedirs(upload_path, exist_ok=True)
@@ -32,9 +31,8 @@ def remote_dataset_import(
     else:
         data_path = os.path.join(unpack_path, top_level_dirs[0])
 
-    # Copy into the repo
-    dataset_id = os.path.basename(dataset_path)
-    move_files_into_repo(dataset_id, dataset_path, data_path, name, email, cookies)
+    # Copy into the repo (this task runs sync in an executor thread)
+    asyncio.run(move_files_into_repo(dataset_path, data_path, name, email))
 
     # Clean up all upload temporary data
     shutil.rmtree(upload_path)
@@ -67,9 +65,7 @@ def remote_import(dataset_path, upload_path, import_id, url, name, email, cookie
     success = True
     message = ''
     try:
-        remote_dataset_import(
-            dataset_path, upload_path, import_id, url, name, email, cookies
-        )
+        remote_dataset_import(dataset_path, upload_path, import_id, url, name, email)
     except Exception as e:
         success = False
         message = ''.join(traceback.format_exception(type(e), e, e.__traceback__))

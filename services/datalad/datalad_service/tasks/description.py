@@ -2,9 +2,10 @@ import aiofiles
 import json
 import os
 
+import pygit2
+
 from datalad_service.common.annex import edit_annexed_file
-from datalad_service.common.git import git_show_content
-from datalad_service.tasks.files import commit_files
+from datalad_service.common.git import git_commit, git_show_content
 
 
 def edit_description(description, new_fields):
@@ -31,10 +32,8 @@ async def update_description(store, dataset, description_fields, name=None, emai
         new_content = json.dumps(updated, indent=4, ensure_ascii=False)
         new_content += '\n'
         await edit_annexed_file(path, description, new_content)
-        # Commit new content, run validator
-        await commit_files(
-            store, dataset, ['dataset_description.json'], name=name, email=email
-        )
+        author = pygit2.Signature(name, email) if name and email else None
+        await git_commit(repo, ['dataset_description.json'], author)
         return updated
     else:
         return description_json

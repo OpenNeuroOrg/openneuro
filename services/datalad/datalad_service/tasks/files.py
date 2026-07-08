@@ -7,36 +7,10 @@ import boto3
 import botocore
 import pygit2
 
-from datalad_service.common.git import (
-    git_commit,
-    git_commit_index,
-    COMMITTER_EMAIL,
-    COMMITTER_NAME,
-)
-from datalad_service.tasks.validator import validate_dataset
+from datalad_service.common.git import git_commit_index
 from datalad_service.config import AWS_ACCESS_KEY_ID
 from datalad_service.config import AWS_SECRET_ACCESS_KEY
 from datalad_service.config import AWS_S3_PUBLIC_BUCKET
-
-
-async def commit_files(store, dataset, files, name=None, email=None, cookies=None):
-    """
-    Commit a list of files with the email and name provided.
-
-    Returns the commit hash generated.
-    """
-    dataset_path = store.get_dataset_path(dataset)
-    repo = pygit2.Repository(dataset_path)
-    author = (
-        name
-        and email
-        and pygit2.Signature(name, email)
-        or pygit2.Signature(COMMITTER_NAME, COMMITTER_EMAIL)
-    )
-    ref = await git_commit(repo, files, author)
-    # Run the validator but don't block on the request
-    await validate_dataset.kiq(dataset, dataset_path, str(ref), cookies)
-    return ref
 
 
 async def remove_files(store, dataset, paths, name=None, email=None, cookies=None):
@@ -49,9 +23,7 @@ async def remove_files(store, dataset, paths, name=None, email=None, cookies=Non
     repo.index.remove_all(paths)
     repo.index.write()
     repo.checkout_index()
-    hexsha = str(
-        await git_commit_index(repo, author, message='[OpenNeuro] Files removed')
-    )
+    await git_commit_index(repo, author, message='[OpenNeuro] Files removed')
 
 
 def parse_s3_annex_url(url, bucket_name=AWS_S3_PUBLIC_BUCKET):

@@ -2,7 +2,6 @@ import falcon
 import subprocess
 
 from datalad_service.common.user import get_user_info
-from datalad_service.tasks.files import commit_files
 
 
 class ResetResource:

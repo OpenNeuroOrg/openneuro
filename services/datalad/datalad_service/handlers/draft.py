@@ -47,20 +47,13 @@ class DraftResource:
             if name and email:
                 media_dict['name'] = name
                 media_dict['email'] = email
-            try:
-                dataset_path = self.store.get_dataset_path(dataset)
-                repo = pygit2.Repository(dataset_path)
-                # Add all changes to the index
-                if name and email:
-                    author = pygit2.Signature(name, email)
-                    media_dict['ref'] = str(await git_commit(repo, ['.'], author))
-                else:
-                    media_dict['ref'] = str(await git_commit(repo, ['.']))
-                resp.media = media_dict
-                resp.status = falcon.HTTP_OK
-            except:
-                raise
-                resp.status = falcon.HTTP_INTERNAL_SERVER_ERROR
+            dataset_path = self.store.get_dataset_path(dataset)
+            repo = pygit2.Repository(dataset_path)
+            # Add all changes to the index
+            author = pygit2.Signature(name, email) if name and email else None
+            media_dict['ref'] = str(await git_commit(repo, ['.'], author))
+            resp.media = media_dict
+            resp.status = falcon.HTTP_OK
         else:
             resp.media = {'error': 'Missing or malformed dataset parameter in request.'}
             resp.status = falcon.HTTP_UNPROCESSABLE_ENTITY

@@ -33,9 +33,7 @@ async def move_files(upload_path, dataset_path):
             await aioshutil.move(str(filename), target)
 
 
-async def move_files_into_repo(
-    dataset_id, dataset_path, upload_path, name, email, cookies
-):
+async def move_files_into_repo(dataset_path, upload_path, name, email):
     repo = pygit2.Repository(dataset_path)
     unlock_files = [
         os.path.relpath(filename, start=upload_path)
@@ -45,11 +43,8 @@ async def move_files_into_repo(
         )
     ]
     await move_files(upload_path, dataset_path)
-    if name and email:
-        author = pygit2.Signature(name, email)
-        hexsha = str(await git_commit(repo, unlock_files, author))
-    else:
-        hexsha = str(await git_commit(repo, unlock_files))
+    author = pygit2.Signature(name, email) if name and email else None
+    await git_commit(repo, unlock_files, author)
 
 
 class UploadResource:
@@ -57,13 +52,11 @@ class UploadResource:
         self.store = store
         self.logger = logging.getLogger('datalad_service.' + __name__)
 
-    async def _finish_upload(self, dataset_id, upload, name, email, cookies):
+    async def _finish_upload(self, dataset_id, upload, name, email):
         try:
             dataset_path = self.store.get_dataset_path(dataset_id)
             upload_path = self.store.get_upload_path(dataset_id, upload)
-            await move_files_into_repo(
-                dataset_id, dataset_path, upload_path, name, email, cookies
-            )
+            await move_files_into_repo(dataset_path, upload_path, name, email)
             await aioshutil.rmtree(upload_path)
         except:
             self.logger.exception('Dataset upload could not be finalized')
@@ -71,6 +64,6 @@ class UploadResource:
     async def on_post(self, req, resp, dataset, upload):
         """Copy uploaded data into dataset"""
         name, email = get_user_info(req)
-        await self._finish_upload(dataset, upload, name, email, req.cookies)
+        await self._finish_upload(dataset, upload, name, email)
         resp.media = {}
         resp.status = falcon.HTTP_OK
