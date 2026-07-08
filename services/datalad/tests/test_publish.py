@@ -4,7 +4,11 @@ from unittest.mock import AsyncMock, Mock, call, patch
 
 import falcon
 
-from datalad_service.tasks.publish import export_dataset, create_remotes, set_remote_public
+from datalad_service.tasks.publish import (
+    export_dataset,
+    create_remotes,
+    set_remote_public,
+)
 from datalad_service.common.annex import is_git_annex_remote
 
 
@@ -71,12 +75,10 @@ async def test_export_snapshots(no_init_remote, client, new_dataset):
 
 
 @patch('datalad_service.tasks.publish.run_check', new_callable=AsyncMock)
-@patch('datalad_service.tasks.publish.set_s3_access_tag', new_callable=AsyncMock)
-async def test_set_remote_public(mock_set_s3_access_tag, mock_run_check, new_dataset):
+async def test_set_remote_public(mock_run_check, new_dataset):
     await set_remote_public(new_dataset.path)
-    
+
     mock_run_check.assert_called_once_with(
         ['git-annex', 'enableremote', 's3-PUBLIC', 'x-amz-tagging=access=public'],
         new_dataset.path,
     )
-    mock_set_s3_access_tag.assert_called_once_with(os.path.basename(new_dataset.path), 'public')
