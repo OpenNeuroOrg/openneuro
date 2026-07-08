@@ -118,8 +118,11 @@ async def export_backup_and_drop(dataset_path):
                 await s3_export(dataset_path, get_s3_remote(), tag.name)
         await fsck_and_drop(dataset_path, [tag.name for tag in tags])
         logger.info(f'Exporting/dropping tags for {dataset_id} complete')
-    if not public_dataset:
-        logger.info(f'Setting access tag for {dataset_id}')
+    if public_dataset:
+        logger.info(f'Setting public access tag for {dataset_id}')
+        await set_s3_access_tag(dataset_id, 'public')
+    else:
+        logger.info(f'Setting private access tag for {dataset_id}')
         await set_s3_access_tag(dataset_id, 'private')
     logger.info(f'{dataset_id} export_backup_and_drop complete')
 
