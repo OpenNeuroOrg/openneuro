@@ -72,6 +72,7 @@ def setup_s3_sibling(dataset_path, public=False):
         ['git-annex', 'initremote', get_s3_remote()]
         + generate_s3_annex_options(dataset_path, public=public),
         cwd=dataset_path,
+        check=True,
     )
 
 
