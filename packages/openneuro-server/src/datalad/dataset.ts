@@ -5,7 +5,6 @@
  */
 import * as Sentry from "@sentry/node"
 import request from "superagent"
-import requestNode from "request"
 import objectHash from "object-hash"
 import { Readable } from "stream"
 import type * as Mongoose from "mongoose"
@@ -351,13 +350,12 @@ export const addFile = async (datasetId, path, file) => {
         filename: getFileName(path, filename),
         size: 0,
       }
-      const downstreamRequest = requestNode(
-        {
-          url: fileUrl(datasetId, path, filename),
-          method: "post",
-          headers: { "Content-Type": mimetype },
-        },
-        (err) => (err ? reject(err) : resolve(responseFile)),
+      const downstreamRequest = request
+        .post(fileUrl(datasetId, path, filename))
+        .set("Content-Type", mimetype)
+      downstreamRequest.then(
+        () => resolve(responseFile),
+        (err) => reject(err),
       )
       // Attach error handler for incoming request and start feeding downstream
       stream

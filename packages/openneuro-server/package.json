@@ -65,7 +65,6 @@
     "redis-smq": "^8.3.1",
     "redis-smq-common": "^8.3.1",
     "redlock": "^4.0.0",
-    "request": "^2.83.0",
     "semver": "^5.5.0",
     "sitemap": "^2.1.0",
     "superagent": "^3.8.2",
