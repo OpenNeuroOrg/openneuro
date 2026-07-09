@@ -8822,7 +8822,7 @@ const RAW_RUNTIME_STATE =
           ["@babel/runtime", "npm:7.27.0"],\
           ["babel-plugin-macros", "npm:3.1.0"],\
           ["cosmiconfig", "npm:7.0.1"],\
-          ["resolve", "patch:resolve@npm%3A1.22.3#optional!builtin<compat/resolve>::version=1.22.3&hash=c3c19d"]\
+          ["resolve", "patch:resolve@npm%3A1.22.3#optional!builtin<compat/resolve>::version=1.22.3&hash=9bd1a5"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -9075,7 +9075,7 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/browser-resolve-npm-2.0.0-b837a8fc14-ad5314db34.zip/node_modules/browser-resolve/",\
         "packageDependencies": [\
           ["browser-resolve", "npm:2.0.0"],\
-          ["resolve", "patch:resolve@npm%3A1.22.11#optional!builtin<compat/resolve>::version=1.22.11&hash=c3c19d"]\
+          ["resolve", "patch:resolve@npm%3A1.22.11#optional!builtin<compat/resolve>::version=1.22.11&hash=9bd1a5"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -18225,7 +18225,7 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["hosted-git-info", "npm:2.8.9"],\
           ["normalize-package-data", "npm:2.5.0"],\
-          ["resolve", "patch:resolve@npm%3A1.20.0#optional!builtin<compat/resolve>::version=1.20.0&hash=c3c19d"],\
+          ["resolve", "patch:resolve@npm%3A1.20.0#optional!builtin<compat/resolve>::version=1.20.0&hash=9bd1a5"],\
           ["semver", "npm:5.7.2"],\
           ["validate-npm-package-license", "npm:3.0.4"]\
         ],\
@@ -21442,31 +21442,31 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["resolve", [\
-      ["patch:resolve@npm%3A1.20.0#optional!builtin<compat/resolve>::version=1.20.0&hash=c3c19d", {\
-        "packageLocation": "./.yarn/cache/resolve-patch-63f1eb0464-197ca6b762.zip/node_modules/resolve/",\
+      ["patch:resolve@npm%3A1.20.0#optional!builtin<compat/resolve>::version=1.20.0&hash=9bd1a5", {\
+        "packageLocation": "./.yarn/cache/resolve-patch-55764d816a-b345e26654.zip/node_modules/resolve/",\
         "packageDependencies": [\
           ["is-core-module", "npm:2.6.0"],\
           ["path-parse", "npm:1.0.7"],\
-          ["resolve", "patch:resolve@npm%3A1.20.0#optional!builtin<compat/resolve>::version=1.20.0&hash=c3c19d"]\
+          ["resolve", "patch:resolve@npm%3A1.20.0#optional!builtin<compat/resolve>::version=1.20.0&hash=9bd1a5"]\
         ],\
         "linkType": "HARD"\
       }],\
-      ["patch:resolve@npm%3A1.22.11#optional!builtin<compat/resolve>::version=1.22.11&hash=c3c19d", {\
-        "packageLocation": "./.yarn/cache/resolve-patch-8d5745ba49-fd342cad25.zip/node_modules/resolve/",\
+      ["patch:resolve@npm%3A1.22.11#optional!builtin<compat/resolve>::version=1.22.11&hash=9bd1a5", {\
+        "packageLocation": "./.yarn/cache/resolve-patch-6a14e45123-c990146fed.zip/node_modules/resolve/",\
         "packageDependencies": [\
           ["is-core-module", "npm:2.16.1"],\
           ["path-parse", "npm:1.0.7"],\
-          ["resolve", "patch:resolve@npm%3A1.22.11#optional!builtin<compat/resolve>::version=1.22.11&hash=c3c19d"],\
+          ["resolve", "patch:resolve@npm%3A1.22.11#optional!builtin<compat/resolve>::version=1.22.11&hash=9bd1a5"],\
           ["supports-preserve-symlinks-flag", "npm:1.0.0"]\
         ],\
         "linkType": "HARD"\
       }],\
-      ["patch:resolve@npm%3A1.22.3#optional!builtin<compat/resolve>::version=1.22.3&hash=c3c19d", {\
-        "packageLocation": "./.yarn/cache/resolve-patch-ac9d7e4cbf-b775dffbad.zip/node_modules/resolve/",\
+      ["patch:resolve@npm%3A1.22.3#optional!builtin<compat/resolve>::version=1.22.3&hash=9bd1a5", {\
+        "packageLocation": "./.yarn/cache/resolve-patch-189a715ecc-a5cdb3ee46.zip/node_modules/resolve/",\
         "packageDependencies": [\
           ["is-core-module", "npm:2.12.1"],\
           ["path-parse", "npm:1.0.7"],\
-          ["resolve", "patch:resolve@npm%3A1.22.3#optional!builtin<compat/resolve>::version=1.22.3&hash=c3c19d"],\
+          ["resolve", "patch:resolve@npm%3A1.22.3#optional!builtin<compat/resolve>::version=1.22.3&hash=9bd1a5"],\
           ["supports-preserve-symlinks-flag", "npm:1.0.0"]\
         ],\
         "linkType": "HARD"\
@@ -23646,7 +23646,7 @@ const RAW_RUNTIME_STATE =
           ["minimist", "npm:1.2.8"],\
           ["mkdirp", "npm:1.0.4"],\
           ["node-notifier", null],\
-          ["resolve", "patch:resolve@npm%3A1.20.0#optional!builtin<compat/resolve>::version=1.20.0&hash=c3c19d"],\
+          ["resolve", "patch:resolve@npm%3A1.20.0#optional!builtin<compat/resolve>::version=1.20.0&hash=9bd1a5"],\
           ["rimraf", "npm:2.7.1"],\
           ["source-map-support", "npm:0.5.20"],\
           ["tree-kill", "npm:1.2.2"],\
@@ -31431,7 +31431,7 @@ function getPathForDisplay(p) {
   return npath.normalize(npath.fromPortablePath(p));
 }
 
-const [major, minor] = process.versions.node.split(`.`).map((value) => parseInt(value, 10));
+const [major, minor, patch] = process.versions.node.split(`.`).map((value) => parseInt(value, 10));
 const WATCH_MODE_MESSAGE_USES_ARRAYS = major > 19 || major === 19 && minor >= 2 || major === 18 && minor >= 13;
 
 function readPackageScope(checkPath) {
