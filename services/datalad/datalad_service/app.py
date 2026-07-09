@@ -25,6 +25,7 @@ from datalad_service.handlers.tree import TreeResource
 from datalad_service.handlers.upload import UploadResource
 from datalad_service.handlers.upload_file import UploadFileResource
 from datalad_service.handlers.validation import ValidationResource
+from datalad_service.handlers.mosaic import MosaicResource
 from datalad_service.handlers.git import (
     GitRefsResource,
     GitReceiveResource,
@@ -123,6 +124,7 @@ def create_app():
     datasets = DatasetResource(store)
     dataset_draft = DraftResource(store)
     dataset_validation = ValidationResource(store)
+    dataset_mosaic = MosaicResource(store)
     dataset_history = HistoryResource(store)
     dataset_drop = DropResource(store)
     dataset_description = DescriptionResource(store)
@@ -155,6 +157,7 @@ def create_app():
     app.add_route('/datasets/{dataset:dataset}/drop', dataset_drop)
     app.add_route('/datasets/{dataset:dataset}/description', dataset_description)
     app.add_route('/datasets/{dataset:dataset}/validate/{hexsha}', dataset_validation)
+    app.add_route('/datasets/{dataset:dataset}/mosaic/{hexsha}', dataset_mosaic)
     app.add_route('/datasets/{dataset:dataset}/reset/{hexsha}', dataset_reset_resource)
     app.add_route('/datasets/{dataset:dataset}/fsck', dataset_fsck_resource)
     app.add_route('/datasets/{dataset:dataset}/info', dataset_info_resource)

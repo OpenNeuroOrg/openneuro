@@ -16,6 +16,7 @@ import { getRedis } from "../../libs/redis"
 import CacheItem, { CacheType } from "../../cache/item"
 import { normalizeDOI } from "../../libs/doi/normalize"
 import { snapshotValidation } from "./validation"
+import { snapshotMosaic } from "./mosaic"
 import { advancedDatasetSearchConnection } from "./dataset-search"
 import { contributors } from "../../datalad/contributors"
 import { getDraftInfo } from "../../datalad/draft"
@@ -334,6 +335,7 @@ const Snapshot = {
   issues: (snapshot) => snapshotIssues(snapshot),
   issuesStatus: (snapshot) => issuesSnapshotStatus(snapshot),
   validation: snapshotValidation,
+  mosaic: snapshotMosaic,
   contributors: (snapshot) => {
     const datasetId = snapshot.datasetId
     return contributors({
