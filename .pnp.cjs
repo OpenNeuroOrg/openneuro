@@ -256,7 +256,7 @@ const RAW_RUNTIME_STATE =
           ["react", "npm:18.2.0"],\
           ["react-dom", "virtual:dfc8861fb483e7f9493811b738b55fee97a3c3e2cb836e82763f82cb601d9955d5ee09c520fd30825cc5220c166a2003feb13430de5559fb2a330912125de5c2#npm:18.2.0"],\
           ["rehackt", "virtual:8233cac6686bf49bf82442079dc25221f6e5a51405accb24796911ef793ef9c58742843f148d9b1b9fc87d90d074c06211d7c3e35b5ce9cc76be6e3ebea9155e#npm:0.1.0"],\
-          ["subscriptions-transport-ws", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:0.11.0"],\
+          ["subscriptions-transport-ws", null],\
           ["symbol-observable", "npm:4.0.0"],\
           ["ts-invariant", "npm:0.10.3"],\
           ["tslib", "npm:2.3.1"],\
@@ -382,7 +382,7 @@ const RAW_RUNTIME_STATE =
           ["react-dom", "virtual:700612a435c8f07f880398815cae177c1d52ef9a9599c39d2214205ded243670b954b7b3a913f88de23f6c008d78920baf22853a2c977f78789b6367447db7eb#npm:17.0.2"],\
           ["rehackt", "virtual:700612a435c8f07f880398815cae177c1d52ef9a9599c39d2214205ded243670b954b7b3a913f88de23f6c008d78920baf22853a2c977f78789b6367447db7eb#npm:0.1.0"],\
           ["response-iterator", "npm:0.2.6"],\
-          ["subscriptions-transport-ws", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:0.11.0"],\
+          ["subscriptions-transport-ws", "virtual:cd7a862e0b955475fa0357e97cd56b069d38049d7f4ddc10830abcb7eb98ad100c2d3db85378520ca03e272094d53f153971b11fad649d897398edb231750ffb#npm:0.11.0"],\
           ["symbol-observable", "npm:4.0.0"],\
           ["ts-invariant", "npm:0.10.3"],\
           ["tslib", "npm:2.3.1"],\
@@ -4394,7 +4394,6 @@ const RAW_RUNTIME_STATE =
           ["sass", "npm:1.93.2"],\
           ["semver", "npm:5.7.2"],\
           ["stream-browserify", "npm:3.0.0"],\
-          ["subscriptions-transport-ws", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:0.11.0"],\
           ["typescript", "patch:typescript@npm%3A5.6.3#optional!builtin<compat/typescript>::version=5.6.3&hash=8c6c40"],\
           ["universal-cookie", "npm:4.0.4"],\
           ["vite", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:7.3.2"],\
@@ -4415,7 +4414,7 @@ const RAW_RUNTIME_STATE =
           ["graphql", "npm:16.8.1"],\
           ["react", "npm:18.2.0"],\
           ["semver", "npm:5.7.2"],\
-          ["subscriptions-transport-ws", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:0.11.0"]\
+          ["subscriptions-transport-ws", "virtual:cd7a862e0b955475fa0357e97cd56b069d38049d7f4ddc10830abcb7eb98ad100c2d3db85378520ca03e272094d53f153971b11fad649d897398edb231750ffb#npm:0.11.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -23185,17 +23184,17 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "SOFT"\
       }],\
-      ["virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:0.11.0", {\
-        "packageLocation": "./.yarn/__virtual__/subscriptions-transport-ws-virtual-222aa3ddde/0/cache/subscriptions-transport-ws-npm-0.11.0-6fa3639659-3835ce8154.zip/node_modules/subscriptions-transport-ws/",\
+      ["virtual:cd7a862e0b955475fa0357e97cd56b069d38049d7f4ddc10830abcb7eb98ad100c2d3db85378520ca03e272094d53f153971b11fad649d897398edb231750ffb#npm:0.11.0", {\
+        "packageLocation": "./.yarn/__virtual__/subscriptions-transport-ws-virtual-6694ebc707/0/cache/subscriptions-transport-ws-npm-0.11.0-6fa3639659-3835ce8154.zip/node_modules/subscriptions-transport-ws/",\
         "packageDependencies": [\
           ["@types/graphql", null],\
           ["backo2", "npm:1.0.2"],\
           ["eventemitter3", "npm:3.1.2"],\
           ["graphql", "npm:16.8.1"],\
           ["iterall", "npm:1.3.0"],\
-          ["subscriptions-transport-ws", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:0.11.0"],\
+          ["subscriptions-transport-ws", "virtual:cd7a862e0b955475fa0357e97cd56b069d38049d7f4ddc10830abcb7eb98ad100c2d3db85378520ca03e272094d53f153971b11fad649d897398edb231750ffb#npm:0.11.0"],\
           ["symbol-observable", "npm:1.2.0"],\
-          ["ws", "virtual:222aa3dddeaeaa61af52fac7bb1ac2d89193af1f1652e3dded827e17e51136f3cdf2657f101e4918984f890bad2fb83a40ad7853b91df134ac952fbe7d0a7df7#npm:7.5.11"]\
+          ["ws", "virtual:6694ebc7071bcc109fdba67d87af84187d573469b926e0f17d07d1d99359f13fc27c5bc284614c1529753ed8569fc1a11161a29e31f550fc26b56fc073844098#npm:7.5.11"]\
         ],\
         "packagePeers": [\
           "@types/graphql",\
@@ -25736,14 +25735,14 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "HARD"\
       }],\
-      ["virtual:222aa3dddeaeaa61af52fac7bb1ac2d89193af1f1652e3dded827e17e51136f3cdf2657f101e4918984f890bad2fb83a40ad7853b91df134ac952fbe7d0a7df7#npm:7.5.11", {\
-        "packageLocation": "./.yarn/__virtual__/ws-virtual-8f02a8baaf/0/cache/ws-npm-7.5.11-420a347b21-486141e4a0.zip/node_modules/ws/",\
+      ["virtual:6694ebc7071bcc109fdba67d87af84187d573469b926e0f17d07d1d99359f13fc27c5bc284614c1529753ed8569fc1a11161a29e31f550fc26b56fc073844098#npm:7.5.11", {\
+        "packageLocation": "./.yarn/__virtual__/ws-virtual-6776ee1479/0/cache/ws-npm-7.5.11-420a347b21-486141e4a0.zip/node_modules/ws/",\
         "packageDependencies": [\
           ["@types/bufferutil", null],\
           ["@types/utf-8-validate", null],\
           ["bufferutil", null],\
           ["utf-8-validate", null],\
-          ["ws", "virtual:222aa3dddeaeaa61af52fac7bb1ac2d89193af1f1652e3dded827e17e51136f3cdf2657f101e4918984f890bad2fb83a40ad7853b91df134ac952fbe7d0a7df7#npm:7.5.11"]\
+          ["ws", "virtual:6694ebc7071bcc109fdba67d87af84187d573469b926e0f17d07d1d99359f13fc27c5bc284614c1529753ed8569fc1a11161a29e31f550fc26b56fc073844098#npm:7.5.11"]\
         ],\
         "packagePeers": [\
           "@types/bufferutil",\

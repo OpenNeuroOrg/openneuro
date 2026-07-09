@@ -3407,7 +3407,6 @@ __metadata:
     sass: "npm:^1.93.2"
     semver: "npm:^5.5.0"
     stream-browserify: "npm:^3.0.0"
-    subscriptions-transport-ws: "npm:0.11.0"
     typescript: "npm:5.6.3"
     universal-cookie: "npm:^4.0.4"
     vite: "npm:^7.1.7"
@@ -19701,7 +19700,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"subscriptions-transport-ws@npm:0.11.0, subscriptions-transport-ws@npm:^0.11.0":
+"subscriptions-transport-ws@npm:^0.11.0":
   version: 0.11.0
   resolution: "subscriptions-transport-ws@npm:0.11.0"
   dependencies:
