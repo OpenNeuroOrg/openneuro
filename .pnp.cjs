@@ -2318,6 +2318,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@gar/promise-retry", [\
+      ["npm:1.0.3", {\
+        "packageLocation": "./.yarn/cache/@gar-promise-retry-npm-1.0.3-f96d9024c8-0d13ea3bb1.zip/node_modules/@gar/promise-retry/",\
+        "packageDependencies": [\
+          ["@gar/promise-retry", "npm:1.0.3"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@gar/promisify", [\
       ["npm:1.1.2", {\
         "packageLocation": "./.yarn/cache/@gar-promisify-npm-1.1.2-2343f94380-d05081e088.zip/node_modules/@gar/promisify/",\
@@ -6248,39 +6257,39 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["@sigstore/sign", [\
-      ["npm:4.1.0", {\
-        "packageLocation": "./.yarn/cache/@sigstore-sign-npm-4.1.0-63a85b0d9f-e5441d4cac.zip/node_modules/@sigstore/sign/",\
+      ["npm:4.1.1", {\
+        "packageLocation": "./.yarn/cache/@sigstore-sign-npm-4.1.1-ff369a9b0e-c9424813ed.zip/node_modules/@sigstore/sign/",\
         "packageDependencies": [\
+          ["@gar/promise-retry", "npm:1.0.3"],\
           ["@sigstore/bundle", "npm:4.0.0"],\
           ["@sigstore/core", "npm:3.2.1"],\
           ["@sigstore/protobuf-specs", "npm:0.5.0"],\
-          ["@sigstore/sign", "npm:4.1.0"],\
-          ["make-fetch-happen", "npm:15.0.3"],\
-          ["proc-log", "npm:6.1.0"],\
-          ["promise-retry", "npm:2.0.1"]\
+          ["@sigstore/sign", "npm:4.1.1"],\
+          ["make-fetch-happen", "npm:15.0.6"],\
+          ["proc-log", "npm:6.1.0"]\
         ],\
         "linkType": "HARD"\
       }]\
     ]],\
     ["@sigstore/tuf", [\
-      ["npm:4.0.1", {\
-        "packageLocation": "./.yarn/cache/@sigstore-tuf-npm-4.0.1-01a069ecac-1a9725aa95.zip/node_modules/@sigstore/tuf/",\
+      ["npm:4.0.2", {\
+        "packageLocation": "./.yarn/cache/@sigstore-tuf-npm-4.0.2-0a8cbe0611-14882b8e71.zip/node_modules/@sigstore/tuf/",\
         "packageDependencies": [\
           ["@sigstore/protobuf-specs", "npm:0.5.0"],\
-          ["@sigstore/tuf", "npm:4.0.1"],\
+          ["@sigstore/tuf", "npm:4.0.2"],\
           ["tuf-js", "npm:4.1.0"]\
         ],\
         "linkType": "HARD"\
       }]\
     ]],\
     ["@sigstore/verify", [\
-      ["npm:3.1.0", {\
-        "packageLocation": "./.yarn/cache/@sigstore-verify-npm-3.1.0-bb4bf8821b-c85713cc32.zip/node_modules/@sigstore/verify/",\
+      ["npm:3.1.1", {\
+        "packageLocation": "./.yarn/cache/@sigstore-verify-npm-3.1.1-fea273058f-4cb24b0e62.zip/node_modules/@sigstore/verify/",\
         "packageDependencies": [\
           ["@sigstore/bundle", "npm:4.0.0"],\
           ["@sigstore/core", "npm:3.2.1"],\
           ["@sigstore/protobuf-specs", "npm:0.5.0"],\
-          ["@sigstore/verify", "npm:3.1.0"]\
+          ["@sigstore/verify", "npm:3.1.1"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -15921,7 +15930,7 @@ const RAW_RUNTIME_STATE =
           ["npm-registry-fetch", "npm:19.1.1"],\
           ["proc-log", "npm:5.0.0"],\
           ["semver", "npm:7.7.3"],\
-          ["sigstore", "npm:4.1.0"],\
+          ["sigstore", "npm:4.1.1"],\
           ["ssri", "npm:12.0.0"]\
         ],\
         "linkType": "HARD"\
@@ -16386,6 +16395,25 @@ const RAW_RUNTIME_STATE =
           ["negotiator", "npm:1.0.0"],\
           ["proc-log", "npm:6.1.0"],\
           ["promise-retry", "npm:2.0.1"],\
+          ["ssri", "npm:13.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:15.0.6", {\
+        "packageLocation": "./.yarn/cache/make-fetch-happen-npm-15.0.6-a629c70972-01bc13d8e8.zip/node_modules/make-fetch-happen/",\
+        "packageDependencies": [\
+          ["@gar/promise-retry", "npm:1.0.3"],\
+          ["@npmcli/agent", "npm:4.0.0"],\
+          ["@npmcli/redact", "npm:4.0.0"],\
+          ["cacache", "npm:20.0.3"],\
+          ["http-cache-semantics", "npm:4.2.0"],\
+          ["make-fetch-happen", "npm:15.0.6"],\
+          ["minipass", "npm:7.1.2"],\
+          ["minipass-fetch", "npm:5.0.0"],\
+          ["minipass-flush", "npm:1.0.5"],\
+          ["minipass-pipeline", "npm:1.2.4"],\
+          ["negotiator", "npm:1.0.0"],\
+          ["proc-log", "npm:6.1.0"],\
           ["ssri", "npm:13.0.0"]\
         ],\
         "linkType": "HARD"\
@@ -19080,7 +19108,7 @@ const RAW_RUNTIME_STATE =
           ["pacote", "npm:21.0.1"],\
           ["proc-log", "npm:5.0.0"],\
           ["promise-retry", "npm:2.0.1"],\
-          ["sigstore", "npm:4.1.0"],\
+          ["sigstore", "npm:4.1.1"],\
           ["ssri", "npm:12.0.0"],\
           ["tar", "npm:7.5.2"]\
         ],\
@@ -19104,7 +19132,7 @@ const RAW_RUNTIME_STATE =
           ["pacote", "npm:21.0.4"],\
           ["proc-log", "npm:6.1.0"],\
           ["promise-retry", "npm:2.0.1"],\
-          ["sigstore", "npm:4.1.0"],\
+          ["sigstore", "npm:4.1.1"],\
           ["ssri", "npm:13.0.0"],\
           ["tar", "npm:7.5.2"]\
         ],\
@@ -22104,16 +22132,16 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["sigstore", [\
-      ["npm:4.1.0", {\
-        "packageLocation": "./.yarn/cache/sigstore-npm-4.1.0-c356de95f4-7312eed22f.zip/node_modules/sigstore/",\
+      ["npm:4.1.1", {\
+        "packageLocation": "./.yarn/cache/sigstore-npm-4.1.1-9ab7be1c91-8fb38bbdc3.zip/node_modules/sigstore/",\
         "packageDependencies": [\
           ["@sigstore/bundle", "npm:4.0.0"],\
           ["@sigstore/core", "npm:3.2.1"],\
           ["@sigstore/protobuf-specs", "npm:0.5.0"],\
-          ["@sigstore/sign", "npm:4.1.0"],\
-          ["@sigstore/tuf", "npm:4.0.1"],\
-          ["@sigstore/verify", "npm:3.1.0"],\
-          ["sigstore", "npm:4.1.0"]\
+          ["@sigstore/sign", "npm:4.1.1"],\
+          ["@sigstore/tuf", "npm:4.0.2"],\
+          ["@sigstore/verify", "npm:3.1.1"],\
+          ["sigstore", "npm:4.1.1"]\
         ],\
         "linkType": "HARD"\
       }]\
