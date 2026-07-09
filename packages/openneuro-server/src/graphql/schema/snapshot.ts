@@ -107,5 +107,9 @@ SnapshotRef.implement({
       nullable: { list: true, items: true },
       resolve: (obj) => SnapshotFields.contributors(obj),
     }),
+    mosaic: t.boolean({
+      resolve: (obj, _args, ctx) =>
+        SnapshotFields.mosaic(obj, null, ctx) as never,
+    }),
   }),
 })

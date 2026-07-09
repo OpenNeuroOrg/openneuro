@@ -28,6 +28,7 @@ import {
   MetadataInput,
   SummaryInput,
   ValidatorInput,
+  MosaicInput
 } from "./inputs"
 
 import Mutation from "../resolvers/mutation"
@@ -121,6 +122,12 @@ builder.mutationType({
         validation: t.arg({ type: ValidatorInput, required: true }),
       },
       resolve: (root, args) => Mutation.updateValidation(root, args as never),
+    }),
+    updateMosaic: t.boolean({
+      args: {
+        mosaic: t.arg({ type: MosaicInput, required: true }),
+      },
+      resolve: (root, args) => Mutation.updateMosaic(root, args as never),
     }),
     updatePermissions: t.field({
       type: DatasetPermissions,
@@ -331,6 +338,14 @@ builder.mutationType({
       },
       resolve: (root, args, ctx) =>
         Mutation.revalidate(root, args as never, ctx),
+    }),
+    createMosaic: t.boolean({
+      args: {
+        datasetId: t.arg.id({ required: true }),
+        ref: t.arg.string({ required: true }),
+      },
+      resolve: (root, args, ctx) =>
+        Mutation.createMosaic(root, args as never, ctx),
     }),
     prepareRepoAccess: t.field({
       type: RepoMetadata,
