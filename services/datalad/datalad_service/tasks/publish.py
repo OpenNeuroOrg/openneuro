@@ -72,7 +72,7 @@ async def create_remotes_and_export(dataset_path, public=False):
     """
     create_remotes(dataset_path)
     if public:
-        await set_remote_public(dataset_path)
+        await enableremote_tag_public(dataset_path)
     await export_dataset(dataset_path)
     if public:
         await set_s3_access_tag(os.path.basename(dataset_path), 'public')
@@ -311,7 +311,13 @@ async def annex_drop(dataset_path, branches):
 
 
 async def set_remote_public(dataset_path):
-    """Clear x-amz-meta-access when a dataset is made public."""
+    """Configure x-amz-meta-access when a dataset is made public and update the S3 access tags."""
+    await enableremote_tag_public(dataset_path)
+    await set_s3_access_tag(os.path.basename(dataset_path), 'public')
+
+
+async def enableremote_tag_public(dataset_path):
+    """Configure x-amz-meta-access when a dataset is made public."""
     await run_check(
         ['git-annex', 'enableremote', get_s3_remote(), 'x-amz-tagging=access=public'],
         dataset_path,
