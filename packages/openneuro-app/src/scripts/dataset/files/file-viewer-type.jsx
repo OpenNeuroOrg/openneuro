@@ -34,6 +34,8 @@ const FileViewerType = ({ path, url, data }) => {
       path.endsWith("CHANGES") ||
       path.endsWith(".bidsignore") ||
       path.endsWith(".gitignore") ||
+      path.endsWith(".gitattributes") ||
+      path.endsWith("config") ||
       path.endsWith(".txt") ||
       path.endsWith(".rst") ||
       path.endsWith(".yml") ||
