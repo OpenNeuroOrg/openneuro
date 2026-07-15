@@ -3,9 +3,11 @@ import { indexingToken, indexQuery } from "@openneuro/search"
 import { setContext } from "@apollo/client/link/context"
 import { RetryLink } from "@apollo/client/link/retry"
 import { Client } from "@elastic/elasticsearch"
-import { createClient, datasetGenerator } from "@openneuro/client"
+import { datasetGenerator } from "./datasetGenerator"
 import indexDatasets from "./indexDatasets"
 import { createIndices } from "./createIndices"
+import { InMemoryCache } from "@apollo/client/cache/inmemory/inMemoryCache"
+import { ApolloClient } from "@apollo/client/core/ApolloClient"
 
 /**
  * Indexer entrypoint
@@ -33,9 +35,12 @@ export default async function main(): Promise<void> {
     }
   })
 
-  const apolloClient = createClient(process.env.GRAPHQL_URI, {
-    links: [retryLink, authLink],
+  const apolloClient = new ApolloClient({
+    uri: process.env.GRAPHQL_URI,
+    cache: new InMemoryCache(),
+    link: authLink.concat(retryLink),
   })
+
   const elasticClient = new Client({
     node: process.env.ELASTICSEARCH_CONNECTION,
     maxRetries: 10,

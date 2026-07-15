@@ -11,7 +11,6 @@
   "dependencies": {
     "@apollo/client": "3.13.8",
     "@elastic/elasticsearch": "8.13.1",
-    "@openneuro/client": "^4.30.2",
     "@openneuro/search": "^5.4.0-alpha.0",
     "graphql": "16.8.1",
     "ts-node": "10.9.2",

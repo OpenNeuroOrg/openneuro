@@ -33,7 +33,7 @@ export default defineConfig({
   build: {
     sourcemap: true,
     rollupOptions: {
-      external: ["/crn/config.js"],
+      external: ["/crn/config.js", "subscriptions-transport-ws"],
     },
   },
   optimizeDeps: {
@@ -44,7 +44,7 @@ export default defineConfig({
       "@apollo/client/link/ws",
       "@apollo/client/utilities",
     ],
-    exclude: ["stream-browserify"],
+    exclude: ["stream-browserify", "subscriptions-transport-ws"],
   },
   resolve: {
     alias: [
