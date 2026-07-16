@@ -105,6 +105,14 @@ interface FileProps {
   isFileToBeDeleted: (id: string) => boolean
 }
 
+/**
+ * Disable online editing of these files - they must be edited with the provided tools or through the git interface.
+ */
+const editDisabledFiles = [
+  "dataset_description.json",
+  ".gitattributes",
+]
+
 const File = ({
   id,
   size,
@@ -177,7 +185,7 @@ const File = ({
             </Tooltip>
           </Media>
         )}
-        {editMode && filename !== "dataset_description.json" && (
+        {editMode && !editDisabledFiles.includes(filename) && (
           <>
             <Media greaterThanOrEqual="medium">
               <Tooltip tooltip="Delete">
