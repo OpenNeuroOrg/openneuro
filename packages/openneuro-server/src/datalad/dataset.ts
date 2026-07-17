@@ -6,7 +6,6 @@
 import * as Sentry from "@sentry/node"
 import request from "superagent"
 import objectHash from "object-hash"
-import { Readable } from "stream"
 import type * as Mongoose from "mongoose"
 import config from "../config"
 import * as subscriptions from "../handlers/subscriptions"
@@ -327,92 +326,29 @@ export const testBlacklist = (path, filename) =>
   filenameBlacklist.test(filename) || pathBlacklist.test(path)
 
 /**
- * Add files to a dataset
+ * Add a file to a dataset from a string
  */
-export const addFile = async (datasetId, path, file) => {
-  try {
-    const { filename, mimetype, createReadStream, capacitor } = await file
-
-    // Apply blacklist to uploaded files
-    if (testBlacklist(path, filename)) {
-      return true
-    }
-
-    const stream = createReadStream()
-
-    // This does not close the fs-capacitor stream until the stream has finished
-    // but it does prevent new readers and allows for cleanup of the temp file buffer
-    capacitor.destroy()
-
-    // Start request to backend
-    return new Promise((resolve, reject) => {
-      const responseFile = {
-        filename: getFileName(path, filename),
-        size: 0,
-      }
-      const downstreamRequest = request
-        .post(fileUrl(datasetId, path, filename))
-        .set("Content-Type", mimetype)
-      downstreamRequest.then(
-        () => resolve(responseFile),
-        (err) => reject(err),
-      )
-      // Attach error handler for incoming request and start feeding downstream
-      stream
-        .on("data", (chunk) => {
-          responseFile.size += chunk.length
-        })
-        .on("error", (err) => {
-          if (err.constructor.name === "FileStreamDisconnectUploadError") {
-            // Catch client disconnects.
-            // eslint-disable-next-line no-console
-            console.warn(
-              `Client disconnected during upload for dataset "${datasetId}".`,
-            )
-          } else {
-            // Unknown error, log it at least.
-            // eslint-disable-next-line no-console
-            console.error(err)
-          }
-        })
-        .pipe(downstreamRequest)
-    })
-  } catch (err) {
-    if (err.constructor.name === "UploadPromiseDisconnectUploadError") {
-      // Catch client aborts silently
-    } else {
-      // Raise any unknown errors
-      throw err
-    }
+export const addFileString = async (
+  datasetId: string,
+  filename: string,
+  mimetype: string,
+  content: string,
+): Promise<void> => {
+  // Apply blacklist to uploaded files
+  if (testBlacklist("", filename)) {
+    return
+  }
+  const response = await fetch(fileUrl(datasetId, "", filename), {
+    method: "POST",
+    headers: { "Content-Type": mimetype },
+    body: content,
+  })
+  if (!response.ok) {
+    throw new Error(
+      `Failed to add file "${filename}" to dataset "${datasetId}": ${response.status} ${response.statusText}`,
+    )
   }
 }
-
-/**
- * Add file using a string and path
- *
- * Used to mock the stream interface in addFile
- */
-export const addFileString = (datasetId, filename, mimetype, content) =>
-  addFile(datasetId, "", {
-    filename,
-    mimetype,
-    // Mock a stream so we can reuse addFile
-    createReadStream: () => {
-      const stream = new Readable()
-      stream._read = () => {
-        // Content is available already, _read does nothing
-      }
-      stream.push(content)
-      stream.push(null)
-      return stream
-    },
-    // Mock capacitor
-    capacitor: {
-      destroy: () => {
-        // There is no capacitor to destroy
-      },
-    },
-  })
 
 /**
  * Commit a draft
