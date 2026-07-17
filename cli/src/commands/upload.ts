@@ -112,6 +112,7 @@ export async function uploadAction(
         console.log(err.message)
         return
       }
+      throw err
     }
   }
 
