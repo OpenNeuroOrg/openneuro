@@ -9,6 +9,6 @@
   "files": [
     "./src/lerna.json",
     "./src/scripts/workers/validator-config.json",
-    "./src/scripts/workers/schema-1.1.1-datacite.json"
+    "./src/scripts/workers/schema-1.2.7-datacite.json"
   ]
 }
