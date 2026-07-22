@@ -70,7 +70,7 @@ export async function uploadAction(
   options.datasetTypes = ["raw", "derivative"]
 
   // Use OpenNeuro's schema until datacite.yml is supported upstream
-  const schemaPath = new URL("../schema-1.1.1-datacite.json", import.meta.url)
+  const schemaPath = new URL("../schema-1.2.7-datacite.json", import.meta.url)
   options.schema = schemaPath.href
 
   const schemaResult = await validate(
