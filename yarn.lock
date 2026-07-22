@@ -961,12 +961,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@bids/validator@npm:@jsr/bids__validator@^3.0.0":
-  version: 3.0.0
-  resolution: "@jsr/bids__validator@npm:3.0.0::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__validator%2F3.0.0.tgz"
+"@bids/validator@npm:@jsr/bids__validator@^3.0.1":
+  version: 3.0.1
+  resolution: "@jsr/bids__validator@npm:3.0.1::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__validator%2F3.0.1.tgz"
   dependencies:
     "@bids/nifti-reader-js": "npm:^0.6.9"
-    "@jsr/bids__schema": "npm:~1.2.4"
+    "@jsr/bids__schema": "npm:~1.2.7"
     "@jsr/bradenmacdonald__s3-lite-client": "npm:^0.9.6"
     "@jsr/effigies__cliffy-command": "npm:1.0.0-dev.8"
     "@jsr/effigies__cliffy-table": "npm:1.0.0-dev.5"
@@ -985,7 +985,7 @@ __metadata:
     isomorphic-git: "npm:^1.38.4"
     marked: "npm:^17.0.6"
     supports-hyperlinks: "npm:^4.4.0"
-  checksum: 10/4ad50a54bfcd6c7e6b8ee2a126cf48ad804976e4da11bd2a1f13c282ab9815d1231ecd8ace028b14b308c743182e81109b0913c78c8466c9adb03f165838fbdc
+  checksum: 10/ef2c6a1d40608004bbc7e072dd181f02a42998d1fae1bee406c473d21e071661a3d48c93a39e8ff9ca0f2c3d316e56091058599c80597ffc36cfd7dd00175213
   languageName: node
   linkType: hard
 
@@ -2302,10 +2302,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jsr/bids__schema@npm:~1.2.4":
-  version: 1.2.4
-  resolution: "@jsr/bids__schema@npm:1.2.4::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__schema%2F1.2.4.tgz"
-  checksum: 10/bc6e5881574118759b7d0b4d9bcc88e11b302a74d4f2f74af9c735680d6f576881288584d83f6f82a9244870d42bbca79bd336863b77c9ea08d9e34c27297740
+"@jsr/bids__schema@npm:~1.2.7":
+  version: 1.2.7
+  resolution: "@jsr/bids__schema@npm:1.2.7::__archiveUrl=https%3A%2F%2Fnpm.jsr.io%2F~%2F11%2F%40jsr%2Fbids__schema%2F1.2.7.tgz"
+  checksum: 10/02a7c6bcd0b0da6b9083efb9f09864f677373d23b48096bcdf0275a19b000d3e534d87512fe74fbb5ea8dcbdd00601c12e708f3b9ca2627df912a6670c03b12e
   languageName: node
   linkType: hard
 
@@ -3340,7 +3340,7 @@ __metadata:
   dependencies:
     "@apollo/client": "npm:3.13.8"
     "@artsy/fresnel": "npm:^1.3.1"
-    "@bids/validator": "npm:@jsr/bids__validator@^3.0.0"
+    "@bids/validator": "npm:@jsr/bids__validator@^3.0.1"
     "@codecov/vite-plugin": "npm:^1.9.1"
     "@emotion/react": "npm:11.11.1"
     "@emotion/styled": "npm:11.11.0"
