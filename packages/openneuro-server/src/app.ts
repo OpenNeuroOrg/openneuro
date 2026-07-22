@@ -51,8 +51,8 @@ export async function expressApolloSetup() {
   })
   app.use(morgan("short"))
   app.use(cookieParser())
-  app.use(urlencoded({ extended: false, limit: "100mb" }))
-  app.use(json({ limit: "100mb" }))
+  app.use(urlencoded({ extended: false, limit: "200mb" }))
+  app.use(json({ limit: "200mb" }))
 
   // routing ---------------------------------------------------------
   app.use("/sitemap.xml", sitemapHandler)
