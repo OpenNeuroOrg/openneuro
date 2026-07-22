@@ -2,35 +2,16 @@ import config from "../../config"
 import { generateDataladCookie } from "../../libs/authentication/jwt"
 import { getDatasetWorker } from "../../libs/datalad-service"
 import Mosaic from "../../models/mosaic"
-import { getRedis } from "../../libs/redis"
-import CacheItem from "../../cache/item"
-import { CacheType } from "../../cache/types"
 import type { GraphQLContext } from "../builder"
 
 
-export const mosaic = async (dataset, _, _context: GraphQLContext) => {
-  const cache = new CacheItem(
-    getRedis(),
-    CacheType.mosaic,
-    [dataset.id, dataset.revision],
-  )
-  const cacheResult = await cache.get((doNotCache) => {
-    return Mosaic.findOne({
-      id: dataset.revision,
-      datasetId: dataset.id,
-    })
-      .exec()
-      .then((data) => {
-        if (data) {
-          return true
-        } else {
-          doNotCache(true)
-          return false
-        }
-      })
+export const mosaic = (dataset, _, _context: GraphQLContext) =>
+  Mosaic.findOne({
+    id: dataset.revision,
+    datasetId: dataset.id,
   })
-  return cacheResult
-}
+    .exec()
+    .then(Boolean)
 
 /**
  * Snapshot mosaic resolver
