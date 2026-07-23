@@ -120,3 +120,14 @@ export function gitRepo(req, res) {
   )
   return res.redirect(301, newUrl)
 }
+
+/**
+ * Request a mosaic pdf for a dataset commit
+ */
+export const getMosaic = (req, res) => {
+  const { datasetId, ref } = req.params
+  const worker = getDatasetWorker(datasetId)
+  res.set("Content-Type", "application/pdf")
+  const uri = `${worker}/datasets/${datasetId}/mosaic/${ref}`
+  return request.get(uri).pipe(res)
+}
