@@ -12167,7 +12167,7 @@ const RAW_RUNTIME_STATE =
           ["once", "npm:1.4.0"],\
           ["parseurl", "npm:1.3.3"],\
           ["proxy-addr", "npm:2.0.7"],\
-          ["qs", "npm:6.15.1"],\
+          ["qs", "npm:6.15.3"],\
           ["range-parser", "npm:1.2.1"],\
           ["router", "npm:2.2.0"],\
           ["send", "npm:1.2.1"],\
@@ -18020,7 +18020,7 @@ const RAW_RUNTIME_STATE =
           ["bluebird", "npm:3.7.2"],\
           ["json-bigint", "npm:1.0.0"],\
           ["node-mailjet", "npm:3.3.5"],\
-          ["qs", "npm:6.10.3"],\
+          ["qs", "npm:6.15.3"],\
           ["superagent", "npm:6.1.0"],\
           ["superagent-proxy", "virtual:e8e8546cc5636e80f867caa65a584b484059483e65cf523b4dde71a90457e7ea4ad19a4c77304307c9ea7c3aa6d0e39305387fbc4451fef4082f0c1014bbfbbe#npm:3.0.0"]\
         ],\
@@ -20163,30 +20163,6 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["qs", [\
-      ["npm:6.10.3", {\
-        "packageLocation": "./.yarn/cache/qs-npm-6.10.3-172e1a3fb7-73d07bfd77.zip/node_modules/qs/",\
-        "packageDependencies": [\
-          ["qs", "npm:6.10.3"],\
-          ["side-channel", "npm:1.0.4"]\
-        ],\
-        "linkType": "HARD"\
-      }],\
-      ["npm:6.14.0", {\
-        "packageLocation": "./.yarn/cache/qs-npm-6.14.0-6b298311eb-a60e49bbd5.zip/node_modules/qs/",\
-        "packageDependencies": [\
-          ["qs", "npm:6.14.0"],\
-          ["side-channel", "npm:1.1.0"]\
-        ],\
-        "linkType": "HARD"\
-      }],\
-      ["npm:6.15.1", {\
-        "packageLocation": "./.yarn/cache/qs-npm-6.15.1-23a708530c-ec10b99574.zip/node_modules/qs/",\
-        "packageDependencies": [\
-          ["qs", "npm:6.15.1"],\
-          ["side-channel", "npm:1.1.0"]\
-        ],\
-        "linkType": "HARD"\
-      }],\
       ["npm:6.15.3", {\
         "packageLocation": "./.yarn/cache/qs-npm-6.15.3-47907326d2-1cbb4b0508.zip/node_modules/qs/",\
         "packageDependencies": [\
@@ -21941,18 +21917,6 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "HARD"\
       }],\
-      ["npm:1.1.0", {\
-        "packageLocation": "./.yarn/cache/side-channel-npm-1.1.0-4993930974-7d53b9db29.zip/node_modules/side-channel/",\
-        "packageDependencies": [\
-          ["es-errors", "npm:1.3.0"],\
-          ["object-inspect", "npm:1.13.4"],\
-          ["side-channel", "npm:1.1.0"],\
-          ["side-channel-list", "npm:1.0.0"],\
-          ["side-channel-map", "npm:1.0.1"],\
-          ["side-channel-weakmap", "npm:1.0.2"]\
-        ],\
-        "linkType": "HARD"\
-      }],\
       ["npm:1.1.1", {\
         "packageLocation": "./.yarn/cache/side-channel-npm-1.1.1-3d97a5a6fb-5fa6393ff6.zip/node_modules/side-channel/",\
         "packageDependencies": [\
@@ -21967,15 +21931,6 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["side-channel-list", [\
-      ["npm:1.0.0", {\
-        "packageLocation": "./.yarn/cache/side-channel-list-npm-1.0.0-14f74146d1-603b928997.zip/node_modules/side-channel-list/",\
-        "packageDependencies": [\
-          ["es-errors", "npm:1.3.0"],\
-          ["object-inspect", "npm:1.13.4"],\
-          ["side-channel-list", "npm:1.0.0"]\
-        ],\
-        "linkType": "HARD"\
-      }],\
       ["npm:1.0.1", {\
         "packageLocation": "./.yarn/cache/side-channel-list-npm-1.0.1-7a0802d399-3499671cd5.zip/node_modules/side-channel-list/",\
         "packageDependencies": [\
@@ -22845,7 +22800,7 @@ const RAW_RUNTIME_STATE =
           ["formidable", "npm:1.2.2"],\
           ["methods", "npm:1.1.2"],\
           ["mime", "npm:1.6.0"],\
-          ["qs", "npm:6.10.3"],\
+          ["qs", "npm:6.15.3"],\
           ["readable-stream", "npm:2.3.7"],\
           ["superagent", "npm:3.8.3"]\
         ],\
@@ -22862,7 +22817,7 @@ const RAW_RUNTIME_STATE =
           ["formidable", "npm:1.2.6"],\
           ["methods", "npm:1.1.2"],\
           ["mime", "npm:2.6.0"],\
-          ["qs", "npm:6.10.3"],\
+          ["qs", "npm:6.15.3"],\
           ["readable-stream", "npm:3.6.0"],\
           ["semver", "npm:7.5.4"],\
           ["superagent", "npm:6.1.0"]\
@@ -24210,7 +24165,7 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/url-npm-0.11.4-706538be7c-e787d070f0.zip/node_modules/url/",\
         "packageDependencies": [\
           ["punycode", "npm:1.4.1"],\
-          ["qs", "npm:6.14.0"],\
+          ["qs", "npm:6.15.3"],\
           ["url", "npm:0.11.4"]\
         ],\
         "linkType": "HARD"\
