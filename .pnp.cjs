@@ -17840,10 +17840,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["nanoid", [\
-      ["npm:3.3.11", {\
-        "packageLocation": "./.yarn/cache/nanoid-npm-3.3.11-f98c1f9ef6-73b5afe597.zip/node_modules/nanoid/",\
+      ["npm:3.3.16", {\
+        "packageLocation": "./.yarn/cache/nanoid-npm-3.3.16-dbca216f06-8004af92b5.zip/node_modules/nanoid/",\
         "packageDependencies": [\
-          ["nanoid", "npm:3.3.11"]\
+          ["nanoid", "npm:3.3.16"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -19677,12 +19677,12 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["postcss", [\
-      ["npm:8.5.12", {\
-        "packageLocation": "./.yarn/cache/postcss-npm-8.5.12-9e3c2c1a24-ec6b79b68c.zip/node_modules/postcss/",\
+      ["npm:8.5.23", {\
+        "packageLocation": "./.yarn/cache/postcss-npm-8.5.23-ea01eac089-8387f42121.zip/node_modules/postcss/",\
         "packageDependencies": [\
-          ["nanoid", "npm:3.3.11"],\
+          ["nanoid", "npm:3.3.16"],\
           ["picocolors", "npm:1.1.1"],\
-          ["postcss", "npm:8.5.12"],\
+          ["postcss", "npm:8.5.23"],\
           ["source-map-js", "npm:1.2.1"]\
         ],\
         "linkType": "HARD"\
@@ -24434,7 +24434,7 @@ const RAW_RUNTIME_STATE =
           ["less", null],\
           ["lightningcss", null],\
           ["picomatch", "npm:4.0.3"],\
-          ["postcss", "npm:8.5.12"],\
+          ["postcss", "npm:8.5.23"],\
           ["rollup", "npm:4.59.0"],\
           ["sass", "npm:1.93.2"],\
           ["sass-embedded", null],\
@@ -24492,7 +24492,7 @@ const RAW_RUNTIME_STATE =
           ["less", null],\
           ["lightningcss", null],\
           ["picomatch", "npm:4.0.3"],\
-          ["postcss", "npm:8.5.12"],\
+          ["postcss", "npm:8.5.23"],\
           ["rollup", "npm:4.59.0"],\
           ["sass", null],\
           ["sass-embedded", null],\
@@ -24550,7 +24550,7 @@ const RAW_RUNTIME_STATE =
           ["less", null],\
           ["lightningcss", null],\
           ["picomatch", "npm:4.0.3"],\
-          ["postcss", "npm:8.5.12"],\
+          ["postcss", "npm:8.5.23"],\
           ["rollup", "npm:4.59.0"],\
           ["sass", null],\
           ["sass-embedded", null],\
@@ -24608,7 +24608,7 @@ const RAW_RUNTIME_STATE =
           ["less", null],\
           ["lightningcss", null],\
           ["picomatch", "npm:4.0.3"],\
-          ["postcss", "npm:8.5.12"],\
+          ["postcss", "npm:8.5.23"],\
           ["rollup", "npm:4.59.0"],\
           ["sass", "npm:1.93.2"],\
           ["sass-embedded", null],\
