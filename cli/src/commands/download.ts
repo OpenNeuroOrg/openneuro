@@ -35,6 +35,15 @@ export async function downloadAction(
     type: "module",
   })
 
+  // Wait for the worker to be ready before sending commands
+  await new Promise<void>((resolve) => {
+    worker.onmessage = (event) => {
+      if (event.data.command === "ready") {
+        resolve()
+      }
+    }
+  })
+
   // Configure worker
   worker.postMessage({
     "command": "setup",

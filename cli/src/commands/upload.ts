@@ -121,6 +121,15 @@ export async function uploadAction(
     type: "module",
   })
 
+  // Wait for the worker to be ready before sending commands
+  await new Promise<void>((resolve) => {
+    worker.onmessage = (event) => {
+      if (event.data.command === "ready") {
+        resolve()
+      }
+    }
+  })
+
   const repoPath = join(repoDir, datasetId)
   const { token, endpoint } = await getRepoAccess(datasetId)
   await Deno.mkdir(repoPath, { recursive: true })
