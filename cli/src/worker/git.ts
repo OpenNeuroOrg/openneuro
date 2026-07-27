@@ -6,7 +6,7 @@ import type {
 import type { GitAnnexAttributes, GitAnnexBackend } from "../gitattributes.ts"
 import { matchGitAttributes, parseGitAttributes } from "../gitattributes.ts"
 import { dirname, join } from "@std/path"
-import { default as git, STAGE, TREE, walk } from "isomorphic-git"
+import { default as git, STAGE, TREE } from "isomorphic-git"
 import { logger, setupLogging } from "../logger.ts"
 import { PromiseQueue } from "./queue.ts"
 import { checkKey, storeKey } from "./transferKey.ts"
@@ -528,3 +528,5 @@ self.onmessage = (event: GitWorkerEvent) => {
     workQueue.enqueue(done)
   }
 }
+
+await globalThis.postMessage({ command: "ready" })
