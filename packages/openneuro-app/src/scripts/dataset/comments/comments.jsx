@@ -56,7 +56,15 @@ const Comments = ({ datasetId, uploader, comments }) => {
         <LoggedIn>
           <CommentEditor
             datasetId={datasetId}
-            done={() => toast.success(<ToastContent title="Comment Posted" />)}
+            done={(err) => {
+              if (!err) {
+                toast.success(<ToastContent title="Comment Posted" />)
+              } else {
+                toast.error(
+                  <ToastContent title="Error Posting Comment" body={err} />,
+                )
+              }
+            }}
           />
         </LoggedIn>
         <LoggedOut>

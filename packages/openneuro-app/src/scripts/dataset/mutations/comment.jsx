@@ -97,7 +97,7 @@ const CommentMutation = ({
   comment,
   disabled,
   profile,
-  done = () => {
+  done = (_err) => {
     /* default no op function */
   },
 }) => {
@@ -133,15 +133,20 @@ const CommentMutation = ({
       className="on-button on-button--primary  on-button--small "
       disabled={disabled}
       onClick={async () => {
-        await newComment({
-          variables: {
-            datasetId,
-            parentId,
-            commentId,
-            comment: JSON.stringify(convertToRaw(comment)),
-          },
-        })
-        done()
+        try {
+          await newComment({
+            variables: {
+              datasetId,
+              parentId,
+              commentId,
+              comment: JSON.stringify(convertToRaw(comment)),
+            },
+          })
+          done()
+        } catch (err) {
+          done(err.message)
+          return
+        }
       }}
     >
       Submit Comment
