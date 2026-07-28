@@ -18,9 +18,9 @@ const CommentEditor = ({
   const [editorState, setEditorState] = useState(
     state || EditorState.createEmpty(),
   )
-  const doAfterSubmit = () => {
+  const doAfterSubmit = (err) => {
     setEditorState(EditorState.createEmpty())
-    if (done) done()
+    if (done) done(err)
   }
   const disabled = editorState.getUndoStack().size === 0
   return (

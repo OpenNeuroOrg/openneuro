@@ -1,7 +1,6 @@
 import React from "react"
 import PropTypes from "prop-types"
-import { gql } from "@apollo/client"
-import { Mutation } from "@apollo/client/react/components"
+import { gql, useMutation } from "@apollo/client"
 import { convertToRaw } from "draft-js"
 import withProfile from "../../authentication/withProfile.jsx"
 import { DATASET_COMMENTS } from "../fragments/comments-fragments"
@@ -98,58 +97,60 @@ const CommentMutation = ({
   comment,
   disabled,
   profile,
-  done = () => {
+  done = (_err) => {
     /* default no op function */
   },
 }) => {
+  const [newComment] = useMutation(commentId ? EDIT_COMMENT : NEW_COMMENT, {
+    update(cache, { data: { addComment } }) {
+      const { comments } = cache.readFragment({
+        id: datasetCacheId(datasetId),
+        fragment: DATASET_COMMENTS,
+      })
+      // Apply state reduction to cache for new comment changes
+      const nextCommentsState = addComment
+        ? newCommentsReducer(comments, {
+          parentId,
+          commentId: addComment,
+          comment,
+          profile,
+        })
+        : modifyCommentsReducer(comments, { commentId, comment })
+      cache.writeFragment({
+        id: datasetCacheId(datasetId),
+        fragment: DATASET_COMMENTS,
+        data: {
+          __typename: "Dataset",
+          id: datasetId,
+          comments: nextCommentsState,
+        },
+      })
+    },
+  })
+
   return (
-    <Mutation
-      mutation={commentId ? EDIT_COMMENT : NEW_COMMENT}
-      update={(cache, { data: { addComment } }) => {
-        const { comments } = cache.readFragment({
-          id: datasetCacheId(datasetId),
-          fragment: DATASET_COMMENTS,
-        })
-        // Apply state reduction to cache for new comment changes
-        const nextCommentsState = addComment
-          ? newCommentsReducer(comments, {
-            parentId,
-            commentId: addComment,
-            comment,
-            profile,
+    <button
+      className="on-button on-button--primary  on-button--small "
+      disabled={disabled}
+      onClick={async () => {
+        try {
+          await newComment({
+            variables: {
+              datasetId,
+              parentId,
+              commentId,
+              comment: JSON.stringify(convertToRaw(comment)),
+            },
           })
-          : modifyCommentsReducer(comments, { commentId, comment })
-        cache.writeFragment({
-          id: datasetCacheId(datasetId),
-          fragment: DATASET_COMMENTS,
-          data: {
-            __typename: "Dataset",
-            id: datasetId,
-            comments: nextCommentsState,
-          },
-        })
+          done()
+        } catch (err) {
+          done(err.message)
+          return
+        }
       }}
     >
-      {(newComment) => (
-        <button
-          className="on-button on-button--primary  on-button--small "
-          disabled={disabled}
-          onClick={async () => {
-            await newComment({
-              variables: {
-                datasetId,
-                parentId,
-                commentId,
-                comment: JSON.stringify(convertToRaw(comment)),
-              },
-            })
-            done()
-          }}
-        >
-          Submit Comment
-        </button>
-      )}
-    </Mutation>
+      Submit Comment
+    </button>
   )
 }
 

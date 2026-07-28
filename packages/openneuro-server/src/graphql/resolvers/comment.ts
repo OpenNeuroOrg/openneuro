@@ -1,3 +1,4 @@
+import User from "../../models/user"
 import Comment from "../../models/comment"
 import type { CommentDocument } from "../../models/comment"
 import notifications from "../../libs/notifications"
@@ -53,7 +54,7 @@ const allNestedReplies = async (obj: CommentDocument) => {
 /**
  * Insert new comment and return the comment _id for replies to reference
  */
-export const addComment = (
+export const addComment = async (
   obj: unknown,
   { datasetId, parentId, comment: text }: {
     datasetId: string
@@ -65,6 +66,12 @@ export const addComment = (
   if (!user) {
     return Promise.reject(
       new Error("You must be logged in to write a comment."),
+    )
+  }
+  const userObj = await User.findOne({ id: user }).exec()
+  if (!userObj.email) {
+    return Promise.reject(
+      new Error("You must have a verified email to write a comment."),
     )
   }
   const newComment = new Comment({
