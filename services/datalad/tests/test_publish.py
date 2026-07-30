@@ -75,7 +75,7 @@ async def test_export_snapshots(no_init_remote, client, new_dataset):
 
 
 @patch('datalad_service.tasks.publish.run_check', new_callable=AsyncMock)
-@patch('datalad_service.tasks.publish.set_s3_access_tag', new_callable=AsyncMock)
+@patch('datalad_service.tasks.publish.set_s3_access_tag_worker')
 async def test_set_remote_public(mock_set_s3_access_tag, mock_run_check, new_dataset):
     await set_remote_public(new_dataset.path)
 
