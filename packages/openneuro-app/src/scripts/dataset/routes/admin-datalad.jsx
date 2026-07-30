@@ -35,7 +35,7 @@ const AdminDataset = ({ dataset }) => (
       push to S3 and GitHub.
     </p>
     <div className="dataset-form-controls">
-      <AdminExports />
+      <AdminExports dataset={dataset} />
     </div>
     <hr />
     <HeaderRow4>Draft Head</HeaderRow4>
