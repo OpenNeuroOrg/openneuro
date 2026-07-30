@@ -181,7 +181,14 @@ async function add(event: GitWorkerEventAdd) {
     try {
       const stats = await context.fs.promises.stat(file.path)
       size = stats.size
-    } catch (_err) {
+    } catch (err) {
+      // Log the underlying error - it is not always a filesystem problem and
+      // discarding it makes unrelated failures look like broken symlinks.
+      logger.error(
+        `Failed to stat "${file.path}": ${
+          err instanceof Error ? (err.stack ?? err.message) : String(err)
+        }`,
+      )
       console.log(
         `${file.relativePath} could not be added, check if this file is accessible and not a broken symlink.`,
       )
