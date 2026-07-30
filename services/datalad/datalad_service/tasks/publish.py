@@ -75,7 +75,7 @@ async def create_remotes_and_export(dataset_path, public=False):
         await enableremote_tag_public(dataset_path)
     await export_dataset(dataset_path)
     if public:
-        await set_s3_access_tag(os.path.basename(dataset_path), 'public')
+        await set_s3_access_tag.kiq(os.path.basename(dataset_path))
 
 
 def create_remotes(dataset_path):
@@ -118,12 +118,8 @@ async def export_backup_and_drop(dataset_path):
                 await s3_export(dataset_path, get_s3_remote(), tag.name)
         await fsck_and_drop(dataset_path, [tag.name for tag in tags])
         logger.info(f'Exporting/dropping tags for {dataset_id} complete')
-    if public_dataset:
-        logger.info(f'Setting public access tag for {dataset_id}')
-        await set_s3_access_tag(dataset_id, 'public')
-    else:
-        logger.info(f'Setting private access tag for {dataset_id}')
-        await set_s3_access_tag(dataset_id, 'private')
+    logger.info(f'Queueing S3 access tag update for {dataset_id}')
+    await set_s3_access_tag.kiq(dataset_id)
     logger.info(f'{dataset_id} export_backup_and_drop complete')
 
 
@@ -311,9 +307,15 @@ async def annex_drop(dataset_path, branches):
 
 
 async def set_remote_public(dataset_path):
-    """Configure x-amz-meta-access when a dataset is made public and update the S3 access tags."""
+    """
+    Configure x-amz-meta-access when a dataset is made public and update the S3 access tags.
+
+    Used by scripts/tag-public.py and runs the tag tasks without the broker.
+    """
     await enableremote_tag_public(dataset_path)
-    await set_s3_access_tag(os.path.basename(dataset_path), 'public')
+    await asyncio.to_thread(
+        set_s3_access_tag_worker, os.path.basename(dataset_path), 'public'
+    )
 
 
 async def enableremote_tag_public(dataset_path):
@@ -370,8 +372,9 @@ def set_s3_access_tag_worker(dataset, value):
 
 
 @broker.task
-async def set_s3_access_tag(dataset, value='private'):
+async def set_s3_access_tag(dataset):
     """Set access tag on all versions of all files."""
+    value = 'public' if is_public_dataset(dataset) else 'private'
     loop = asyncio.get_running_loop()
     # Use the default executor for the orchestration task to avoid deadlocking
     # the tags_executor which is used for the sub-tasks.
