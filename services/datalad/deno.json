@@ -1,0 +1,6 @@
+{
+  "imports": {
+    "@bids/validator": "jsr:@bids/validator@3.0.1"
+  },
+  "nodeModulesDir": "none"
+}

@@ -12,17 +12,17 @@ from types import SimpleNamespace
 
 
 @pytest.mark.parametrize(
-    "age, expected",
+    'age, expected',
     [
         (25, 25.0),
         (25.5, 25.5),
         (0, 0.0),
         (-1, -1.0),
-        (float("nan"), None),
-        (float("inf"), None),
-        (float("-inf"), None),
-        ("89+", None),
-        ("25", None),
+        (float('nan'), None),
+        (float('inf'), None),
+        (float('-inf'), None),
+        ('89+', None),
+        ('25', None),
         (None, None),
     ],
 )
@@ -36,14 +36,14 @@ def test_sanitize_age(age, expected):
 
 def test_sanitize_subject_metadata():
     metadata = [
-        {"participantId": "01", "age": 25, "sex": "M"},
-        {"participantId": "02", "age": "89+", "sex": "F"},
-        {"participantId": "03", "sex": "M"},
+        {'participantId': '01', 'age': 25, 'sex': 'M'},
+        {'participantId': '02', 'age': '89+', 'sex': 'F'},
+        {'participantId': '03', 'sex': 'M'},
     ]
     result = sanitize_subject_metadata(metadata)
-    assert result[0]["age"] == 25.0
-    assert result[1]["age"] is None
-    assert result[2]["age"] is None
+    assert result[0]['age'] == 25.0
+    assert result[1]['age'] is None
+    assert result[2]['age'] is None
 
 
 def test_sanitize_subject_metadata_passthrough():
@@ -62,7 +62,12 @@ async def test_validator_error(new_dataset):
     logger.exception = Mock()
     await validate_dataset_deno_call(new_dataset.path, 'HEAD', logger)
     # new_dataset completes validation with errors, should not call logger
-    assert not logger.exception.called
+    assert not logger.exception.called, (
+        'validator did not return parseable JSON\n'
+        f'exception: {logger.exception.call_args}\n'
+        f'stdout: {logger.info.call_args}\n'
+        f'stderr: {logger.error.call_args}'
+    )
 
 
 @pytest.fixture
