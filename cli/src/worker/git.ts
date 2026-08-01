@@ -306,17 +306,17 @@ async function commitAnnexBranch(version?: string) {
       builder.add(annexBranchPath, newAnnexLog)
       changes = true
     }
-    // Skip commit if no changes are needed for either remote.log or new annexed objects
-    if (changes) {
-      // Show a better commit message for when only the remote is updated
-      if (Object.keys(annexKeys).length === 0) {
-        await builder.commit("git-annex", "[OpenNeuro CLI] Configured remote")
-      } else {
-        await builder.commit(
-          "git-annex",
-          "[OpenNeuro CLI] Added annexed objects",
-        )
-      }
+  }
+  // Skip commit if no changes are needed for either remote.log or new annexed objects
+  if (changes) {
+    // Show a better commit message for when only the remote is updated
+    if (Object.keys(annexKeys).length === 0) {
+      await builder.commit("git-annex", "[OpenNeuro CLI] Configured remote")
+    } else {
+      await builder.commit(
+        "git-annex",
+        "[OpenNeuro CLI] Added annexed objects",
+      )
     }
   }
 }
