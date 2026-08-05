@@ -3,7 +3,45 @@
  */
 
 import { getConfig } from "./config.ts"
-import { QueryError, ResponseError } from "./error.ts"
+import { LoginError, QueryError, ResponseError } from "./error.ts"
+
+interface GraphQLError {
+  message: string
+  locations?: { line: number; column: number }[]
+  path?: string[]
+  extensions?: unknown
+}
+
+/**
+ * Patterns that identify a GraphQL error caused by missing credentials
+ */
+const authenticationErrorPattern =
+  /logged in|log in|not authori[sz]ed|unauthori[sz]ed|authentication/i
+
+/**
+ * Throw the most useful error available for a failed GraphQL response
+ *
+ * GraphQL reports failures as an array of objects that carry a server side
+ * stack trace. Printing the whole array buries the one line that matters, so
+ * only the messages are kept, and a failure caused by missing credentials is
+ * reported as a LoginError explaining how to fix it.
+ * @param errors The errors array from a GraphQL response
+ */
+function throwGraphQLError(errors: GraphQLError[]): never {
+  const message = errors
+    .map((error) => error?.message)
+    .filter((message) => typeof message === "string" && message.length > 0)
+    .join("\n")
+  if (!message) {
+    throw new ResponseError(JSON.stringify(errors))
+  }
+  if (authenticationErrorPattern.test(message)) {
+    throw new LoginError(
+      `${message}\nRun \`openneuro login\` to authenticate. If you have already logged in, your API key may no longer be valid, so generate a new one and run \`openneuro login\` again.`,
+    )
+  }
+  throw new ResponseError(message)
+}
 
 function request(query: string, variables = {}): Promise<Response> {
   const config = getConfig()
@@ -29,14 +67,9 @@ interface CreateDatasetMutationResponse {
   data?: {
     createDataset: {
       id: string
-    }
+    } | null
   }
-  errors?: {
-    message: string
-    locations: { line: number; column: number }[]
-    path: string[]
-    extensions: unknown
-  }[]
+  errors?: GraphQLError[]
 }
 
 /**
@@ -55,13 +88,21 @@ export async function createDataset(
   })
   const body: CreateDatasetMutationResponse = await res.json()
   if (body.errors) {
-    throw new ResponseError(JSON.stringify(body.errors))
+    throwGraphQLError(body.errors)
   }
-  if (body.data) {
-    return body?.data?.createDataset?.id
-  } else {
+  if (!body.data) {
     throw new QueryError("Invalid response")
   }
+  const datasetId = body.data.createDataset?.id
+  if (!datasetId) {
+    // An undefined accession number is used to build the local repository
+    // path, so it fails much later with a path error that says nothing about
+    // the request that actually failed.
+    throw new ResponseError(
+      "The server did not return an accession number for the new dataset.",
+    )
+  }
+  return datasetId
 }
 
 const prepareUploadMutation = `
@@ -107,7 +148,7 @@ export async function getLatestSnapshotVersion(datasetId: string) {
   const res = await request(query, { datasetId })
   const body = await res.json()
   if (body.errors) {
-    throw new ResponseError(JSON.stringify(body.errors))
+    throwGraphQLError(body.errors)
   }
   if (body.data) {
     return body.data.dataset.latestSnapshot.tag
