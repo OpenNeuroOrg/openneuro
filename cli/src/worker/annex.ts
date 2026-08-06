@@ -155,11 +155,8 @@ export async function annexAdd(
     await context.fs.promises.rm(fileRepoPath, { force: true })
     // Create our new symlink pointing at the right annex object
     await context.fs.promises.symlink(symlinkTarget, fileRepoPath)
-    const options = {
-      ...context.config(),
-      filepath: relativePath,
-    }
-    await git.add(options)
+    // Staging is left to the caller so adds can be batched - see ADD_BATCH_SIZE
+    // in git.ts. Adding one path at a time rewrites the whole index per file.
     return true
   } else {
     return false
