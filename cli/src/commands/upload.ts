@@ -10,7 +10,7 @@ import type { CommandOptions } from "@cliffy/command"
 import { getRepoAccess } from "./git-credential.ts"
 import { readConfig } from "../config.ts"
 import { createDatasetAffirmed } from "./create-dataset.ts"
-import { CreateDatasetAffirmedError } from "../error.ts"
+import { CreateDatasetAffirmedError, LoginError } from "../error.ts"
 import validatorConfig from "../validator-config.json" with { type: "json" }
 
 async function getRepoDir(url: URL): Promise<string> {
@@ -108,7 +108,9 @@ export async function uploadAction(
     try {
       datasetId = await createDatasetAffirmed(options)
     } catch (err) {
-      if (err instanceof CreateDatasetAffirmedError) {
+      if (
+        err instanceof CreateDatasetAffirmedError || err instanceof LoginError
+      ) {
         console.log(err.message)
         return
       }
