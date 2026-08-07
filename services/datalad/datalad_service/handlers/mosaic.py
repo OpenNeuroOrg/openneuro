@@ -2,6 +2,7 @@ import logging
 import falcon
 import os
 import aiofiles
+import pygit2
 
 from datalad_service.common.user import get_user_info
 from datalad_service.tasks.mosaic import create_mosaic, get_mosaic_path
@@ -12,7 +13,14 @@ class MosaicResource:
         self.store = store
 
     async def on_get(self, req, resp, dataset, hexsha):
-        mosaic_path = get_mosaic_path(dataset, hexsha)
+        try:
+            repo = self.store.get_dataset_repo(dataset)
+            commit, _ref = repo.resolve_refish(hexsha)
+            mosaic_path = get_mosaic_path(dataset, repo, commit)
+        except (KeyError, pygit2.GitError, pygit2.InvalidSpecError):
+            resp.media = {'error': 'mosaic not found'}
+            resp.status = falcon.HTTP_NOT_FOUND
+            return
         if os.path.exists(mosaic_path):
             resp.status = falcon.HTTP_OK
             fd = await aiofiles.open(mosaic_path, 'rb')
