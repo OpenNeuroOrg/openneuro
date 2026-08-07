@@ -76,7 +76,7 @@ def create_anat_files_dict(repo, commit):
 
 
 @broker.task
-async def create_mosaic(dataset_id, dataset_path, ref, cookies=None, user=''):
+async def create_mosaic(dataset_id, dataset_path, ref, cookies=None):
     async with redis_client() as client:
         lock = client.lock(f'mosaic-lock:{dataset_id}:{ref}', timeout=60 * 60 * 4)
         if await lock.acquire(blocking=False):
