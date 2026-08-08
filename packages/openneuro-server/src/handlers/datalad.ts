@@ -4,6 +4,7 @@ import mime from "mime-types"
 import { getFiles } from "../datalad/files"
 import { getDatasetEndpoint, getDatasetWorker } from "../libs/datalad-service"
 import { getDraftRevision } from "../datalad/draft"
+import { checkDatasetRead } from "../graphql/permissions"
 
 /**
  * Handlers for datalad dataset manipulation
@@ -124,8 +125,14 @@ export function gitRepo(req, res) {
 /**
  * Request a mosaic pdf for a dataset commit
  */
-export const getMosaic = (req, res) => {
+export const getMosaic = async (req, res) => {
   const { datasetId, ref } = req.params
+  try {
+    await checkDatasetRead(datasetId, req.user?.id, req.user)
+  } catch {
+    res.status(403).send("You do not have access to read this dataset.")
+    return
+  }
   const worker = getDatasetWorker(datasetId)
   res.set("Content-Type", "application/pdf")
   const uri = `${worker}/datasets/${datasetId}/mosaic/${ref}`

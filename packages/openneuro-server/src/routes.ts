@@ -132,6 +132,7 @@ const routes = [
   {
     method: "get",
     url: "/datasets/:datasetId/mosaic/:ref",
+    middleware: [noCache, jwt.authenticate],
     handler: datalad.getMosaic,
   },
 

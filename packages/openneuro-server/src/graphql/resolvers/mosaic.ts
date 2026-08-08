@@ -2,8 +2,8 @@ import config from "../../config"
 import { generateDataladCookie } from "../../libs/authentication/jwt"
 import { getDatasetWorker } from "../../libs/datalad-service"
 import Mosaic from "../../models/mosaic"
+import { checkDatasetWrite } from "../permissions"
 import type { GraphQLContext } from "../builder"
-
 
 export const mosaic = (dataset, _, _context: GraphQLContext) =>
   Mosaic.findOne({
@@ -59,7 +59,12 @@ export const mosaicUrl = (datasetId, ref) => {
  * @param {string} args.datasetId Dataset accession number
  * @param {string} args.ref Git hexsha
  */
-export const createMosaic = async (obj, { datasetId, ref }, { userInfo }: Pick<GraphQLContext, "userInfo">) => {
+export const createMosaic = async (
+  obj,
+  { datasetId, ref },
+  { user, userInfo }: Pick<GraphQLContext, "user" | "userInfo">,
+) => {
+  await checkDatasetWrite(datasetId, user, userInfo)
   try {
     const response = await fetch(mosaicUrl(datasetId, ref), {
       method: "POST",
