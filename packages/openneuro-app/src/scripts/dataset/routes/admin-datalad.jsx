@@ -4,6 +4,7 @@ import DatasetHistory from "../fragments/dataset-history.jsx"
 import CacheClear from "../mutations/cache-clear.jsx"
 import { HoldDeletion } from "../mutations/hold-deletion"
 import AdminExports from "../mutations/admin-exports"
+import CreateMosaic from "../mutations/create-mosaic"
 import { DatasetPageBorder } from "./styles/dataset-page-border"
 import { HeaderRow3, HeaderRow4 } from "./styles/header-row"
 import { DatasetEvents } from "../mutations/dataset-events"
@@ -36,6 +37,15 @@ const AdminDataset = ({ dataset }) => (
     </p>
     <div className="dataset-form-controls">
       <AdminExports />
+    </div>
+    <hr />
+    <HeaderRow4>Create Mosaic PDF</HeaderRow4>
+    <p>
+      Create a pdf containing a single slice of every anatomical image. Useful
+      for quickly finding non-defaced images.
+    </p>
+    <div className="dataset-form-controls">
+      <CreateMosaic datasetId={dataset.id} revision={dataset.draft.head} />
     </div>
     <hr />
     <HeaderRow4>Draft Head</HeaderRow4>
