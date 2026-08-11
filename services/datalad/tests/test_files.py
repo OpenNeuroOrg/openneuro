@@ -2,9 +2,11 @@ import os
 import falcon
 from falcon import testing
 import json
+import pygit2
+import pytest
 from datalad.api import Dataset
 
-from datalad_service.tasks.files import parse_s3_annex_url
+from datalad_service.tasks.files import parse_s3_annex_url, target_path
 
 
 class FileWrapper:
@@ -370,6 +372,112 @@ def test_delete_nested_file(client, new_dataset):
     )
     assert response.status == falcon.HTTP_OK
     assert json.loads(response.content)['deleted'] == ['derivatives/LICENSE', 'CHANGES']
+
+
+def test_delete_file_removes_from_working_tree(client, new_dataset):
+    ds_id = os.path.basename(new_dataset.path)
+    response = client.simulate_delete(
+        f'/datasets/{ds_id}/files', body='{ "filenames": ["CHANGES"] }'
+    )
+    assert response.status == falcon.HTTP_OK
+    # Removed from the working tree and the index, not just the commit
+    assert not os.path.exists(os.path.join(new_dataset.path, 'CHANGES'))
+    repo = pygit2.Repository(new_dataset.path)
+    index_paths = [entry.path for entry in repo.index]
+    assert 'CHANGES' not in index_paths
+    # Untouched files are still present in both
+    assert os.path.exists(os.path.join(new_dataset.path, 'dataset_description.json'))
+    assert 'dataset_description.json' in index_paths
+
+
+def test_delete_directory(client, new_dataset):
+    ds_id = os.path.basename(new_dataset.path)
+    for filename in ('derivatives:LICENSE', 'derivatives:sub-01:stats.tsv'):
+        response = client.simulate_post(
+            f'/datasets/{ds_id}/files/{filename}', body='test content'
+        )
+        assert response.status == falcon.HTTP_OK
+    response = client.simulate_post(
+        f'/datasets/{ds_id}/draft', params={'validate': 'false'}
+    )
+    assert response.status == falcon.HTTP_OK
+    response = client.simulate_delete(
+        f'/datasets/{ds_id}/files', body='{ "filenames": ["derivatives"] }'
+    )
+    assert response.status == falcon.HTTP_OK
+    assert json.loads(response.content)['deleted'] == ['derivatives']
+    assert not os.path.exists(os.path.join(new_dataset.path, 'derivatives'))
+    repo = pygit2.Repository(new_dataset.path)
+    assert not [
+        entry.path for entry in repo.index if entry.path.startswith('derivatives/')
+    ]
+
+
+def test_delete_prunes_emptied_directories(client, new_dataset):
+    """Deleting the last file in a directory should not leave the directory behind."""
+    ds_id = os.path.basename(new_dataset.path)
+    response = client.simulate_post(
+        f'/datasets/{ds_id}/files/sub-01:anat:sub-01_T1w.json', body='{}'
+    )
+    assert response.status == falcon.HTTP_OK
+    response = client.simulate_post(
+        f'/datasets/{ds_id}/draft', params={'validate': 'false'}
+    )
+    assert response.status == falcon.HTTP_OK
+    response = client.simulate_delete(
+        f'/datasets/{ds_id}/files',
+        body='{ "filenames": ["sub-01:anat:sub-01_T1w.json"] }',
+    )
+    assert response.status == falcon.HTTP_OK
+    assert not os.path.exists(os.path.join(new_dataset.path, 'sub-01'))
+
+
+def test_delete_leaves_untracked_files_alone(client, new_dataset):
+    """Only the requested paths are removed, unrelated untracked files survive."""
+    ds_id = os.path.basename(new_dataset.path)
+    untracked = os.path.join(new_dataset.path, 'untracked.txt')
+    with open(untracked, 'w') as f:
+        f.write('not committed')
+    response = client.simulate_delete(
+        f'/datasets/{ds_id}/files', body='{ "filenames": ["CHANGES"] }'
+    )
+    assert response.status == falcon.HTTP_OK
+    assert os.path.exists(untracked)
+
+
+def test_delete_does_not_rewrite_unrequested_paths(client, new_dataset):
+    """A delete only touches the paths it was asked to delete.
+
+    A full checkout of the index would also restore any other tracked file missing from
+    the working tree, so an unrelated delete could rewrite arbitrary amounts of a large
+    dataset as a side effect.
+    """
+    ds_id = os.path.basename(new_dataset.path)
+    missing = os.path.join(new_dataset.path, 'dataset_description.json')
+    os.remove(missing)
+    response = client.simulate_delete(
+        f'/datasets/{ds_id}/files', body='{ "filenames": ["CHANGES"] }'
+    )
+    assert response.status == falcon.HTTP_OK
+    assert not os.path.exists(os.path.join(new_dataset.path, 'CHANGES'))
+    assert not os.path.exists(missing)
+
+
+def test_target_path_rejects_paths_outside_dataset(tmp_path):
+    dataset_root = str(tmp_path)
+    with pytest.raises(ValueError):
+        target_path(dataset_root, '../outside.txt')
+    with pytest.raises(ValueError):
+        target_path(dataset_root, 'sub-01/../../outside.txt')
+    with pytest.raises(ValueError):
+        target_path(dataset_root, '/etc/passwd')
+    with pytest.raises(ValueError):
+        target_path(dataset_root, '.')
+    with pytest.raises(ValueError):
+        target_path(dataset_root, '.git/config')
+    assert target_path(dataset_root, 'sub-01/anat/sub-01_T1w.nii.gz') == os.path.join(
+        dataset_root, 'sub-01/anat/sub-01_T1w.nii.gz'
+    )
 
 
 def test_delete_non_existing_file(client, new_dataset):

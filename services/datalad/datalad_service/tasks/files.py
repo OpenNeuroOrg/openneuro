@@ -1,5 +1,7 @@
 import json
 import logging
+import os
+import shutil
 import subprocess
 from urllib.parse import urlparse, parse_qs
 
@@ -13,6 +15,37 @@ from datalad_service.config import AWS_SECRET_ACCESS_KEY
 from datalad_service.config import AWS_S3_PUBLIC_BUCKET
 
 
+def target_path(dataset_root, path):
+    """Resolve a dataset relative path, rejecting anything outside of the dataset."""
+    # Normalize without resolving symlinks, annexed files are symlinks into .git/annex
+    target = os.path.normpath(os.path.join(dataset_root, path))
+    if target == dataset_root or not target.startswith(dataset_root + os.sep):
+        raise ValueError(f'"{path}" is not a path within this dataset')
+    if os.path.relpath(target, dataset_root).split(os.sep)[0] == '.git':
+        raise ValueError(f'"{path}" is a git internal path and cannot be removed')
+    return target
+
+
+def remove_from_worktree(dataset_root, target):
+    """Delete one file or directory and any parent directories it leaves empty."""
+    try:
+        if os.path.isdir(target) and not os.path.islink(target):
+            shutil.rmtree(target)
+        else:
+            os.remove(target)
+    except FileNotFoundError:
+        # Already gone, the index update below is all that is needed
+        pass
+    # Git does not track directories, so drop any that are now empty
+    parent = os.path.dirname(target)
+    while parent != dataset_root:
+        try:
+            os.rmdir(parent)
+        except OSError:
+            break
+        parent = os.path.dirname(parent)
+
+
 async def remove_files(store, dataset, paths, name=None, email=None, cookies=None):
     dataset_path = store.get_dataset_path(dataset)
     repo = pygit2.Repository(dataset_path)
@@ -20,9 +53,17 @@ async def remove_files(store, dataset, paths, name=None, email=None, cookies=Non
         author = pygit2.Signature(name, email)
     else:
         author = None
+    dataset_root = os.path.realpath(dataset_path)
+    # Validate every path before changing anything
+    targets = [target_path(dataset_root, path) for path in paths]
     repo.index.remove_all(paths)
     repo.index.write()
-    repo.checkout_index()
+    # Remove the requested paths from the working tree directly. repo.checkout_index()
+    # would do this too, but it diffs the entire index against the entire working tree,
+    # making any delete cost time proportional to the size of the dataset instead of to
+    # the number of paths being deleted.
+    for target in targets:
+        remove_from_worktree(dataset_root, target)
     await git_commit_index(repo, author, message='[OpenNeuro] Files removed')
 
 

@@ -377,6 +377,8 @@ export const deleteFiles = (datasetId, files, user) => {
     .del(filesUrl(datasetId))
     .set("Cookie", generateDataladCookie(config)(user))
     .set("Accept", "application/json")
+    // Fail with an error instead of hanging indefinitely if a worker stalls
+    .timeout({ response: 60000, deadline: 300000 })
     .send({ filenames })
     .then(() => filenames)
 }
