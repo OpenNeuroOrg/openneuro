@@ -9,15 +9,6 @@ const DELETE_FILE = gql`
   }
 `
 
-const DELETED_FILE_FRAGMENT = gql`
-  fragment DeletedFile on DatasetFile {
-    id
-    key
-    filename
-    directory
-  }
-`
-
 /**
  * Given a file object, path/filename for deletion, and a list of currently loaded files, filter any that will be deleted and orphan directories
  */
@@ -52,28 +43,22 @@ const DeleteFile = ({ datasetId, path, filename }) => {
         cache.modify({
           id: `Draft:${datasetId}`,
           fields: {
-            files(cachedFiles) {
+            files(cachedFiles, { readField }) {
+              // DatasetFile is not normalized (keyFields: false) so read the
+              // fields we need via readField instead of cache ids
+              const cachedFileObjects = cachedFiles.map((f) => ({
+                filename: readField("filename", f),
+                directory: readField("directory", f),
+              }))
               // Filter any removed files from the Draft.files cache
-              const cachedFileObjects = cachedFiles.map((f) =>
-                cache.readFragment({
-                  id: cache.identify(f),
-                  fragment: DELETED_FILE_FRAGMENT,
-                })
-              )
-              const remainingFiles = cachedFiles.filter((f) => {
-                // Get the cache key for each file we have loaded
-                const file = cache.readFragment({
-                  id: cache.identify(f),
-                  fragment: DELETED_FILE_FRAGMENT,
-                })
-                return fileCacheDeleteFilter(
-                  file,
+              return cachedFiles.filter((_, index) =>
+                fileCacheDeleteFilter(
+                  cachedFileObjects[index],
                   path,
                   filename,
                   cachedFileObjects,
                 )
-              })
-              return remainingFiles
+              )
             },
           },
         })
