@@ -4,6 +4,7 @@ import mime from "mime-types"
 import { getFiles } from "../datalad/files"
 import { getDatasetEndpoint, getDatasetWorker } from "../libs/datalad-service"
 import { getDraftRevision } from "../datalad/draft"
+import { checkDatasetRead, DeletedDatasetError } from "../graphql/permissions"
 
 /**
  * Handlers for datalad dataset manipulation
@@ -15,10 +16,31 @@ import { getDraftRevision } from "../datalad/draft"
  */
 
 /**
+ * Verify read access to the requested dataset and respond with an error if denied
+ *
+ * @returns {Promise<boolean>} True if the request may continue
+ */
+const requestDatasetRead = async (req, res, datasetId): Promise<boolean> => {
+  try {
+    await checkDatasetRead(datasetId, req.user?.id, req.user)
+    return true
+  } catch (err) {
+    if (err instanceof DeletedDatasetError) {
+      res.status(404).send({ error: err.message })
+    } else {
+      // Read denied or the dataset does not exist
+      res.status(403).send({ error: err.message })
+    }
+    return false
+  }
+}
+
+/**
  * Get a file from a dataset
  */
 export const getFile = async (req, res) => {
   const { datasetId, snapshotId, filename } = req.params
+  if (!await requestDatasetRead(req, res, datasetId)) return
   const worker = getDatasetWorker(datasetId)
   // Find the right tree
   const pathComponents = filename.split(":")
@@ -84,8 +106,9 @@ export const getFile = async (req, res) => {
 /**
  * Request a git object from a dataset
  */
-export const getObject = (req, res) => {
+export const getObject = async (req, res) => {
   const { datasetId, key } = req.params
+  if (!await requestDatasetRead(req, res, datasetId)) return
   const { filename } = req.query
   const worker = getDatasetWorker(datasetId)
   if (req.query?.filename) {
