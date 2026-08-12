@@ -117,16 +117,19 @@ const routes = [
   {
     method: "get",
     url: "/datasets/:datasetId/files/:filename",
+    middleware: [jwt.authenticate],
     handler: datalad.getFile,
   },
   {
     method: "get",
     url: "/datasets/:datasetId/snapshots/:snapshotId/files/:filename",
+    middleware: [jwt.authenticate],
     handler: datalad.getFile,
   },
   {
     method: "get",
     url: "/datasets/:datasetId/objects/:key",
+    middleware: [jwt.authenticate],
     handler: datalad.getObject,
   },
 
