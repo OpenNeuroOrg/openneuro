@@ -6,8 +6,8 @@ import { Client } from "@elastic/elasticsearch"
 import { datasetGenerator } from "./datasetGenerator"
 import indexDatasets from "./indexDatasets"
 import { createIndices } from "./createIndices"
-import { InMemoryCache } from "@apollo/client/cache/inmemory/inMemoryCache"
-import { ApolloClient } from "@apollo/client/core/ApolloClient"
+import { InMemoryCache } from "@apollo/client/cache"
+import { ApolloClient, ApolloLink, HttpLink } from "@apollo/client/core"
 
 /**
  * Indexer entrypoint
@@ -35,10 +35,12 @@ export default async function main(): Promise<void> {
     }
   })
 
+  const httpLink = new HttpLink({ uri: process.env.GRAPHQL_URI })
+
   const apolloClient = new ApolloClient({
-    uri: process.env.GRAPHQL_URI,
     cache: new InMemoryCache(),
-    link: authLink.concat(retryLink),
+    // Terminating httpLink must come last, otherwise retryLink has nothing to forward to
+    link: ApolloLink.from([authLink, retryLink, httpLink]),
   })
 
   const elasticClient = new Client({
