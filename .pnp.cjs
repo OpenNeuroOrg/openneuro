@@ -4402,6 +4402,7 @@ const RAW_RUNTIME_STATE =
           ["core-js", "npm:3.18.0"],\
           ["graphql", "npm:16.8.1"],\
           ["ts-node", "virtual:91213f02ae820a190b230a7880bf0bf0c2c9838397b0cf7428815db9bfbf992c47df4585ca3b01cd14d7a39c5069db5fdbf809cb9db4dfc613f95e2e83ce1e0a#npm:10.9.2"],\
+          ["tslib", "npm:2.8.1"],\
           ["typescript", "patch:typescript@npm%3A5.6.3#optional!builtin<compat/typescript>::version=5.6.3&hash=8c6c40"],\
           ["vitest", "virtual:e74940e35978632a0c14fa5497dc52825a9c66f5b1078eb2e64acf3c410407bb81bc4632771c0031555903c2ed0410b5bd9f7005884e1b336a14c40f1d7762b1#npm:3.2.6"]\
         ],\
