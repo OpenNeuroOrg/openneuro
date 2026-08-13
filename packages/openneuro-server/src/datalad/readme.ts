@@ -4,12 +4,16 @@ import CacheItem, { CacheType } from "../cache/item"
 import { getDatasetWorker } from "../libs/datalad-service"
 import { datasetOrSnapshot } from "../utils/datasetOrSnapshot"
 
-export const readmeUrl = (datasetId, revision) => {
+/** Valid README extensions in preference order, "" for a bare README */
+export const readmeExtensions = ["md", "rst", "txt", ""]
+
+export const readmeUrl = (datasetId, revision, extension) => {
+  const filename = extension ? `README.${extension}` : "README"
   return `http://${
     getDatasetWorker(
       datasetId,
     )
-  }/datasets/${datasetId}/snapshots/${revision}/files/README`
+  }/datasets/${datasetId}/snapshots/${revision}/files/${filename}`
 }
 
 export const readme = (obj) => {
@@ -25,12 +29,13 @@ export const readme = (obj) => {
      *
      * We may want to use less superagent anyways just to avoid library weight
      */
-    const readmeReq = await fetch(readmeUrl(datasetId, revision))
-    if (readmeReq.status === 200) {
-      return await readmeReq.text()
-    } else {
-      return null
+    for (const extension of readmeExtensions) {
+      const readmeReq = await fetch(readmeUrl(datasetId, revision, extension))
+      if (readmeReq.status === 200) {
+        return await readmeReq.text()
+      }
     }
+    return null
   })
 }
 
