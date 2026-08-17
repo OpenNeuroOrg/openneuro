@@ -288,9 +288,9 @@
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># This allows the helper to identify which dataset you are accessing automatically and issue a key for that dataset</span>
 git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>credential.https://openneuro.org.useHttpPath<span class="w"> </span><span class="nb">true</span>
 <span class="c1"># Point git at the @openneuro/cli tool (this must be an absolute path)</span>
-git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>credential.https://openneuro.org.helper<span class="w"> </span><span class="s2">&quot;/path/to/deno -A jsr:@openneuro/cli git-credential&quot;</span>
+git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>credential.https://openneuro.org.helper<span class="w"> </span><span class="s2">"/path/to/deno -A jsr:@openneuro/cli git-credential"</span>
 <span class="c1"># For OpenNeuro instances other than https://openneuro.org</span>
-git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>credential.https://staging.openneuro.org.helper<span class="w"> </span><span class="s2">&quot;/path/to/deno -A jsr:@openneuro/cli git-credential --url https://staging.openneuro.org&quot;</span>
+git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>credential.https://staging.openneuro.org.helper<span class="w"> </span><span class="s2">"/path/to/deno -A jsr:@openneuro/cli git-credential --url https://staging.openneuro.org"</span>
 </pre></div>
 </div>
 <p>If you are using <a class="reference external" href="https://github.com/git-ecosystem/git-credential-manager">Git Credential Manager</a> add the provider entry to avoid duplicating entries.</p>
@@ -298,10 +298,10 @@ git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"
 </pre></div>
 </div>
 <p>Or by modifying your .gitconfig:</p>
-<div class="highlight-cfg notranslate"><div class="highlight"><pre><span></span><span class="k">[credential &quot;https://openneuro.org&quot;]</span>
+<div class="highlight-cfg notranslate"><div class="highlight"><pre><span></span><span class="k">[credential "https://openneuro.org"]</span>
 <span class="w">  </span><span class="na">useHttpPath</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">true</span>
 <span class="w">  </span><span class="na">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">generic</span>
-<span class="w">  </span><span class="na">helper</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;/path/to/openneuro git-credential&quot;</span>
+<span class="w">  </span><span class="na">helper</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"/path/to/openneuro git-credential"</span>
 </pre></div>
 </div>
 </section>
@@ -354,8 +354,8 @@ deno<span class="w"> </span>compile<span class="w"> </span>-A<span class="w"> </
 </pre></div>
 </div>
 <p>Obtain the URL from the dataset page and run initremote (or enableremote if you need to update it).</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># You should see &#39;VERSION 1&#39; &#39;EXTENSIONS&#39; if this is working</span>
-<span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;EXTENSIONS&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>deno<span class="w"> </span>run<span class="w"> </span>-A<span class="w"> </span>jsr:@openneuro/cli<span class="w"> </span>special-remote
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># You should see 'VERSION 1' 'EXTENSIONS' if this is working</span>
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"EXTENSIONS"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>deno<span class="w"> </span>run<span class="w"> </span>-A<span class="w"> </span>jsr:@openneuro/cli<span class="w"> </span>special-remote
 <span class="c1"># Configure the remote with the URL for your dataset</span>
 git<span class="w"> </span>annex<span class="w"> </span>initremote<span class="w"> </span>openneuro<span class="w"> </span><span class="nv">type</span><span class="o">=</span>external<span class="w"> </span><span class="nv">externaltype</span><span class="o">=</span>openneuro<span class="w"> </span><span class="nv">encryption</span><span class="o">=</span>none<span class="w"> </span><span class="nv">url</span><span class="o">=</span>https://openneuro.org/git/0/ds0000001
 </pre></div>
