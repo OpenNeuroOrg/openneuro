@@ -8,6 +8,7 @@ import User from "../../models/user"
 import { encrypt } from "./crypto"
 import { addJWT, jwtFromRequest } from "./jwt"
 import orcid from "../orcid"
+import { orcidTokenFields } from "../orcid/token"
 import { setupGitHubAuth } from "./github"
 
 export const PROVIDERS = {
@@ -88,21 +89,29 @@ export const verifyGoogleUser = (accessToken, refreshToken, profile, done) => {
   }
 }
 
+/**
+ * passport-oauth2 calls five argument verify callbacks with the raw token
+ * response (`params`) before the OAuth profile, and ORCID returns the iD and
+ * name in that token response rather than in a profile lookup.
+ */
 export const verifyORCIDUser = (
   accessToken,
   refreshToken,
-  profile,
   params,
+  profile,
   done,
 ) => {
   orcid
-    .getProfile(profile.orcid, profile.access_token)
+    .getProfile(params.orcid, params.access_token)
     .then((info) => {
-      profile.info = info
-      profile.provider = PROVIDERS.ORCID
-      const profileUpdate = loadProfile(profile)
+      params.info = info
+      params.provider = PROVIDERS.ORCID
+      const profileUpdate = loadProfile(params)
+      if (profileUpdate instanceof Error) return done(profileUpdate, null)
+      // Retain the granted token so we can write works back to their record
+      Object.assign(profileUpdate, orcidTokenFields(params))
       User.findOneAndUpdate(
-        { providerId: profile.orcid, provider: profile.provider },
+        { providerId: params.orcid, provider: params.provider },
         profileUpdate,
         { upsert: true, new: true, setDefaultsOnInsert: true },
       ).then((user) => done(null, addJWT(config)(user.toObject())))

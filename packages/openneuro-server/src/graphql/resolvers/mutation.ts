@@ -57,6 +57,7 @@ import { holdDeletion } from "./holdDeletion"
 import { updateContributors } from "../../datalad/contributors"
 import { updateWorkerTask } from "./worker"
 import { syncDatasetDois } from "./doi"
+import { syncOrcidWorks } from "./orcid"
 
 const Mutation = {
   createDataset,
@@ -116,6 +117,7 @@ const Mutation = {
   updateContributors,
   updateWorkerTask,
   syncDatasetDois,
+  syncOrcidWorks,
 }
 
 export default Mutation
