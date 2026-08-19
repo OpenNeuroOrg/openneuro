@@ -3,11 +3,11 @@ import { snapshotCreationComparison } from "../snapshots"
 describe("snapshotCreationComparison()", () => {
   it('sorts array of objects by the "created" and "tag" properties', () => {
     const testArray = [
-      { id: 2, created: new Date("2018-11-20T00:05:43.473Z"), tag: "1.0.0" },
-      { id: 1, created: new Date("2018-11-19T00:05:43.473Z"), tag: "1.0.1" },
-      { id: 3, created: new Date("2018-11-23T00:05:43.473Z"), tag: "1.0.2" },
-      { id: 5, created: new Date("2018-11-23T00:05:43.473Z"), tag: "1.0.10" },
-      { id: 4, created: new Date("2018-11-23T00:05:43.473Z"), tag: "1.0.3" },
+      { id: 2, created: 1542672343473, tag: "1.0.0" },
+      { id: 1, created: 1542585943473, tag: "1.0.1" },
+      { id: 3, created: 1542931543473, tag: "1.0.2" },
+      { id: 5, created: 1542931543473, tag: "1.0.10" },
+      { id: 4, created: 1542931543473, tag: "1.0.3" },
     ]
     const sorted = testArray.sort(snapshotCreationComparison)
     expect(sorted[0].id).toBe(2)
@@ -29,13 +29,13 @@ describe("snapshotCreationComparison()", () => {
   })
   it("sorts non-semver tags mixed with semver tags", () => {
     const testArray = [
-      { id: 2, created: new Date("2018-11-19T00:05:43.473Z"), tag: "1.0.2" },
+      { id: 2, created: 1542585943473, tag: "1.0.2" },
       {
         id: 1,
-        created: new Date("2018-11-19T00:05:43.473Z"),
+        created: 1542585943473,
         tag: "57fed018cce88d000ac1757f",
       },
-      { id: 3, created: new Date("2018-11-19T00:05:43.473Z"), tag: "1.0.1" },
+      { id: 3, created: 1542585943473, tag: "1.0.1" },
     ]
     const sorted = testArray.sort(snapshotCreationComparison)
     expect(sorted[0].id).toBe(2)
@@ -46,17 +46,17 @@ describe("snapshotCreationComparison()", () => {
     const testArray = [
       {
         id: 2,
-        created: new Date("2018-11-19T00:05:43.473Z"),
+        created: 1542585943473,
         tag: "00001",
       },
       {
         id: 1,
-        created: new Date("2018-11-19T00:05:43.473Z"),
+        created: 1542585943473,
         tag: "57fed018cce88d000ac1757f",
       },
       {
         id: 3,
-        created: new Date("2018-11-19T00:05:43.473Z"),
+        created: 1542585943473,
         tag: "57fed018cce88d000ac1757f",
       },
     ]

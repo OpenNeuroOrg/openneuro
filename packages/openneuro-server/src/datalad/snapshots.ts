@@ -21,7 +21,7 @@ import { getDatasetWorker } from "../libs/datalad-service"
 import { createEvent, updateEvent } from "../libs/events"
 import { queueIndexDataset } from "../queues/producer-methods"
 
-type SnapshotResponse = Omit<SnapshotDocument, "created"> & {
+export type SnapshotResponse = Omit<SnapshotDocument, "created"> & {
   created: number // DataLad service `created` is a timestamp in seconds, not a Date object
 }
 
