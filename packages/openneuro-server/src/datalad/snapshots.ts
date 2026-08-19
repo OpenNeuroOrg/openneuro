@@ -21,6 +21,10 @@ import { getDatasetWorker } from "../libs/datalad-service"
 import { createEvent, updateEvent } from "../libs/events"
 import { queueIndexDataset } from "../queues/producer-methods"
 
+type SnapshotResponse = Omit<SnapshotDocument, "created"> & {
+  created: number // DataLad service `created` is a timestamp in seconds, not a Date object
+}
+
 const lockSnapshot = (datasetId, tag) => {
   return getRedlock().lock(
     `openneuro:create-snapshot-lock:${datasetId}:${tag}`,
@@ -108,9 +112,9 @@ const postSnapshot = async (
  * This is equivalent to `git tag` on the repository
  *
  * @param {string} datasetId Dataset accession number
- * @returns {Promise<import('../models/snapshot').SnapshotDocument[]>}
+ * @returns {Promise<SnapshotResponse[]>}
  */
-export const getSnapshots = async (datasetId): Promise<SnapshotDocument[]> => {
+export const getSnapshots = async (datasetId): Promise<SnapshotResponse[]> => {
   const dataset = await Dataset.findOne({ id: datasetId })
   if (!dataset) return null
   const cache = new CacheItem(
