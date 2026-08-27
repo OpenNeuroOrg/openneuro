@@ -11,6 +11,7 @@ import {
   SyncDatasetDoisPayload,
   UserNotificationStatus,
 } from "./misc"
+import { SyncOrcidWorksPayload } from "./orcid"
 import { DatasetReviewer } from "./reviewer"
 import { WorkerTask } from "./worker"
 import { FollowDatasetResponse, StarDatasetResponse } from "./misc"
@@ -561,6 +562,17 @@ builder.mutationType({
       },
       resolve: (root, args, ctx) =>
         Mutation.syncDatasetDois(root, args as never, ctx) as never,
+    }),
+    syncOrcidWorks: t.field({
+      type: SyncOrcidWorksPayload,
+      nullable: false,
+      description:
+        "Publish every dataset the authenticated user has contributed to as a work on their ORCID record",
+      args: {
+        dryRun: t.arg.boolean(),
+      },
+      resolve: (root, args, ctx) =>
+        Mutation.syncOrcidWorks(root, args as never, ctx) as never,
     }),
   }),
 })

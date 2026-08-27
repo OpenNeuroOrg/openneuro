@@ -45,6 +45,14 @@ export interface UserDocument extends Document {
   githubSynced: Date
   // Defaults to NULL populated from ORCID Consent Form Mutation
   orcidConsent?: boolean | null
+  // Encrypted ORCID OAuth access token, used to write works to the user's record
+  orcidAccessToken?: string
+  // Encrypted ORCID OAuth refresh token
+  orcidRefreshToken?: string
+  // Expiration of orcidAccessToken
+  orcidTokenExpires?: Date
+  // Space separated scopes granted with orcidAccessToken
+  orcidScope?: string
   // Whether the user has opted out of public profile visibility
   profilePrivate?: boolean
   givenName?: string
@@ -75,6 +83,10 @@ const userSchema = new Schema({
     type: Boolean,
     default: null,
   },
+  orcidAccessToken: String,
+  orcidRefreshToken: String,
+  orcidTokenExpires: { type: Date },
+  orcidScope: String,
   profilePrivate: {
     type: Boolean,
     default: false,

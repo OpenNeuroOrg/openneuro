@@ -1,6 +1,6 @@
 // Camel case rule is disabled since ORCID API uses snake case variables
 import xmldoc from "xmldoc"
-import config from "../config"
+import config from "../../config"
 import * as Sentry from "@sentry/node"
 
 export default {
