@@ -11,7 +11,7 @@ graphql: http://openneuro-prod-api:8111/crn/graphql
 environment: production
 
 # Base URL of the Zammad instance backing the support form
-zammadUrl: https://support.openneuro.org
+zammadUrl: https://openneuro.zammad.com
 
 # Enable Google Analytics
 googleTrackingIds: 'UA-100754266-2,G-MJNMY6D3FX'

@@ -47,6 +47,8 @@ workerMemoryRequests: 1Gi
 webCpuRequests: 0.25
 webMemoryRequests: 0.5Gi
 
+zammadUrl: https://openneuro.zammad.com
+
 # GCP zone for this set of workers
 workerZone: us-west1-b
 
