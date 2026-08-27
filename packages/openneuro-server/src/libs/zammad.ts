@@ -30,7 +30,7 @@ export interface ZammadArticle {
 }
 
 /**
- * Format diagnostic context as a clean text block for an internal note
+ * Format diagnostic context as a clean text block
  */
 export const formatDiagnosticNote = ({
   referrer,
@@ -51,6 +51,22 @@ export const formatDiagnosticNote = ({
   return items.join("\n\n")
 }
 
+/**
+ * Format user message and diagnostic info into the initial ticket body
+ */
+export const formatTicketBody = (
+  userBody: string,
+  diagnostics: DiagnosticContext,
+): string => {
+  const diagnosticText = formatDiagnosticNote(diagnostics)
+  if (!diagnosticText) {
+    return userBody
+  }
+  return [userBody.trim(), "---", "Diagnostic Information:", diagnosticText]
+    .filter(Boolean)
+    .join("\n\n")
+}
+
 const getZammadConfig = () => {
   const url = config.zammad?.url?.replace(/\/+$/, "")
   const token = config.zammad?.token
@@ -61,12 +77,13 @@ const getZammadConfig = () => {
 }
 
 /**
- * Create a new ticket via the Zammad REST API
+ * Create a new ticket via the Zammad REST API as the customer
  */
 export async function createTicket(
   params: CreateTicketParams,
 ): Promise<ZammadTicket> {
   const { url, token } = getZammadConfig()
+  const from = params.name ? `${params.name} <${params.email}>` : params.email
 
   const response = await fetch(`${url}/api/v1/tickets`, {
     method: "POST",
@@ -82,6 +99,8 @@ export async function createTicket(
         subject: params.title,
         body: params.body,
         type: "web",
+        sender: "Customer",
+        from,
         internal: false,
       },
     }),
@@ -95,39 +114,4 @@ export async function createTicket(
   }
 
   return (await response.json()) as ZammadTicket
-}
-
-/**
- * Add an internal note (article) to an existing Zammad ticket
- */
-export async function createTicketNote(
-  ticketId: number | string,
-  noteBody: string,
-  subject = "Diagnostic Details",
-): Promise<ZammadArticle> {
-  const { url, token } = getZammadConfig()
-
-  const response = await fetch(`${url}/api/v1/ticket_articles`, {
-    method: "POST",
-    headers: {
-      "Authorization": `Token token=${token}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      ticket_id: ticketId,
-      subject,
-      body: noteBody,
-      type: "note",
-      internal: true,
-    }),
-  })
-
-  if (!response.ok) {
-    const errorBody = await response.text().catch(() => "")
-    throw new Error(
-      `Failed to create Zammad ticket note (${response.status}): ${errorBody}`,
-    )
-  }
-
-  return (await response.json()) as ZammadArticle
 }

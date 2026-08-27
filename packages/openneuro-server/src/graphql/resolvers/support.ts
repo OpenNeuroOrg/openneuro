@@ -1,8 +1,4 @@
-import {
-  createTicket,
-  createTicketNote,
-  formatDiagnosticNote,
-} from "../../libs/zammad"
+import { createTicket, formatTicketBody } from "../../libs/zammad"
 import type { GraphQLContext } from "../builder"
 
 export interface CreateSupportTicketArgs {
@@ -16,7 +12,7 @@ export interface CreateSupportTicketArgs {
 }
 
 /**
- * Creates a support ticket in Zammad, optionally attaching diagnostic context as an internal note
+ * Creates a support ticket in Zammad as the customer, embedding diagnostic context in the body
  */
 export async function createSupportTicket(
   _parent: unknown,
@@ -29,16 +25,7 @@ export async function createSupportTicket(
     throw new Error("Missing required support ticket fields")
   }
 
-  // 1. Create the customer-facing ticket
-  const ticket = await createTicket({
-    title,
-    body,
-    email,
-    name,
-  })
-
-  // 2. Format and attach diagnostic details as an internal note if available
-  const diagnosticNote = formatDiagnosticNote({
+  const fullBody = formatTicketBody(body, {
     referrer,
     sentryId,
     error,
@@ -46,9 +33,12 @@ export async function createSupportTicket(
     userName: name,
   })
 
-  if (diagnosticNote && ticket?.id) {
-    await createTicketNote(ticket.id, diagnosticNote)
-  }
+  await createTicket({
+    title,
+    body: fullBody,
+    email,
+    name,
+  })
 
   return true
 }

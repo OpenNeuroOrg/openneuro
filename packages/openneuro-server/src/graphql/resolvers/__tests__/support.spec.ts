@@ -23,7 +23,7 @@ describe("createSupportTicket resolver", () => {
     vi.unstubAllGlobals()
   })
 
-  it("creates a ticket in Zammad when no diagnostic info is provided", async () => {
+  it("creates a ticket in Zammad as the customer when no diagnostic info is provided", async () => {
     fetchMock.mockResolvedValueOnce({
       ok: true,
       json: () =>
@@ -59,32 +59,23 @@ describe("createSupportTicket resolver", () => {
         subject: "Cannot upload",
         body: "I am having trouble uploading my dataset.",
         type: "web",
+        sender: "Customer",
+        from: "Test User <user@example.com>",
         internal: false,
       },
     })
   })
 
-  it("creates a ticket and an internal diagnostic note when diagnostic metadata is present", async () => {
-    fetchMock
-      .mockResolvedValueOnce({
-        ok: true,
-        json: () =>
-          Promise.resolve({
-            id: 202,
-            number: "100202",
-            title: "Validation error",
-          }),
-      })
-      .mockResolvedValueOnce({
-        ok: true,
-        json: () =>
-          Promise.resolve({
-            id: 501,
-            ticket_id: 202,
-            type: "note",
-            internal: true,
-          }),
-      })
+  it("embeds diagnostic context into the customer ticket body when present", async () => {
+    fetchMock.mockResolvedValueOnce({
+      ok: true,
+      json: () =>
+        Promise.resolve({
+          id: 202,
+          number: "100202",
+          title: "Validation error",
+        }),
+    })
 
     const mockContext = {
       user: "user_12345",
@@ -106,35 +97,27 @@ describe("createSupportTicket resolver", () => {
     )
 
     expect(result).toBe(true)
-    expect(fetchMock).toHaveBeenCalledTimes(2)
+    expect(fetchMock).toHaveBeenCalledTimes(1)
 
-    // 1. Check ticket creation call
     const [ticketUrl, ticketInit] = fetchMock.mock.calls[0]
     expect(ticketUrl).toBe("https://support.example.com/api/v1/tickets")
     const ticketPayload = JSON.parse(ticketInit.body)
-    expect(ticketPayload.article.body).toBe(
+
+    expect(ticketPayload.customer).toBe("user@example.com")
+    expect(ticketPayload.article.sender).toBe("Customer")
+    expect(ticketPayload.article.from).toBe("Test User <user@example.com>")
+    expect(ticketPayload.article.body).toContain(
       "Dataset validation failed unexpectedly.",
     )
-    expect(ticketPayload.article.internal).toBe(false)
-
-    // 2. Check internal note creation call
-    const [articleUrl, articleInit] = fetchMock.mock.calls[1]
-    expect(articleUrl).toBe(
-      "https://support.example.com/api/v1/ticket_articles",
+    expect(ticketPayload.article.body).toContain("---")
+    expect(ticketPayload.article.body).toContain("Diagnostic Information:")
+    expect(ticketPayload.article.body).toContain("Page: /datasets/ds000001")
+    expect(ticketPayload.article.body).toContain("Sentry ID: sentry_abc_123")
+    expect(ticketPayload.article.body).toContain(
+      "OpenNeuro User ID: user_12345",
     )
-    expect(articleInit.headers).toMatchObject({
-      "Authorization": "Token token=test-zammad-token",
-      "Content-Type": "application/json",
-    })
-
-    const notePayload = JSON.parse(articleInit.body)
-    expect(notePayload.ticket_id).toBe(202)
-    expect(notePayload.type).toBe("note")
-    expect(notePayload.internal).toBe(true)
-    expect(notePayload.body).toContain("Page: /datasets/ds000001")
-    expect(notePayload.body).toContain("Sentry ID: sentry_abc_123")
-    expect(notePayload.body).toContain("OpenNeuro User ID: user_12345")
-    expect(notePayload.body).toContain(
+    expect(ticketPayload.article.body).toContain("User Name: Test User")
+    expect(ticketPayload.article.body).toContain(
       "Error:\nTypeError: failed to parse dataset description",
     )
   })
