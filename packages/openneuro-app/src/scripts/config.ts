@@ -27,9 +27,6 @@ export interface OpenNeuroConfig {
     environment: string
     dsn: string
   }
-  support?: {
-    url: string
-  }
   github?: string
   publicBucket?: string
 }
@@ -66,7 +63,6 @@ export const config: OpenNeuroConfig = {
     environment: globalThis.OpenNeuroConfig.ENVIRONMENT,
     dsn: globalThis.OpenNeuroConfig.SENTRY_DSN,
   },
-  support: { url: globalThis.OpenNeuroConfig.SUPPORT_URL },
   github: globalThis.OpenNeuroConfig.DATALAD_GITHUB_ORG,
   publicBucket: globalThis.OpenNeuroConfig.AWS_S3_PUBLIC_BUCKET,
 }

@@ -1,14 +1,37 @@
 import React, { useEffect, useState } from "react"
 import { useCookies } from "react-cookie"
 import { useLocation } from "react-router-dom"
-import { useMutation } from "@apollo/client"
+import { gql, useMutation } from "@apollo/client"
 import { getProfile } from "../../authentication/profile"
 import { useUser } from "../../queries/user"
 import { Button } from "../../components/button/Button"
 import { Input } from "../../components/input/Input"
 import { Textarea } from "../../components/textarea/Textarea"
-import { CREATE_SUPPORT_TICKET, SUPPORT_EMAIL } from "./zammad"
 import "./zammad-widget.scss"
+
+export const SUPPORT_EMAIL = "openneuro@zammad.com"
+
+export const CREATE_SUPPORT_TICKET = gql`
+  mutation createSupportTicket(
+    $name: String
+    $email: String!
+    $title: String!
+    $body: String!
+    $error: String
+    $sentryId: String
+    $referrer: String
+  ) {
+    createSupportTicket(
+      name: $name
+      email: $email
+      title: $title
+      body: $body
+      error: $error
+      sentryId: $sentryId
+      referrer: $referrer
+    )
+  }
+`
 
 export interface ZammadWidgetProps {
   subject?: string
@@ -44,7 +67,7 @@ function ZammadWidget(
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [body, setBody] = useState(description || "")
-  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [hasError, setHasError] = useState(false)
   const [submitted, setSubmitted] = useState(false)
 
   const [createSupportTicket, { loading }] = useMutation(CREATE_SUPPORT_TICKET)
@@ -60,20 +83,7 @@ function ZammadWidget(
   const onSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
     if (loading) return
-    setErrorMessage(null)
-
-    if (!email) {
-      setErrorMessage("Email is required")
-      return
-    }
-    if (!title) {
-      setErrorMessage("Subject is required")
-      return
-    }
-    if (!body) {
-      setErrorMessage("Description is required")
-      return
-    }
+    setHasError(false)
 
     try {
       const response = await createSupportTicket({
@@ -90,15 +100,17 @@ function ZammadWidget(
       if (response.data?.createSupportTicket) {
         setSubmitted(true)
       } else {
-        setErrorMessage("The support form is unavailable right now.")
+        setHasError(true)
       }
     } catch {
-      setErrorMessage("The support form is unavailable right now.")
+      setHasError(true)
     }
   }
 
-  if (errorMessage && errorMessage.includes("unavailable")) {
-    return <SupportEmailFallback message={errorMessage} />
+  if (hasError) {
+    return (
+      <SupportEmailFallback message="The support form is unavailable right now." />
+    )
   }
 
   if (submitted) {
@@ -142,7 +154,6 @@ function ZammadWidget(
         value={body}
         setValue={(event) => setBody(event.currentTarget.value)}
       />
-      {errorMessage ? <span className="form-error">{errorMessage}</span> : null}
       <Button
         primary
         type="submit"

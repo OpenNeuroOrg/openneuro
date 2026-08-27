@@ -104,7 +104,6 @@ export const HeaderContainer: FC = () => {
             }}
           </UploaderContext.Consumer>
         )}
-        // Mounting requests a form token from Zammad, so wait for the modal
         renderOnSupportWidget={() => isOpenSupport ? <ZammadWidget /> : null}
         renderOnExpanded={() => (
           <LandingExpandedHeader
