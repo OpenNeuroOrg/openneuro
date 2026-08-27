@@ -6,6 +6,9 @@ export interface DiagnosticContext {
   error?: string
   userId?: string
   userName?: string
+  userOrcid?: string
+  datasetId?: string
+  siteUrl?: string
 }
 
 export interface CreateTicketParams {
@@ -30,7 +33,7 @@ export interface ZammadArticle {
 }
 
 /**
- * Format diagnostic context as a clean text block
+ * Format diagnostic context as a clean text block with direct links
  */
 export const formatDiagnosticNote = ({
   referrer,
@@ -38,12 +41,37 @@ export const formatDiagnosticNote = ({
   error,
   userId,
   userName,
+  userOrcid,
+  datasetId,
+  siteUrl,
 }: DiagnosticContext): string | null => {
+  const baseUrl = (siteUrl || config.url || "").replace(/\/+$/, "")
+
+  let pageUrl: string | undefined
+  if (referrer) {
+    pageUrl = baseUrl
+      ? (referrer.startsWith("http")
+        ? referrer
+        : `${baseUrl}${referrer.startsWith("/") ? "" : "/"}${referrer}`)
+      : referrer
+  }
+
+  const dsId = datasetId || referrer?.match(/(ds\d{6})/)?.[1]
+  const datasetUrl = dsId
+    ? (baseUrl ? `${baseUrl}/datasets/${dsId}` : `/datasets/${dsId}`)
+    : undefined
+
+  const userUrl = userOrcid
+    ? (baseUrl ? `${baseUrl}/user/${userOrcid}` : `/user/${userOrcid}`)
+    : undefined
+
   const items = [
-    referrer && `Page: ${referrer}`,
-    sentryId && `Sentry ID: ${sentryId}`,
+    pageUrl && `Page: ${pageUrl}`,
+    datasetUrl && `Dataset: ${datasetUrl}`,
+    userUrl && `User Profile: ${userUrl}`,
     userId && `OpenNeuro User ID: ${userId}`,
     userName && `User Name: ${userName}`,
+    sentryId && `Sentry ID: ${sentryId}`,
     error && `Error:\n${error}`,
   ].filter(Boolean)
 

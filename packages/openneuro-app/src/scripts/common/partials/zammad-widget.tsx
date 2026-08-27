@@ -72,6 +72,9 @@ function ZammadWidget(
 
   const [createSupportTicket, { loading }] = useMutation(CREATE_SUPPORT_TICKET)
 
+  const isSubmitDisabled = loading || !title.trim() || !body.trim() ||
+    !email.trim()
+
   // Prefill contact details once the signed in user's profile resolves
   useEffect(() => {
     if (signedIn && user?.email) {
@@ -82,7 +85,7 @@ function ZammadWidget(
 
   const onSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
-    if (loading) return
+    if (isSubmitDisabled) return
     setHasError(false)
 
     try {
@@ -158,7 +161,7 @@ function ZammadWidget(
         primary
         type="submit"
         size="small"
-        disabled={loading}
+        disabled={isSubmitDisabled}
         label={loading ? "Sending..." : "Request Support"}
       />
     </form>

@@ -4,10 +4,25 @@ import type { GraphQLContext } from "../../builder"
 
 vi.mock("../../../config", () => ({
   default: {
+    url: "https://openneuro.example.com",
     zammad: {
       url: "https://support.example.com",
       token: "test-zammad-token",
     },
+  },
+}))
+
+vi.mock("../../../models/user", () => ({
+  default: {
+    findOne: () => ({
+      exec: () =>
+        Promise.resolve({
+          id: "user_12345",
+          orcid: "0000-0002-1825-0097",
+          name: "Test User",
+          email: "user@example.com",
+        }),
+    }),
   },
 }))
 
@@ -66,7 +81,7 @@ describe("createSupportTicket resolver", () => {
     })
   })
 
-  it("embeds diagnostic context into the customer ticket body when present", async () => {
+  it("embeds diagnostic context and direct links into the customer ticket body when present", async () => {
     fetchMock.mockResolvedValueOnce({
       ok: true,
       json: () =>
@@ -90,7 +105,7 @@ describe("createSupportTicket resolver", () => {
         title: "Validation error",
         body: "Dataset validation failed unexpectedly.",
         sentryId: "sentry_abc_123",
-        referrer: "/datasets/ds000001",
+        referrer: "/datasets/ds000001/snapshots/1.0.0",
         error: "TypeError: failed to parse dataset description",
       },
       mockContext,
@@ -111,7 +126,15 @@ describe("createSupportTicket resolver", () => {
     )
     expect(ticketPayload.article.body).toContain("---")
     expect(ticketPayload.article.body).toContain("Diagnostic Information:")
-    expect(ticketPayload.article.body).toContain("Page: /datasets/ds000001")
+    expect(ticketPayload.article.body).toContain(
+      "Page: https://openneuro.example.com/datasets/ds000001/snapshots/1.0.0",
+    )
+    expect(ticketPayload.article.body).toContain(
+      "Dataset: https://openneuro.example.com/datasets/ds000001",
+    )
+    expect(ticketPayload.article.body).toContain(
+      "User Profile: https://openneuro.example.com/user/0000-0002-1825-0097",
+    )
     expect(ticketPayload.article.body).toContain("Sentry ID: sentry_abc_123")
     expect(ticketPayload.article.body).toContain(
       "OpenNeuro User ID: user_12345",

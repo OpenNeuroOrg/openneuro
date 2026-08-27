@@ -53,6 +53,16 @@ describe("ZammadWidget component", () => {
     expect(body.value).toBe("This is a test description")
   })
 
+  it("disables the submit button when subject or description is empty", async () => {
+    renderWidget({
+      subject: "",
+      description: "",
+    })
+
+    const button = screen.getByRole("button", { name: "Request Support" })
+    expect(button).toBeDisabled()
+  })
+
   it("submits the support ticket via GraphQL mutation with metadata", async () => {
     let mutationCalled = false
     const mocks = [
@@ -90,8 +100,11 @@ describe("ZammadWidget component", () => {
       mocks,
     )
 
+    const button = screen.getByRole("button", { name: "Request Support" })
+    expect(button).not.toBeDisabled()
+
     await act(async () => {
-      await userEvent.click(screen.getByText("Request Support"))
+      await userEvent.click(button)
     })
 
     await waitFor(() => expect(mutationCalled).toBe(true))
