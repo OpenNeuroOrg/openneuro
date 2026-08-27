@@ -14,8 +14,6 @@ globalThis.OpenNeuroConfig = {
   GOOGLE_TRACKING_IDS: "UA-test",
   ENVIRONMENT: "development",
   SENTRY_DSN: "",
-  SUPPORT_URL:
-    "https://openneuro.freshdesk.com/widgets/feedback_widget/new?&widgetType=embedded&screenshot=no",
   DATALAD_GITHUB_ORG: "openneuro",
   AWS_S3_PUBLIC_BUCKET: "test-bucket",
 } as any

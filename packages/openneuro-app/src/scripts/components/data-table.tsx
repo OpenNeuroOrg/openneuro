@@ -9,6 +9,7 @@ import {
 import type { SortingState } from "@tanstack/react-table"
 import styled from "@emotion/styled"
 import { format, isValid, parse } from "date-fns"
+import { SUPPORT_EMAIL } from "../common/partials/zammad"
 
 interface DataTableProps {
   /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
@@ -148,8 +149,8 @@ export function DataTable<T extends Record<string, unknown>>({
         No data available to display.<br />
         <>
           Please email issues or questions to{" "}
-          <a href={"mailto:support@openneuro.freshdesk.com"}>
-            support@openneuro.freshdesk.com
+          <a href={`mailto:${SUPPORT_EMAIL}`}>
+            {SUPPORT_EMAIL}
           </a>
           .
         </>

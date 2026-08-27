@@ -6,8 +6,7 @@ data:
   CRN_SERVER_URL: {{ .Values.url | quote }}
   GRAPHQL_URI: {{ .Values.graphql | quote }}
   DATALAD_WORKERS: {{ .Values.dataladWorkers | quote }}
-  SUPPORT_URL: {{ .Values.freshDeskUrl | quote }}
-  FRESH_DESK_URL: {{ .Values.freshDeskUrl | quote }}
+  ZAMMAD_URL: {{ .Values.zammadUrl | quote }}
   ENVIRONMENT: {{ .Values.environment | quote }}
   GOOGLE_TRACKING_IDS: {{ .Values.googleTrackingIds | quote }}
   REDIS_HOST: {{ .Release.Name }}-redis-master

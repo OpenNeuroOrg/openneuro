@@ -75,6 +75,10 @@ const config = {
   github: {
     token: process.env.DATALAD_GITHUB_TOKEN,
   },
+  zammad: {
+    url: process.env.ZAMMAD_URL,
+    token: process.env.ZAMMAD_TOKEN,
+  },
 }
 
 export default config

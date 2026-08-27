@@ -18,7 +18,7 @@ export interface HeaderProps {
   toggleSupport: () => void
   navigateToNewSearch: (resetSearchParams?: boolean) => void
   renderOnExpanded: (profile) => React.ReactNode
-  renderOnFreshDeskWidget: () => React.ReactNode
+  renderOnSupportWidget: () => React.ReactNode
   renderUploader: () => React.ReactNode
 }
 
@@ -31,7 +31,7 @@ export const Header = ({
   toggleSupport,
   navigateToNewSearch,
   renderOnExpanded,
-  renderOnFreshDeskWidget,
+  renderOnSupportWidget,
   renderUploader,
 }: HeaderProps) => {
   const [isOpen, setOpen] = React.useState(false)
@@ -123,22 +123,13 @@ export const Header = ({
         </div>
       </header>
       <Modal
-        className="freshdesk-support"
+        className="support-modal"
         isOpen={isOpenSupport}
         toggle={toggleSupport}
         closeText="Close"
       >
         <h3>OpenNeuro Support</h3>
-        <p>
-          Please email issues or questions to
-          <br />
-          <a href={"mailto:support@openneuro.freshdesk.com"}>
-            support@openneuro.freshdesk.com
-          </a>
-          <br />
-          or use the form below.
-        </p>
-        {renderOnFreshDeskWidget()}
+        {renderOnSupportWidget()}
       </Modal>
     </>
   )

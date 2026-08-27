@@ -58,6 +58,7 @@ import { updateContributors } from "../../datalad/contributors"
 import { updateWorkerTask } from "./worker"
 import { syncDatasetDois } from "./doi"
 import { syncOrcidWorks } from "./orcid"
+import { createSupportTicket } from "./support"
 
 const Mutation = {
   createDataset,
@@ -118,6 +119,7 @@ const Mutation = {
   updateWorkerTask,
   syncDatasetDois,
   syncOrcidWorks,
+  createSupportTicket,
 }
 
 export default Mutation

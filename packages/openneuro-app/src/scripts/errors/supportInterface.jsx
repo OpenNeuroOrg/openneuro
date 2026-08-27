@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import FreshdeskWidget from "./freshdesk-widget.jsx"
+import ZammadWidget from "../common/partials/zammad-widget"
 import {
   ExitButton,
   ModalContainer,
@@ -7,16 +7,16 @@ import {
 } from "../styles/support-modal.jsx"
 import PropTypes from "prop-types"
 
-const FreshdeskInterface = (props) => {
+const SupportInterface = (props) => {
   const [showModal, setShowModal] = useState(false)
   return (
     <>
       <p className="generic-error-message">
         {props.message || "An error has occurred."}
         <br />
-        Please support us by documenting the issue with{" "}
+        Please support us by{" "}
         <a onClick={() => setShowModal(true)}>
-          <u>FreshDesk</u>
+          <u>documenting the issue</u>
         </a>
         .
       </p>
@@ -31,7 +31,7 @@ const FreshdeskInterface = (props) => {
               provide as much detail as you can, including what you were trying
               to accomplish when the error occurred.
             </div>
-            <FreshdeskWidget
+            <ZammadWidget
               {...{
                 subject: props.subject,
                 description: props.description,
@@ -45,7 +45,7 @@ const FreshdeskInterface = (props) => {
     </>
   )
 }
-FreshdeskInterface.propTypes = {
+SupportInterface.propTypes = {
   error: PropTypes.object,
   message: PropTypes.string,
   subject: PropTypes.string,
@@ -53,4 +53,4 @@ FreshdeskInterface.propTypes = {
   eventId: PropTypes.string,
 }
 
-export default FreshdeskInterface
+export default SupportInterface
