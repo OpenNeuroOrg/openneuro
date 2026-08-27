@@ -24,6 +24,10 @@ const config = {
   doi: {
     username: "",
   },
+  zammad: {
+    url: "https://support.example.com",
+    token: "mock-zammad-token",
+  },
 }
 
 export default config

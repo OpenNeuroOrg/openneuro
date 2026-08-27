@@ -574,5 +574,18 @@ builder.mutationType({
       resolve: (root, args, ctx) =>
         Mutation.syncOrcidWorks(root, args as never, ctx) as never,
     }),
+    createSupportTicket: t.boolean({
+      args: {
+        name: t.arg.string(),
+        email: t.arg.string({ required: true }),
+        title: t.arg.string({ required: true }),
+        body: t.arg.string({ required: true }),
+        error: t.arg.string(),
+        sentryId: t.arg.string(),
+        referrer: t.arg.string(),
+      },
+      resolve: (root, args, ctx) =>
+        Mutation.createSupportTicket(root, args as never, ctx),
+    }),
   }),
 })

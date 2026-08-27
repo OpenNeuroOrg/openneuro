@@ -1,19 +1,13 @@
 import React, { useEffect, useState } from "react"
 import { useCookies } from "react-cookie"
 import { useLocation } from "react-router-dom"
+import { useMutation } from "@apollo/client"
 import { getProfile } from "../../authentication/profile"
-import { config } from "../../config"
 import { useUser } from "../../queries/user"
 import { Button } from "../../components/button/Button"
 import { Input } from "../../components/input/Input"
 import { Textarea } from "../../components/textarea/Textarea"
-import type { ZammadFormConfig, ZammadFormErrors } from "./zammad"
-import {
-  fetchFormConfig,
-  getFingerprint,
-  submitForm,
-  SUPPORT_EMAIL,
-} from "./zammad"
+import { CREATE_SUPPORT_TICKET, SUPPORT_EMAIL } from "./zammad"
 import "./zammad-widget.scss"
 
 export interface ZammadWidgetProps {
@@ -22,29 +16,6 @@ export interface ZammadWidgetProps {
   sentryId?: string
   description?: string
 }
-
-interface BodyContext {
-  description?: string
-  error?: Error
-  sentryId?: string
-  referrer?: string
-}
-
-/**
- * Zammad's form channel has no custom fields, so the diagnostic context
- * Freshdesk carried in meta[] is appended to the ticket body instead
- */
-export const buildBody = (
-  { description, error, sentryId, referrer }: BodyContext,
-): string =>
-  [
-    description,
-    error && String(error),
-    sentryId && `Sentry ID: ${sentryId}`,
-    referrer && `Page: ${referrer}`,
-  ]
-    .filter((line) => line)
-    .join("\n\n")
 
 const SUBMIT_THANKS =
   "Thank you for taking the time to report your case. A support representative will be reviewing your request and will send you a personal response within 24 to 48 hours."
@@ -69,19 +40,14 @@ function ZammadWidget(
   // a stable boolean rather than the profile itself
   const signedIn = Boolean(getProfile(cookies))
 
-  // The token is bound to this fingerprint, so generate it once per mount
-  const [fingerprint] = useState(getFingerprint)
-  const [formConfig, setFormConfig] = useState<ZammadFormConfig | null>(null)
-  const [unavailable, setUnavailable] = useState(false)
   const [title, setTitle] = useState(subject || "")
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
-  const [body, setBody] = useState(
-    buildBody({ description, error, sentryId, referrer: pathname }),
-  )
-  const [errors, setErrors] = useState<ZammadFormErrors>({})
-  const [submitting, setSubmitting] = useState(false)
+  const [body, setBody] = useState(description || "")
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [submitted, setSubmitted] = useState(false)
+
+  const [createSupportTicket, { loading }] = useMutation(CREATE_SUPPORT_TICKET)
 
   // Prefill contact details once the signed in user's profile resolves
   useEffect(() => {
@@ -91,57 +57,48 @@ function ZammadWidget(
     }
   }, [signedIn, user?.email, user?.name])
 
-  useEffect(() => {
-    if (!config.support?.url) {
-      setUnavailable(true)
-      return
-    }
-    let active = true
-    fetchFormConfig(config.support.url, fingerprint)
-      .then((fetched) => {
-        if (!active) return
-        if (fetched.enabled) {
-          setFormConfig(fetched)
-        } else {
-          setUnavailable(true)
-        }
-      })
-      .catch(() => {
-        if (active) setUnavailable(true)
-      })
-    return () => {
-      active = false
-    }
-  }, [fingerprint])
-
   const onSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
-    if (!formConfig || submitting) return
-    setSubmitting(true)
-    setErrors({})
+    if (loading) return
+    setErrorMessage(null)
+
+    if (!email) {
+      setErrorMessage("Email is required")
+      return
+    }
+    if (!title) {
+      setErrorMessage("Subject is required")
+      return
+    }
+    if (!body) {
+      setErrorMessage("Description is required")
+      return
+    }
+
     try {
-      const fieldErrors = await submitForm(formConfig, fingerprint, {
-        name,
-        email,
-        title,
-        body,
+      const response = await createSupportTicket({
+        variables: {
+          name,
+          email,
+          title,
+          body,
+          error: error ? String(error) : undefined,
+          sentryId,
+          referrer: pathname,
+        },
       })
-      if (fieldErrors) {
-        setErrors(fieldErrors)
-      } else {
+      if (response.data?.createSupportTicket) {
         setSubmitted(true)
+      } else {
+        setErrorMessage("The support form is unavailable right now.")
       }
     } catch {
-      setUnavailable(true)
-    } finally {
-      setSubmitting(false)
+      setErrorMessage("The support form is unavailable right now.")
     }
   }
 
-  if (unavailable) {
-    return (
-      <SupportEmailFallback message="The support form is unavailable right now." />
-    )
+  if (errorMessage && errorMessage.includes("unavailable")) {
+    return <SupportEmailFallback message={errorMessage} />
   }
 
   if (submitted) {
@@ -162,7 +119,6 @@ function ZammadWidget(
         value={name}
         setValue={setName}
       />
-      {errors.name ? <span className="form-error">{errors.name}</span> : null}
       <Input
         name="email"
         type="email"
@@ -171,7 +127,6 @@ function ZammadWidget(
         value={email}
         setValue={setEmail}
       />
-      {errors.email ? <span className="form-error">{errors.email}</span> : null}
       <Input
         name="title"
         type="text"
@@ -180,7 +135,6 @@ function ZammadWidget(
         value={title}
         setValue={setTitle}
       />
-      {errors.title ? <span className="form-error">{errors.title}</span> : null}
       <Textarea
         name="body"
         label="Description"
@@ -188,13 +142,13 @@ function ZammadWidget(
         value={body}
         setValue={(event) => setBody(event.currentTarget.value)}
       />
-      {errors.body ? <span className="form-error">{errors.body}</span> : null}
+      {errorMessage ? <span className="form-error">{errorMessage}</span> : null}
       <Button
         primary
         type="submit"
         size="small"
-        disabled={!formConfig || submitting}
-        label={submitting ? "Sending..." : "Request Support"}
+        disabled={loading}
+        label={loading ? "Sending..." : "Request Support"}
       />
     </form>
   )
