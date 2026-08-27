@@ -130,15 +130,6 @@ export const Header = ({
         closeText="Close"
       >
         <h3>OpenNeuro Support</h3>
-        <p>
-          Please email issues or questions to
-          <br />
-          <a href={`mailto:${SUPPORT_EMAIL}`}>
-            {SUPPORT_EMAIL}
-          </a>
-          <br />
-          or use the form below.
-        </p>
         {renderOnSupportWidget()}
       </Modal>
     </>
