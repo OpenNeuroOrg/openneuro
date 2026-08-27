@@ -72,7 +72,13 @@ describe("createSupportTicket resolver", () => {
       customer: "user@example.com",
       article: {
         subject: "Cannot upload",
-        body: "I am having trouble uploading my dataset.",
+        body: `I am having trouble uploading my dataset.
+
+---
+
+Diagnostic Information:
+
+User Name: Test User`,
         type: "web",
         sender: "Customer",
         from: "Test User <user@example.com>",
