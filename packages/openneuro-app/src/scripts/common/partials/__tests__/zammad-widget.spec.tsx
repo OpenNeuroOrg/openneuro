@@ -1,13 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, expect, it, vi } from "vitest"
 import React from "react"
 import { act, render, screen, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { MemoryRouter } from "react-router-dom"
 import { MockedProvider } from "@apollo/client/testing"
-import ZammadWidget, {
-  CREATE_SUPPORT_TICKET,
-  SUPPORT_EMAIL,
-} from "../zammad-widget"
+import ZammadWidget, { CREATE_SUPPORT_TICKET } from "../zammad-widget"
 
 // Mock dependencies
 vi.mock("react-cookie", () => ({

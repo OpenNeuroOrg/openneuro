@@ -5,7 +5,6 @@ import { Logo } from "../logo/Logo"
 import { Modal } from "../modal/Modal"
 import { UserMenu } from "../../users/user-menu"
 import type { OpenNeuroTokenProfile } from "../../authentication/profile"
-import { SUPPORT_EMAIL } from "../../common/partials/zammad"
 import "./header.scss"
 
 export interface HeaderProps {
