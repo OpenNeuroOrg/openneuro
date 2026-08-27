@@ -1,0 +1,18 @@
+@import '../../scss/variables';
+
+.zammad-widget {
+  .form-control {
+    margin-bottom: 15px;
+  }
+
+  .form-error {
+    display: block;
+    margin: -10px 0 15px;
+    color: $danger;
+    font-size: 14px;
+  }
+}
+
+.zammad-widget-message {
+  margin-top: 20px;
+}

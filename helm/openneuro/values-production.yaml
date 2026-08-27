@@ -10,8 +10,8 @@ graphql: http://openneuro-prod-api:8111/crn/graphql
 # A unique string identifying this install of OpenNeuro
 environment: production
 
-# Enable FreshDesk ticketing
-freshDeskUrl: https://openneuro.freshdesk.com/widgets/feedback_widget/new?&widgetType=embedded&screenshot=no
+# Base URL of the Zammad instance backing the support form
+zammadUrl: https://support.openneuro.org
 
 # Enable Google Analytics
 googleTrackingIds: 'UA-100754266-2,G-MJNMY6D3FX'

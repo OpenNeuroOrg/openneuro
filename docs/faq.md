@@ -37,7 +37,7 @@ OpenNeuro does not accept datasets that have not been defaced for privacy consid
 
 We recommend using [pydeface](https://pypi.python.org/pypi/pydeface) to deface your images. In the case that the dataset(s) is cited in publications, please notify the OpenNeuro team and we will direct the DOI and dataset links from the previous dataset to the new dataset. We suggest adding a note to the README of the reuploaded dataset to specify this change.
 
-For any questions or concerns please email Openneuro at: <support@openneuro.freshdesk.com>
+For any questions or concerns please email Openneuro at: <openneuro@zammad.com>
 
 ## How can I upload data onto OpenNeuro?
 

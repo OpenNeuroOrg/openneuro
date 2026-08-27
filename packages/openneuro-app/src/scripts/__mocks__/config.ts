@@ -25,6 +25,6 @@ export const config = {
     environment: "unit-tests",
   },
   support: {
-    url: "https://example.com/test-suite",
+    url: "https://support.example.com",
   },
 }

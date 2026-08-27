@@ -31,7 +31,7 @@ export const Page = ({ children, headerArgs, className }: PageProps) => {
           expanded={headerArgs.expanded}
           navigateToNewSearch={() => console.log("go to /search")}
           renderUploader={() => <li>Upload</li>}
-          renderOnFreshDeskWidget={() => <>This is a freshdesk widget</>}
+          renderOnSupportWidget={() => <>This is a support widget</>}
           renderOnExpanded={() => (
             <LandingExpandedHeader
               renderFacetSelect={() => <>front facet example</>}

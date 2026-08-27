@@ -12,7 +12,7 @@ import { useLocation, useNavigate } from "react-router-dom"
 import { useCookies } from "react-cookie"
 import signOut from "../../authentication/signOut"
 import { getUnexpiredProfile } from "../../authentication/profile"
-import FreshdeskWidget from "../partials/freshdesk-widget"
+import ZammadWidget from "../partials/zammad-widget"
 import AggregateCountsContainer from "../../pages/front-page/aggregate-queries/aggregate-counts-container"
 import loginUrls from "../../authentication/loginUrls"
 import UploaderView from "../../uploader/uploader-view.jsx"
@@ -104,7 +104,8 @@ export const HeaderContainer: FC = () => {
             }}
           </UploaderContext.Consumer>
         )}
-        renderOnFreshDeskWidget={() => <FreshdeskWidget />}
+        // Mounting requests a form token from Zammad, so wait for the modal
+        renderOnSupportWidget={() => isOpenSupport ? <ZammadWidget /> : null}
         renderOnExpanded={() => (
           <LandingExpandedHeader
             loginUrls={loginUrls}

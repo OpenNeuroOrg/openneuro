@@ -5,6 +5,7 @@ import { Logo } from "../logo/Logo"
 import { Modal } from "../modal/Modal"
 import { UserMenu } from "../../users/user-menu"
 import type { OpenNeuroTokenProfile } from "../../authentication/profile"
+import { SUPPORT_EMAIL } from "../../common/partials/zammad"
 import "./header.scss"
 
 export interface HeaderProps {
@@ -18,7 +19,7 @@ export interface HeaderProps {
   toggleSupport: () => void
   navigateToNewSearch: (resetSearchParams?: boolean) => void
   renderOnExpanded: (profile) => React.ReactNode
-  renderOnFreshDeskWidget: () => React.ReactNode
+  renderOnSupportWidget: () => React.ReactNode
   renderUploader: () => React.ReactNode
 }
 
@@ -31,7 +32,7 @@ export const Header = ({
   toggleSupport,
   navigateToNewSearch,
   renderOnExpanded,
-  renderOnFreshDeskWidget,
+  renderOnSupportWidget,
   renderUploader,
 }: HeaderProps) => {
   const [isOpen, setOpen] = React.useState(false)
@@ -123,7 +124,7 @@ export const Header = ({
         </div>
       </header>
       <Modal
-        className="freshdesk-support"
+        className="support-modal"
         isOpen={isOpenSupport}
         toggle={toggleSupport}
         closeText="Close"
@@ -132,13 +133,13 @@ export const Header = ({
         <p>
           Please email issues or questions to
           <br />
-          <a href={"mailto:support@openneuro.freshdesk.com"}>
-            support@openneuro.freshdesk.com
+          <a href={`mailto:${SUPPORT_EMAIL}`}>
+            {SUPPORT_EMAIL}
           </a>
           <br />
           or use the form below.
         </p>
-        {renderOnFreshDeskWidget()}
+        {renderOnSupportWidget()}
       </Modal>
     </>
   )

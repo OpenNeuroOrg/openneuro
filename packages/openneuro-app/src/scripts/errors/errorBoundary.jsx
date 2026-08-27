@@ -1,7 +1,7 @@
 import React from "react"
 import PropTypes from "prop-types"
 import * as Sentry from "@sentry/react"
-import FreshdeskInterface from "./freshdeskInterface.jsx"
+import SupportInterface from "./supportInterface.jsx"
 
 // raises error if catchErrorIf returns true
 const getDerivedStateFromErrorOnCondition = (error, catchErrorIf) => {
@@ -48,7 +48,7 @@ class ErrorBoundary extends React.Component {
     const { subject, description } = this.props
     if (error) {
       return (
-        <FreshdeskInterface
+        <SupportInterface
           message={message}
           error={error}
           subject={subject}
