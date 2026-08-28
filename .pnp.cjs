@@ -4476,7 +4476,7 @@ const RAW_RUNTIME_STATE =
           ["keyv", "npm:5.3.4"],\
           ["mime-types", "npm:2.1.32"],\
           ["mongodb-memory-server", "npm:9.2.0"],\
-          ["mongoose", "npm:8.23.1"],\
+          ["mongoose", "npm:8.24.4"],\
           ["morgan", "npm:1.10.0"],\
           ["msgpackr", "npm:1.11.9"],\
           ["node-mailjet", "npm:3.3.5"],\
@@ -17654,8 +17654,8 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "HARD"\
       }],\
-      ["virtual:17921316e101ac6d93a8fa758f03525d59c3467c7e3e856f7f4b686501c89a77b1204e1b02b82d0e315ea9212fbb1a6a384b2fcd4ab9a22add8ded9a6b58ffad#npm:6.20.0", {\
-        "packageLocation": "./.yarn/__virtual__/mongodb-virtual-a8f6594d81/0/cache/mongodb-npm-6.20.0-5d66340ebb-2718cdd443.zip/node_modules/mongodb/",\
+      ["virtual:4f71562f3441c17f8521cd049c21dcbed53837ea371fe1741cec94f0a788c6124be042ec45cb552a6e1fa77f7614a1e941e879fbe28d1dfa080c9a95d39e7282#npm:6.20.0", {\
+        "packageLocation": "./.yarn/__virtual__/mongodb-virtual-8275eb86dd/0/cache/mongodb-npm-6.20.0-5d66340ebb-2718cdd443.zip/node_modules/mongodb/",\
         "packageDependencies": [\
           ["@aws-sdk/credential-providers", null],\
           ["@mongodb-js/saslprep", "npm:1.4.11"],\
@@ -17670,7 +17670,7 @@ const RAW_RUNTIME_STATE =
           ["bson", "npm:6.10.4"],\
           ["gcp-metadata", null],\
           ["kerberos", null],\
-          ["mongodb", "virtual:17921316e101ac6d93a8fa758f03525d59c3467c7e3e856f7f4b686501c89a77b1204e1b02b82d0e315ea9212fbb1a6a384b2fcd4ab9a22add8ded9a6b58ffad#npm:6.20.0"],\
+          ["mongodb", "virtual:4f71562f3441c17f8521cd049c21dcbed53837ea371fe1741cec94f0a788c6124be042ec45cb552a6e1fa77f7614a1e941e879fbe28d1dfa080c9a95d39e7282#npm:6.20.0"],\
           ["mongodb-client-encryption", null],\
           ["mongodb-connection-string-url", "npm:3.0.2"],\
           ["snappy", null],\
@@ -17748,13 +17748,13 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["mongoose", [\
-      ["npm:8.23.1", {\
-        "packageLocation": "./.yarn/cache/mongoose-npm-8.23.1-17921316e1-954485485c.zip/node_modules/mongoose/",\
+      ["npm:8.24.4", {\
+        "packageLocation": "./.yarn/cache/mongoose-npm-8.24.4-4f71562f34-5ea9cbba3f.zip/node_modules/mongoose/",\
         "packageDependencies": [\
           ["bson", "npm:6.10.4"],\
           ["kareem", "npm:2.6.3"],\
-          ["mongodb", "virtual:17921316e101ac6d93a8fa758f03525d59c3467c7e3e856f7f4b686501c89a77b1204e1b02b82d0e315ea9212fbb1a6a384b2fcd4ab9a22add8ded9a6b58ffad#npm:6.20.0"],\
-          ["mongoose", "npm:8.23.1"],\
+          ["mongodb", "virtual:4f71562f3441c17f8521cd049c21dcbed53837ea371fe1741cec94f0a788c6124be042ec45cb552a6e1fa77f7614a1e941e879fbe28d1dfa080c9a95d39e7282#npm:6.20.0"],\
+          ["mongoose", "npm:8.24.4"],\
           ["mpath", "npm:0.9.0"],\
           ["mquery", "npm:5.0.0"],\
           ["ms", "npm:2.1.3"],\
