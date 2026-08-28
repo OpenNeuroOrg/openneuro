@@ -4467,7 +4467,7 @@ const RAW_RUNTIME_STATE =
           ["graphql-tools", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:9.0.0"],\
           ["graphql-type-json", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:0.3.2"],\
           ["hash-wasm", "npm:4.12.0"],\
-          ["immutable", "npm:4.3.8"],\
+          ["immutable", "npm:4.3.9"],\
           ["ioredis", "npm:5.6.1"],\
           ["ioredis-mock", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:8.8.1"],\
           ["js-yaml", "npm:4.3.0"],\
@@ -11259,7 +11259,7 @@ const RAW_RUNTIME_STATE =
           ["draft-js", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:0.11.7"],\
           ["draft-js-export-html", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:1.4.1"],\
           ["draft-js-utils", "virtual:3cd71e390644863e4e22d74e44c58aa2da733be6c526b5fdc275212b477d9caaf922b83a8b8fae02c382781ef3e34c9eb8617213fdad7e4254ead015c5571929#npm:1.4.0"],\
-          ["immutable", "npm:4.3.8"]\
+          ["immutable", "npm:4.3.9"]\
         ],\
         "packagePeers": [\
           "@types/draft-js",\
@@ -11285,7 +11285,7 @@ const RAW_RUNTIME_STATE =
           ["@types/immutable", null],\
           ["draft-js", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:0.11.7"],\
           ["draft-js-utils", "virtual:3cd71e390644863e4e22d74e44c58aa2da733be6c526b5fdc275212b477d9caaf922b83a8b8fae02c382781ef3e34c9eb8617213fdad7e4254ead015c5571929#npm:1.4.0"],\
-          ["immutable", "npm:4.3.8"]\
+          ["immutable", "npm:4.3.9"]\
         ],\
         "packagePeers": [\
           "@types/draft-js",\
@@ -14260,17 +14260,17 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "HARD"\
       }],\
-      ["npm:4.3.8", {\
-        "packageLocation": "./.yarn/cache/immutable-npm-4.3.8-9db2d34fb7-27a134cec0.zip/node_modules/immutable/",\
+      ["npm:4.3.9", {\
+        "packageLocation": "./.yarn/cache/immutable-npm-4.3.9-04378617c7-bb951f0b69.zip/node_modules/immutable/",\
         "packageDependencies": [\
-          ["immutable", "npm:4.3.8"]\
+          ["immutable", "npm:4.3.9"]\
         ],\
         "linkType": "HARD"\
       }],\
-      ["npm:5.1.3", {\
-        "packageLocation": "./.yarn/cache/immutable-npm-5.1.3-27d8e1c55d-6d29b29036.zip/node_modules/immutable/",\
+      ["npm:5.1.9", {\
+        "packageLocation": "./.yarn/cache/immutable-npm-5.1.9-35365e455d-dc61ea6f79.zip/node_modules/immutable/",\
         "packageDependencies": [\
-          ["immutable", "npm:5.1.3"]\
+          ["immutable", "npm:5.1.9"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -21716,7 +21716,7 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["@parcel/watcher", "npm:2.5.1"],\
           ["chokidar", "npm:4.0.3"],\
-          ["immutable", "npm:5.1.3"],\
+          ["immutable", "npm:5.1.9"],\
           ["sass", "npm:1.93.2"],\
           ["source-map-js", "npm:1.0.2"]\
         ],\
