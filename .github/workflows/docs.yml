@@ -17,19 +17,16 @@ jobs:
         mode: ["build", "check"]
     steps:
       - uses: actions/checkout@v7.0.1
-      - name: Set up Python
-        uses: actions/setup-python@v7
-        with:
-          python-version: 3
-      - name: Install dependencies
+      - name: Install the latest version of uv
+        uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
+      - name: Install environment
         run: |
-          pip install --upgrade pip
-          pip install -r docs/requirements.txt
+          uv sync --group=doc --no-install-project --frozen
       - name: Set build options
         run: echo 'SPHINXOPTS=-W --keep-going' >> $GITHUB_ENV
         if: matrix.mode == 'check'
       - name: Build
-        run: make -C docs html
+        run: uv run make -C docs html
       - uses: peaceiris/actions-gh-pages@v4.1.0
         if: github.ref == 'refs/heads/master' && matrix.mode == 'build'
         with:
