@@ -1,0 +1,17 @@
+# OpenNeuro is NOT a Python package.
+# This pyproject.toml is here because this is how uv specifies dependencies,
+# and we use sphinx for documentation generation.
+[project]
+name = "openneuro-workspace"
+version = "0.1.0"
+requires-python = ">=3.13"
+
+[dependency-groups]
+doc = [
+    "furo>=2024.8.6",
+    "myst-parser>=4.0.1",
+    "pygments-graphql-lexer>=0.1.0",
+    "sphinx>=8.2.3",
+    "sphinx-copybutton>=0.5.2",
+    "sphinxext-rediraffe>=0.2.7",
+]
