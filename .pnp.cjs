@@ -894,7 +894,7 @@ const RAW_RUNTIME_STATE =
           ["@babel/compat-data", "npm:7.29.7"],\
           ["@babel/helper-compilation-targets", "npm:7.29.7"],\
           ["@babel/helper-validator-option", "npm:7.29.7"],\
-          ["browserslist", "npm:4.24.2"],\
+          ["browserslist", "npm:4.28.8"],\
           ["lru-cache", "npm:5.1.1"],\
           ["semver", "npm:6.3.1"]\
         ],\
@@ -8831,6 +8831,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["baseline-browser-mapping", [\
+      ["npm:2.11.20", {\
+        "packageLocation": "./.yarn/cache/baseline-browser-mapping-npm-2.11.20-7bd5070fa1-5263ac0e5f.zip/node_modules/baseline-browser-mapping/",\
+        "packageDependencies": [\
+          ["baseline-browser-mapping", "npm:2.11.20"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["basic-auth", [\
       ["npm:2.0.1", {\
         "packageLocation": "./.yarn/cache/basic-auth-npm-2.0.1-f1627ef330-3419b805d5.zip/node_modules/basic-auth/",\
@@ -9090,14 +9099,15 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["browserslist", [\
-      ["npm:4.24.2", {\
-        "packageLocation": "./.yarn/cache/browserslist-npm-4.24.2-0bc5f13e3b-f8a9d78bba.zip/node_modules/browserslist/",\
+      ["npm:4.28.8", {\
+        "packageLocation": "./.yarn/cache/browserslist-npm-4.28.8-95f9f58626-9df1d87f91.zip/node_modules/browserslist/",\
         "packageDependencies": [\
-          ["browserslist", "npm:4.24.2"],\
-          ["caniuse-lite", "npm:1.0.30001669"],\
-          ["electron-to-chromium", "npm:1.5.42"],\
-          ["node-releases", "npm:2.0.18"],\
-          ["update-browserslist-db", "virtual:0bc5f13e3b070c660ccf3396ff30b6fc44ede2343c6543d593ce4624807ab1bafdbcd764ac20b4d55e6854e63e2568f1c6d09371eb639766b95e2d401b5b05cb#npm:1.1.1"]\
+          ["baseline-browser-mapping", "npm:2.11.20"],\
+          ["browserslist", "npm:4.28.8"],\
+          ["caniuse-lite", "npm:1.0.30001810"],\
+          ["electron-to-chromium", "npm:1.5.419"],\
+          ["node-releases", "npm:2.0.54"],\
+          ["update-browserslist-db", "virtual:95f9f58626b262dac1adc8cb7d943dcb00411315fc304f34ffd5bf6e813870e1cc11ff4d3ae5d15ad953f880d2f3b63ee25ef93e7f98fcc5768d15cc491c6ece#npm:1.3.2"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -9411,10 +9421,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["caniuse-lite", [\
-      ["npm:1.0.30001669", {\
-        "packageLocation": "./.yarn/cache/caniuse-lite-npm-1.0.30001669-1160fd58ad-cd0b481bb9.zip/node_modules/caniuse-lite/",\
+      ["npm:1.0.30001810", {\
+        "packageLocation": "./.yarn/cache/caniuse-lite-npm-1.0.30001810-8ded52f6d7-47d7db627c.zip/node_modules/caniuse-lite/",\
         "packageDependencies": [\
-          ["caniuse-lite", "npm:1.0.30001669"]\
+          ["caniuse-lite", "npm:1.0.30001810"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -11382,10 +11392,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["electron-to-chromium", [\
-      ["npm:1.5.42", {\
-        "packageLocation": "./.yarn/cache/electron-to-chromium-npm-1.5.42-68cb27581f-869d481372.zip/node_modules/electron-to-chromium/",\
+      ["npm:1.5.419", {\
+        "packageLocation": "./.yarn/cache/electron-to-chromium-npm-1.5.419-34c63ee3e4-9c75c034c1.zip/node_modules/electron-to-chromium/",\
         "packageDependencies": [\
-          ["electron-to-chromium", "npm:1.5.42"]\
+          ["electron-to-chromium", "npm:1.5.419"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -18058,10 +18068,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["node-releases", [\
-      ["npm:2.0.18", {\
-        "packageLocation": "./.yarn/cache/node-releases-npm-2.0.18-51abc46668-241e5fa955.zip/node_modules/node-releases/",\
+      ["npm:2.0.54", {\
+        "packageLocation": "./.yarn/cache/node-releases-npm-2.0.54-bb06fd5c78-36380abbe4.zip/node_modules/node-releases/",\
         "packageDependencies": [\
-          ["node-releases", "npm:2.0.18"]\
+          ["node-releases", "npm:2.0.54"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -19564,13 +19574,6 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/picocolors-npm-1.0.0-d81e0b1927-a2e8092dd8.zip/node_modules/picocolors/",\
         "packageDependencies": [\
           ["picocolors", "npm:1.0.0"]\
-        ],\
-        "linkType": "HARD"\
-      }],\
-      ["npm:1.1.0", {\
-        "packageLocation": "./.yarn/cache/picocolors-npm-1.1.0-ea12a640bd-a2ad60d94d.zip/node_modules/picocolors/",\
-        "packageDependencies": [\
-          ["picocolors", "npm:1.1.0"]\
         ],\
         "linkType": "HARD"\
       }],\
@@ -24152,21 +24155,21 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["update-browserslist-db", [\
-      ["npm:1.1.1", {\
-        "packageLocation": "./.yarn/cache/update-browserslist-db-npm-1.1.1-16e34017b1-7678dd8609.zip/node_modules/update-browserslist-db/",\
+      ["npm:1.3.2", {\
+        "packageLocation": "./.yarn/cache/update-browserslist-db-npm-1.3.2-2e0fa362e5-ca883e9d0f.zip/node_modules/update-browserslist-db/",\
         "packageDependencies": [\
-          ["update-browserslist-db", "npm:1.1.1"]\
+          ["update-browserslist-db", "npm:1.3.2"]\
         ],\
         "linkType": "SOFT"\
       }],\
-      ["virtual:0bc5f13e3b070c660ccf3396ff30b6fc44ede2343c6543d593ce4624807ab1bafdbcd764ac20b4d55e6854e63e2568f1c6d09371eb639766b95e2d401b5b05cb#npm:1.1.1", {\
-        "packageLocation": "./.yarn/__virtual__/update-browserslist-db-virtual-594dc17320/0/cache/update-browserslist-db-npm-1.1.1-16e34017b1-7678dd8609.zip/node_modules/update-browserslist-db/",\
+      ["virtual:95f9f58626b262dac1adc8cb7d943dcb00411315fc304f34ffd5bf6e813870e1cc11ff4d3ae5d15ad953f880d2f3b63ee25ef93e7f98fcc5768d15cc491c6ece#npm:1.3.2", {\
+        "packageLocation": "./.yarn/__virtual__/update-browserslist-db-virtual-de9922e5fd/0/cache/update-browserslist-db-npm-1.3.2-2e0fa362e5-ca883e9d0f.zip/node_modules/update-browserslist-db/",\
         "packageDependencies": [\
           ["@types/browserslist", null],\
-          ["browserslist", "npm:4.24.2"],\
+          ["browserslist", "npm:4.28.8"],\
           ["escalade", "npm:3.2.0"],\
-          ["picocolors", "npm:1.1.0"],\
-          ["update-browserslist-db", "virtual:0bc5f13e3b070c660ccf3396ff30b6fc44ede2343c6543d593ce4624807ab1bafdbcd764ac20b4d55e6854e63e2568f1c6d09371eb639766b95e2d401b5b05cb#npm:1.1.1"]\
+          ["picocolors", "npm:1.1.1"],\
+          ["update-browserslist-db", "virtual:95f9f58626b262dac1adc8cb7d943dcb00411315fc304f34ffd5bf6e813870e1cc11ff4d3ae5d15ad953f880d2f3b63ee25ef93e7f98fcc5768d15cc491c6ece#npm:1.3.2"]\
         ],\
         "packagePeers": [\
           "@types/browserslist",\
