@@ -1,6 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { vi } from "vitest"
 import User from "../../../models/user"
-import { addJWT, jwtFromRequest } from "../jwt"
+import passport from "passport"
+import {
+  addJWT,
+  authenticate,
+  jwtFromRequest,
+  parsedJwtFromRequest,
+} from "../jwt"
 
 vi.mock("ioredis")
 vi.mock("../../../config.ts")
@@ -54,6 +61,89 @@ describe("jwt auth", () => {
         headers: {},
       }
       expect(jwtFromRequest(req)).toEqual(null)
+    })
+  })
+  describe("parsedJwtFromRequest()", () => {
+    it("returns null for invalid token strings", () => {
+      const req = {
+        headers: { authorization: "Bearer invalid.token.payload" },
+      }
+      expect(parsedJwtFromRequest(req)).toBeNull()
+    })
+  })
+  describe("authenticate()", () => {
+    it("calls next() when user is unauthenticated", async () => {
+      vi.spyOn(passport, "authenticate").mockImplementation(
+        (_strategy, _options, callback: any) => {
+          return (_req, _res, _next) => {
+            callback(null, false)
+          }
+        },
+      )
+      const req: any = { headers: {}, cookies: {} }
+      const res: any = { cookie: vi.fn() }
+      const next = vi.fn()
+      await authenticate(req, res, next)
+      expect(next).toHaveBeenCalledWith()
+    })
+    it("forwards authentication error to next(err)", async () => {
+      const authErr = new Error("DB failure")
+      vi.spyOn(passport, "authenticate").mockImplementation(
+        (_strategy, _options, callback: any) => {
+          return (_req, _res, _next) => {
+            callback(authErr, null)
+          }
+        },
+      )
+      const req: any = { headers: {}, cookies: {} }
+      const res: any = { cookie: vi.fn() }
+      const next = vi.fn()
+      await authenticate(req, res, next)
+      expect(next).toHaveBeenCalledWith(authErr)
+    })
+    it("logs in user and sets Sentry context when authenticated", async () => {
+      const mockUser = { id: "user-123" }
+      vi.spyOn(passport, "authenticate").mockImplementation(
+        (_strategy, _options, callback: any) => {
+          return (_req, _res, _next) => {
+            callback(null, mockUser)
+          }
+        },
+      )
+      const req: any = {
+        headers: { "x-forwarded-for": "127.0.0.1" },
+        cookies: {},
+        login: vi.fn((_user, _opts, cb) => cb(null)),
+      }
+      const res: any = { cookie: vi.fn() }
+      const next = vi.fn()
+      await authenticate(req, res, next)
+      expect(req.login).toHaveBeenCalledWith(
+        mockUser,
+        { session: false },
+        expect.any(Function),
+      )
+      expect(next).toHaveBeenCalledWith()
+    })
+    it("forwards login error to next(err)", async () => {
+      const mockUser = { id: "user-123" }
+      const loginErr = new Error("Login failed")
+      vi.spyOn(passport, "authenticate").mockImplementation(
+        (_strategy, _options, callback: any) => {
+          return (_req, _res, _next) => {
+            callback(null, mockUser)
+          }
+        },
+      )
+      const req: any = {
+        headers: {},
+        cookies: {},
+        login: vi.fn((_user, _opts, cb) => cb(loginErr)),
+      }
+      const res: any = { cookie: vi.fn() }
+      const next = vi.fn()
+      await authenticate(req, res, next)
+      expect(next).toHaveBeenCalledWith(loginErr)
     })
   })
 })
