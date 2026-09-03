@@ -1366,7 +1366,7 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/@bids-nifti-reader-js-npm-0.6.9-e2ec90b371-36e485e0d8.zip/node_modules/@bids/nifti-reader-js/",\
         "packageDependencies": [\
           ["@bids/nifti-reader-js", "npm:0.6.9"],\
-          ["fflate", "npm:0.7.4"]\
+          ["fflate", "npm:0.8.3"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -3571,7 +3571,7 @@ const RAW_RUNTIME_STATE =
           ["@rollup/rollup-linux-x64-gnu", "npm:4.24.0"],\
           ["@ungap/structured-clone", "npm:1.2.0"],\
           ["array-equal", "npm:1.0.2"],\
-          ["fflate", "npm:0.8.2"],\
+          ["fflate", "npm:0.8.3"],\
           ["gl-matrix", "npm:3.4.3"],\
           ["nifti-reader-js", "npm:0.8.0"],\
           ["zarrita", "npm:0.5.1"]\
@@ -12409,17 +12409,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["fflate", [\
-      ["npm:0.7.4", {\
-        "packageLocation": "./.yarn/cache/fflate-npm-0.7.4-df9245ab05-27f61b3536.zip/node_modules/fflate/",\
+      ["npm:0.8.3", {\
+        "packageLocation": "./.yarn/cache/fflate-npm-0.8.3-35acaff861-6ebf528dc9.zip/node_modules/fflate/",\
         "packageDependencies": [\
-          ["fflate", "npm:0.7.4"]\
-        ],\
-        "linkType": "HARD"\
-      }],\
-      ["npm:0.8.2", {\
-        "packageLocation": "./.yarn/cache/fflate-npm-0.8.2-5129f303f0-2bd26ba6d2.zip/node_modules/fflate/",\
-        "packageDependencies": [\
-          ["fflate", "npm:0.8.2"]\
+          ["fflate", "npm:0.8.3"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -17938,7 +17931,7 @@ const RAW_RUNTIME_STATE =
       ["npm:0.8.0", {\
         "packageLocation": "./.yarn/cache/nifti-reader-js-npm-0.8.0-e416e4173b-c7ec6c4db1.zip/node_modules/nifti-reader-js/",\
         "packageDependencies": [\
-          ["fflate", "npm:0.8.2"],\
+          ["fflate", "npm:0.8.3"],\
           ["nifti-reader-js", "npm:0.8.0"]\
         ],\
         "linkType": "HARD"\
@@ -18408,7 +18401,7 @@ const RAW_RUNTIME_STATE =
       ["npm:0.3.2", {\
         "packageLocation": "./.yarn/cache/numcodecs-npm-0.3.2-2b1df5a180-8ae6182ae4.zip/node_modules/numcodecs/",\
         "packageDependencies": [\
-          ["fflate", "npm:0.8.2"],\
+          ["fflate", "npm:0.8.3"],\
           ["numcodecs", "npm:0.3.2"]\
         ],\
         "linkType": "HARD"\
