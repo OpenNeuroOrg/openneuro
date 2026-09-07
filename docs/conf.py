@@ -14,6 +14,7 @@ author = 'Stanford Center for Reproducible Neuroscience'
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
+    'sphinxcontrib.mermaid',
     'myst_parser',
     'sphinx_copybutton',
     'sphinxext.rediraffe',
