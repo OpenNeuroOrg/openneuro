@@ -157,8 +157,15 @@ export const decodeJWT = (token: string): OpenNeuroTokenProfile => {
 
 export const parsedJwtFromRequest = (req) => {
   try {
-    const jwt = decodeJWT(jwtFromRequest(req))
-    return jwt || null
+    const token = jwtFromRequest(req)
+    if (!token) return null
+    if (config.auth?.jwt?.secret) {
+      return jwt.verify(token, config.auth.jwt.secret, {
+        ignoreExpiration: true,
+      }) as OpenNeuroTokenProfile
+    } else {
+      return decodeJWT(token)
+    }
   } catch (_err) {
     return null
   }
@@ -177,7 +184,7 @@ const refreshToken = async (jwt) => {
 }
 
 // Shared options for Express response.cookie()
-const cookieOptions = { sameSite: "Lax" }
+const cookieOptions = { sameSite: "lax" as const }
 
 // Obtain client IP address from request, considering possible proxies
 function getClientIp(req: Request): string | undefined {
@@ -194,32 +201,54 @@ function getClientIp(req: Request): string | undefined {
 
 // attach user obj to request based on jwt
 // if user does not exist, continue
-export const authenticate = (req, res, next) => {
-  const authenticateAsync = async () => {
+export const authenticate = async (req, res, next) => {
+  try {
     const jwt = parsedJwtFromRequest(req)
     if (jwt && Date.now() > jwt.exp * 1000) {
-      const token = await refreshToken(jwt)
-      if (token) {
-        req.cookies.accessToken = token
-        res.cookie("accessToken", token, cookieOptions)
+      try {
+        const token = await refreshToken(jwt)
+        if (token) {
+          if (!req.cookies) {
+            req.cookies = {}
+          }
+          req.cookies.accessToken = token
+          if (req.headers.authorization) {
+            req.headers.authorization = `Bearer ${token}`
+          }
+          res.cookie("accessToken", token, cookieOptions)
+        }
+      } catch {
+        // Continue to passport.authenticate if token refresh fails
       }
     }
     passport.authenticate("jwt", { session: false }, (err, user) => {
-      req.login(user, { session: false }, () => {
-        if (user) {
+      if (err) {
+        return next(err)
+      }
+      if (user) {
+        req.login(user, { session: false }, (loginErr) => {
+          if (loginErr) {
+            return next(loginErr)
+          }
           Sentry.setUser({
             id: user.id,
             ip_address: getClientIp(req),
           })
-        }
+          Sentry.setContext("request_headers", {
+            "x-forwarded-for": req.headers["x-forwarded-for"],
+          })
+          next()
+        })
+      } else {
         Sentry.setContext("request_headers", {
           "x-forwarded-for": req.headers["x-forwarded-for"],
         })
         next()
-      })
+      }
     })(req, res, next)
+  } catch (err) {
+    next(err)
   }
-  authenticateAsync()
 }
 
 export const authSuccessHandler = (req, res, next) => {
