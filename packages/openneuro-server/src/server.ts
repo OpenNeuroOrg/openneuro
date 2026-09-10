@@ -8,7 +8,9 @@ import { initQueues } from "./queues/setup"
 
 void mongoose.connect(config.mongo.url, {
   dbName: config.mongo.dbName,
-  connectTimeoutMS: config.mongo.connectTimeoutMS,
+  connectTimeoutMS: 1000,
+  serverSelectionTimeoutMS: 5000,
+  socketTimeoutMS: 10000,
 })
 
 async function init() {
