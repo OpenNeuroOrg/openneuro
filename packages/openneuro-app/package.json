@@ -73,7 +73,7 @@
     "typescript": "5.6.3",
     "vite": "^7.1.7",
     "vite-plugin-node-polyfills": "0.17.0",
-    "vitest": "3.2.6"
+    "vitest": "4.1.11"
   },
   "publishConfig": {
     "access": "public"
