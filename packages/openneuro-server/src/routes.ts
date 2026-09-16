@@ -132,6 +132,12 @@ const routes = [
     middleware: [jwt.authenticate],
     handler: datalad.getObject,
   },
+  {
+    method: "get",
+    url: "/datasets/:datasetId/mosaic/:ref",
+    middleware: [noCache, jwt.authenticate],
+    handler: datalad.getMosaic,
+  },
 
   // Authentication routes
 

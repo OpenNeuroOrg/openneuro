@@ -140,6 +140,13 @@ export const ValidatorInput = builder.inputType("ValidatorInput", {
   }),
 })
 
+export const MosaicInput = builder.inputType("MosaicInput", {
+  fields: (t) => ({
+    id: t.id({ required: true }),
+    datasetId: t.id({ required: true }),
+  }),
+})
+
 export const MetadataInput = builder.inputType("MetadataInput", {
   fields: (t) => ({
     datasetId: t.id({ required: true }),

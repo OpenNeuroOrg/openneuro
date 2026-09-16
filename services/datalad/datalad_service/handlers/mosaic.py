@@ -1,0 +1,46 @@
+import logging
+import falcon
+import os
+import aiofiles
+import pygit2
+
+from datalad_service.tasks.mosaic import create_mosaic, get_mosaic_path
+
+
+class MosaicResource:
+    def __init__(self, store):
+        self.store = store
+
+    async def on_get(self, req, resp, dataset, hexsha):
+        try:
+            repo = self.store.get_dataset_repo(dataset)
+            commit, _ref = repo.resolve_refish(hexsha)
+            mosaic_path = get_mosaic_path(dataset, repo, commit)
+        except (KeyError, pygit2.GitError, pygit2.InvalidSpecError):
+            resp.media = {'error': 'mosaic not found'}
+            resp.status = falcon.HTTP_NOT_FOUND
+            return
+        if os.path.exists(mosaic_path):
+            resp.status = falcon.HTTP_OK
+            fd = await aiofiles.open(mosaic_path, 'rb')
+            resp.set_stream(fd, os.fstat(fd.fileno()).st_size)
+        else:
+            resp.media = {'error': 'mosaic not found'}
+            resp.status = falcon.HTTP_NOT_FOUND
+
+    async def on_post(self, req, resp, dataset, hexsha):
+        """Create a mosaic for a given commit"""
+        if dataset and hexsha:
+            try:
+                dataset_path = self.store.get_dataset_path(dataset)
+                # Queue the mosaic but don't block on the request
+                await create_mosaic.kiq(dataset, dataset_path, hexsha, req.cookies)
+                resp.status = falcon.HTTP_OK
+            except Exception:
+                logging.exception(
+                    'Mosaic task enqueue failed for dataset %s', dataset
+                )
+                resp.status = falcon.HTTP_INTERNAL_SERVER_ERROR
+        else:
+            resp.media = {'error': 'Missing or malformed dataset parameter in request.'}
+            resp.status = falcon.HTTP_UNPROCESSABLE_ENTITY

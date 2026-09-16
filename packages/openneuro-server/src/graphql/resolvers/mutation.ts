@@ -19,6 +19,7 @@ import {
 import { removeUser, setAdmin, setBlocked, updateUser } from "./user.js"
 import { updateSummary } from "./summary"
 import { revalidate, updateValidation } from "./validation.js"
+import { createMosaic, updateMosaic } from "./mosaic.js"
 import {
   removePermissions,
   updateOrcidPermissions,
@@ -72,6 +73,7 @@ const Mutation = {
   deleteSnapshot,
   updateSummary,
   updateValidation,
+  updateMosaic,
   updatePublic,
   updatePermissions,
   updateOrcidPermissions,
@@ -95,6 +97,7 @@ const Mutation = {
   finishUpload,
   cacheClear,
   revalidate,
+  createMosaic,
   fsckDataset,
   holdDeletion,
   prepareRepoAccess,
