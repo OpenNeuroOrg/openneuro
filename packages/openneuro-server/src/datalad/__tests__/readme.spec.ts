@@ -12,7 +12,7 @@ const mockFetch = vi.fn()
 global.fetch = mockFetch
 
 const mockCacheItemGet = vi.fn()
-vi.mocked(CacheItem).mockImplementation(() => {
+vi.mocked(CacheItem).mockImplementation(function () {
   return { get: mockCacheItemGet } as unknown as CacheItem
 })
 
