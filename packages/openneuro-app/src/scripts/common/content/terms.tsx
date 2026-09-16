@@ -13,7 +13,10 @@ export function Terms(): React.ReactElement {
         </a>{" "}
         (including names, zip codes, dates of birth, acquisition dates, etc). I
         agree to destroy any key linking the personal identity of research
-        participants to the subject codes used in the dataset.
+        participants to the subject codes used in the dataset. The imaging data
+        being uploaded are original recordings and are not simulated or
+        synthesized, except insofar as simulation is required to anonymize the
+        data, for example, for defacing/refacing MRI images.
       </p>
       <p>
         I agree that this dataset will become publicly available under a{" "}
