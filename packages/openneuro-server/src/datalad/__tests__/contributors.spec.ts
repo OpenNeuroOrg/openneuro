@@ -40,7 +40,7 @@ const mockFetch = vi.fn()
 global.fetch = mockFetch
 
 const mockCacheItemGet = vi.fn()
-vi.mocked(CacheItem).mockImplementation((_redis, _type, _key) => {
+vi.mocked(CacheItem).mockImplementation(function (_redis, _type, _key) {
   return {
     get: mockCacheItemGet,
   } as unknown as CacheItem

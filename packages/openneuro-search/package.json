@@ -24,7 +24,7 @@
     "@types/jsonwebtoken": "^8",
     "@types/node": "20.12.7",
     "core-js": "^3.10.1",
-    "vitest": "3.2.6"
+    "vitest": "4.1.11"
   },
   "publishConfig": {
     "access": "public"
