@@ -132,12 +132,10 @@ def test_key_remote_finds_s3_url(monkeypatch):
             return remote_log
         return rmet_content
 
-    monkeypatch.setattr(
-        'datalad_service.common.annex.pygit2.Repository', lambda _: mock.MagicMock()
-    )
     monkeypatch.setattr('datalad_service.common.annex.git_show', mock_git_show)
 
-    result = annex_test_key_remote('/fake/path', key)
+    mock_repo = mock.MagicMock()
+    result = annex_test_key_remote(mock_repo, key)
     assert result is not None
     assert 'ds000001' in result
     assert 'sub-0475' in result
