@@ -321,11 +321,10 @@ async def edit_annexed_file(path, expected_content, new_content, encoding='utf-8
         await changes_file.write(new_content)
 
 
-def test_key_remote(dataset_path, key, remote_name='s3-PUBLIC'):
+def test_key_remote(repo, key, remote_name='s3-PUBLIC'):
     """
     Test if a key exists in the named remote and return the rmet URL if so.
     """
-    repo = pygit2.Repository(dataset_path)
     try:
         remote_log = git_show(repo, 'git-annex', 'remote.log')
     except KeyError:

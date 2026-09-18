@@ -50,7 +50,7 @@ def _stream_opener(repo, ref, relpath):
     """Return a function that runs git_show_content() and returns just the stream."""
 
     async def opener():
-        stream, _size = await git_show_content(repo, ref, relpath)
+        stream, _size = await git_show_content(repo, ref, relpath, stream_remote=True)
         return stream
 
     return opener
