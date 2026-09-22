@@ -15,7 +15,6 @@ import aiofiles
 import pygit2
 
 import datalad_service.config
-from datalad_service.common.git import git_show
 from datalad_service.common.s3_client import get_s3_remote
 
 SERVICE_EMAIL = 'git@openneuro.org'
@@ -326,7 +325,12 @@ def test_key_remote(repo, key, remote_name='s3-PUBLIC'):
     Test if a key exists in the named remote and return the rmet URL if so.
     """
     try:
-        remote_log = git_show(repo, 'git-annex', 'remote.log')
+        annex_tree = repo.revparse_single('git-annex').peel(pygit2.Tree)
+    except (KeyError, pygit2.GitError, ValueError):
+        return None
+    try:
+        remote_blob = repo[annex_tree['remote.log'].id]
+        remote_log = remote_blob.data.decode('utf-8')
     except KeyError:
         return None
     for line in remote_log.splitlines():
@@ -334,7 +338,8 @@ def test_key_remote(repo, key, remote_name='s3-PUBLIC'):
         if remote and remote['name'] == remote_name:
             rmet_path = compute_rmet(key)
             try:
-                rmet = git_show(repo, 'git-annex', rmet_path)
+                blob = repo[annex_tree[rmet_path].id]
+                rmet = blob.data.decode('utf-8')
             except KeyError:
                 return None
             for line in rmet.splitlines():

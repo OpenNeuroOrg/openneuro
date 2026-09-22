@@ -2,10 +2,12 @@ from unittest import mock
 
 from datalad_service.common.annex import (
     compute_rmet,
+    encode_remote_url,
     parse_remote_line,
     parse_rmet_line,
     read_rmet_blob,
-    encode_remote_url,
+)
+from datalad_service.common.annex import (
     test_key_remote as annex_test_key_remote,
 )
 
@@ -110,7 +112,7 @@ def test_read_rmet_blob():
     )
 
 
-def test_key_remote_finds_s3_url(monkeypatch):
+def test_key_remote_finds_s3_url():
     """Keys not stored locally should resolve to their S3 URL via the rmet log."""
     key = 'SHA256E-s4266076--9952d0328f159fdabbcdc8928411bfe02c74d321c75c7a396664866c3387a236.pial.sub-0475_acq-t1mprtrap2iso_run-1_T1w.gii'
     remote_uuid = '57894849-d0c8-4c62-8418-3627be18a196'
@@ -126,15 +128,19 @@ def test_key_remote_finds_s3_url(monkeypatch):
         '+iVcEk18e3J2WQys4zr_ANaTPfpUufW4Y'
         '#ds000001/sub-0475/anat/sub-0475_acq-t1mprtrap2iso_run-1_T1w.gii\n'
     )
-
-    def mock_git_show(repo, committish, obj):
-        if obj == 'remote.log':
-            return remote_log
-        return rmet_content
-
-    monkeypatch.setattr('datalad_service.common.annex.git_show', mock_git_show)
-
+    rmet_path = compute_rmet(key)
+    mock_tree = {
+        'remote.log': mock.MagicMock(id='remote_id'),
+        rmet_path: mock.MagicMock(id='rmet_id'),
+    }
     mock_repo = mock.MagicMock()
+    mock_repo.revparse_single.return_value.peel.return_value = mock_tree
+    mock_repo.__getitem__.side_effect = lambda obj_id: mock.MagicMock(
+        data=remote_log.encode('utf-8')
+        if obj_id == 'remote_id'
+        else rmet_content.encode('utf-8')
+    )
+
     result = annex_test_key_remote(mock_repo, key)
     assert result is not None
     assert 'ds000001' in result

@@ -11,6 +11,7 @@ import pygit2
 import sentry_sdk
 from charset_normalizer import from_bytes
 
+from datalad_service.common.annex import annex_key_re, test_key_remote
 from datalad_service.common.const import CHUNK_SIZE_BYTES
 from datalad_service.common.onchange import on_head
 
@@ -97,11 +98,6 @@ async def git_show_content(repo, committish, filename, stream_remote: bool = Fal
             elif not stream_remote:
                 raise FileNotFoundError(f'{target_path} is not present locally')
             else:
-                from datalad_service.common.annex import (
-                    annex_key_re,
-                    test_key_remote,
-                )
-
                 key = os.path.basename(target_path)
                 remote_url = test_key_remote(repo, key)
                 if not remote_url:
