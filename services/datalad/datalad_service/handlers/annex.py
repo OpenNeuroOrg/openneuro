@@ -46,7 +46,8 @@ class GitAnnexResource:
         if os.path.exists(annex_object_path):
             resp.status = falcon.HTTP_OK
         else:
-            if test_key_remote(dataset_path, key):
+            repo = self.store.get_dataset_repo(dataset)
+            if test_key_remote(repo, key):
                 resp.status = falcon.HTTP_OK
             else:
                 resp.status = falcon.HTTP_NOT_FOUND
@@ -62,7 +63,8 @@ class GitAnnexResource:
             fd = await aiofiles.open(annex_object_path, 'rb')
             resp.set_stream(fd, os.fstat(fd.fileno()).st_size)
         else:
-            rmet_url = test_key_remote(dataset_path, key)
+            repo = self.store.get_dataset_repo(dataset)
+            rmet_url = test_key_remote(repo, key)
             if rmet_url:
                 # Return a redirect to S3 if possible here
                 resp.status = falcon.HTTP_SEE_OTHER
@@ -76,7 +78,8 @@ class GitAnnexResource:
             return _handle_failed_access(req, resp)
         dataset_path = self.store.get_dataset_path(dataset)
         annex_object_path = os.path.join(dataset_path, key_to_path(key))
-        if os.path.exists(annex_object_path) or test_key_remote(dataset_path, key):
+        repo = self.store.get_dataset_repo(dataset)
+        if os.path.exists(annex_object_path) or test_key_remote(repo, key):
             # Don't allow objects to be replaced
             resp.status = falcon.HTTP_CONFLICT
         else:

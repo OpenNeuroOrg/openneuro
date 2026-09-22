@@ -1,17 +1,19 @@
 import asyncio
+import logging
 import os
 import pathlib
 import re
 import subprocess
-import logging
-import sentry_sdk
 
 import aiofiles
+import httpx
 import pygit2
+import sentry_sdk
 from charset_normalizer import from_bytes
 
-from datalad_service.common.onchange import on_head
+from datalad_service.common.annex import annex_key_re, test_key_remote
 from datalad_service.common.const import CHUNK_SIZE_BYTES
+from datalad_service.common.onchange import on_head
 
 tag_ref = re.compile('^refs/tags/')
 
@@ -56,7 +58,20 @@ async def stream_from_reader(reader, start=None, chunk_size: int = 1024):
         await optional_await(reader.close)
 
 
-async def git_show_content(repo, committish, filename):
+async def stream_from_url(url, chunk_size: int = CHUNK_SIZE_BYTES):
+    """Stream from an HTTP URL using httpx."""
+    async with (
+        httpx.AsyncClient() as client,
+        client.stream('GET', url) as response,
+    ):
+        if response.status_code == 404:
+            raise FileNotFoundError(f'Remote object not found at {url}')
+        response.raise_for_status()
+        async for chunk in response.aiter_bytes(chunk_size=chunk_size):
+            yield chunk
+
+
+async def git_show_content(repo, committish, filename, stream_remote: bool = False):
     """
     Similar to git_show but resolves annexed content if possible.
 
@@ -77,8 +92,26 @@ async def git_show_content(repo, committish, filename):
         )
         # Verify the annex path is within the dataset dir
         if dataset_root == os.path.commonpath((dataset_root, target_path)):
-            file_obj = await aiofiles.open(target_path, 'rb')
-            return stream_from_reader(file_obj), os.path.getsize(target_path)
+            if os.path.exists(target_path):
+                file_obj = await aiofiles.open(target_path, 'rb')
+                return stream_from_reader(file_obj), os.path.getsize(target_path)
+            elif not stream_remote:
+                raise FileNotFoundError(f'{target_path} is not present locally')
+            else:
+                key = os.path.basename(target_path)
+                remote_url = test_key_remote(repo, key)
+                if not remote_url:
+                    raise FileNotFoundError(
+                        f'{target_path} not found locally or in remote'
+                    )
+                match = annex_key_re.match(key)
+                size = int(match.group('size')) if match else None
+                if size is None:
+                    async with httpx.AsyncClient() as client:
+                        head_resp = await client.head(remote_url)
+                        if 'content-length' in head_resp.headers:
+                            size = int(head_resp.headers['content-length'])
+                return stream_from_url(remote_url), size
         else:
             raise OpenNeuroGitError('Invalid symlinked path in git_show_content')
     else:
