@@ -8,8 +8,9 @@ import pluralize from "pluralize"
 import { pageTitle } from "../resources/strings.js"
 import { config } from "../config"
 import DatasetCitation from "./fragments/dataset-citation.jsx"
-import { DatasetAlertVersion } from "./fragments/dataset-alert-version"
 import { DatasetAlertPrivate } from "./fragments/dataset-alert"
+import { DatasetAlertVersion } from "./fragments/dataset-alert-version"
+import { DatasetAlertSynthetic } from "./fragments/dataset-alert-synthetic"
 import { AnalyzeDropdown } from "./components/AnalyzeDropdown"
 import { CloneDropdown } from "./components/CloneDropdown"
 import { DatasetGitAccess } from "./components/DatasetGitAccess"
@@ -142,6 +143,7 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
             hasEdit={hasEdit}
           />
         )}
+        {dataset.metadata.syntheticDataset && <DatasetAlertSynthetic />}
         <div className="dataset-content container">
           <div className="grid grid-between">
             <div className="col col-lg col-8">

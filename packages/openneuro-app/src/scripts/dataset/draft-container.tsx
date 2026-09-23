@@ -14,6 +14,7 @@ import {
 } from "../authentication/profile"
 import { useCookies } from "react-cookie"
 import { DatasetAlertDraft } from "./fragments/dataset-alert"
+import { DatasetAlertSynthetic } from "./fragments/dataset-alert-synthetic"
 import { CloneDropdown } from "./components/CloneDropdown"
 import { DatasetGitAccess } from "./components/DatasetGitAccess"
 import { DatasetHeader } from "./components/DatasetHeader"
@@ -143,6 +144,7 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
           hasDraftChanges={hasDraftChanges}
           hasSnapshot={dataset.snapshots.length !== 0}
         />
+        {dataset.metadata.syntheticDataset && <DatasetAlertSynthetic />}
         <div className="dataset-content container">
           <div className="grid grid-between">
             <div className="col col-lg col-8">
