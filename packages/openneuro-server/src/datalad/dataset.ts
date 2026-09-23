@@ -52,9 +52,10 @@ export const giveUploaderPermission = (datasetId: string, userId: string) => {
 export const createDataset = async (
   uploader: string,
   userInfo: UserInfo,
-  { affirmedDefaced, affirmedConsent }: {
+  { affirmedDefaced, affirmedConsent, syntheticDataset = false }: {
     affirmedDefaced: boolean
     affirmedConsent: boolean
+    syntheticDataset?: boolean
   },
 ) => {
   // Obtain an accession number
@@ -73,7 +74,12 @@ export const createDataset = async (
       .set("Cookie", generateDataladCookie(config)(userInfo))
     // Write the new dataset to mongo after creation
     await ds.save()
-    const md = new Metadata({ datasetId, affirmedDefaced, affirmedConsent })
+    const md = new Metadata({
+      datasetId,
+      affirmedDefaced,
+      affirmedConsent,
+      syntheticDataset,
+    })
     await md.save()
     await giveUploaderPermission(datasetId, uploader)
     // Creation is complete here, mark successful

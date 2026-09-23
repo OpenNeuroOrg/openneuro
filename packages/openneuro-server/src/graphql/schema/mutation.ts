@@ -27,9 +27,9 @@ import {
   ContributorInput,
   DeleteFile,
   MetadataInput,
+  MosaicInput,
   SummaryInput,
   ValidatorInput,
-  MosaicInput
 } from "./inputs"
 
 import Mutation from "../resolvers/mutation"
@@ -39,8 +39,9 @@ builder.mutationType({
     createDataset: t.field({
       type: DatasetRef,
       args: {
-        affirmedDefaced: t.arg.boolean(),
-        affirmedConsent: t.arg.boolean(),
+        affirmedDefaced: t.arg.boolean({ required: true }),
+        affirmedConsent: t.arg.boolean({ required: true }),
+        syntheticDataset: t.arg.boolean(),
       },
       resolve: (root, args, ctx) =>
         Mutation.createDataset(root, args as never, ctx),

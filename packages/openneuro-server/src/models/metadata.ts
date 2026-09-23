@@ -27,6 +27,7 @@ export interface MetadataDocument extends Document {
   grantIdentifier: string
   affirmedDefaced: boolean
   affirmedConsent: boolean
+  syntheticDataset: boolean
 }
 
 const metadataSchema = new Schema({
@@ -53,6 +54,7 @@ const metadataSchema = new Schema({
   grantIdentifier: String,
   affirmedDefaced: Boolean,
   affirmedConsent: Boolean,
+  syntheticDataset: Boolean,
 })
 
 metadataSchema.index({ datasetId: 1 }, { unique: true })
