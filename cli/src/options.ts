@@ -30,6 +30,11 @@ const openneuroCommand = new Command()
   })
   .globalEnv("OPENNEURO_API_KEY=<key:string>", "Specify an OpenNeuro API key.")
   .globalEnv("OPENNEURO_URL=<url:string>", "Specify an OpenNeuro URL to use.")
+  .action(function () {
+    // Show help if no action is selected
+    openneuroCommand.showHelp()
+    Deno.exit(1)
+  })
   .command("login", login)
   .command("download", download)
   .command("upload", upload)
@@ -46,10 +51,6 @@ export async function commandLine(
 ): Promise<OpenNeuroOptions> {
   const { args, options } = await openneuroCommand.parse(argumentOverride)
 
-  if (args.length === 0) {
-    openneuroCommand.showHelp()
-    Deno.exit(1)
-  }
   return {
     datasetPath: args[0] as string,
     ...options,
