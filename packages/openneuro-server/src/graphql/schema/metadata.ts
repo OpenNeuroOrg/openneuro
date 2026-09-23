@@ -82,5 +82,6 @@ export const Metadata = builder.simpleObject("Metadata", {
     grantIdentifier: t.string(),
     affirmedDefaced: t.boolean(),
     affirmedConsent: t.boolean(),
+    syntheticDataset: t.boolean(),
   }),
 })

@@ -92,9 +92,10 @@ export const updateDatasetName = (datasetId: string) =>
  */
 export const createDataset = (
   obj: unknown,
-  { affirmedDefaced, affirmedConsent }: {
+  { affirmedDefaced, affirmedConsent, syntheticDataset = false }: {
     affirmedDefaced: boolean
     affirmedConsent: boolean
+    syntheticDataset?: boolean
   },
   { user, userInfo }: GraphQLContext,
 ) => {
@@ -104,6 +105,7 @@ export const createDataset = (
       return datalad.createDataset(user, userInfo, {
         affirmedDefaced,
         affirmedConsent,
+        syntheticDataset,
       })
     } else {
       throw new Error(

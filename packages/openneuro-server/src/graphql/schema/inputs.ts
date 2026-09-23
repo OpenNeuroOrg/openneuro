@@ -172,6 +172,7 @@ export const MetadataInput = builder.inputType("MetadataInput", {
     grantIdentifier: t.string(),
     affirmedDefaced: t.boolean(),
     affirmedConsent: t.boolean(),
+    syntheticDataset: t.boolean(),
   }),
 })
 
