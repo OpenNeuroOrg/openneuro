@@ -68,7 +68,7 @@ Deno.test("createDataset() returns the new accession number", async () => {
     await withResponse(
       { data: { createDataset: { id: "ds000001" } } },
       async () => {
-        assertEquals(await createDataset(true, false), "ds000001")
+        assertEquals(await createDataset(true, false, false), "ds000001")
       },
     )
   })
@@ -81,7 +81,7 @@ Deno.test("createDataset() rejects a response with no accession number", async (
     // path join in the upload command and fail there instead.
     await withResponse({ data: { createDataset: null } }, async () => {
       await assertRejects(
-        () => createDataset(true, false),
+        () => createDataset(true, false, false),
         ResponseError,
         "The server did not return an accession number for the new dataset.",
       )
@@ -93,7 +93,7 @@ Deno.test("createDataset() reports missing credentials as a LoginError", async (
   await withStubbedConfig(async () => {
     await withResponse({ errors: notLoggedInErrors }, async () => {
       const error = await assertRejects(
-        () => createDataset(true, false),
+        () => createDataset(true, false, false),
         LoginError,
         "You must be logged in to create a dataset.",
       )
@@ -111,7 +111,7 @@ Deno.test("createDataset() keeps only the messages for other failures", async ()
       { errors: [{ message: "Dataset does not exist" }] },
       async () => {
         const error = await assertRejects(
-          () => createDataset(true, false),
+          () => createDataset(true, false, false),
           ResponseError,
         )
         assertEquals(error.message, "Dataset does not exist")
