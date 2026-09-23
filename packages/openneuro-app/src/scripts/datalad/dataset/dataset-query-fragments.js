@@ -278,6 +278,7 @@ export const DATASET_METADATA = gql`
       modalities
       affirmedDefaced
       affirmedConsent
+      syntheticDataset
     }
   }
 `

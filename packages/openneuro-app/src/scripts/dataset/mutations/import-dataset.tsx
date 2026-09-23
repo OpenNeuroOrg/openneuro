@@ -22,6 +22,7 @@ interface ImportDatasetMutationProps {
   url: string
   affirmedDefaced: boolean
   affirmedConsent: boolean
+  syntheticDataset: boolean
   disabled?: boolean | null
 }
 
@@ -30,6 +31,7 @@ export const ImportDatasetMutation: React.FC<ImportDatasetMutationProps> = ({
   disabled,
   affirmedDefaced,
   affirmedConsent,
+  syntheticDataset,
 }) => {
   const [importStarted, setImportStarted] = useState(false)
   const [importFailed, setImportFailed] = useState(false)
@@ -48,6 +50,7 @@ export const ImportDatasetMutation: React.FC<ImportDatasetMutationProps> = ({
         const datasetId = await createDatasetMutation({
           affirmedDefaced,
           affirmedConsent,
+          syntheticDataset,
         })
         try {
           await ImportDataset({

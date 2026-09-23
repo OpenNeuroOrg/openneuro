@@ -38,7 +38,11 @@ const UploadMetadata = () => {
             values={values}
             onChange={handleInputChange}
             hideDisabled={true}
-            hiddenFields={["affirmedConsent", "affirmedDefaced"]}
+            hiddenFields={[
+              "affirmedConsent",
+              "affirmedDefaced",
+              "syntheticDataset",
+            ]}
             hasEdit={true}
           />
           <br />

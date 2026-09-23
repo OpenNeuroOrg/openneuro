@@ -130,6 +130,7 @@ export class UploadClient extends React.Component {
               dataset: { draft, metadata },
             },
           }) => {
+            const syntheticDataset = metadata?.syntheticDataset || null
             const affirmedDefaced = metadata?.affirmedDefaced || null
             const affirmedConsent = metadata?.affirmedConsent || null
             // Create a new array of files to upload
@@ -153,7 +154,11 @@ export class UploadClient extends React.Component {
               files: addPathToFiles(filesToUpload, path),
               selectedFiles: files,
             }, () => {
-              this.upload({ affirmedDefaced, affirmedConsent })
+              this.upload({
+                affirmedDefaced,
+                affirmedConsent,
+                syntheticDataset,
+              })
             })
           },
         )
@@ -214,7 +219,7 @@ export class UploadClient extends React.Component {
       this.state.metadata,
     )
 
-  upload = ({ affirmedDefaced, affirmedConsent }) => {
+  upload = ({ affirmedDefaced, affirmedConsent, syntheticDataset }) => {
     // Track the start of uploads
     gtag.event({
       category: "Upload",
@@ -235,6 +240,7 @@ export class UploadClient extends React.Component {
         .createDataset(this.props.client)({
           affirmedDefaced,
           affirmedConsent,
+          syntheticDataset,
         })
         .then((datasetId) => {
           // Note chain to this._addFiles

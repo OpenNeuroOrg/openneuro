@@ -32,6 +32,7 @@ export const SUBMIT_METADATA = gql`
       modalities
       affirmedDefaced
       affirmedConsent
+      syntheticDataset
     }
   }
 `
