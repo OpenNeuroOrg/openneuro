@@ -2,10 +2,11 @@ import { gql } from "@apollo/client"
 import { SUBMIT_METADATA } from "../dataset/mutations/submit-metadata.jsx"
 
 export const CREATE_DATASET = gql`
-  mutation createDataset($affirmedDefaced: Boolean, $affirmedConsent: Boolean) {
+  mutation createDataset($affirmedDefaced: Boolean!, $affirmedConsent: Boolean!, $syntheticDataset: Boolean) {
     createDataset(
       affirmedDefaced: $affirmedDefaced
       affirmedConsent: $affirmedConsent
+      syntheticDataset: $syntheticDataset
     ) {
       id
     }
@@ -34,11 +35,11 @@ export const FINISH_UPLOAD = gql`
  * @param {object} client Apollo client
  */
 export const createDataset =
-  (client) => ({ affirmedDefaced, affirmedConsent }) => {
+  (client) => ({ affirmedDefaced, affirmedConsent, syntheticDataset }) => {
     return client
       .mutate({
         mutation: CREATE_DATASET,
-        variables: { affirmedDefaced, affirmedConsent },
+        variables: { affirmedDefaced, affirmedConsent, syntheticDataset },
         errorPolicy: "all",
       })
       .then(({ data }) => data.createDataset.id)

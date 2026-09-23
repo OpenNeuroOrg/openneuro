@@ -14,6 +14,7 @@ export const testAffirmed = (affirmedDefaced, affirmedConsent) =>
 const UploadDisclaimer = () => {
   const [affirmedDefaced, setAffirmedDefaced] = useState(false)
   const [affirmedConsent, setAffirmedConsent] = useState(false)
+  const [syntheticDataset, setSyntheticDataset] = useState(false)
   return (
     <UploaderContext.Consumer>
       {(uploader) => (
@@ -21,9 +22,13 @@ const UploadDisclaimer = () => {
           <UploadDisclaimerInput
             affirmedDefaced={affirmedDefaced}
             affirmedConsent={affirmedConsent}
-            onChange={({ affirmedDefaced, affirmedConsent }) => {
+            syntheticDataset={syntheticDataset}
+            onChange={(
+              { affirmedDefaced, affirmedConsent, syntheticDataset },
+            ) => {
               setAffirmedDefaced(affirmedDefaced)
               setAffirmedConsent(affirmedConsent)
+              setSyntheticDataset(syntheticDataset)
             }}
           />
           <span className="message">
@@ -34,8 +39,13 @@ const UploadDisclaimer = () => {
                   ...uploader.metadata,
                   affirmedDefaced,
                   affirmedConsent,
+                  syntheticDataset,
                 })
-                uploader.upload({ affirmedDefaced, affirmedConsent })
+                uploader.upload({
+                  affirmedDefaced,
+                  affirmedConsent,
+                  syntheticDataset,
+                })
               }}
               disabled={testAffirmed(affirmedDefaced, affirmedConsent)}
             >
