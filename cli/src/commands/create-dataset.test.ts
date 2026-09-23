@@ -6,6 +6,7 @@ Deno.test("createDatasetAffirmed - with affirmed options", async () => {
   const datasetId = await createDatasetAffirmed({
     affirmDefaced: true,
     affirmConsent: false,
+    syntheticDataset: false,
   }, () => Promise.resolve("ds000001"))
   assertEquals(datasetId, "ds000001")
 })
@@ -15,7 +16,12 @@ Deno.test("createDatasetAffirmed - with prompt", async () => {
     {},
     () => Promise.resolve("ds000002"),
     // @ts-expect-error Mocked method
-    () => Promise.resolve({ affirmedDefaced: true, affirmedConsent: false }),
+    () =>
+      Promise.resolve({
+        affirmedDefaced: true,
+        affirmedConsent: false,
+        syntheticDataset: false,
+      }),
   )
   assertEquals(datasetId, "ds000002")
 })
@@ -28,7 +34,11 @@ Deno.test("createDatasetAffirmed - with prompt and no affirmation", async () => 
         () => Promise.resolve("ds000003"),
         // @ts-expect-error Mocked method
         () =>
-          Promise.resolve({ affirmedDefaced: false, affirmedConsent: false }),
+          Promise.resolve({
+            affirmedDefaced: false,
+            affirmedConsent: false,
+            syntheticDataset: false,
+          }),
       )
     },
     CreateDatasetAffirmedError,

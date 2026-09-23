@@ -56,8 +56,8 @@ function request(query: string, variables = {}): Promise<Response> {
 }
 
 const createDatasetMutation = `
-mutation($affirmedConsent: Boolean, $affirmedDefaced: Boolean) {
-  createDataset(affirmedConsent: $affirmedConsent, affirmedDefaced: $affirmedDefaced) {
+mutation($affirmedConsent: Boolean!, $affirmedDefaced: Boolean!, $syntheticDataset: Boolean) {
+  createDataset(affirmedConsent: $affirmedConsent, affirmedDefaced: $affirmedDefaced, syntheticDataset: $syntheticDataset) {
     id
   }
 }
@@ -81,10 +81,12 @@ interface CreateDatasetMutationResponse {
 export async function createDataset(
   affirmedDefaced: boolean,
   affirmedConsent: boolean,
+  syntheticDataset: boolean,
 ): Promise<string> {
   const res = await request(createDatasetMutation, {
     affirmedDefaced,
     affirmedConsent,
+    syntheticDataset,
   })
   const body: CreateDatasetMutationResponse = await res.json()
   if (body.errors) {
