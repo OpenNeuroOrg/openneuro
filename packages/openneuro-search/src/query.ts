@@ -32,6 +32,7 @@ export const INDEX_DATASET_FRAGMENT = gql`
       seniorAuthor
       grantFunderName
       grantIdentifier
+      syntheticDataset
     }
     latestSnapshot {
       id

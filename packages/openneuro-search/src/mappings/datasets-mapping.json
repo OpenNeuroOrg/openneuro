@@ -25,7 +25,8 @@
         "openneuroPaperDOI": { "type": "keyword" },
         "seniorAuthor": { "type": "keyword" },
         "grantFunderName": { "type": "keyword" },
-        "grantIdentifier": { "type": "keyword" }
+        "grantIdentifier": { "type": "keyword" },
+        "syntheticDataset": { "type": "boolean" }
       }
     },
     "latestSnapshot": {
