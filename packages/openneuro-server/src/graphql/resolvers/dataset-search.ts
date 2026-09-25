@@ -104,7 +104,7 @@ export const datasetSearchConnection = async (
   await getElasticClient().search({
     index: elasticIndex,
     size: first,
-    q: `${q} AND public:true`,
+    q: `${q} AND public:true AND metadata.syntheticDataset:false`,
     ...requestBody,
   })
   return elasticRelayConnection(requestBody, searchId, first)
