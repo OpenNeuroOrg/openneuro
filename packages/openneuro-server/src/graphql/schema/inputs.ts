@@ -235,5 +235,8 @@ export const DatasetSearchInput = builder.inputType("DatasetSearchInput", {
       description: "Filter datasets by a specific user's permissions",
     }),
     publicOnly: t.boolean({ description: "Filter to only public datasets" }),
+    syntheticDataset: t.boolean({
+      description: "Filter datasets by syntheticDataset metadata",
+    }),
   }),
 })
