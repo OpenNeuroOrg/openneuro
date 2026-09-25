@@ -165,6 +165,7 @@ export interface SearchParams {
   bidsDatasetType_available: string[]
   bidsDatasetType_selected: string | null
   brain_initiative: string | null
+  syntheticDataset: boolean
 }
 
 const initialSearchParams: SearchParams = {
@@ -213,6 +214,7 @@ const initialSearchParams: SearchParams = {
   bidsDatasetType_available: ["raw", "derivative"],
   bidsDatasetType_selected: null,
   brain_initiative: null,
+  syntheticDataset: false,
 }
 
 export default initialSearchParams

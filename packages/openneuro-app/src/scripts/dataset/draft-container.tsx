@@ -144,7 +144,7 @@ const DraftContainer: React.FC<DraftContainerProps> = ({ dataset }) => {
           hasDraftChanges={hasDraftChanges}
           hasSnapshot={dataset.snapshots.length !== 0}
         />
-        {dataset.metadata.syntheticDataset && <DatasetAlertSynthetic />}
+        {dataset.metadata?.syntheticDataset && <DatasetAlertSynthetic />}
         <div className="dataset-content container">
           <div className="grid grid-between">
             <div className="col col-lg col-8">

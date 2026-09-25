@@ -75,6 +75,18 @@ export const setDefaultSearch = (
       }),
     )
   }
+  if (
+    query.has("synthetic") ||
+    query.has("syntheticDataset") ||
+    query.has("syntheticDatasets")
+  ) {
+    setSearchParams(
+      (prevState: SearchParams): SearchParams => ({
+        ...prevState,
+        syntheticDataset: true,
+      }),
+    )
+  }
 
   const modalitiesWithSecondaries = {
     mri: ["mri", "Diffusion", "Structural", "Functional", "ASL Perfusion"],

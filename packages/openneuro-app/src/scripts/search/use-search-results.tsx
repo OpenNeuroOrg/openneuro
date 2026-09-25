@@ -45,6 +45,7 @@ const searchQuery = gql`
           }
           metadata {
             ages
+            syntheticDataset
           }
           latestSnapshot {
             size
@@ -152,6 +153,7 @@ export const useSearchResults = () => {
     sortBy_selected,
     bidsDatasetType_selected,
     brain_initiative,
+    syntheticDataset,
   } = searchParams
 
   // Build the structured search input
@@ -175,6 +177,7 @@ export const useSearchResults = () => {
   if (studyDomains.length) query.studyDomains = studyDomains
   if (bidsDatasetType_selected) query.bidsDatasetType = bidsDatasetType_selected
   if (brain_initiative) query.brainInitiative = true
+  if (syntheticDataset) query.syntheticDataset = true
   if (bodyParts.length) query.bodyParts = bodyParts
   if (scannerManufacturers.length) {
     query.scannerManufacturers = scannerManufacturers

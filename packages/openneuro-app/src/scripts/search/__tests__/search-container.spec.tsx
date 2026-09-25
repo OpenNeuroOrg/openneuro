@@ -61,5 +61,22 @@ describe("SearchContainer component", () => {
       )
       expect(context.datasetType_selected).toEqual("My Bookmarks")
     })
+    it('sets syntheticDataset to true with "synthetic" parameter', () => {
+      let context = {
+        syntheticDataset: false,
+      }
+      const setContext = vi.fn().mockImplementation((arg) => {
+        context = arg(context)
+      })
+      setDefaultSearch(
+        "",
+        "",
+        false,
+        context,
+        setContext,
+        new URLSearchParams("synthetic"),
+      )
+      expect(context.syntheticDataset).toEqual(true)
+    })
   })
 })

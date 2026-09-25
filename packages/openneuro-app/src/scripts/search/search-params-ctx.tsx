@@ -96,6 +96,7 @@ export const removeFilterItem = (setSearchParams) => (param, value) => {
     case "section_selected":
     case "species_selected":
     case "bidsDatasetType_selected":
+    case "syntheticDataset":
       updatedParams[param] = initialSearchParams[param]
       setSearchParams((prevState) => ({
         ...prevState,
@@ -155,6 +156,7 @@ export const getSelectParams = ({
   tracerRadionuclides,
   bidsDatasetType_selected,
   brain_initiative,
+  syntheticDataset,
 }) => ({
   keywords,
   modality_selected,
@@ -178,6 +180,7 @@ export const getSelectParams = ({
   tracerRadionuclides,
   bidsDatasetType_selected,
   brain_initiative,
+  syntheticDataset,
 })
 
 /**
