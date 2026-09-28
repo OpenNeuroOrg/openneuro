@@ -31,9 +31,9 @@ export const SyntheticDatasetSelect: FC<SyntheticDatasetSelectProps> = ({
         startOpen={Boolean(syntheticDataset)}
       >
         <FacetSelect
-          selected={syntheticDataset ? "Synthetic" : null}
+          selected={syntheticDataset ? "Synthetic Only" : null}
           setSelected={setSynthetic}
-          items={["Synthetic"]}
+          items={["Synthetic Only"]}
         />
       </AccordionTab>
     </AccordionWrap>

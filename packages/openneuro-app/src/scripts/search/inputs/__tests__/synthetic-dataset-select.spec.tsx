@@ -34,7 +34,7 @@ describe("SyntheticDatasetSelect Component", () => {
     renderWithContext(<SyntheticDatasetSelect />)
     const accordionTitle = screen.getByText("Synthetic Datasets")
     fireEvent.click(accordionTitle)
-    expect(screen.getByText("Synthetic")).toBeInTheDocument()
+    expect(screen.getByText("Synthetic Only")).toBeInTheDocument()
   })
 
   it("toggles syntheticDataset to true when selected", () => {
@@ -47,7 +47,7 @@ describe("SyntheticDatasetSelect Component", () => {
     const accordionTitle = screen.getByText("Synthetic Datasets")
     fireEvent.click(accordionTitle)
 
-    const option = screen.getByText("Synthetic")
+    const option = screen.getByText("Synthetic Only")
     fireEvent.click(option)
 
     expect(setSearchParams).toHaveBeenCalled()
@@ -64,7 +64,7 @@ describe("SyntheticDatasetSelect Component", () => {
     })
 
     // When syntheticDataset is true, it starts open
-    const option = screen.getByText("Synthetic")
+    const option = screen.getByText("Synthetic Only")
     expect(option).toBeInTheDocument()
     expect(option.closest("li")).toHaveClass("selected-facet")
 

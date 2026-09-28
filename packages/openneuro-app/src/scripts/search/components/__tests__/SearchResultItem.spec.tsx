@@ -127,7 +127,7 @@ describe("SearchResultItem", () => {
       </MemoryRouter>,
     )
 
-    expect(screen.getByText("syntheticDataset")).toBeInTheDocument()
+    expect(screen.getByText("Synthetic Data")).toBeInTheDocument()
   })
 
   it("does not render syntheticDataset label when metadata.syntheticDataset is false", () => {
@@ -142,7 +142,7 @@ describe("SearchResultItem", () => {
       </MemoryRouter>,
     )
 
-    expect(screen.queryByText("syntheticDataset")).not.toBeInTheDocument()
+    expect(screen.queryByText("Synthetic Data")).not.toBeInTheDocument()
   })
 
   it("does not render syntheticDataset label when metadata.syntheticDataset is undefined", () => {
@@ -157,6 +157,6 @@ describe("SearchResultItem", () => {
       </MemoryRouter>,
     )
 
-    expect(screen.queryByText("syntheticDataset")).not.toBeInTheDocument()
+    expect(screen.queryByText("Synthetic Data")).not.toBeInTheDocument()
   })
 })

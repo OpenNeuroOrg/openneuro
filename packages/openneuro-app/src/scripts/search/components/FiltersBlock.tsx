@@ -136,7 +136,7 @@ export const FiltersBlock = ({
             type="Synthetic"
             item={{
               param: "syntheticDataset",
-              value: "syntheticDataset",
+              value: "Synthetic Only",
             }}
             removeFilterItem={removeFilterItem()}
           />

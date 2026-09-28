@@ -287,7 +287,7 @@ export const SearchResultItem = ({
           )}
           {node.metadata?.syntheticDataset && (
             <div className="col col-12 dataset-synthetic-tag text-right">
-              <small>syntheticDataset</small>
+              <small>Synthetic Data</small>
             </div>
           )}
           <div className="col col-12 result-actions">
