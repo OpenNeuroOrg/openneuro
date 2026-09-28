@@ -27,6 +27,7 @@ import {
   SpeciesSelect,
   StudyDomainInput,
   SubjectCountRangeInput,
+  SyntheticDatasetSelect,
   TaskInput,
   TracerNames,
   TracerRadionuclides,
@@ -272,6 +273,7 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
             <SpeciesSelect />
             <SectionSelect />
             <StudyDomainInput />
+            <SyntheticDatasetSelect />
             {(portalContent === undefined ||
               portalContent?.modality === "PET") && (
               <>
