@@ -25,6 +25,7 @@ export const ImportDataset: React.VoidFunctionComponent = () => {
   const url = useQuery().get("url")
   const [affirmedDefaced, setAffirmedDefaced] = useState(false)
   const [affirmedConsent, setAffirmedConsent] = useState(false)
+  const [syntheticDataset, setSyntheticDataset] = useState(false)
   return (
     <ImportDatasetPageStyle>
       <div className="container">
@@ -39,9 +40,13 @@ export const ImportDataset: React.VoidFunctionComponent = () => {
           <UploadDisclaimerInput
             affirmedDefaced={affirmedDefaced}
             affirmedConsent={affirmedConsent}
-            onChange={({ affirmedDefaced, affirmedConsent }): void => {
+            syntheticDataset={syntheticDataset}
+            onChange={(
+              { affirmedDefaced, affirmedConsent, syntheticDataset },
+            ): void => {
               setAffirmedDefaced(affirmedDefaced)
               setAffirmedConsent(affirmedConsent)
+              setSyntheticDataset(syntheticDataset)
             }}
           />
           <ImportDatasetMutation
@@ -49,6 +54,7 @@ export const ImportDataset: React.VoidFunctionComponent = () => {
             disabled={testAffirmed(affirmedDefaced, affirmedConsent)}
             affirmedDefaced={affirmedDefaced}
             affirmedConsent={affirmedConsent}
+            syntheticDataset={false}
           />
         </LoggedIn>
         <LoggedOut>
