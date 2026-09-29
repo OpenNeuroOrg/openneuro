@@ -27,6 +27,7 @@ import {
   SpeciesSelect,
   StudyDomainInput,
   SubjectCountRangeInput,
+  SyntheticDatasetSelect,
   TaskInput,
   TracerNames,
   TracerRadionuclides,
@@ -72,6 +73,18 @@ export const setDefaultSearch = (
       (prevState: SearchParams): SearchParams => ({
         ...prevState,
         datasetType_selected: "My Bookmarks",
+      }),
+    )
+  }
+  if (
+    query.has("synthetic") ||
+    query.has("syntheticDataset") ||
+    query.has("syntheticDatasets")
+  ) {
+    setSearchParams(
+      (prevState: SearchParams): SearchParams => ({
+        ...prevState,
+        syntheticDataset: true,
       }),
     )
   }
@@ -260,6 +273,7 @@ const SearchContainer: FC<SearchContainerProps> = ({ portalContent }) => {
             <SpeciesSelect />
             <SectionSelect />
             <StudyDomainInput />
+            <SyntheticDatasetSelect />
             {(portalContent === undefined ||
               portalContent?.modality === "PET") && (
               <>

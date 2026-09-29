@@ -43,6 +43,7 @@ export interface SearchResultItemProps {
     }
     metadata: {
       ages: number[]
+      syntheticDataset?: boolean
     }
     latestSnapshot: {
       id: string
@@ -282,6 +283,11 @@ export const SearchResultItem = ({
           {MyDatasetsPage && (
             <div className="col col-12 dataset-permissions-tag text-right">
               <small>Access: {datasetPerms}</small>
+            </div>
+          )}
+          {node.metadata?.syntheticDataset && (
+            <div className="col col-12 dataset-synthetic-tag text-right">
+              <small>Synthetic Data</small>
             </div>
           )}
           <div className="col col-12 result-actions">

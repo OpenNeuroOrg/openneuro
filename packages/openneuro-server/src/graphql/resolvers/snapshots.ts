@@ -232,6 +232,19 @@ export const participantCount = (obj, { modality }) => {
       },
       {
         $lookup: {
+          from: "metadatas",
+          localField: "id",
+          foreignField: "datasetId",
+          as: "metadata",
+        },
+      },
+      {
+        $match: {
+          "metadata.syntheticDataset": { $ne: true },
+        },
+      },
+      {
+        $lookup: {
           from: "snapshots",
           localField: "id",
           foreignField: "datasetId",

@@ -34,6 +34,7 @@ export interface FiltersBlockProps {
   loading: boolean
   bidsDatasetType_selected?: FacetSelectValueType
   brain_initiative: string
+  syntheticDataset?: boolean
 }
 
 export const FiltersBlock = ({
@@ -64,6 +65,7 @@ export const FiltersBlock = ({
   numTotalResults,
   bidsDatasetType_selected,
   brain_initiative,
+  syntheticDataset,
 }: FiltersBlockProps) => {
   const ageRangeIsNull =
     JSON.stringify(ageRange) === JSON.stringify([null, null])
@@ -125,6 +127,16 @@ export const FiltersBlock = ({
             item={{
               param: "bidsDatasetType_selected",
               value: bidsDatasetType_selected,
+            }}
+            removeFilterItem={removeFilterItem()}
+          />
+        )}
+        {syntheticDataset && (
+          <FilterListItem
+            type="Synthetic"
+            item={{
+              param: "syntheticDataset",
+              value: "Synthetic Only",
             }}
             removeFilterItem={removeFilterItem()}
           />

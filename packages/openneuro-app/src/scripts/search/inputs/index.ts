@@ -18,6 +18,9 @@ import ScannerManufacturersModelNames from "./pet/scannerManufacturersModelNames
 import TracerNames from "./pet/tracerNames_input"
 import TracerRadionuclides from "./pet/tracerRadionuclides_input"
 import SortBySelect from "./sort-by-select"
+import SyntheticDatasetSelect, {
+  SyntheticDatasetsSelect,
+} from "./synthetic-dataset-select"
 
 export {
   AgeRangeInput,
@@ -37,6 +40,8 @@ export {
   SpeciesSelect,
   StudyDomainInput,
   SubjectCountRangeInput,
+  SyntheticDatasetSelect,
+  SyntheticDatasetsSelect,
   TaskInput,
   TracerNames,
   TracerRadionuclides,

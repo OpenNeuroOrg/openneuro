@@ -55,6 +55,8 @@ export const metadata = async (
     ages: summary?.subjectMetadata?.map((s) => s.age as number),
     modalities: summary?.modalities || [],
     dataProcessed: summary?.dataProcessed || null,
+    // Ensure syntheticDataset is a boolean, defaulting to false if not present
+    syntheticDataset: record?.syntheticDataset || false,
   }
 }
 

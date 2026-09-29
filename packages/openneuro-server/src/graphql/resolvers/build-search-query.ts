@@ -26,6 +26,7 @@ interface DatasetSearchInput {
   tracerRadionuclides?: string[]
   userId?: string
   publicOnly?: boolean
+  syntheticDataset?: boolean
 }
 
 const KNOWN_SPECIES = ["Human", "Rat", "Mouse"]
@@ -385,7 +386,18 @@ export const buildElasticQuery = (
     })
   }
 
-  const isEmpty = Object.keys(query.bool).length === 0
+  const isEmpty = Object.keys(query.bool).length === 0 &&
+    !input.syntheticDataset
+
+  if (input.syntheticDataset) {
+    addClause(query, "filter", {
+      term: { "metadata.syntheticDataset": true },
+    })
+  } else {
+    addClause(query, "filter", {
+      term: { "metadata.syntheticDataset": false },
+    })
+  }
 
   return { query, isEmpty }
 }

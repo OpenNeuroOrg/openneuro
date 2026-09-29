@@ -32,7 +32,12 @@ const client = new ApolloClient({
     typePolicies: {
       Query: {
         fields: {
-          advancedSearch: relayStylePagination(),
+          advancedSearch: relayStylePagination([
+            "query",
+            "allDatasets",
+            "datasetType",
+            "datasetStatus",
+          ]),
         },
       },
       DatasetFile: {

@@ -1,16 +1,6 @@
 import { gql, useQuery } from "@apollo/client"
 
-const PUBLIC_DATASETS_COUNT = gql`
-  query publicDatasetCount($modality: String) {
-    datasets(filterBy: { public: true }, modality: $modality) {
-      pageInfo {
-        count
-      }
-    }
-  }
-`
-
-const BRAIN_INITIATIVE_COUNT = gql`
+export const ADVANCED_SEARCH_COUNT = gql`
   query AdvancedSearch($query: DatasetSearchInput!, $datasetType: String!) {
     advancedSearch(query: $query, datasetType: $datasetType) {
       pageInfo {
@@ -23,15 +13,17 @@ const BRAIN_INITIATIVE_COUNT = gql`
 const usePublicDatasetsCount = (modality?: string) => {
   const isNIH = modality === "nih"
 
-  const query = isNIH ? BRAIN_INITIATIVE_COUNT : PUBLIC_DATASETS_COUNT
   const variables = isNIH
     ? {
       query: { brainInitiative: true },
-      datasetType: "public",
+      datasetType: "All Public",
     }
-    : { modality }
+    : {
+      query: modality ? { modality } : {},
+      datasetType: "All Public",
+    }
 
-  return useQuery(query, {
+  return useQuery(ADVANCED_SEARCH_COUNT, {
     variables,
     errorPolicy: "all",
   })

@@ -143,7 +143,7 @@ export const SnapshotContainer: React.FC<SnapshotContainerProps> = ({
             hasEdit={hasEdit}
           />
         )}
-        {dataset.metadata.syntheticDataset && <DatasetAlertSynthetic />}
+        {dataset.metadata?.syntheticDataset && <DatasetAlertSynthetic />}
         <div className="dataset-content container">
           <div className="grid grid-between">
             <div className="col col-lg col-8">
