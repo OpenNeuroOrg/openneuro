@@ -257,6 +257,30 @@ const metadataFields = (hasEdit) => {
       },
     },
     {
+      key: "syntheticDataset",
+      label: "Contains Synthetic Data",
+      component: SelectInput,
+      additionalProps: {
+        options: [
+          {
+            value: true,
+            text: "true",
+          },
+          {
+            value: false,
+            text: "false",
+          },
+        ],
+        hasBooleanValues: true,
+        showOptionOther: false,
+        disabled: false,
+        annotated: false,
+        required: false,
+        warningOnChange:
+          "Details: Indicates whether the dataset contains synthetic data.",
+      },
+    },
+    {
       key: "affirmedDefaced",
       label: "Uploader Affirmed Structural Scans Are Defaced",
       component: SelectInput,
@@ -302,30 +326,6 @@ const metadataFields = (hasEdit) => {
         required: false,
         warningOnChange:
           "Details: Affirms or refutes that I have explicit participant consent and ethical authorization to publish structural scans without defacing",
-      },
-    },
-    {
-      key: "syntheticDataset",
-      label: "Contains Synthetic Data",
-      component: SelectInput,
-      additionalProps: {
-        options: [
-          {
-            value: true,
-            text: "true",
-          },
-          {
-            value: false,
-            text: "false",
-          },
-        ],
-        hasBooleanValues: true,
-        showOptionOther: false,
-        disabled: false,
-        annotated: false,
-        required: false,
-        warningOnChange:
-          "Details: Indicates whether the dataset contains synthetic data.",
       },
     },
   ]

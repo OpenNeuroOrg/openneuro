@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import MetadataForm from "../dataset/mutations/metadata-form.jsx"
 import UploaderContext from "./uploader-context.js"
 import styled from "@emotion/styled"
@@ -9,56 +9,49 @@ const Container = styled.div`
   }
 `
 
+const defaultMetadata = {
+  associatedPaperDOI: "",
+  species: "",
+  studyLongitudinal: "",
+  studyDomain: "",
+  trialCount: undefined,
+  studyDesign: "",
+  openneuroPaperDOI: "",
+  dxStatus: "",
+  grantFunderName: "",
+  grantIdentifier: "",
+}
+
 const UploadMetadata = () => {
-  const [values, setValues] = useState({
-    associatedPaperDOI: "",
-    species: "",
-    studyLongitudinal: "",
-    studyDomain: "",
-    trialCount: undefined,
-    studyDesign: "",
-    openneuroPaperDOI: "",
-    dxStatus: "",
-    grantFunderName: "",
-    grantIdentifier: "",
-  })
+  const uploader = useContext(UploaderContext)
+  const [values, setValues] = useState(() => ({
+    ...defaultMetadata,
+    ...uploader?.metadata,
+  }))
+
+  useEffect(() => {
+    uploader?.captureMetadata?.(values)
+  }, [])
+
   const handleInputChange = (name, value) => {
     const newValues = {
       ...values,
       [name]: value,
     }
     setValues(newValues)
+    uploader?.captureMetadata?.(newValues)
   }
 
   return (
-    <UploaderContext.Consumer>
-      {(uploader) => (
-        <Container className="message fade-in">
-          <MetadataForm
-            values={values}
-            onChange={handleInputChange}
-            hideDisabled={true}
-            hiddenFields={[
-              "affirmedConsent",
-              "affirmedDefaced",
-              "syntheticDataset",
-            ]}
-            hasEdit={true}
-          />
-          <br />
-          <button
-            className="fileupload-btn btn-blue"
-            disabled={false}
-            onClick={() => {
-              uploader.captureMetadata(values)
-              uploader.setLocation("/upload/disclaimer")
-            }}
-          >
-            Continue
-          </button>
-        </Container>
-      )}
-    </UploaderContext.Consumer>
+    <Container className="message fade-in">
+      <MetadataForm
+        values={values}
+        onChange={handleInputChange}
+        hideDisabled={true}
+        hasEdit={true}
+      />
+    </Container>
   )
 }
+
 export default UploadMetadata
