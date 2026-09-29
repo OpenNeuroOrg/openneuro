@@ -8,6 +8,7 @@ import { CreateDatasetAffirmedError } from "../error.ts"
 interface CreateDatasetOptions {
   affirmDefaced?: boolean
   affirmConsent?: boolean
+  syntheticDataset?: boolean
   [otherOptions: string]: unknown
 }
 
@@ -23,8 +24,13 @@ export async function createDatasetAffirmed(
 ) {
   let affirmedDefaced = options.affirmDefaced || false
   let affirmedConsent = options.affirmConsent || false
+  let syntheticDataset = options.syntheticDataset || false
   if (affirmedDefaced || affirmedConsent) {
-    return await graphqlCreateDataset(affirmedDefaced, affirmedConsent)
+    return await graphqlCreateDataset(
+      affirmedDefaced,
+      affirmedConsent,
+      syntheticDataset,
+    )
   } else {
     const affirmed = await cliffyPrompt([
       {
@@ -39,11 +45,22 @@ export async function createDatasetAffirmed(
           "I have explicit participant consent and ethical authorization to publish structural scans without defacing.",
         type: Confirm,
       },
+      {
+        name: "syntheticDataset",
+        message:
+          "Does this dataset contain synthetic data? If so, please contact the OpenNeuro team with the support menu to discuss sharing prior to uploading.",
+        type: Confirm,
+      },
     ])
     affirmedDefaced = affirmed.affirmedDefaced || false
     affirmedConsent = affirmed.affirmedConsent || false
+    syntheticDataset = affirmed.syntheticDataset || false
     if (affirmedDefaced || affirmedConsent) {
-      return await graphqlCreateDataset(affirmedDefaced, affirmedConsent)
+      return await graphqlCreateDataset(
+        affirmedDefaced,
+        affirmedConsent,
+        syntheticDataset,
+      )
     } else {
       throw new CreateDatasetAffirmedError(
         "You must affirm defacing or consent to upload without defacing to continue.",
