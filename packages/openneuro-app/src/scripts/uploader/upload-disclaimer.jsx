@@ -1,3 +1,4 @@
+import PropTypes from "prop-types"
 import React, { useContext, useEffect, useState } from "react"
 import UploaderContext from "./uploader-context.js"
 import { UploadDisclaimerInput } from "./upload-disclaimer-input"
@@ -11,7 +12,7 @@ export const testAffirmed = (affirmedDefaced, affirmedConsent) =>
     (!affirmedDefaced && affirmedConsent)
   )
 
-const UploadDisclaimer = () => {
+const UploadDisclaimer = ({ showInputs = false }) => {
   const uploader = useContext(UploaderContext)
   const [affirmedDefaced, setAffirmedDefaced] = useState(false)
   const [affirmedConsent, setAffirmedConsent] = useState(false)
@@ -25,18 +26,25 @@ const UploadDisclaimer = () => {
     }
   }, [uploader?.location?.pathname])
 
+  const affirmedDefacedEffective =
+    affirmedDefaced || Boolean(uploader?.metadata?.affirmedDefaced)
+  const affirmedConsentEffective =
+    affirmedConsent || Boolean(uploader?.metadata?.affirmedConsent)
+  const syntheticDatasetEffective =
+    syntheticDataset || Boolean(uploader?.metadata?.syntheticDataset)
+
   const isMetadataDisplayed =
     uploader?.location?.pathname === "/upload/metadata"
   const disabled = !isMetadataDisplayed ||
-    testAffirmed(affirmedDefaced, affirmedConsent)
+    testAffirmed(affirmedDefacedEffective, affirmedConsentEffective)
 
   return (
     <div className="disclaimer fade-in">
       <UploadDisclaimerInput
-        affirmedDefaced={affirmedDefaced}
-        affirmedConsent={affirmedConsent}
-        syntheticDataset={syntheticDataset}
-        showInputs={false}
+        affirmedDefaced={affirmedDefacedEffective}
+        affirmedConsent={affirmedConsentEffective}
+        syntheticDataset={syntheticDatasetEffective}
+        showInputs={showInputs}
         onChange={(
           { affirmedDefaced, affirmedConsent, syntheticDataset },
         ) => {
@@ -51,14 +59,14 @@ const UploadDisclaimer = () => {
           onClick={() => {
             uploader?.captureMetadata?.({
               ...uploader.metadata,
-              affirmedDefaced,
-              affirmedConsent,
-              syntheticDataset,
+              affirmedDefaced: affirmedDefacedEffective,
+              affirmedConsent: affirmedConsentEffective,
+              syntheticDataset: syntheticDatasetEffective,
             })
             uploader?.upload?.({
-              affirmedDefaced,
-              affirmedConsent,
-              syntheticDataset,
+              affirmedDefaced: affirmedDefacedEffective,
+              affirmedConsent: affirmedConsentEffective,
+              syntheticDataset: syntheticDatasetEffective,
             })
           }}
           disabled={disabled}
@@ -70,4 +78,9 @@ const UploadDisclaimer = () => {
   )
 }
 
+UploadDisclaimer.propTypes = {
+  showInputs: PropTypes.bool,
+}
+
 export default UploadDisclaimer
+

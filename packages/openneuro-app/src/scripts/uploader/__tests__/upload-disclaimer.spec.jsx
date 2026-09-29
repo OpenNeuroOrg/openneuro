@@ -24,7 +24,7 @@ describe("testAffirmed", () => {
 })
 
 describe("UploadDisclaimer", () => {
-  const setup = (locationPath = "/upload", overrides = {}) => {
+  const setup = (locationPath = "/upload", overrides = {}, showInputs = true) => {
     const contextValue = {
       location: { pathname: locationPath },
       metadata: {},
@@ -35,7 +35,7 @@ describe("UploadDisclaimer", () => {
 
     const utils = render(
       <UploaderContext.Provider value={contextValue}>
-        <UploadDisclaimer />
+        <UploadDisclaimer showInputs={showInputs} />
       </UploaderContext.Provider>,
     )
 
@@ -192,4 +192,74 @@ describe("UploadDisclaimer", () => {
       syntheticDataset: false,
     })
   })
+
+  it("activates 'I Agree' button on /upload/metadata when affirmedDefaced is already in metadata", () => {
+    setup(
+      "/upload/metadata",
+      {
+        metadata: { affirmedDefaced: true },
+      },
+      false,
+    )
+
+    const agreeButton = screen.getByRole("button", { name: /I Agree/i })
+    expect(agreeButton).toBeEnabled()
+  })
+
+  it("activates 'I Agree' button on /upload/metadata when affirmedConsent is already in metadata", () => {
+    setup(
+      "/upload/metadata",
+      {
+        metadata: { affirmedConsent: true },
+      },
+      false,
+    )
+
+    const agreeButton = screen.getByRole("button", { name: /I Agree/i })
+    expect(agreeButton).toBeEnabled()
+  })
+
+  it("disables 'I Agree' button on /upload/metadata when both affirmedDefaced and affirmedConsent are in metadata", () => {
+    setup(
+      "/upload/metadata",
+      {
+        metadata: { affirmedDefaced: true, affirmedConsent: true },
+      },
+      false,
+    )
+
+    const agreeButton = screen.getByRole("button", { name: /I Agree/i })
+    expect(agreeButton).toBeDisabled()
+  })
+
+  it("calls captureMetadata and upload with metadata affirmed values when 'I Agree' is clicked without disclaimer inputs", async () => {
+    const user = userEvent.setup()
+    const { contextValue } = setup(
+      "/upload/metadata",
+      {
+        metadata: { species: "Human", affirmedDefaced: true },
+      },
+      false,
+    )
+
+    const agreeButton = screen.getByRole("button", { name: /I Agree/i })
+    expect(agreeButton).toBeEnabled()
+
+    await act(async () => {
+      await user.click(agreeButton)
+    })
+
+    expect(contextValue.captureMetadata).toHaveBeenCalledWith({
+      species: "Human",
+      affirmedDefaced: true,
+      affirmedConsent: false,
+      syntheticDataset: false,
+    })
+    expect(contextValue.upload).toHaveBeenCalledWith({
+      affirmedDefaced: true,
+      affirmedConsent: false,
+      syntheticDataset: false,
+    })
+  })
 })
+
