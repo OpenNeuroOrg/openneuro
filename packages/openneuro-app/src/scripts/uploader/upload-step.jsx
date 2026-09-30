@@ -5,7 +5,7 @@ const UploadStepCol = ({ active, text }) => {
   const activeClasses = active
     ? ["upload-step", "upload-step-active"]
     : ["upload-step"]
-  return <div className={"col col-3 " + activeClasses.join(" ")}>{text}</div>
+  return <div className={"col col-4 " + activeClasses.join(" ")}>{text}</div>
 }
 
 UploadStepCol.propTypes = {
@@ -26,10 +26,6 @@ const UploadStep = ({ location }) => (
     <UploadStepCol
       text="Step 3: Metadata"
       active={location.pathname === "/upload/metadata"}
-    />
-    <UploadStepCol
-      text="Step 4: Accept Terms"
-      active={location.pathname === "/upload/disclaimer"}
     />
   </div>
 )

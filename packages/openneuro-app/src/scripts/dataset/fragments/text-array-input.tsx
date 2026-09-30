@@ -100,7 +100,7 @@ const TextArrayInput = ({
       <Input
         ref={input}
         name={name}
-        value={value.join(", ")}
+        value={value?.join(", ") || ""}
         disabled={disabled}
         required={required}
         onFocus={focusInput}

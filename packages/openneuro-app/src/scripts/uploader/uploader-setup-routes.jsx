@@ -10,15 +10,21 @@ import UploadDisclaimer from "./upload-disclaimer.jsx"
 
 const UploaderSetupRoutes = (props) => (
   <UploaderModal {...props}>
-    <UploadStep location={props.location} />
-    <div className="tasks-col fade-in">
-      <div id="upload-tabs" className="uploader">
-        <Routes location={props.location}>
-          <Route path="/upload" element={<UploadSelect />} />
-          <Route path="/upload/issues" element={<UploadIssues />} />
-          <Route path="/upload/metadata" element={<UploadMetadata />} />
-          <Route path="/upload/disclaimer" element={<UploadDisclaimer />} />
-        </Routes>
+    <div className="grid">
+      <div className="col col-6 col-md">
+        <UploadStep location={props.location} />
+        <div className="tasks-col fade-in">
+          <div id="upload-tabs" className="uploader">
+            <Routes location={props.location}>
+              <Route path="/upload" element={<UploadSelect />} />
+              <Route path="/upload/issues" element={<UploadIssues />} />
+              <Route path="/upload/metadata" element={<UploadMetadata />} />
+            </Routes>
+          </div>
+        </div>
+      </div>
+      <div className="col col-6 col-md">
+        <UploadDisclaimer />
       </div>
     </div>
   </UploaderModal>

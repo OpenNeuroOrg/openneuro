@@ -41,6 +41,7 @@ export const ImportDataset: React.VoidFunctionComponent = () => {
             affirmedDefaced={affirmedDefaced}
             affirmedConsent={affirmedConsent}
             syntheticDataset={syntheticDataset}
+            showInputs={true}
             onChange={(
               { affirmedDefaced, affirmedConsent, syntheticDataset },
             ): void => {

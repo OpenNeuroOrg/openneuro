@@ -17,6 +17,11 @@ const UploadSelect = () => {
               we require that all scan data be defaced before publishing a
               dataset.
             </p>
+            <p>
+              If your dataset contains synthetic data, please contact the
+              OpenNeuro team before uploading. Synthetic data is accepted on a
+              case by case basis.
+            </p>
             Select a{" "}
             <a
               href="http://bids.neuroimaging.io"
@@ -25,7 +30,7 @@ const UploadSelect = () => {
             >
               BIDS dataset
             </a>{" "}
-            to upload
+            to upload.
             <FileSelect onChange={uploader.selectFiles} disabled={disabled} />
             {noEmail && (
               <p>

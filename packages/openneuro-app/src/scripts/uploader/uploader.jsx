@@ -208,9 +208,12 @@ export class UploadClient extends React.Component {
   }
 
   captureMetadata = (metadata) => {
-    this.setState({
-      metadata,
-    })
+    this.setState((prevState) => ({
+      metadata: {
+        ...prevState.metadata,
+        ...metadata,
+      },
+    }))
   }
 
   uploadMetadata = () =>
