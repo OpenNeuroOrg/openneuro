@@ -15,8 +15,9 @@ export function Terms(): React.ReactElement {
         agree to destroy any key linking the personal identity of research
         participants to the subject codes used in the dataset. The imaging data
         being uploaded are original recordings and are not simulated or
-        synthesized, except insofar as simulation is required to anonymize the
-        data, for example, for defacing/refacing MRI images.
+        synthesized, except insofar as necessary for anonymization (such as
+        defacing/refacing MRI images) or the OpenNeuro team has been contacted
+        to discuss an exception for synthetic data.
       </p>
       <p>
         I agree that this dataset will become publicly available under a{" "}
