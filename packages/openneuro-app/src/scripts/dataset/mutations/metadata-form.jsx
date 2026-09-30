@@ -4,6 +4,7 @@ import TextInput from "../fragments/text-input"
 import SelectInput from "../fragments/select-input"
 import NumberInput from "../fragments/number-input"
 import TextArrayInput from "../fragments/text-array-input"
+import CheckboxInput from "../fragments/checkbox-input"
 import styled from "@emotion/styled"
 
 const Form = styled.form({
@@ -249,7 +250,7 @@ const metadataFields = (hasEdit) => {
     {
       key: "dataProcessed",
       label: "Has Processed Data",
-      component: TextInput,
+      component: CheckboxInput,
       additionalProps: {
         disabled: true,
         annotated: true,
@@ -259,73 +260,36 @@ const metadataFields = (hasEdit) => {
     {
       key: "syntheticDataset",
       label: "Contains Synthetic Data",
-      component: SelectInput,
+      description: "Indicates whether the dataset contains synthetic data.",
+      component: CheckboxInput,
       additionalProps: {
-        options: [
-          {
-            value: true,
-            text: "true",
-          },
-          {
-            value: false,
-            text: "false",
-          },
-        ],
-        hasBooleanValues: true,
-        showOptionOther: false,
         disabled: false,
         annotated: false,
         required: false,
-        warningOnChange:
-          "Details: Indicates whether the dataset contains synthetic data.",
       },
     },
     {
       key: "affirmedDefaced",
       label: "Uploader Affirmed Structural Scans Are Defaced",
-      component: SelectInput,
+      description:
+        "Affirms or refutes that all structural scans have been defaced, obscuring any tissue on or near the face that could potentially be used to reconstruct the facial structure.",
+      component: CheckboxInput,
       additionalProps: {
-        options: [
-          {
-            value: true,
-            text: "true",
-          },
-          {
-            value: false,
-            text: "false",
-          },
-        ],
-        hasBooleanValues: true,
-        showOptionOther: false,
         disabled: false,
         annotated: false,
         required: false,
-        warningOnChange:
-          "Details: Affirms or refutes that all structural scans have been defaced, obscuring any tissue on or near the face that could potentially be used to reconstruct the facial structure.",
       },
     },
     {
       key: "affirmedConsent",
       label: "Uploader Affirmed Consent To Publish Scans Without Defacing",
-      component: SelectInput,
+      description:
+        "Affirms or refutes that I have explicit participant consent and ethical authorization to publish structural scans without defacing",
+      component: CheckboxInput,
       additionalProps: {
-        options: [
-          {
-            value: true,
-            text: "true",
-          },
-          {
-            value: false,
-            text: "false",
-          },
-        ],
-        hasBooleanValues: true,
-        showOptionOther: false,
         disabled: false,
         annotated: false,
         required: false,
-        warningOnChange:
-          "Details: Affirms or refutes that I have explicit participant consent and ethical authorization to publish structural scans without defacing",
       },
     },
   ]
@@ -372,6 +336,8 @@ const MetadataForm = ({
             key,
             label,
             hoverText,
+            description,
+            extendedDescription,
             component: FieldComponent,
             additionalProps,
             transformValue,
@@ -381,6 +347,7 @@ const MetadataForm = ({
           <FieldComponent
             name={key}
             label={label}
+            description={description || extendedDescription}
             hoverText={hoverText}
             value={transformValue
               ? transformValue(values?.[key])
