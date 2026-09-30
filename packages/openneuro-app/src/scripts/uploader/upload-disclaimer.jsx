@@ -26,12 +26,12 @@ const UploadDisclaimer = ({ showInputs = false }) => {
     }
   }, [uploader?.location?.pathname])
 
-  const affirmedDefacedEffective =
-    affirmedDefaced || Boolean(uploader?.metadata?.affirmedDefaced)
-  const affirmedConsentEffective =
-    affirmedConsent || Boolean(uploader?.metadata?.affirmedConsent)
-  const syntheticDatasetEffective =
-    syntheticDataset || Boolean(uploader?.metadata?.syntheticDataset)
+  const affirmedDefacedEffective = affirmedDefaced ||
+    Boolean(uploader?.metadata?.affirmedDefaced)
+  const affirmedConsentEffective = affirmedConsent ||
+    Boolean(uploader?.metadata?.affirmedConsent)
+  const syntheticDatasetEffective = syntheticDataset ||
+    Boolean(uploader?.metadata?.syntheticDataset)
 
   const isMetadataDisplayed =
     uploader?.location?.pathname === "/upload/metadata"
@@ -74,6 +74,12 @@ const UploadDisclaimer = ({ showInputs = false }) => {
           I Agree
         </button>
       </span>
+      {disabled && (
+        <span className="message">
+          Please affirm defacing or participant consent under metadata before
+          proceeding.
+        </span>
+      )}
     </div>
   )
 }
@@ -83,4 +89,3 @@ UploadDisclaimer.propTypes = {
 }
 
 export default UploadDisclaimer
-
