@@ -18,6 +18,7 @@ import { resetWorktree } from "./resetWorktree.ts"
 import { getDefault } from "./getDefault.ts"
 import { transformEol } from "./transformEol.ts"
 import { CommitBuilder } from "./commitBuilder.ts"
+import { pushBranch } from "./pushBranch.ts"
 
 let context: GitWorkerContext
 let attributesCache: GitAnnexAttributes
@@ -486,13 +487,12 @@ async function push() {
     )
     logger.info("Pushing git-annex branch...")
     // Git push git-annex
-    await git.push(
-      { ...context.config(), ref: "git-annex", onMessage: console.log },
-    )
+    await pushBranch(context, logger, "git-annex")
   }
 
   // Check if remote HEAD matches local HEAD
-  const remoteRef = `refs/remotes/origin/${await getDefault(context)}`
+  const defaultBranch = await getDefault(context)
+  const remoteRef = `refs/remotes/origin/${defaultBranch}`
   const localHeadOid = await git.resolveRef({
     ...context.config(),
     ref: "HEAD",
@@ -519,9 +519,7 @@ async function push() {
   } else {
     console.log("Pushing changes...")
     // Git push
-    await git.push(
-      { ...context.config(), onMessage: console.log },
-    )
+    await pushBranch(context, logger, defaultBranch)
     const url = new URL(context.repoEndpoint)
     console.log(
       `Upload complete, visit your dataset at ${url.protocol}//${url.host}/datasets/${context.datasetId}`,
