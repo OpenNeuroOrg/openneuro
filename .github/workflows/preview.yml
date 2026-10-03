@@ -1,0 +1,112 @@
+name: PR preview
+on:
+  pull_request:
+    # "closed" is included so the action can delete the preview when the PR ends.
+    types: [opened, synchronize, reopened, closed]
+
+# One deployment per PR at a time; a newer push supersedes an in-flight one.
+concurrency: preview-${{ github.ref }}
+
+permissions:
+  contents: read
+
+jobs:
+  preview:
+    name: Build and publish PR preview
+    # Fork-only. Upstream deploys through its own infrastructure.
+    if: github.repository != 'OpenNeuroOrg/openneuro'
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write # the action commits the build to the gh-pages branch
+      pull-requests: write # ...and posts the preview link as a comment
+    env:
+      # Each PR is served from its own subdirectory, so the base path is
+      # per-PR rather than the repository root.
+      BASE_PATH: /${{ github.event.repository.name }}/pr-preview/pr-${{ github.event.number }}/
+      # The preview is static: it talks to an already-deployed OpenNeuro API.
+      # Read-only browsing works; login does not, since the auth cookie is
+      # scoped to that API's domain.
+      PREVIEW_API_URL: https://openneuro.org
+    steps:
+      - uses: actions/checkout@v7.0.1
+
+      - uses: actions/setup-node@v7
+        if: github.event.action != 'closed'
+        with:
+          node-version: 24.x
+          cache: yarn
+
+      - name: Install
+        if: github.event.action != 'closed'
+        run: yarn install
+
+      - name: Build app
+        if: github.event.action != 'closed'
+        run: yarn build --base "$BASE_PATH"
+        working-directory: packages/openneuro-app
+
+      - name: Add static config and SPA fallback
+        if: github.event.action != 'closed'
+        working-directory: packages/openneuro-app/src/dist
+        run: |
+          # Normally served by openneuro-server at /crn/config.js. Reuse the
+          # target instance's public config so every key the app reads is set,
+          # but keep preview traffic out of its analytics and Sentry environment.
+          mkdir -p crn
+          curl -fsSL --retry 3 "$PREVIEW_API_URL/crn/config.js" > crn/config.js
+          cat >> crn/config.js <<'EOF'
+
+          window.OpenNeuroConfig.GOOGLE_TRACKING_IDS = ""
+          window.OpenNeuroConfig.ENVIRONMENT = "preview"
+          window.OpenNeuroConfig.ORCID_API_ENDPOINT ||= "https://pub.orcid.org"
+          EOF
+          # The config is an absolute external import in every chunk, and the
+          # favicon is an absolute link; point both inside the preview.
+          sed -i "s#\"/crn/config.js\"#\"${BASE_PATH}crn/config.js\"#g" assets/*.js
+          sed -i "s#\"/favicon.ico\"#\"${BASE_PATH}favicon.ico\"#" index.html
+          cp ../assets/favicon.ico favicon.ico
+          # The Font Awesome kit is restricted to the production domain and is
+          # refused here, so swap it for the free build (with v4 name shims).
+          npm pack -s @fortawesome/fontawesome-free@6.7.2 --pack-destination "$RUNNER_TEMP"
+          mkdir -p fontawesome
+          tar xzf "$RUNNER_TEMP/fortawesome-fontawesome-free-6.7.2.tgz" -C fontawesome --strip-components=1 package/css package/webfonts
+          perl -0pi -e 's#<script\s+src="https://kit\.fontawesome\.com/[^"]+"[^>]*>\s*</script>##' index.html
+          sed -i "s#<head>#<head><link rel=\"stylesheet\" href=\"${BASE_PATH}fontawesome/css/all.min.css\"><link rel=\"stylesheet\" href=\"${BASE_PATH}fontawesome/css/v4-shims.min.css\">#" index.html
+          # Deep links reach the site-root 404.html (below), which redirects
+          # here with the route in ?__route=; restore it before the app boots.
+          sed -i "s#<head>#<head><script>(function(){var m=location.search.match(/[?\&]__route=([^\&]*)/);if(m)history.replaceState(null,'','${BASE_PATH}'+decodeURIComponent(m[1])+location.hash)})()</script>#" index.html
+
+      - name: Deploy preview
+        uses: rossjrw/pr-preview-action@9f77b1d057b494e662c50b8ca40ecc63f21e0887 # v1.6.2
+        with:
+          source-dir: packages/openneuro-app/src/dist
+          preview-branch: gh-pages
+
+      - name: Write site-root 404 page
+        if: github.event.action != 'closed'
+        # Pages only serves the 404.html at the site root, never one inside a
+        # preview directory, so this one forwards deep links to their preview.
+        run: |
+          mkdir -p "$RUNNER_TEMP/pages-root"
+          cat > "$RUNNER_TEMP/pages-root/404.html" <<'EOF'
+          <!doctype html>
+          <meta charset="utf-8">
+          <title>Not found</title>
+          <script>
+            var m = location.pathname.match(/^(\/[^/]+\/pr-preview\/pr-\d+\/)(.+)$/)
+            if (m && !/[?&]__route=/.test(location.search)) {
+              location.replace(m[1] + "?__route=" + encodeURIComponent(m[2] + location.search) + location.hash)
+            } else {
+              document.write("Not found")
+            }
+          </script>
+          EOF
+
+      - name: Deploy site-root 404 page
+        if: github.event.action != 'closed'
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: ${{ runner.temp }}/pages-root
+          branch: gh-pages
+          clean: false
+          commit-message: Update site-root 404 redirect
