@@ -1,5 +1,5 @@
 import React, { useContext } from "react"
-import { useParams } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import FileView from "./file-view.jsx"
 import { apiPath } from "./file"
 import styled from "@emotion/styled"
@@ -21,6 +21,33 @@ const PathBreadcrumb = styled.div`
     margin-right: 10px;
   }
 `
+
+const BackLink = styled.div`
+  margin-bottom: 15px;
+`
+
+interface FileDisplayBackLinkProps {
+  datasetId: string
+  snapshotTag?: string
+}
+
+/**
+ * Link to exit the file viewer and return to the dataset page
+ */
+export const FileDisplayBackLink = (
+  { datasetId, snapshotTag }: FileDisplayBackLinkProps,
+) => {
+  const datasetPath = snapshotTag
+    ? `/datasets/${datasetId}/versions/${snapshotTag}`
+    : `/datasets/${datasetId}`
+  return (
+    <BackLink>
+      <Link to={datasetPath}>
+        <i className="fa fa-arrow-left" /> Back to dataset
+      </Link>
+    </BackLink>
+  )
+}
 
 interface FileDisplayBreadcrumbProps {
   filePath: string
@@ -87,6 +114,7 @@ const FileDisplay = (
     }
     return (
       <DatasetPageBorder className="dataset-form display-file">
+        <FileDisplayBackLink datasetId={datasetId} snapshotTag={snapshotTag} />
         <PathBreadcrumb>
           <FileDisplayBreadcrumb filePath={filePath} />
         </PathBreadcrumb>
@@ -98,6 +126,7 @@ const FileDisplay = (
       apiPath(datasetId, snapshotTag, filePath)
     return (
       <DatasetPageBorder className="dataset-form display-file">
+        <FileDisplayBackLink datasetId={datasetId} snapshotTag={snapshotTag} />
         <PathBreadcrumb>
           <FileDisplayBreadcrumb filePath={filePath} />
         </PathBreadcrumb>
