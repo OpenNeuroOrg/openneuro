@@ -18,14 +18,22 @@ else:
         queue_name = 'taskiq'
     else:
         queue_name = f'worker-{worker_id}'
+
+    # Shared Redis connection arguments to avoid connection failures with stale TCP connections in Kubernetes
+    redis_connection_kwargs = {
+        'socket_connect_timeout': 10,
+        'socket_timeout': 10,
+        'socket_keepalive': True,
+        'health_check_interval': 30,
+        'retry_on_timeout': True,
+    }
+
     result_backend = RedisAsyncResultBackend(
-        redis_url=redis_url,
-        result_ex_time=5000,
+        redis_url=redis_url, result_ex_time=5000, **redis_connection_kwargs
     )
     broker = (
         RedisStreamBroker(
-            url=redis_url,
-            queue_name=queue_name,
+            url=redis_url, queue_name=queue_name, **redis_connection_kwargs
         )
         .with_result_backend(result_backend)
         .with_middlewares(
