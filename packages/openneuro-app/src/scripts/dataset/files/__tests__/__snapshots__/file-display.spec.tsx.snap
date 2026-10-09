@@ -1,0 +1,18 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`FileDisplayBackLink > renders the back link 1`] = `
+<DocumentFragment>
+  <div
+    class="css-9s9ecg"
+  >
+    <a
+      href="/datasets/ds000001"
+    >
+      <i
+        class="fa fa-arrow-left"
+      />
+       Back to dataset
+    </a>
+  </div>
+</DocumentFragment>
+`;
