@@ -1,6 +1,7 @@
 import json
 import os
 from unittest.mock import AsyncMock, Mock, call, patch
+from botocore.exceptions import ClientError
 
 import falcon
 
@@ -8,6 +9,8 @@ from datalad_service.tasks.publish import (
     export_dataset,
     create_remotes,
     set_remote_public,
+    update_object_tag,
+    set_s3_access_tag_worker,
 )
 from datalad_service.common.annex import is_git_annex_remote
 
@@ -86,3 +89,126 @@ async def test_set_remote_public(mock_set_s3_access_tag, mock_run_check, new_dat
     mock_set_s3_access_tag.assert_called_once_with(
         os.path.basename(new_dataset.path), 'public'
     )
+
+
+def test_update_object_tag_skips_when_already_matching():
+    client = Mock()
+    client.get_object_tagging.return_value = {
+        'TagSet': [{'Key': 'access', 'Value': 'public'}]
+    }
+    updated = update_object_tag(
+        client, 'my-bucket', 'ds000001/file.txt', 'v1', 'public'
+    )
+    assert updated is False
+    client.put_object_tagging.assert_not_called()
+
+
+def test_update_object_tag_updates_when_mismatched():
+    client = Mock()
+    client.get_object_tagging.return_value = {
+        'TagSet': [{'Key': 'access', 'Value': 'private'}]
+    }
+    updated = update_object_tag(
+        client, 'my-bucket', 'ds000001/file.txt', 'v1', 'public'
+    )
+    assert updated is True
+    client.put_object_tagging.assert_called_once_with(
+        Bucket='my-bucket',
+        Key='ds000001/file.txt',
+        VersionId='v1',
+        Tagging={'TagSet': [{'Key': 'access', 'Value': 'public'}]},
+    )
+
+
+def test_update_object_tag_preserves_other_tags():
+    client = Mock()
+    client.get_object_tagging.return_value = {
+        'TagSet': [
+            {'Key': 'custom', 'Value': 'val'},
+            {'Key': 'access', 'Value': 'private'},
+        ]
+    }
+    updated = update_object_tag(
+        client, 'my-bucket', 'ds000001/file.txt', 'v1', 'public'
+    )
+    assert updated is True
+    client.put_object_tagging.assert_called_once_with(
+        Bucket='my-bucket',
+        Key='ds000001/file.txt',
+        VersionId='v1',
+        Tagging={
+            'TagSet': [
+                {'Key': 'custom', 'Value': 'val'},
+                {'Key': 'access', 'Value': 'public'},
+            ]
+        },
+    )
+
+
+def test_update_object_tag_handles_no_such_tag_set():
+    client = Mock()
+    client.exceptions.ClientError = ClientError
+    client.get_object_tagging.side_effect = ClientError(
+        {'Error': {'Code': 'NoSuchTagSet', 'Message': 'No tags'}},
+        'GetObjectTagging',
+    )
+    updated = update_object_tag(
+        client, 'my-bucket', 'ds000001/file.txt', 'v1', 'public'
+    )
+    assert updated is True
+    client.put_object_tagging.assert_called_once_with(
+        Bucket='my-bucket',
+        Key='ds000001/file.txt',
+        VersionId='v1',
+        Tagging={'TagSet': [{'Key': 'access', 'Value': 'public'}]},
+    )
+
+
+def test_update_object_tag_handles_missing_object():
+    client = Mock()
+    client.exceptions.ClientError = ClientError
+    client.get_object_tagging.side_effect = ClientError(
+        {'Error': {'Code': 'NoSuchKey', 'Message': 'Key does not exist'}},
+        'GetObjectTagging',
+    )
+    updated = update_object_tag(
+        client, 'my-bucket', 'ds000001/file.txt', 'v1', 'public'
+    )
+    assert updated is False
+    client.put_object_tagging.assert_not_called()
+
+
+@patch('datalad_service.tasks.publish.boto3.client')
+@patch('datalad_service.tasks.publish.get_s3_bucket', return_value='test-bucket')
+def test_set_s3_access_tag_worker(mock_get_bucket, mock_boto_client):
+    mock_s3 = Mock()
+    mock_boto_client.return_value = mock_s3
+
+    paginator = Mock()
+    # 2 pages: page 1 has 2 versions (1 in sync, 1 needs update), page 2 has 1 version (needs update)
+    paginator.paginate.return_value = [
+        {
+            'Versions': [
+                {'Key': 'ds000001/f1', 'VersionId': 'v1'},
+                {'Key': 'ds000001/f2', 'VersionId': 'v2'},
+            ]
+        },
+        {
+            'Versions': [
+                {'Key': 'ds000001/f3', 'VersionId': 'v3'},
+            ]
+        },
+    ]
+    mock_s3.get_paginator.return_value = paginator
+
+    def mock_get_tagging(Bucket, Key, VersionId):
+        if Key == 'ds000001/f1':
+            return {'TagSet': [{'Key': 'access', 'Value': 'public'}]}
+        return {'TagSet': [{'Key': 'access', 'Value': 'private'}]}
+
+    mock_s3.get_object_tagging.side_effect = mock_get_tagging
+
+    stats = set_s3_access_tag_worker('ds000001', 'public')
+
+    assert stats == {'scanned': 3, 'updated': 2, 'in_sync': 1}
+    assert mock_s3.put_object_tagging.call_count == 2
