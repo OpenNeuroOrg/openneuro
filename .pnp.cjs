@@ -10562,7 +10562,7 @@ const RAW_RUNTIME_STATE =
           ["diffie-hellman", "npm:5.0.3"],\
           ["hash-base", "npm:3.0.5"],\
           ["inherits", "npm:2.0.4"],\
-          ["pbkdf2", "npm:3.1.5"],\
+          ["pbkdf2", "npm:3.1.7"],\
           ["public-encrypt", "npm:4.0.3"],\
           ["randombytes", "npm:2.1.0"],\
           ["randomfill", "npm:1.0.4"]\
@@ -19325,7 +19325,7 @@ const RAW_RUNTIME_STATE =
           ["browserify-aes", "npm:1.2.0"],\
           ["evp_bytestokey", "npm:1.0.3"],\
           ["parse-asn1", "npm:5.1.9"],\
-          ["pbkdf2", "npm:3.1.5"],\
+          ["pbkdf2", "npm:3.1.7"],\
           ["safe-buffer", "npm:5.2.1"]\
         ],\
         "linkType": "HARD"\
@@ -19680,12 +19680,12 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["pbkdf2", [\
-      ["npm:3.1.5", {\
-        "packageLocation": "./.yarn/cache/pbkdf2-npm-3.1.5-bc7245df26-ce1c9a2ebb.zip/node_modules/pbkdf2/",\
+      ["npm:3.1.7", {\
+        "packageLocation": "./.yarn/cache/pbkdf2-npm-3.1.7-e103ee58fb-3b8cf9d991.zip/node_modules/pbkdf2/",\
         "packageDependencies": [\
           ["create-hash", "npm:1.2.0"],\
           ["create-hmac", "npm:1.1.7"],\
-          ["pbkdf2", "npm:3.1.5"],\
+          ["pbkdf2", "npm:3.1.7"],\
           ["ripemd160", "npm:2.0.3"],\
           ["safe-buffer", "npm:5.2.1"],\
           ["sha.js", "npm:2.4.12"],\
