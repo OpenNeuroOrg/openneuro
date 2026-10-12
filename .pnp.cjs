@@ -10221,7 +10221,7 @@ const RAW_RUNTIME_STATE =
           ["conventional-changelog-writer", "npm:6.0.1"],\
           ["conventional-commits-filter", "npm:3.0.0"],\
           ["dateformat", "npm:3.0.3"],\
-          ["handlebars", "npm:4.7.9"],\
+          ["handlebars", "npm:4.7.10"],\
           ["json-stringify-safe", "npm:5.0.1"],\
           ["meow", "npm:8.1.2"],\
           ["semver", "npm:7.7.3"],\
@@ -13620,10 +13620,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["handlebars", [\
-      ["npm:4.7.9", {\
-        "packageLocation": "./.yarn/cache/handlebars-npm-4.7.9-46c3c68605-e755433d65.zip/node_modules/handlebars/",\
+      ["npm:4.7.10", {\
+        "packageLocation": "./.yarn/cache/handlebars-npm-4.7.10-2577c6a17a-e7df9b9986.zip/node_modules/handlebars/",\
         "packageDependencies": [\
-          ["handlebars", "npm:4.7.9"],\
+          ["handlebars", "npm:4.7.10"],\
           ["minimist", "npm:1.2.8"],\
           ["neo-async", "npm:2.6.2"],\
           ["source-map", "npm:0.6.1"],\
