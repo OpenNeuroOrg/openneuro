@@ -335,17 +335,40 @@ def update_object_tag(client, s3_bucket, key, version_id, value):
     except client.exceptions.ClientError as e:
         if e.response['Error']['Code'] == 'NoSuchTagSet':
             tag_set = []
+        elif e.response['Error']['Code'] in ('NoSuchKey', 'NoSuchVersion'):
+            logger.warning(
+                f'Object {key} (version {version_id}) not found while getting tags: {e}'
+            )
+            return False
         else:
             raise
+
+    # Check if access tag already matches desired value (declarative drift check)
+    current_access = next(
+        (tag['Value'] for tag in tag_set if tag['Key'] == 'access'), None
+    )
+    if current_access == value:
+        return False
+
     # Remove any existing access tag and add the new one
     new_tags = [tag for tag in tag_set if tag['Key'] != 'access']
     new_tags.append({'Key': 'access', 'Value': value})
-    client.put_object_tagging(
-        Bucket=s3_bucket,
-        Key=key,
-        VersionId=version_id,
-        Tagging={'TagSet': new_tags},
-    )
+    try:
+        client.put_object_tagging(
+            Bucket=s3_bucket,
+            Key=key,
+            VersionId=version_id,
+            Tagging={'TagSet': new_tags},
+        )
+    except client.exceptions.ClientError as e:
+        if e.response['Error']['Code'] in ('NoSuchKey', 'NoSuchVersion'):
+            logger.warning(
+                f'Object {key} (version {version_id}) not found while putting tags: {e}'
+            )
+            return False
+        else:
+            raise
+    return True
 
 
 def set_s3_access_tag_worker(dataset, value):
@@ -356,19 +379,41 @@ def set_s3_access_tag_worker(dataset, value):
     )
     s3_bucket = get_s3_bucket()
     paginator = client.get_paginator('list_object_versions')
-    futures = []
-    for page in paginator.paginate(Bucket=s3_bucket, Prefix=f'{dataset}/'):
-        for version in page.get('Versions', []):
-            key = version['Key']
-            version_id = version['VersionId']
-            futures.append(
-                tags_executor.submit(
-                    update_object_tag, client, s3_bucket, key, version_id, value
-                )
+    prefix = f'{dataset.rstrip("/")}/'
+    total_scanned = 0
+    total_updated = 0
+
+    for page in paginator.paginate(Bucket=s3_bucket, Prefix=prefix):
+        versions = page.get('Versions', [])
+        if not versions:
+            continue
+        futures = [
+            tags_executor.submit(
+                update_object_tag,
+                client,
+                s3_bucket,
+                version['Key'],
+                version['VersionId'],
+                value,
             )
-    # Make sure exceptions from the tag updates are raised
-    for future in futures:
-        future.result()
+            for version in versions
+        ]
+        # Evaluate futures page-by-page to stream progress
+        for future in futures:
+            if future.result():
+                total_updated += 1
+            total_scanned += 1
+
+    total_in_sync = total_scanned - total_updated
+    logger.info(
+        f'S3 access tag reconciliation complete for {dataset} (target={value}): '
+        f'{total_scanned} scanned, {total_updated} updated, {total_in_sync} already in sync'
+    )
+    return {
+        'scanned': total_scanned,
+        'updated': total_updated,
+        'in_sync': total_in_sync,
+    }
 
 
 @broker.task
@@ -378,4 +423,4 @@ async def set_s3_access_tag(dataset):
     loop = asyncio.get_running_loop()
     # Use the default executor for the orchestration task to avoid deadlocking
     # the tags_executor which is used for the sub-tasks.
-    await loop.run_in_executor(None, set_s3_access_tag_worker, dataset, value)
+    return await loop.run_in_executor(None, set_s3_access_tag_worker, dataset, value)

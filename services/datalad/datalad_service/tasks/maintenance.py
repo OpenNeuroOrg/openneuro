@@ -7,6 +7,7 @@ import random
 
 from datalad_service.config import DATALAD_DATASET_PATH
 from datalad_service.broker import broker
+from datalad_service.tasks.publish import set_s3_access_tag
 
 
 def dataset_factory():
@@ -40,6 +41,7 @@ def dataset_factory():
 
 gc_dataset_generator = dataset_factory()
 fsck_dataset_generator = dataset_factory()
+s3_tags_dataset_generator = dataset_factory()
 
 
 @broker.task(schedule=[{'cron': '*/15 * * * *'}])
@@ -80,3 +82,17 @@ def git_fsck_dataset(dataset_path=None):
         logging.error(
             f'`git fsck --full` failed for `{dataset_path}`: {git_fsck.stderr}'
         )
+
+
+@broker.task(schedule=[{'cron': '*/20 * * * *'}])
+async def reconcile_s3_tags_dataset(dataset_path=None):
+    """Routinely verify and reconcile S3 access tags for a dataset to match expected public/private status."""
+    try:
+        if not dataset_path:
+            dataset_path = next(s3_tags_dataset_generator)
+    except StopIteration:
+        logging.info('No datasets available for S3 tag reconciliation.')
+        return
+    dataset_id = os.path.basename(dataset_path)
+    logging.info(f'Running S3 access tag reconciliation on dataset: {dataset_id}')
+    return await set_s3_access_tag(dataset_id)
