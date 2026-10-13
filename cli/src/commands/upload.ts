@@ -12,18 +12,7 @@ import { readConfig } from "../config.ts"
 import { createDatasetAffirmed } from "./create-dataset.ts"
 import { CreateDatasetAffirmedError, LoginError } from "../error.ts"
 import validatorConfig from "../validator-config.json" with { type: "json" }
-
-async function getRepoDir(url: URL): Promise<string> {
-  const LOCAL_STORAGE_KEY = `openneuro_cli_${url.hostname}_`
-  const repoDir = localStorage.getItem(LOCAL_STORAGE_KEY)
-  if (repoDir) {
-    return repoDir
-  } else {
-    const tmpDir = await Deno.makeTempDir({ prefix: LOCAL_STORAGE_KEY })
-    localStorage.setItem(LOCAL_STORAGE_KEY, tmpDir)
-    return tmpDir
-  }
-}
+import { getRepoDir } from "../cache.ts"
 
 /**
  * Add all files to a setup git worker
