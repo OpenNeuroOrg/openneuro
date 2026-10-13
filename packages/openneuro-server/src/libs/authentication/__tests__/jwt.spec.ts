@@ -5,6 +5,8 @@ import passport from "passport"
 import {
   addJWT,
   authenticate,
+  authSuccessHandler,
+  cookieOptions,
   jwtFromRequest,
   parsedJwtFromRequest,
 } from "../jwt"
@@ -144,6 +146,35 @@ describe("jwt auth", () => {
       const next = vi.fn()
       await authenticate(req, res, next)
       expect(next).toHaveBeenCalledWith(loginErr)
+    })
+  })
+  describe("cookieOptions", () => {
+    it("sets sameSite and 7-day maxAge", () => {
+      expect(cookieOptions).toEqual({
+        sameSite: "lax",
+        maxAge: 1000 * 60 * 60 * 24 * 7,
+      })
+    })
+  })
+  describe("authSuccessHandler()", () => {
+    it("sets accessToken cookie with cookieOptions and redirects", () => {
+      const req: any = {
+        query: { state: Buffer.from("/datasets").toString("base64") },
+        user: { token: "token-123" },
+      }
+      const res: any = {
+        cookie: vi.fn(),
+        redirect: vi.fn(),
+      }
+      const next = vi.fn()
+      authSuccessHandler(req, res, next)
+      expect(res.cookie).toHaveBeenCalledWith(
+        "accessToken",
+        "token-123",
+        cookieOptions,
+      )
+      expect(res.redirect).toHaveBeenCalledWith("/datasets")
+      expect(next).toHaveBeenCalled()
     })
   })
 })

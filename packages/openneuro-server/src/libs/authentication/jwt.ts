@@ -184,7 +184,10 @@ const refreshToken = async (jwt) => {
 }
 
 // Shared options for Express response.cookie()
-const cookieOptions = { sameSite: "lax" as const }
+export const cookieOptions = {
+  sameSite: "lax" as const,
+  maxAge: 1000 * 60 * 60 * 24 * 7,
+}
 
 // Obtain client IP address from request, considering possible proxies
 function getClientIp(req: Request): string | undefined {
