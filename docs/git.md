@@ -72,9 +72,9 @@ Once the helper has been configured clone a repo:
 
 ```shell
 # You can use git clone...
-git clone https://openneuro.org/git/0/ds0000001
+git clone https://openneuro.org/api/git/ds0000001
 # Or datalad install
-datalad install https://openneuro.org/git/0/ds0000001
+datalad install https://openneuro.org/api/git/ds0000001
 cd ds0000001
 # From here you can treat this like a datalad dataset and export back to OpenNeuro to deploy changes
 ```
@@ -88,10 +88,10 @@ To push annexed files, see `Configuring OpenNeuro special remote` below.
 If you cannot use the credential helper you can manually generate a short lived key and pass this as the password for git operations. Substitute path= with the repository path for the dataset being accessed.
 
 ```bash
-openneuro git-credential fill <<EOF
+openneuro git-credential get <<EOF
 protocol=https
 host=openneuro.org
-path=/git/0/ds000001
+path=api/git/ds000001
 EOF
 ```
 
@@ -127,7 +127,7 @@ Obtain the URL from the dataset page and run initremote (or enableremote if you 
 # You should see 'VERSION 1' 'EXTENSIONS' if this is working
 echo "EXTENSIONS" | deno run -A jsr:@openneuro/cli special-remote
 # Configure the remote with the URL for your dataset
-git annex initremote openneuro type=external externaltype=openneuro encryption=none url=https://openneuro.org/git/0/ds0000001
+git annex initremote openneuro type=external externaltype=openneuro encryption=none url=https://openneuro.org/api/git/ds0000001
 ```
 
 To download annexed objects from the remote, you may need to manually ask git-annex update the local state of the OpenNeuro remote. You can force this update for all files:
