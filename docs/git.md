@@ -88,7 +88,7 @@ To push annexed files, see `Configuring OpenNeuro special remote` below.
 If you cannot use the credential helper you can manually generate a short lived key and pass this as the password for git operations. Substitute path= with the repository path for the dataset being accessed.
 
 ```bash
-openneuro git-credential fill <<EOF
+openneuro git-credential get <<EOF
 protocol=https
 host=openneuro.org
 path=/git/0/ds000001
