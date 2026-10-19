@@ -327,6 +327,14 @@ datalad<span class="w"> </span>get<span class="w"> </span>&lt;path<span class="w
 </pre></div>
 </div>
 </section>
+<section id="clearing-cache">
+<h3>Clearing cache<a class="headerlink" href="#clearing-cache" title="Link to this heading">¶</a></h3>
+<p>To clear temporary local repositories created during uploads or downloads:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>openneuro<span class="w"> </span>cache<span class="w"> </span>clean
+</pre></div>
+</div>
+<p>Use <code class="docutils literal notranslate"><span class="pre">--dry-run</span></code> to inspect which directories would be cleared without deleting them, or <code class="docutils literal notranslate"><span class="pre">--url</span> <span class="pre">&lt;url&gt;</span></code> to target a specific OpenNeuro instance.</p>
+</section>
 <section id="debugging-issues">
 <h3>Debugging issues<a class="headerlink" href="#debugging-issues" title="Link to this heading">¶</a></h3>
 <p>To debug issues - enable logging and provide this log to support or open a GitHub issue.</p>
@@ -409,6 +417,7 @@ deno<span class="w"> </span>run<span class="w"> </span>--reload<span class="w"> 
 <li><a class="reference internal" href="#usage">Usage</a><ul>
 <li><a class="reference internal" href="#uploading-datasets">Uploading datasets</a></li>
 <li><a class="reference internal" href="#downloading-datasets">Downloading datasets</a></li>
+<li><a class="reference internal" href="#clearing-cache">Clearing cache</a></li>
 <li><a class="reference internal" href="#debugging-issues">Debugging issues</a></li>
 <li><a class="reference internal" href="#implementation-notes">Implementation Notes</a></li>
 </ul>
