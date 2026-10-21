@@ -242,9 +242,7 @@ def delete_s3_sibling_executor(dataset_id, backup=False):
             )
         paginator = client.get_paginator('list_object_versions')
         object_delete_list = []
-        for response in paginator.paginate(
-            Bucket=get_s3_bucket(), Prefix=f'{dataset_id}/'
-        ):
+        for response in paginator.paginate(Bucket=s3_bucket, Prefix=f'{dataset_id}/'):
             versions = response.get('Versions', [])
             versions.extend(response.get('DeleteMarkers', []))
             object_delete_list.extend(
