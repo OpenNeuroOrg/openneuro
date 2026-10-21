@@ -13,7 +13,7 @@ Sentry.init({
   // Performance Monitoring
   tracesSampleRate: 1.0, //  Capture 100% of the transactions
   // Set sampling rate for profiling - this is relative to tracesSampleRate
-  profilesSampleRate: 1.0,
+  profileSessionSampleRate: 1.0,
   release: `openneuro-server@${version}`,
   beforeSendTransaction(event) {
     if (event.transaction === "/crn/") {
@@ -26,5 +26,4 @@ Sentry.init({
     "You do not have access to read this dataset.",
     "You do not have access to modify this dataset.",
   ],
-  sendDefaultPii: true,
 })
