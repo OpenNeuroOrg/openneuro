@@ -310,9 +310,9 @@ git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"
 <p>Most datalad or git operations will work as expected but there are a few limitations. Force pushes or unrelated history will be rejected. Annexed data is accepted but only via the git transport, using other annexes will result in unreachable files or failed validation due to missing data.</p>
 <p>Once the helper has been configured clone a repo:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># You can use git clone...</span>
-git<span class="w"> </span>clone<span class="w"> </span>https://openneuro.org/git/0/ds0000001
+git<span class="w"> </span>clone<span class="w"> </span>https://openneuro.org/api/git/ds0000001
 <span class="c1"># Or datalad install</span>
-datalad<span class="w"> </span>install<span class="w"> </span>https://openneuro.org/git/0/ds0000001
+datalad<span class="w"> </span>install<span class="w"> </span>https://openneuro.org/api/git/ds0000001
 <span class="nb">cd</span><span class="w"> </span>ds0000001
 <span class="c1"># From here you can treat this like a datalad dataset and export back to OpenNeuro to deploy changes</span>
 </pre></div>
@@ -323,10 +323,10 @@ datalad<span class="w"> </span>install<span class="w"> </span>https://openneuro.
 <section id="advanced-authentication">
 <h3>Advanced authentication<a class="headerlink" href="#advanced-authentication" title="Link to this heading">¶</a></h3>
 <p>If you cannot use the credential helper you can manually generate a short lived key and pass this as the password for git operations. Substitute path= with the repository path for the dataset being accessed.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>openneuro<span class="w"> </span>git-credential<span class="w"> </span>fill<span class="w"> </span><span class="s">&lt;&lt;EOF</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>openneuro<span class="w"> </span>git-credential<span class="w"> </span>get<span class="w"> </span><span class="s">&lt;&lt;EOF</span>
 <span class="s">protocol=https</span>
 <span class="s">host=openneuro.org</span>
-<span class="s">path=/git/0/ds000001</span>
+<span class="s">path=api/git/ds000001</span>
 <span class="s">EOF</span>
 </pre></div>
 </div>
@@ -357,7 +357,7 @@ deno<span class="w"> </span>compile<span class="w"> </span>-A<span class="w"> </
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># You should see 'VERSION 1' 'EXTENSIONS' if this is working</span>
 <span class="nb">echo</span><span class="w"> </span><span class="s2">"EXTENSIONS"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>deno<span class="w"> </span>run<span class="w"> </span>-A<span class="w"> </span>jsr:@openneuro/cli<span class="w"> </span>special-remote
 <span class="c1"># Configure the remote with the URL for your dataset</span>
-git<span class="w"> </span>annex<span class="w"> </span>initremote<span class="w"> </span>openneuro<span class="w"> </span><span class="nv">type</span><span class="o">=</span>external<span class="w"> </span><span class="nv">externaltype</span><span class="o">=</span>openneuro<span class="w"> </span><span class="nv">encryption</span><span class="o">=</span>none<span class="w"> </span><span class="nv">url</span><span class="o">=</span>https://openneuro.org/git/0/ds0000001
+git<span class="w"> </span>annex<span class="w"> </span>initremote<span class="w"> </span>openneuro<span class="w"> </span><span class="nv">type</span><span class="o">=</span>external<span class="w"> </span><span class="nv">externaltype</span><span class="o">=</span>openneuro<span class="w"> </span><span class="nv">encryption</span><span class="o">=</span>none<span class="w"> </span><span class="nv">url</span><span class="o">=</span>https://openneuro.org/api/git/ds0000001
 </pre></div>
 </div>
 <p>To download annexed objects from the remote, you may need to manually ask git-annex update the local state of the OpenNeuro remote. You can force this update for all files:</p>
