@@ -1,7 +1,6 @@
 ARG LERNA_JSON
-FROM docker.io/denoland/deno:bin-2.9.4 AS deno
-FROM ghcr.io/astral-sh/uv:0.7.11-python3.13-bookworm-slim as production
-
+FROM docker.io/denoland/deno:bin-2.9.8 AS deno
+FROM ghcr.io/astral-sh/uv:0.13.4-python3.13-trixie as production
 WORKDIR /srv
 
 RUN apt-get update \
