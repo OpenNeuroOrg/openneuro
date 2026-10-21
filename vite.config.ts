@@ -1,6 +1,8 @@
 // vite.config.ts
 import { defineConfig } from "vitest/config"
 
+const nodeMajorVersion = parseInt(process.versions.node.split(".")[0], 10)
+
 export default defineConfig({
   test: {
     globals: true,
@@ -17,5 +19,6 @@ export default defineConfig({
         ],
       },
     },
+    ...(nodeMajorVersion >= 26 ? { execArgv: ["--no-webstorage"] } : {}),
   },
 })
