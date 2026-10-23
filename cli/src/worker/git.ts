@@ -420,9 +420,8 @@ async function push() {
       await progress.render(completed)
     } else {
       let storeKeyResult = -1
-      let retries = 3
-      while (storeKeyResult === -1 && retries > 0) {
-        retries -= 1
+      const maxAttempts = 3
+      for (let attempt = 1; attempt <= maxAttempts; attempt++) {
         storeKeyResult = await storeKey(
           {
             url: context.repoEndpoint,
@@ -431,13 +430,14 @@ async function push() {
           key,
           join(context.sourcePath, relativePath),
         )
-        if (storeKeyResult === -1 && retries > 0) {
+        if (storeKeyResult !== -1) break
+        if (attempt < maxAttempts) {
           logger.warn(`Failed to transfer annex object "${key}" - retrying`)
         }
       }
       if (storeKeyResult === -1) {
         logger.error(
-          `Failed to transfer annex object "${key}" after ${retries} attempts`,
+          `Failed to transfer annex object "${key}" after ${maxAttempts} attempts`,
         )
       } else {
         completed += 1
