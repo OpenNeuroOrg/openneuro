@@ -408,7 +408,7 @@ const RAW_RUNTIME_STATE =
           ["@graphql-tools/schema", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:10.0.0"],\
           ["@types/graphql", null],\
           ["async-retry", "npm:1.3.3"],\
-          ["body-parser", "npm:2.3.0"],\
+          ["body-parser", "npm:2.4.0"],\
           ["content-type", "npm:1.0.5"],\
           ["cors", "npm:2.8.5"],\
           ["finalhandler", "npm:2.1.1"],\
@@ -8360,17 +8360,17 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["body-parser", [\
-      ["npm:2.3.0", {\
-        "packageLocation": "./.yarn/cache/body-parser-npm-2.3.0-c6f573225c-94f741ff52.zip/node_modules/body-parser/",\
+      ["npm:2.4.0", {\
+        "packageLocation": "./.yarn/cache/body-parser-npm-2.4.0-3b713870fe-e34971abf7.zip/node_modules/body-parser/",\
         "packageDependencies": [\
-          ["body-parser", "npm:2.3.0"],\
+          ["body-parser", "npm:2.4.0"],\
           ["bytes", "npm:3.1.2"],\
-          ["content-type", "npm:2.0.0"],\
+          ["content-type", "npm:2.1.0"],\
           ["debug", "virtual:e5a68e66e61c28ba8fcce7f8ce38ef829d42728b97243d64a06e24fd15823e9bcb3f5a81a0473d2019bc3e22ca5c6a8f3cf8f4ab53bb42dc8844e39b4517e226#npm:4.4.3"],\
           ["http-errors", "npm:2.0.1"],\
           ["iconv-lite", "npm:0.7.3"],\
           ["on-finished", "npm:2.4.1"],\
-          ["qs", "npm:6.16.0"],\
+          ["qs", "npm:6.16.1"],\
           ["raw-body", "npm:3.0.2"],\
           ["type-is", "npm:2.1.0"]\
         ],\
@@ -9454,6 +9454,13 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/content-type-npm-2.0.0-c790197c3d-0bbb276b79.zip/node_modules/content-type/",\
         "packageDependencies": [\
           ["content-type", "npm:2.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:2.1.0", {\
+        "packageLocation": "./.yarn/cache/content-type-npm-2.1.0-c765f38799-8aac907922.zip/node_modules/content-type/",\
+        "packageDependencies": [\
+          ["content-type", "npm:2.1.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -11570,7 +11577,7 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/express-npm-5.2.1-d1e97b99e1-4aa545d897.zip/node_modules/express/",\
         "packageDependencies": [\
           ["accepts", "npm:2.0.0"],\
-          ["body-parser", "npm:2.3.0"],\
+          ["body-parser", "npm:2.4.0"],\
           ["content-disposition", "npm:1.1.0"],\
           ["content-type", "npm:1.0.5"],\
           ["cookie", "npm:0.7.2"],\
@@ -19579,6 +19586,15 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["es-define-property", "npm:1.0.1"],\
           ["qs", "npm:6.16.0"],\
+          ["side-channel", "npm:1.1.1"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:6.16.1", {\
+        "packageLocation": "./.yarn/cache/qs-npm-6.16.1-9b77e54f12-e33e0a5cee.zip/node_modules/qs/",\
+        "packageDependencies": [\
+          ["es-define-property", "npm:1.0.1"],\
+          ["qs", "npm:6.16.1"],\
           ["side-channel", "npm:1.1.1"]\
         ],\
         "linkType": "HARD"\
