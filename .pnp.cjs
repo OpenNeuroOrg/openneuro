@@ -4265,7 +4265,7 @@ const RAW_RUNTIME_STATE =
           ["comlink", "npm:4.3.1"],\
           ["core-js", "npm:3.25.1"],\
           ["date-fns", "npm:2.24.0"],\
-          ["dompurify", "npm:3.4.16"],\
+          ["dompurify", "npm:3.4.17"],\
           ["draft-js", "virtual:4112afb9dad10978c159910bf10db9840b981b1333117623c8a4a8cf77481344a0a24735a5506e2920c18e3cfa2cc179489824b6a56c988bb070f4f60da40974#npm:0.11.7"],\
           ["email-validator", "npm:2.0.4"],\
           ["esbuild-plugin-globals", "npm:0.1.1"],\
@@ -10549,11 +10549,11 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["dompurify", [\
-      ["npm:3.4.16", {\
-        "packageLocation": "./.yarn/cache/dompurify-npm-3.4.16-5722cc146c-a571d0e2be.zip/node_modules/dompurify/",\
+      ["npm:3.4.17", {\
+        "packageLocation": "./.yarn/cache/dompurify-npm-3.4.17-925de8a518-ae03c068bd.zip/node_modules/dompurify/",\
         "packageDependencies": [\
           ["@types/trusted-types", "npm:2.0.7"],\
-          ["dompurify", "npm:3.4.16"]\
+          ["dompurify", "npm:3.4.17"]\
         ],\
         "linkType": "HARD"\
       }]\
