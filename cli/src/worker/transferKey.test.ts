@@ -93,6 +93,30 @@ Deno.test({
 })
 
 Deno.test({
+  name: "storeKey() handles 409 conflict as success",
+  async fn() {
+    const mocked = mockFetch(new Response("", { status: 409 }))
+    const testData = "test data here"
+    const tmpFilePath = await Deno.makeTempFile()
+    const textEncoder = new TextEncoder()
+    await Deno.writeFile(tmpFilePath, textEncoder.encode(testData))
+
+    try {
+      const testFileSize = testData.length
+
+      const result = await storeKey(
+        { url: "http://localhost", token: "" },
+        "key",
+        tmpFilePath,
+      )
+      assertEquals(result, testFileSize)
+    } finally {
+      mocked.restore()
+    }
+  },
+})
+
+Deno.test({
   name: "storeKey() handles upload failure",
   async fn() {
     const mocked = mockFetch(new Response("", { status: 500 }))
