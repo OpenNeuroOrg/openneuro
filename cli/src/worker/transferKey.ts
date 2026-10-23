@@ -66,7 +66,7 @@ export async function storeKey(
     }
     const request = keyRequest(state, key, requestOptions)
     const response = await fetch(request, { body: fileHandle.readable })
-    if (response.status === 200) {
+    if (response.status === 200 || response.status === 409) {
       return fileStat.size
     } else {
       return -1
