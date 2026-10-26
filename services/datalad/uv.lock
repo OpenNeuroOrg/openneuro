@@ -223,7 +223,7 @@ wheels = [
 
 [[package]]
 name = "bids-mosaic"
-version = "0.2.0"
+version = "0.3.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "matplotlib" },
@@ -234,9 +234,9 @@ dependencies = [
     { name = "pybids" },
     { name = "reportlab" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/f6/10/1e5dc5f23ec9d5dc688e0a582394cfd577137d0c0a6fd7058924f23854a5/bids_mosaic-0.2.0.tar.gz", hash = "sha256:cbef11e15ae4d2547c015b214467bad78b68d608f9c77604d731ac05aa0fcbbf", size = 12629, upload-time = "2026-08-06T22:44:59.054Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/81/f6/88c375eb54ca59a757bd1d680ae1835b517372d203a1fd2b7302bea70ec1/bids_mosaic-0.3.1.tar.gz", hash = "sha256:f4acb5124f815082748dc38739adde7a94ec7c01947310229ed32acad5ff2bac", size = 16551, upload-time = "2026-10-20T22:03:54.832Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/ef/2b/1768e24a3d32c0e2c683f49bdd3e96a56bbdb87d92437369764acddb6aa5/bids_mosaic-0.2.0-py3-none-any.whl", hash = "sha256:1c26ed26d261f93a55da3721c4974d62e2d967946f89d7513e9cfa0df00ef1d0", size = 8976, upload-time = "2026-08-06T22:44:58.099Z" },
+    { url = "https://files.pythonhosted.org/packages/c6/bb/50b469ed47ef76458e5859acddd2fc6967649bb72a1782d33e844192b064/bids_mosaic-0.3.1-py3-none-any.whl", hash = "sha256:a02601ece08bb2802b0a312ae3392c75169b803aef5f6ff372dfde52503daa29", size = 10399, upload-time = "2026-10-20T22:03:53.374Z" },
 ]
 
 [[package]]
@@ -833,7 +833,7 @@ dev = [
 requires-dist = [
     { name = "aiofiles", specifier = ">=24.1.0" },
     { name = "aioshutil", specifier = ">=1.5" },
-    { name = "bids-mosaic", specifier = ">=0.2.0" },
+    { name = "bids-mosaic", specifier = ">=0.3.1" },
     { name = "bidsschematools", specifier = ">=1.2.7" },
     { name = "boto3", specifier = ">=1.43.56" },
     { name = "charset-normalizer", specifier = ">=3.4.9" },

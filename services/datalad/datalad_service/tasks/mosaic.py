@@ -100,7 +100,6 @@ async def create_mosaic(dataset_id, dataset_path, ref, cookies=None):
                     str(out_file_path),
                     files_dict,
                     downsample=2,
-                    strict=True,
                 )
 
                 if out_file_path.exists():
