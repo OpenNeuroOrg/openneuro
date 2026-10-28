@@ -66,11 +66,24 @@ export async function storeKey(
     }
     const request = keyRequest(state, key, requestOptions)
     const response = await fetch(request, { body: fileHandle.readable })
-    if (response.status === 200) {
+    if (response.status === 200 || response.status === 409) {
       return fileStat.size
     } else {
+      const body = await response.text().catch(() => "")
+      logger.warn(
+        `Failed to store key "${key}" (${response.status} ${response.statusText})${
+          body ? `: ${body.trim()}` : ""
+        }`,
+      )
       return -1
     }
+  } catch (err) {
+    logger.warn(
+      `Error transferring key "${key}": ${
+        err instanceof Error ? err.message : String(err)
+      }`,
+    )
+    return -1
   } finally {
     try {
       fileHandle?.close()

@@ -1,6 +1,6 @@
 {
   "name": "@openneuro/app",
-  "version": "5.8.0",
+  "version": "5.10.2",
   "description": "React JS web frontend for the OpenNeuro platform.",
   "license": "MIT",
   "main": "public/client.js",
@@ -78,5 +78,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "7c9eaae04ccef2232b4d948f3ead6cc625778edf"
+  "gitHead": "f80ee550bd9c6f5de4624ecd863c651054936944"
 }

@@ -4,10 +4,10 @@ version: "2.3"
 services:
   # This dummy service provides shared configuration for all Node deps
   node:
-    image: docker.io/library/node:22.20-bullseye
+    image: docker.io/library/node:26.12.1-trixie
     env_file: ./config.env
     working_dir: /srv
-    command: bash -c 'yarn install && yarn pnpify tsc-watch -b --onSuccess "touch /watch/done"'
+    command: bash -c 'npm install --global corepack@0.36.0 && corepack enable && yarn pnpify tsc-watch -b --onSuccess "touch /watch/done"'
     healthcheck:
       test: test -f /watch/done || exit 1
       interval: 5s
@@ -27,7 +27,7 @@ services:
   app:
     extends:
       service: node
-    command: bash -c 'yarn workspace @openneuro/app start'
+    command: bash -c 'npm install --global corepack@0.36.0 && corepack enable &&yarn workspace @openneuro/app start'
     healthcheck:
       test: curl -f http://localhost/index.html || exit 1
       interval: 5s
@@ -45,7 +45,7 @@ services:
   server:
     extends:
       service: node
-    command: bash -c 'yarn workspace @openneuro/server start'
+    command: bash -c 'npm install --global corepack@0.36.0 && corepack enable &&yarn workspace @openneuro/server start'
     healthcheck:
       test: curl -f http://localhost:8111/crn || exit 1
       interval: 5s
@@ -66,7 +66,7 @@ services:
   indexer:
     extends:
       service: node
-    command: bash -c 'sleep 10 && yarn workspace @openneuro/indexer start'
+    command: bash -c 'npm install --global corepack@0.36.0 && corepack enable &&sleep 10 && yarn workspace @openneuro/indexer start'
     depends_on:
       server:
         condition: service_healthy

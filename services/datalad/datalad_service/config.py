@@ -41,3 +41,14 @@ SENTRY_DSN = os.getenv('SENTRY_DSN')
 def get_jwt_secret():
     """Returns the JWT_SECRET from environment variables."""
     return os.getenv('JWT_SECRET')
+
+
+def get_redis_connection_kwargs():
+    """Returns the shared Redis connection arguments."""
+    return {
+        'socket_connect_timeout': 10,
+        'socket_timeout': 10,
+        'socket_keepalive': True,
+        'health_check_interval': 30,
+        'retry_on_timeout': True,
+    }

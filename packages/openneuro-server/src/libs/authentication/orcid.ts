@@ -1,5 +1,5 @@
 import passport from "passport"
-import { parsedJwtFromRequest } from "./jwt"
+import { cookieOptions, parsedJwtFromRequest } from "./jwt"
 import * as Sentry from "@sentry/node"
 import { userMigration } from "./user-migration"
 import User from "../../models/user"
@@ -22,7 +22,7 @@ export function completeRequestLogin(req, res, next, user) {
     // If no email is provided for a logged in user, warn the user
     if (!req.user.email && req.user && req.user.token) {
       // Set the access token manually and redirect
-      res.cookie("accessToken", req.user.token, { sameSite: "Lax" as const })
+      res.cookie("accessToken", req.user.token, cookieOptions)
       res.redirect("/error/email-warning")
     } else {
       // Login normally

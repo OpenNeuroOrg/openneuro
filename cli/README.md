@@ -93,6 +93,15 @@ git-annex get <path or paths to download>
 # DataLad is supported as well
 datalad get <path or paths to download>
 ```
+### Clearing cache
+
+To clear temporary local repositories created during uploads or downloads:
+
+```shell
+openneuro cache clean
+```
+
+Use `--dry-run` to inspect which directories would be cleared without deleting them, or `--url <url>` to target a specific OpenNeuro instance.
 
 ### Debugging issues
 

@@ -4,7 +4,7 @@ FROM openneuro/node AS build
 WORKDIR /srv/packages/openneuro-server
 RUN yarn build
 
-FROM node:22.20-alpine
+FROM node:26.12.1-alpine
 
 WORKDIR /srv
 
@@ -18,7 +18,7 @@ COPY --from=build /srv/packages/openneuro-server/dist /srv/packages/openneuro-se
 
 HEALTHCHECK --interval=10s --retries=10 CMD curl -f 'http://localhost:8111' || exit 1
 
-ENV NODE_OPTIONS=--max_old_space_size=2048
+ENV NODE_OPTIONS="--max_old_space_size=2048 --no-experimental-require-module"
 
 # start server
 CMD ["node", "-r", "/srv/.pnp.cjs", "/srv/packages/openneuro-server/dist/server.js"]
