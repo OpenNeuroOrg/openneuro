@@ -54,6 +54,7 @@ orcid
 :caption: OpenNeuro polices
 :hidden:
 
+policy/general
 policy/data_retention
 policy/data_management_plans
 ```

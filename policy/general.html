@@ -1,0 +1,476 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../genindex.html"><link rel="search" title="Search" href="../search.html"><link rel="next" title="Data Retention Policies" href="data_retention.html"><link rel="prev" title="ORCID Logins" href="../orcid.html">
+        <link rel="prefetch" href="../_static/on-dark.svg" as="image">
+        <link rel="prefetch" href="../_static/on-light.svg" as="image">
+
+    <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
+        <title>General Policies - OpenNeuro documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">OpenNeuro  documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo only-light" src="../_static/on-dark.svg" alt="Light Logo"/>
+    <img class="sidebar-logo only-dark" src="../_static/on-light.svg" alt="Dark Logo"/>
+  </div>
+  
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../orcid.html">ORCID Logins</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">OpenNeuro polices</span></p>
+<ul class="current">
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">General Policies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_retention.html">Data Retention Policies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_management_plans.html">Data Management Plans</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced usage</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../packages/openneuro-cli.html">OpenNeuro command line interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../git.html">Git access to OpenNeuro datasets</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer resources</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../maintenance.html">Maintenance</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/OpenNeuroOrg/openneuro">Source repository (GitHub)</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="../_sources/policy/general.md.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="general-policies">
+<h1>General Policies<a class="headerlink" href="#general-policies" title="Link to this heading">¶</a></h1>
+<ul class="simple">
+<li><p>Version: 1.0.0</p></li>
+<li><p>Last updated: 2026-10-13</p></li>
+</ul>
+<section id="content">
+<h2>Content<a class="headerlink" href="#content" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong>Scope</strong>:
+Neuroimaging products of biomedical and psychological research;
+raw and derived experimental data.
+Content must not violate privacy or copyright,
+or breach confidentiality or non-disclosure agreements
+for data collected from human subjects.</p></li>
+<li><p><strong>Status of research data</strong>:
+Empirical (not simulated) data and associated metadata
+from any stage of the research study’s life cycle is accepted.</p></li>
+<li><p><strong>Simulated data</strong>:
+Simulated data may be submitted to OpenNeuro,
+as determined on a case-by-case basis.
+Contact the OpenNeuro team to discuss simulated deposits.
+OpenNeuro reserves the right to remove simulated data
+uploaded without prior authorization.</p></li>
+<li><p><strong>Eligible users</strong>:
+Anyone may register as a user of OpenNeuro.
+Users must authenticate with <a class="reference external" href="https://orcid.org/">ORCID</a>
+and provide a verified email address for contact.
+All users are allowed to deposit empirical data for which
+they possess the appropriate rights and which falls within the scope of the archive.
+See the <strong>Simulated data</strong> section for details on submitting simulated data.</p></li>
+<li><p><strong>Ownership</strong>:
+By uploading content,
+the uploading party commits to making the data available under the permissive CC0 license.
+No change of ownership is implied and no property rights are transferred
+to the OpenNeuro team.
+Users allow OpenNeuro to extract metadata records
+and make them available under the CC0 license.</p></li>
+<li><p><strong>Data file formats</strong>:
+OpenNeuro only accepts data organized according to the
+<a class="reference external" href="https://bids.neuroimaging.io/">Brain Imaging Data Structure</a> (BIDS) standard.
+We work with the community to improve BIDS standards
+and to make the OpenNeuro archive FAIR.</p></li>
+<li><p><strong>Data quality</strong>:
+All data are provided “as-is” and without warranty of any kind,
+express, implied, statutory or otherwise,
+including without limitation warranties of title, merchantability,
+fitness for a particular purpose, non infringement,
+or the absence of latent or other defects, accuracy,
+or the present or absence of errors, whether or not discoverable,
+all to the greatest extent permissible under applicable law.</p></li>
+<li><p><strong>Metadata types and sources</strong>:
+OpenNeuro’s GraphQL API is the user-facing record source.</p></li>
+<li><p><strong>Language</strong>:
+Textual items must be in English.
+Latin names could be used in exceptional cases where appropriate.</p></li>
+</ul>
+</section>
+<section id="access-and-reuse">
+<h2>Access and Reuse<a class="headerlink" href="#access-and-reuse" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong>Embargo status</strong>:
+Users may deposit content under an embargo status
+with a default end date of 36 months after the initial version.
+The repository will restrict access to the data until the end of the embargo period,
+at which time the content will automatically become publicly available.
+The user may publish the dataset at any time prior to the end of the default embargo.</p></li>
+<li><p><strong>Access to data objects</strong>:
+Files deposited to the archive are accessible to the public openly or
+accessible to collaborators for embargoed datasets.
+Access to metadata and data files is provided over standard protocols such as HTTPS.</p></li>
+<li><p><strong>Use and reuse of data objects</strong>:
+Use and reuse is subject to the terms of the license
+under which the data objects were deposited.</p></li>
+<li><p><strong>Metadata access and reuse</strong>:
+Metadata records, provided by the users or extracted from the assets,
+are licensed under CC0.
+All metadata for non-embargoed datasets is made publicly available and can be harvested.</p></li>
+<li><p><strong>Restricted access</strong>:
+Depositors of embargoed datasets have the ability
+to share access with other collaborators.
+These files will not be made publicly available until the end of the embargo period.</p></li>
+</ul>
+</section>
+<section id="removal">
+<h2>Removal<a class="headerlink" href="#removal" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong>Removal</strong>:
+OpenNeuro reserves the right to remove any data file or dataset that is not within scope,
+violates terms of use, or is otherwise non-compliant with OpenNeuro’s data policies.
+If you suspect a policy violation, inform the OpenNeuro team as soon as possible.
+Datasets that have been issued a DOI will have the OpenNeuro DOI marked as “not findable”.
+User access may be revoked on violation of Terms of Use.</p></li>
+<li><p><strong>Withdrawal</strong>:
+Withdrawal is a user-initiated removal of a dataset from OpenNeuro.
+If the uploaded research object must later be withdrawn,
+the reason for the withdrawal will be indicated on a tombstone page,
+which will thereafter be served in its place.
+Withdrawal is considered an exceptional action,
+which normally should be requested and fully justified by the original uploader.
+In any other circumstance reasonable attempts will be made
+to contact the original uploader to obtain consent.
+The DOI and the URL of the original object are retained.</p></li>
+</ul>
+</section>
+<section id="longevity">
+<h2>Longevity<a class="headerlink" href="#longevity" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p><strong>Versions</strong>:
+Datasets are versioned repositories.
+Prior to the creation of a version (or “snapshot”),
+the data and metadata are not guaranteed to persist.
+Modifications made to a dataset that are not saved in a new version
+are not guaranteed to persist.</p></li>
+<li><p><strong>Replicas</strong>:
+All data files are stored on an AWS public bucket,
+with replicas housed in encrypted object storage.
+Data files are kept in multiple replicas at the moment, but this may change over time,
+and no recovery mechanisms for unversioned data should be assumed to be in place.</p></li>
+<li><p><strong>Retention period</strong>:
+Versioned items will be retained for the lifetime of the repository.</p></li>
+<li><p><strong>Functional preservation</strong>:
+OpenNeuro makes no promises of usability and understandability of deposited objects.</p></li>
+<li><p><strong>File preservation</strong>:
+Data files and metadata are backed up nightly
+and replicated into multiple copies in different storage services.</p></li>
+<li><p><strong>Fixity and authenticity</strong>:
+All data files are stored along with checksums of the file content.
+Files are regularly checked against their checksums to assure that
+file content remains constant.</p></li>
+<li><p><strong>Succession plans</strong>:
+In case of a repository shutdown, our best efforts will be made
+to integrate all content into suitable alternative institutional
+and/or other repositories overlapping in the scope of the OpenNeuro archive.</p></li>
+</ul>
+<p>This policy document is derived from the <a class="reference external" href="https://about.zenodo.org/policies/">Zenodo General Policies v1.0</a> and <a class="reference external" href="https://docs.dandiarchive.org/terms-policies/policies/">DANDI Archive General Policies v1.3.0</a>.</p>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="data_retention.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Data Retention Policies</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="../orcid.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">ORCID Logins</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2015-2025, Stanford Center for Reproducible Neuroscience
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">General Policies</a><ul>
+<li><a class="reference internal" href="#content">Content</a></li>
+<li><a class="reference internal" href="#access-and-reuse">Access and Reuse</a></li>
+<li><a class="reference internal" href="#removal">Removal</a></li>
+<li><a class="reference internal" href="#longevity">Longevity</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    </body>
+</html>
