@@ -22,8 +22,8 @@ const PathBreadcrumb = styled.div`
   }
 `
 
-const BackLink = styled.div`
-  margin-bottom: 15px;
+const BackLink = styled.span`
+  margin-right: 10px;
 `
 
 interface FileDisplayBackLinkProps {
@@ -43,7 +43,7 @@ export const FileDisplayBackLink = (
   return (
     <BackLink>
       <Link to={datasetPath}>
-        <i className="fa fa-arrow-left" /> Back to dataset
+        <i className="fa fa-arrow-left" />
       </Link>
     </BackLink>
   )
@@ -114,8 +114,11 @@ const FileDisplay = (
     }
     return (
       <DatasetPageBorder className="dataset-form display-file">
-        <FileDisplayBackLink datasetId={datasetId} snapshotTag={snapshotTag} />
         <PathBreadcrumb>
+          <FileDisplayBackLink
+            datasetId={datasetId}
+            snapshotTag={snapshotTag}
+          />
           <FileDisplayBreadcrumb filePath={filePath} />
         </PathBreadcrumb>
         <Loading />
@@ -126,8 +129,11 @@ const FileDisplay = (
       apiPath(datasetId, snapshotTag, filePath)
     return (
       <DatasetPageBorder className="dataset-form display-file">
-        <FileDisplayBackLink datasetId={datasetId} snapshotTag={snapshotTag} />
         <PathBreadcrumb>
+          <FileDisplayBackLink
+            datasetId={datasetId}
+            snapshotTag={snapshotTag}
+          />
           <FileDisplayBreadcrumb filePath={filePath} />
         </PathBreadcrumb>
         <div className="display-file-body">
