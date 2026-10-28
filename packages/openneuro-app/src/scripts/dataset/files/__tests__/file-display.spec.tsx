@@ -15,7 +15,7 @@ describe("FileDisplayBackLink", () => {
     render(<FileDisplayBackLink datasetId="ds000001" />, {
       wrapper: MemoryRouter,
     })
-    expect(screen.getByRole("link", { name: /back to dataset/i }))
+    expect(screen.getByRole("link", { name: /Back to file tree/i }))
       .toHaveAttribute("href", "/datasets/ds000001")
   })
   it("links back to the snapshot page when a tag is provided", () => {
@@ -23,7 +23,7 @@ describe("FileDisplayBackLink", () => {
       <FileDisplayBackLink datasetId="ds000001" snapshotTag="1.0.0" />,
       { wrapper: MemoryRouter },
     )
-    expect(screen.getByRole("link", { name: /back to dataset/i }))
+    expect(screen.getByRole("link", { name: /Back to file tree/i }))
       .toHaveAttribute("href", "/datasets/ds000001/versions/1.0.0")
   })
 })

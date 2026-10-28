@@ -2,17 +2,17 @@
 
 exports[`FileDisplayBackLink > renders the back link 1`] = `
 <DocumentFragment>
-  <div
-    class="css-9s9ecg"
+  <span
+    class="css-12frltk"
   >
     <a
+      aria-label="Back to file tree"
       href="/datasets/ds000001"
     >
       <i
         class="fa fa-arrow-left"
       />
-       Back to dataset
     </a>
-  </div>
+  </span>
 </DocumentFragment>
 `;

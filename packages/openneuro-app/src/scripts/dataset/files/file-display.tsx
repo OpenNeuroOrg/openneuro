@@ -42,7 +42,7 @@ export const FileDisplayBackLink = (
     : `/datasets/${datasetId}`
   return (
     <BackLink>
-      <Link to={datasetPath}>
+      <Link to={datasetPath} aria-label="Back to file tree">
         <i className="fa fa-arrow-left" />
       </Link>
     </BackLink>
