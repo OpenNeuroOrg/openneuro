@@ -190,6 +190,20 @@ async function shouldBeAnnexed(
 const ADD_BATCH_SIZE = 500
 
 async function add(event: GitWorkerEventAdd) {
+  let completed = 0
+  let lastRendered = -1
+  const totalFiles = event.data.paths.length
+  const progress = new ProgressBar({
+    title: "Adding files",
+    total: totalFiles,
+  })
+  const renderProgress = async () => {
+    if (totalFiles > 0 && completed !== lastRendered) {
+      lastRendered = completed
+      await progress.render(completed)
+    }
+  }
+  await renderProgress()
   const pending: string[] = []
   const flushPending = async () => {
     if (pending.length === 0) return
@@ -198,6 +212,7 @@ async function add(event: GitWorkerEventAdd) {
       filepath: pending.length === 1 ? pending[0] : [...pending],
     })
     pending.length = 0
+    await renderProgress()
   }
 
   for (const file of event.data.paths) {
@@ -216,6 +231,7 @@ async function add(event: GitWorkerEventAdd) {
       console.log(
         `${file.relativePath} could not be added, check if this file is accessible and not a broken symlink.`,
       )
+      completed += 1
       continue
     }
     const annexed = await shouldBeAnnexed(file.relativePath, size)
@@ -248,11 +264,15 @@ async function add(event: GitWorkerEventAdd) {
         logger.info(`Unchanged\t${file.relativePath}`)
       }
     }
+    completed += 1
     if (pending.length >= ADD_BATCH_SIZE) {
       await flushPending()
+    } else if (completed % ADD_BATCH_SIZE === 0) {
+      await renderProgress()
     }
   }
   await flushPending()
+  await renderProgress()
 }
 
 /**
