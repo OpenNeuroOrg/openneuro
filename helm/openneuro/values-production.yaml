@@ -40,7 +40,8 @@ apiMemoryRequests: 1Gi
 
 # Worker resource configuration
 workerCpuRequests: 2
-workerMemoryRequests: 16Gi
+workerFalconMemoryRequests: 4Gi
+workerTaskiqMemoryRequests: 24Gi
 
 # Nginx resource configuration
 webCpuRequests: 0.1

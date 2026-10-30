@@ -42,7 +42,7 @@ spec:
         resources:
           requests:
             cpu: {{ .Values.workerCpuRequests }}
-            memory: 4Gi
+            memory: {{ .Values.workerFalconMemoryRequests }}
         readinessProbe:
           periodSeconds: 5
           initialDelaySeconds: 15
@@ -74,7 +74,7 @@ spec:
         resources:
           requests:
             cpu: {{ .Values.workerCpuRequests }}
-            memory: 24Gi
+            memory: {{ .Values.workerTaskiqMemoryRequests }}
         envFrom:
         - configMapRef:
             name: {{ .Release.Name }}-configmap
