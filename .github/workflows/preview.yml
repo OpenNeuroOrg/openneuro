@@ -77,7 +77,7 @@ jobs:
           sed -i "s#<head>#<head><script>(function(){var m=location.search.match(/[?\&]__route=([^\&]*)/);if(m)history.replaceState(null,'','${BASE_PATH}'+decodeURIComponent(m[1])+location.hash)})()</script>#" index.html
 
       - name: Deploy preview
-        uses: rossjrw/pr-preview-action@9f77b1d057b494e662c50b8ca40ecc63f21e0887 # v1.6.2
+        uses: rossjrw/pr-preview-action@ffa7509e91a3ec8dfc2e5536c4d5c1acdf7a6de9 # v1.8.1
         with:
           source-dir: packages/openneuro-app/src/dist
           preview-branch: gh-pages
