@@ -1,14 +1,17 @@
 /*eslint no-console: ["error", { allow: ["log"] }] */
 import config from "../config"
 import { send as emailSend } from "./email"
-import request from "superagent"
 import User from "../models/user"
 import Subscription from "../models/subscription"
 import { format } from "date-fns"
 import url from "url"
 import { convertFromRaw, EditorState } from "draft-js"
 import { stateToHTML } from "draft-js-export-html"
-import { getDatasetWorker } from "./datalad-service"
+import {
+  assertWorkerResponse,
+  discardWorkerResponse,
+  getDatasetWorker,
+} from "./datalad-service"
 import { commentCreated } from "./email/templates/comment-created"
 import { datasetDeleted } from "./email/templates/dataset-deleted"
 import { ownerUnsubscribed } from "./email/templates/owner-unsubscribed"
@@ -42,22 +45,27 @@ const notifications = {
     const uploaderId = uploader ? uploader.id : null
     const URI = getDatasetWorker(datasetId)
     const datasetDescriptionUrl =
-      `${URI}/datasets/${datasetId}/snapshots/${tag}/files/dataset_description.json`
+      `http://${URI}/datasets/${datasetId}/snapshots/${tag}/files/dataset_description.json`
     const changesUrl =
-      `${URI}/datasets/${datasetId}/snapshots/${tag}/files/CHANGES`
+      `http://${URI}/datasets/${datasetId}/snapshots/${tag}/files/CHANGES`
 
     // get the dataset description
-    const descriptionResponse = await request.get(datasetDescriptionUrl)
-    const description = descriptionResponse.body
+    const descriptionResponse = await fetch(datasetDescriptionUrl)
+    await assertWorkerResponse(
+      descriptionResponse,
+      `Failed to fetch dataset_description.json for "${datasetId}:${tag}"`,
+    )
+    const description = await descriptionResponse.json()
     const datasetLabel = description.Name ? description.Name : "Unnamed Dataset"
 
     // get the snapshot changelog
-    const changesResponse = await request
-      .get(changesUrl)
-      .responseType("application/octet-stream")
-    const changelog = changesResponse.body
-      ? changesResponse.body.toString()
-      : null
+    const changesResponse = await fetch(changesUrl)
+    let changelog = null
+    if (changesResponse.ok) {
+      changelog = await changesResponse.text()
+    } else {
+      await discardWorkerResponse(changesResponse)
+    }
     // get all users that are subscribed to the dataset
     const subscriptions = await Subscription.find({
       datasetId: datasetId,

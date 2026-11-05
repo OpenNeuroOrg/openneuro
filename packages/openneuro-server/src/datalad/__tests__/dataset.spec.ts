@@ -1,18 +1,18 @@
 import { vi } from "vitest"
-import request from "superagent"
 import { createDataset, datasetsFilter, testBlacklist } from "../dataset"
 import { getDatasetWorker } from "../../libs/datalad-service"
 import { connect } from "mongoose"
 import { MongoMemoryServer } from "mongodb-memory-server"
 
 // Mock requests to Datalad service
-vi.mock("superagent")
 vi.mock("ioredis")
 vi.mock("../../libs/redis")
 vi.mock("../../config.ts")
 vi.mock("../../libs/notifications")
 vi.mock("../draft")
 vi.mock("../snapshots")
+
+const fetchMock = vi.fn()
 
 describe("dataset model operations", () => {
   describe("createDataset()", () => {
@@ -21,6 +21,17 @@ describe("dataset model operations", () => {
       // Setup MongoDB with mongodb-memory-server
       mongod = await MongoMemoryServer.create()
       connect(mongod.getUri())
+    })
+    beforeEach(() => {
+      fetchMock.mockReset()
+      fetchMock.mockResolvedValue({
+        ok: true,
+        json: async () => ({}),
+      })
+      vi.stubGlobal("fetch", fetchMock)
+    })
+    afterEach(() => {
+      vi.unstubAllGlobals()
     })
     it("resolves to dataset id string", async () => {
       const user = { id: "1234", userId: "1234", admin: false }
@@ -33,15 +44,14 @@ describe("dataset model operations", () => {
     })
     it("posts to the DataLad /datasets/{dsId} endpoint", async () => {
       const user = { id: "1234", userId: "1234", admin: false }
-      // Reset call count for request.post
-      request.post.mockClear()
       const { id: dsId } = await createDataset(user.id, user, {
         affirmedDefaced: true,
         affirmedConsent: true,
       })
-      expect(request.post).toHaveBeenCalledTimes(1)
-      expect(request.post).toHaveBeenCalledWith(
-        expect.stringContaining(`${getDatasetWorker(dsId)}/datasets/`),
+      expect(fetchMock).toHaveBeenCalledTimes(1)
+      expect(fetchMock).toHaveBeenCalledWith(
+        expect.stringContaining(`http://${getDatasetWorker(dsId)}/datasets/`),
+        expect.objectContaining({ method: "POST" }),
       )
     })
   })

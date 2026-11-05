@@ -1,5 +1,4 @@
-import request from "superagent"
-import { Readable } from "node:stream"
+import { pipeline, Readable } from "node:stream"
 import mime from "mime-types"
 import { getFiles } from "../datalad/files"
 import { getDatasetEndpoint, getDatasetWorker } from "../libs/datalad-service"
@@ -11,9 +10,41 @@ import { checkDatasetRead, DeletedDatasetError } from "../graphql/permissions"
  *
  * Access and caching is handled here so that it can be coordinated with other
  * web nodes independent of the DataLad service.
- *
- * Unlike the other handlers, these use superagent for performance reasons
  */
+
+/**
+ * Stream a worker response body to the client
+ *
+ * pipeline() destroys both streams on failure, so a worker failing mid-transfer
+ * aborts the client response instead of raising an unhandled stream error, and
+ * a client disconnect cancels the upstream fetch.
+ */
+const pipeWorkerBody = (r: Response, res) => {
+  if (!r.body) {
+    res.end()
+    return
+  }
+  pipeline(
+    // @ts-expect-error https://github.com/denoland/deno/issues/19620
+    Readable.fromWeb(r.body, { highWaterMark: 4194304 }),
+    res,
+    () => {
+      // Errors are handled by pipeline() tearing down both streams
+    },
+  )
+}
+
+/**
+ * Forward a worker response, keeping the worker's Content-Type for error bodies
+ */
+const forwardWorkerResponse = (r: Response, res, contentType: string) => {
+  res.status(r.status)
+  res.set(
+    "Content-Type",
+    r.ok ? contentType : r.headers.get("content-type") ?? "application/json",
+  )
+  pipeWorkerBody(r, res)
+}
 
 /**
  * Verify read access to the requested dataset and respond with an error if denied
@@ -93,8 +124,7 @@ export const getFile = async (req, res) => {
         if (r.status === 404) {
           res.status(404).send("Requested dataset or file cannot be found")
         } else {
-          // @ts-expect-error https://github.com/denoland/deno/issues/19620
-          Readable.fromWeb(r.body, { highWaterMark: 4194304 }).pipe(res)
+          pipeWorkerBody(r, res)
         }
       })
       .catch((_err) => {
@@ -115,20 +145,23 @@ export const getObject = async (req, res) => {
     res.set("Content-Disposition", `attachment; filename=${filename}`)
   }
   // Backend depends on git object or git-annex key
+  let uri: string
   if (key.length === 40) {
-    const uri = `${worker}/datasets/${datasetId}/objects/${key}`
-    res.set("Content-Type", "application/octet-stream")
-    return request.get(uri).pipe(res)
+    uri = `http://${worker}/datasets/${datasetId}/objects/${key}`
   } else if (key.startsWith("SHA256E-") || key.startsWith("MD5E-")) {
-    const uri = `${worker}/datasets/${datasetId}/annex/${key}`
-    res.set("Content-Type", "application/octet-stream")
-    return request.get(uri).pipe(res)
+    uri = `http://${worker}/datasets/${datasetId}/annex/${key}`
   } else {
     res.set("Content-Type", "application/json")
     res.status(400).send({
       error: "Key must be a git object hash or git-annex key",
     })
+    return
   }
+  return fetch(uri)
+    .then((r) => forwardWorkerResponse(r, res, "application/octet-stream"))
+    .catch((_err) => {
+      res.status(500).send("Internal error transferring requested object")
+    })
 }
 
 /**
@@ -156,7 +189,10 @@ export const getMosaic = async (req, res) => {
     return
   }
   const worker = getDatasetWorker(datasetId)
-  res.set("Content-Type", "application/pdf")
-  const uri = `${worker}/datasets/${datasetId}/mosaic/${ref}`
-  return request.get(uri).pipe(res)
+  const uri = `http://${worker}/datasets/${datasetId}/mosaic/${ref}`
+  return fetch(uri)
+    .then((r) => forwardWorkerResponse(r, res, "application/pdf"))
+    .catch((_err) => {
+      res.status(500).send("Internal error transferring requested mosaic")
+    })
 }

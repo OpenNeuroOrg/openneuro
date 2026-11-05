@@ -1,10 +1,13 @@
 import * as Sentry from "@sentry/node"
 import yaml from "js-yaml"
-import superagent from "superagent"
 import User from "../models/user"
 import { fileUrl } from "../datalad/files"
 import { commitFiles } from "../datalad/dataset"
-import { getDatasetWorker } from "../libs/datalad-service"
+import {
+  assertWorkerResponse,
+  discardWorkerResponse,
+  getDatasetWorker,
+} from "../libs/datalad-service"
 import type {
   Contributor,
   ContributorType,
@@ -110,18 +113,26 @@ export const saveDataciteYmlToRepo = async (
   cookies: string,
   dataciteData: RawDataciteYml,
 ) => {
-  const url = `${
+  const url = `http://${
     getDatasetWorker(datasetId)
   }/datasets/${datasetId}/files/datacite.yml`
 
   try {
     // Directly PUT the file using the user's request cookies
-    await superagent
-      .post(url)
-      .set("Cookie", cookies)
-      .set("Accept", "application/json")
-      .set("Content-Type", "text/yaml")
-      .send(yaml.dump(dataciteData))
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        Cookie: cookies,
+        Accept: "application/json",
+        "Content-Type": "text/yaml",
+      },
+      body: yaml.dump(dataciteData),
+    })
+    await assertWorkerResponse(
+      response,
+      `Failed to save datacite.yml for dataset "${datasetId}"`,
+    )
+    await discardWorkerResponse(response)
 
     // Commit the draft after upload
     const gitRef = await commitFiles(datasetId, cookies)

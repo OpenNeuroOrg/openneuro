@@ -67,7 +67,6 @@
     "redlock": "^4.0.0",
     "semver": "^5.5.0",
     "sitemap": "^2.1.0",
-    "superagent": "^3.8.2",
     "ts-node": "10.9.2",
     "typescript": "5.6.3",
     "underscore": "^1.8.3",

@@ -2,12 +2,11 @@
  * Get description data from backend
  */
 import config from "../config"
-import request from "superagent"
 import { getRedis } from "../libs/redis"
 import { commitFiles } from "./dataset"
 import { fileUrl } from "./files"
 import { generateDataladCookie } from "../libs/authentication/jwt"
-import { getDatasetWorker } from "../libs/datalad-service"
+import { assertWorkerResponse, getDatasetWorker } from "../libs/datalad-service"
 import CacheItem, { CacheType } from "../cache/item"
 import { datasetOrSnapshot } from "../utils/datasetOrSnapshot"
 
@@ -151,18 +150,31 @@ export const description = async (obj) => {
   }
 }
 
-export const setDescription = (datasetId, user, descriptionFieldUpdates) => {
-  const url = `${getDatasetWorker(datasetId)}/datasets/${datasetId}/description`
-  return request
-    .post(url)
-    .send({ description_fields: descriptionFieldUpdates })
-    .set("Accept", "application/json")
-    .set("Cookie", generateDataladCookie(config)(user))
-    .then((res) => {
-      const description = res.body
-      return commitFiles(datasetId, user).then((gitRef) => ({
-        id: gitRef,
-        ...description,
-      }))
-    })
+export const setDescription = async (
+  datasetId,
+  user,
+  descriptionFieldUpdates,
+) => {
+  const url = `http://${
+    getDatasetWorker(datasetId)
+  }/datasets/${datasetId}/description`
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Cookie: generateDataladCookie(config)(user),
+    },
+    body: JSON.stringify({ description_fields: descriptionFieldUpdates }),
+  })
+  await assertWorkerResponse(
+    response,
+    `Failed to set description for dataset "${datasetId}"`,
+  )
+  const description = await response.json()
+  const gitRef = await commitFiles(datasetId, user)
+  return {
+    id: gitRef,
+    ...description,
+  }
 }

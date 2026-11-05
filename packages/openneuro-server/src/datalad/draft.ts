@@ -1,9 +1,12 @@
 /**
  * Manage serving a Draft object based on DataLad working trees
  */
-import request from "superagent"
 import Dataset from "../models/dataset"
-import { getDatasetWorker } from "../libs/datalad-service"
+import {
+  assertWorkerResponse,
+  discardWorkerResponse,
+  getDatasetWorker,
+} from "../libs/datalad-service"
 import CacheItem, { CacheType } from "../cache/item"
 import { getRedis } from "../libs/redis"
 
@@ -51,11 +54,19 @@ export const updateDatasetRevision = (datasetId) => {
  * @param {string} datasetId Accession number
  * @param {string} ref Git hexsha
  */
-export const resetDraft = (datasetId, ref) => {
-  const resetUrl = `${
+export const resetDraft = async (datasetId, ref) => {
+  const resetUrl = `http://${
     getDatasetWorker(
       datasetId,
     )
   }/datasets/${datasetId}/reset/${ref}`
-  return request.post(resetUrl).set("Accept", "application/json")
+  const response = await fetch(resetUrl, {
+    method: "POST",
+    headers: { Accept: "application/json" },
+  })
+  await assertWorkerResponse(
+    response,
+    `Failed to reset draft for dataset "${datasetId}"`,
+  )
+  await discardWorkerResponse(response)
 }
