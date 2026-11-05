@@ -2,7 +2,11 @@
  * Manage serving a Draft object based on DataLad working trees
  */
 import Dataset from "../models/dataset"
-import { getDatasetWorker } from "../libs/datalad-service"
+import {
+  assertWorkerResponse,
+  discardWorkerResponse,
+  getDatasetWorker,
+} from "../libs/datalad-service"
 import CacheItem, { CacheType } from "../cache/item"
 import { getRedis } from "../libs/redis"
 
@@ -60,10 +64,9 @@ export const resetDraft = async (datasetId, ref) => {
     method: "POST",
     headers: { Accept: "application/json" },
   })
-  if (!response.ok) {
-    throw new Error(
-      `Failed to reset draft for dataset "${datasetId}": ${response.status} ${response.statusText}`,
-    )
-  }
-  return response
+  await assertWorkerResponse(
+    response,
+    `Failed to reset draft for dataset "${datasetId}"`,
+  )
+  await discardWorkerResponse(response)
 }

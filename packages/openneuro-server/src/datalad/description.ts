@@ -6,7 +6,7 @@ import { getRedis } from "../libs/redis"
 import { commitFiles } from "./dataset"
 import { fileUrl } from "./files"
 import { generateDataladCookie } from "../libs/authentication/jwt"
-import { getDatasetWorker } from "../libs/datalad-service"
+import { assertWorkerResponse, getDatasetWorker } from "../libs/datalad-service"
 import CacheItem, { CacheType } from "../cache/item"
 import { datasetOrSnapshot } from "../utils/datasetOrSnapshot"
 
@@ -167,11 +167,10 @@ export const setDescription = async (
     },
     body: JSON.stringify({ description_fields: descriptionFieldUpdates }),
   })
-  if (!response.ok) {
-    throw new Error(
-      `Failed to set description for dataset "${datasetId}": ${response.status} ${response.statusText}`,
-    )
-  }
+  await assertWorkerResponse(
+    response,
+    `Failed to set description for dataset "${datasetId}"`,
+  )
   const description = await response.json()
   const gitRef = await commitFiles(datasetId, user)
   return {

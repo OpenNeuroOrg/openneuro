@@ -2,7 +2,11 @@ import config from "../../config"
 import { updatePublic } from "../../datalad/dataset"
 import { checkDatasetWrite } from "../permissions.js"
 import { generateDataladCookie } from "../../libs/authentication/jwt"
-import { getDatasetWorker } from "../../libs/datalad-service"
+import {
+  assertWorkerResponse,
+  discardWorkerResponse,
+  getDatasetWorker,
+} from "../../libs/datalad-service"
 import type { GraphQLContext } from "../builder"
 
 export const publishDataset = (
@@ -21,11 +25,11 @@ export const publishDataset = (
         Cookie: generateDataladCookie(config)(userInfo),
       },
     })
-    if (!response.ok) {
-      throw new Error(
-        `Failed to publish dataset "${datasetId}": ${response.status} ${response.statusText}`,
-      )
-    }
+    await assertWorkerResponse(
+      response,
+      `Failed to publish dataset "${datasetId}"`,
+    )
+    await discardWorkerResponse(response)
     return true
   })
 }

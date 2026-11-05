@@ -28,3 +28,35 @@ export function getDatasetEndpoint(dataset) {
 export function getDatasetWorker(dataset) {
   return `${config.datalad.uri}-${getDatasetEndpoint(dataset)}`
 }
+
+/**
+ * Throw if a worker response is not 2xx, including the worker's error body
+ * @param response fetch() response from a DataLad worker
+ * @param message Description of the failed operation
+ */
+export async function assertWorkerResponse(
+  response: Response,
+  message: string,
+): Promise<void> {
+  if (!response.ok) {
+    let detail = ""
+    try {
+      detail = await response.text()
+    } catch {
+      // Body unavailable, report the status alone
+    }
+    throw new Error(
+      `${message}: ${response.status} ${response.statusText}${
+        detail ? ` - ${detail}` : ""
+      }`,
+    )
+  }
+}
+
+/**
+ * Release a worker response body that is not needed so the connection can be reused
+ * @param response fetch() response from a DataLad worker
+ */
+export async function discardWorkerResponse(response: Response): Promise<void> {
+  await response.body?.cancel()
+}

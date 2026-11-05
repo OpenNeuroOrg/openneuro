@@ -3,7 +3,11 @@ import yaml from "js-yaml"
 import User from "../models/user"
 import { fileUrl } from "../datalad/files"
 import { commitFiles } from "../datalad/dataset"
-import { getDatasetWorker } from "../libs/datalad-service"
+import {
+  assertWorkerResponse,
+  discardWorkerResponse,
+  getDatasetWorker,
+} from "../libs/datalad-service"
 import type {
   Contributor,
   ContributorType,
@@ -124,11 +128,11 @@ export const saveDataciteYmlToRepo = async (
       },
       body: yaml.dump(dataciteData),
     })
-    if (!response.ok) {
-      throw new Error(
-        `Failed to save datacite.yml for dataset "${datasetId}": ${response.status} ${response.statusText}`,
-      )
-    }
+    await assertWorkerResponse(
+      response,
+      `Failed to save datacite.yml for dataset "${datasetId}"`,
+    )
+    await discardWorkerResponse(response)
 
     // Commit the draft after upload
     const gitRef = await commitFiles(datasetId, cookies)

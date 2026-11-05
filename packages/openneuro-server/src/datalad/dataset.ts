@@ -21,7 +21,11 @@ import Star from "../models/stars"
 import Subscription from "../models/subscription"
 import BadAnnexObject from "../models/badAnnexObject"
 import { datasetsConnection } from "./pagination"
-import { getDatasetWorker } from "../libs/datalad-service"
+import {
+  assertWorkerResponse,
+  discardWorkerResponse,
+  getDatasetWorker,
+} from "../libs/datalad-service"
 import { createEvent, updateEvent } from "../libs/events"
 import Doi from "../models/doi"
 import {
@@ -77,11 +81,11 @@ export const createDataset = async (
         },
       },
     )
-    if (!response.ok) {
-      throw new Error(
-        `Failed to create dataset "${datasetId}": ${response.status} ${response.statusText}`,
-      )
-    }
+    await assertWorkerResponse(
+      response,
+      `Failed to create dataset "${datasetId}"`,
+    )
+    await discardWorkerResponse(response)
     // Write the new dataset to mongo after creation
     await ds.save()
     const md = new Metadata({
@@ -136,11 +140,11 @@ export const deleteDataset = async (datasetId: string, user: UserInfo) => {
       method: "DELETE",
     },
   )
-  if (!response.ok) {
-    throw new Error(
-      `Failed to delete dataset "${datasetId}": ${response.status} ${response.statusText}`,
-    )
-  }
+  await assertWorkerResponse(
+    response,
+    `Failed to delete dataset "${datasetId}"`,
+  )
+  await discardWorkerResponse(response)
   await Dataset.deleteOne({ id: datasetId }).exec()
   await updateEvent(event)
   return true
@@ -389,11 +393,10 @@ export const commitFiles = async (datasetId, user) => {
       Accept: "application/json",
     },
   })
-  if (!response.ok) {
-    throw new Error(
-      `Failed to commit files for dataset "${datasetId}": ${response.status} ${response.statusText}`,
-    )
-  }
+  await assertWorkerResponse(
+    response,
+    `Failed to commit files for dataset "${datasetId}"`,
+  )
   const body = await response.json()
   const gitRef = body.ref
   await updateDatasetRevision(datasetId)
@@ -418,11 +421,11 @@ export const deleteFiles = async (datasetId, files, user) => {
     // Fail with an error instead of hanging indefinitely if a worker stalls
     signal: AbortSignal.timeout(300000),
   })
-  if (!response.ok) {
-    throw new Error(
-      `Failed to delete files from dataset "${datasetId}": ${response.status} ${response.statusText}`,
-    )
-  }
+  await assertWorkerResponse(
+    response,
+    `Failed to delete files from dataset "${datasetId}"`,
+  )
+  await discardWorkerResponse(response)
   return filenames
 }
 
@@ -446,11 +449,11 @@ export const removeAnnexObject = async (
       Accept: "application/json",
     },
   })
-  if (!response.ok) {
-    throw new Error(
-      `Failed to remove annex object "${annexKey}" from dataset "${datasetId}": ${response.status} ${response.statusText}`,
-    )
-  }
+  await assertWorkerResponse(
+    response,
+    `Failed to remove annex object "${annexKey}" from dataset "${datasetId}"`,
+  )
+  await discardWorkerResponse(response)
   const existingBAO = await BadAnnexObject.find({ annexKey }).exec()
   if (existingBAO) {
     existingBAO.forEach((bAO) => {

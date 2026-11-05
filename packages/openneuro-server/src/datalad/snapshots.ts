@@ -16,7 +16,7 @@ import Dataset from "../models/dataset"
 import Snapshot from "../models/snapshot"
 import type { SnapshotDocument } from "../models/snapshot"
 import { updateDatasetRevision } from "./draft"
-import { getDatasetWorker } from "../libs/datalad-service"
+import { assertWorkerResponse, getDatasetWorker } from "../libs/datalad-service"
 import { createEvent, updateEvent } from "../libs/events"
 import { queueIndexDataset } from "../queues/producer-methods"
 
@@ -105,11 +105,10 @@ const postSnapshot = async (
       snapshot_changes: snapshotChanges,
     }),
   })
-  if (!response.ok) {
-    throw new Error(
-      `Failed to create snapshot at "${createSnapshotUrl}": ${response.status} ${response.statusText}`,
-    )
-  }
+  await assertWorkerResponse(
+    response,
+    `Failed to create snapshot at "${createSnapshotUrl}"`,
+  )
 
   return await response.json()
 }
@@ -138,11 +137,10 @@ export const getSnapshots = async (datasetId): Promise<SnapshotResponse[]> => {
     const response = await fetch(url, {
       headers: { Accept: "application/json" },
     })
-    if (!response.ok) {
-      throw new Error(
-        `Failed to fetch snapshots for dataset "${datasetId}": ${response.status} ${response.statusText}`,
-      )
-    }
+    await assertWorkerResponse(
+      response,
+      `Failed to fetch snapshots for dataset "${datasetId}"`,
+    )
     const { snapshots } = await response.json()
     return snapshots.sort(snapshotCreationComparison)
   })
@@ -246,11 +244,10 @@ export const deleteSnapshot = async (datasetId, tag) => {
   const response = await fetch(url, {
     method: "DELETE",
   })
-  if (!response.ok) {
-    throw new Error(
-      `Failed to delete snapshot "${tag}" for dataset "${datasetId}": ${response.status} ${response.statusText}`,
-    )
-  }
+  await assertWorkerResponse(
+    response,
+    `Failed to delete snapshot "${tag}" for dataset "${datasetId}"`,
+  )
   const body = await response.json()
   const snapshotCache = new CacheItem(getRedis(), CacheType.snapshot, [
     datasetId,
@@ -289,11 +286,10 @@ export const getSnapshot = (
     const response = await fetch(url, {
       headers: { Accept: "application/json" },
     })
-    if (!response.ok) {
-      throw new Error(
-        `Failed to fetch snapshot "${commitRef}" for dataset "${datasetId}": ${response.status} ${response.statusText}`,
-      )
-    }
+    await assertWorkerResponse(
+      response,
+      `Failed to fetch snapshot "${commitRef}" for dataset "${datasetId}"`,
+    )
     return await response.json()
   })
 }
