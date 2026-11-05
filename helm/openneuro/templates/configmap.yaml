@@ -14,6 +14,7 @@ data:
   GRAPHQL_ENDPOINT: http://{{ .Release.Name }}-api:8111/crn/graphql
   DATALAD_SERVICE_URI: {{ .Release.Name }}-dataset-worker
   DATALAD_DATASET_PATH: "/datasets"
+  DATALAD_FSCK_MAX_MEMORY: {{ .Values.dataladFsckMaxMemory | default "2G" | quote }}
   LOCPATH: ""
   OPENNEURO_VERSION: {{ .Chart.AppVersion }}
   SENTRY_DSN: {{ .Values.sentryDsn }}

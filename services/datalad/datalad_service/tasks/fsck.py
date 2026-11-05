@@ -1,11 +1,49 @@
 import json
 import asyncio
 import logging
+import re
+import resource
 
 import pygit2
 
+from datalad_service import config
 from datalad_service.broker import broker
 from datalad_service.common.openneuro import update_file_check
+
+_MEMORY_UNITS = {
+    '': 1,
+    'k': 1024,
+    'm': 1024**2,
+    'g': 1024**3,
+    't': 1024**4,
+}
+
+
+def parse_memory_limit(value):
+    """Parse a human-readable memory size (e.g. '2G', '512M', '8Gi') into bytes."""
+    if not value:
+        return None
+    match = re.fullmatch(r'\s*(\d+)\s*([kmgt]?)(?:i?b?)?\s*', str(value), re.IGNORECASE)
+    if not match:
+        raise ValueError(f'Invalid memory limit: {value!r}')
+    amount, unit = match.groups()
+    return int(amount) * _MEMORY_UNITS[unit.lower()]
+
+
+def _memory_limit_preexec():
+    """Return a preexec_fn that sets RLIMIT_DATA for the child process."""
+    limit_bytes = parse_memory_limit(config.DATALAD_FSCK_MAX_MEMORY)
+    if not limit_bytes:
+        return None
+
+    def _apply_rlimit():
+        _, hard = resource.getrlimit(resource.RLIMIT_DATA)
+        new_hard = (
+            limit_bytes if hard == resource.RLIM_INFINITY else min(limit_bytes, hard)
+        )
+        resource.setrlimit(resource.RLIMIT_DATA, (new_hard, new_hard))
+
+    return _apply_rlimit
 
 
 def get_head_commit_and_references(repo):
@@ -43,16 +81,25 @@ async def git_annex_fsck_local(dataset_path):
         '--numcopies=1',
     ]
     annex_process = await asyncio.create_subprocess_exec(
-        *annex_command, cwd=dataset_path, stdout=asyncio.subprocess.PIPE
+        *annex_command,
+        cwd=dataset_path,
+        stdout=asyncio.subprocess.PIPE,
+        preexec_fn=_memory_limit_preexec(),
     )
     bad_files = []
-    async for annexed_file_json in annex_process.stdout:
-        annexed_file = json.loads(annexed_file_json)
-        if not annexed_file['success']:
-            # Rename for GraphQL consistency
-            annexed_file['errorMessages'] = annexed_file.pop('error-messages')
-            bad_files.append(annexed_file)
-    await annex_process.wait()
+    try:
+        async for annexed_file_json in annex_process.stdout:
+            annexed_file = json.loads(annexed_file_json)
+            if not annexed_file['success']:
+                # Rename for GraphQL consistency
+                annexed_file['errorMessages'] = annexed_file.pop('error-messages')
+                bad_files.append(annexed_file)
+    finally:
+        returncode = await annex_process.wait()
+    if returncode not in (0, 1) or (returncode == 1 and len(bad_files) == 0):
+        raise RuntimeError(
+            f'git-annex fsck failed for {dataset_path} with exit code {returncode}'
+        )
     if len(bad_files) > 0:
         logging.error(f'missing or corrupt annexed objects found in {dataset_path}')
     update_file_check(dataset_path, commit, references, bad_files)
@@ -80,17 +127,26 @@ async def git_annex_fsck_remote(dataset_path, branches, remote='s3-PUBLIC'):
         '--json',
         '--json-error-messages',
         '--incremental-schedule=365d',
+        *[f'--branch={branch}' for branch in branches],
     ]
-    annex_command += [f'--branch={branch}' for branch in branches]
     annex_process = await asyncio.create_subprocess_exec(
-        *annex_command, cwd=dataset_path, stdout=asyncio.subprocess.PIPE
+        *annex_command,
+        cwd=dataset_path,
+        stdout=asyncio.subprocess.PIPE,
+        preexec_fn=_memory_limit_preexec(),
     )
     bad_files = []
-    async for annexed_file_json in annex_process.stdout:
-        annexed_file = json.loads(annexed_file_json)
-        if not annexed_file['success']:
-            bad_files.append(annexed_file)
-    await annex_process.wait()
+    try:
+        async for annexed_file_json in annex_process.stdout:
+            annexed_file = json.loads(annexed_file_json)
+            if not annexed_file['success']:
+                bad_files.append(annexed_file)
+    finally:
+        returncode = await annex_process.wait()
+    if returncode not in (0, 1) or (returncode == 1 and len(bad_files) == 0):
+        raise RuntimeError(
+            f'git-annex fsck failed for {dataset_path} (remote={remote}) with exit code {returncode}'
+        )
     update_file_check(dataset_path, commit, references, bad_files, remote)
     if len(bad_files) > 0:
         logging.error(
