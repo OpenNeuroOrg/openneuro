@@ -1,10 +1,15 @@
 import json
+import resource
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
 from datalad_service import config
-from datalad_service.tasks.fsck import git_annex_fsck_local, git_annex_fsck_remote
+from datalad_service.tasks.fsck import (
+    git_annex_fsck_local,
+    git_annex_fsck_remote,
+    parse_memory_limit,
+)
 
 
 class _AsyncLines:
@@ -28,8 +33,19 @@ def _make_mock_process(lines, returncode=0):
     return proc
 
 
+def test_parse_memory_limit():
+    assert parse_memory_limit('2G') == 2 * 1024**3
+    assert parse_memory_limit('8Gi') == 8 * 1024**3
+    assert parse_memory_limit('512M') == 512 * 1024**2
+    assert parse_memory_limit('1024') == 1024
+    assert parse_memory_limit('') is None
+    assert parse_memory_limit(None) is None
+    with pytest.raises(ValueError):
+        parse_memory_limit('invalid')
+
+
 @pytest.mark.asyncio
-async def test_git_annex_fsck_local_passes_rts_memory_limit(new_dataset, monkeypatch):
+async def test_git_annex_fsck_local_sets_rlimit_data(new_dataset, monkeypatch):
     monkeypatch.setattr(config, 'DATALAD_FSCK_MAX_MEMORY', '4G')
     proc = _make_mock_process(
         [json.dumps({'file': 'sub-01/T1w.nii.gz', 'success': True}).encode() + b'\n'],
@@ -41,14 +57,22 @@ async def test_git_annex_fsck_local_passes_rts_memory_limit(new_dataset, monkeyp
             new=AsyncMock(return_value=proc),
         ) as mock_exec,
         patch('datalad_service.tasks.fsck.update_file_check') as mock_update,
+        patch(
+            'datalad_service.tasks.fsck.resource.getrlimit',
+            return_value=(resource.RLIM_INFINITY, resource.RLIM_INFINITY),
+        ),
+        patch('datalad_service.tasks.fsck.resource.setrlimit') as mock_setrlimit,
     ):
         await git_annex_fsck_local(new_dataset.path)
+        mock_exec.assert_called_once()
+        preexec_fn = mock_exec.call_args.kwargs['preexec_fn']
+        assert callable(preexec_fn)
+        preexec_fn()
+        expected = 4 * 1024**3
+        mock_setrlimit.assert_called_once_with(
+            resource.RLIMIT_DATA, (expected, expected)
+        )
 
-    mock_exec.assert_called_once()
-    args = mock_exec.call_args.args
-    assert '+RTS' in args
-    assert '-M4G' in args
-    assert '-RTS' in args
     mock_update.assert_called_once()
     assert mock_update.call_args.args[3] == []
 
@@ -81,7 +105,7 @@ async def test_git_annex_fsck_local_bad_files_exit_1(new_dataset):
 
 @pytest.mark.asyncio
 async def test_git_annex_fsck_local_raises_on_oom_crash(new_dataset):
-    # GHC RTS exits with 251 on heap exhaustion (+RTS -M<size> -RTS)
+    # GHC RTS exits with 251 on out of memory
     proc = _make_mock_process([], returncode=251)
     with (
         patch(
@@ -97,7 +121,7 @@ async def test_git_annex_fsck_local_raises_on_oom_crash(new_dataset):
 
 
 @pytest.mark.asyncio
-async def test_git_annex_fsck_remote_passes_rts_and_raises_on_oom(
+async def test_git_annex_fsck_remote_sets_rlimit_and_raises_on_oom(
     new_dataset, monkeypatch
 ):
     monkeypatch.setattr(config, 'DATALAD_FSCK_MAX_MEMORY', '2G')
@@ -112,8 +136,5 @@ async def test_git_annex_fsck_remote_passes_rts_and_raises_on_oom(
         with pytest.raises(RuntimeError, match='exit code 251'):
             await git_annex_fsck_remote(new_dataset.path, ['1.0.0'], 's3-PUBLIC')
 
-    args = mock_exec.call_args.args
-    assert '+RTS' in args
-    assert '-M2G' in args
-    assert '-RTS' in args
+    assert callable(mock_exec.call_args.kwargs['preexec_fn'])
     mock_update.assert_not_called()
