@@ -42,6 +42,7 @@ apiMemoryRequests: 1Gi
 workerCpuRequests: 2
 workerFalconMemoryRequests: 4Gi
 workerTaskiqMemoryRequests: 24Gi
+dataladFsckMaxMemory: 8G
 
 # Nginx resource configuration
 webCpuRequests: 0.1
