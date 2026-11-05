@@ -1,14 +1,12 @@
 import { vi } from "vitest"
 vi.mock("ioredis")
 import { MongoMemoryServer } from "mongodb-memory-server"
-import request from "superagent"
 import { createDataset } from "../dataset"
 import { createSnapshot } from "../snapshots"
 import { getDatasetWorker } from "../../libs/datalad-service"
 import { connect } from "mongoose"
 
 // Mock requests to Datalad service
-vi.mock("superagent")
 vi.mock("../../libs/redis.js", () => ({
   getRedis: () => ({
     del: vi.fn(),
@@ -21,9 +19,14 @@ vi.mock("../../libs/redis.js", () => ({
 vi.mock("../draft.ts", () => ({
   updateDatasetRevision: () => () => Promise.resolve(),
 }))
+vi.mock("../files.ts", () => ({
+  getFiles: () => Promise.resolve([]),
+}))
 vi.mock("../../config.ts")
 vi.mock("../../libs/notifications.ts")
 vi.mock("../../libs/events.ts")
+
+const fetchMock = vi.fn()
 
 describe("snapshot model operations", () => {
   describe("createSnapshot()", () => {
@@ -33,6 +36,17 @@ describe("snapshot model operations", () => {
       mongod = await MongoMemoryServer.create()
       connect(mongod.getUri())
     })
+    beforeEach(() => {
+      fetchMock.mockReset()
+      fetchMock.mockResolvedValue({
+        ok: true,
+        json: async () => ({}),
+      })
+      vi.stubGlobal("fetch", fetchMock)
+    })
+    afterEach(() => {
+      vi.unstubAllGlobals()
+    })
     it("posts to the DataLad /datasets/{dsId}/snapshots/{snapshot} endpoint", async () => {
       const user = { id: "1234", userId: "1234", admin: false }
       const tag = "snapshot"
@@ -40,15 +54,13 @@ describe("snapshot model operations", () => {
         affirmedDefaced: true,
         affirmedConsent: true,
       })
-      // Reset call count for request.post
-      request.post.mockClear()
-      request.__setMockResponse({ body: {} })
+      fetchMock.mockClear()
       await createSnapshot(dsId, tag, false)
-      expect(request.post).toHaveBeenCalledTimes(1)
-      expect(request.post).toHaveBeenCalledWith(
+      expect(fetchMock).toHaveBeenCalledWith(
         expect.stringContaining(
-          `${getDatasetWorker(dsId)}/datasets/${dsId}/snapshots/${tag}`,
+          `http://${getDatasetWorker(dsId)}/datasets/${dsId}/snapshots/${tag}`,
         ),
+        expect.objectContaining({ method: "POST" }),
       )
     })
   })

@@ -2,7 +2,6 @@
  * Get snapshots from datalad-service tags
  */
 import * as Sentry from "@sentry/node"
-import request from "superagent"
 import { getRedis, getRedlock } from "../libs/redis"
 import CacheItem, { CacheType } from "../cache/item"
 import config from "../config"
@@ -94,16 +93,25 @@ const postSnapshot = async (
   snapshotChanges,
 ) => {
   // Create snapshot once DOI is ready
-  const response = await request
-    .post(createSnapshotUrl)
-    .send({
+  const response = await fetch(createSnapshotUrl, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Cookie: generateDataladCookie(config)(user),
+    },
+    body: JSON.stringify({
       description_fields: descriptionFieldUpdates,
       snapshot_changes: snapshotChanges,
-    })
-    .set("Accept", "application/json")
-    .set("Cookie", generateDataladCookie(config)(user))
+    }),
+  })
+  if (!response.ok) {
+    throw new Error(
+      `Failed to create snapshot at "${createSnapshotUrl}": ${response.status} ${response.statusText}`,
+    )
+  }
 
-  return response.body
+  return await response.json()
 }
 
 /**
@@ -123,14 +131,20 @@ export const getSnapshots = async (datasetId): Promise<SnapshotResponse[]> => {
     [datasetId],
     432000,
   )
-  return cache.get(() => {
-    const url = `${getDatasetWorker(datasetId)}/datasets/${datasetId}/snapshots`
-    return request
-      .get(url)
-      .set("Accept", "application/json")
-      .then(({ body: { snapshots } }) => {
-        return snapshots.sort(snapshotCreationComparison)
-      })
+  return cache.get(async () => {
+    const url = `http://${
+      getDatasetWorker(datasetId)
+    }/datasets/${datasetId}/snapshots`
+    const response = await fetch(url, {
+      headers: { Accept: "application/json" },
+    })
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch snapshots for dataset "${datasetId}": ${response.status} ${response.statusText}`,
+      )
+    }
+    const { snapshots } = await response.json()
+    return snapshots.sort(snapshotCreationComparison)
   })
 }
 
@@ -172,7 +186,7 @@ export const createSnapshot = async (
     })
     await createIfNotExistsDoi(datasetId, tag, descriptionFieldUpdates)
 
-    const createSnapshotUrl = `${
+    const createSnapshotUrl = `http://${
       getDatasetWorker(
         datasetId,
       )
@@ -223,24 +237,31 @@ export const createSnapshot = async (
   }
 }
 
-export const deleteSnapshot = (datasetId, tag) => {
-  const url = `${
+export const deleteSnapshot = async (datasetId, tag) => {
+  const url = `http://${
     getDatasetWorker(
       datasetId,
     )
   }/datasets/${datasetId}/snapshots/${tag}`
-  return request.del(url).then(async ({ body }) => {
-    const snapshotCache = new CacheItem(getRedis(), CacheType.snapshot, [
-      datasetId,
-      tag,
-    ])
-    await snapshotCache.drop()
-    const snapshotListCache = new CacheItem(getRedis(), CacheType.snapshot, [
-      datasetId,
-    ])
-    await snapshotListCache.drop()
-    return body
+  const response = await fetch(url, {
+    method: "DELETE",
   })
+  if (!response.ok) {
+    throw new Error(
+      `Failed to delete snapshot "${tag}" for dataset "${datasetId}": ${response.status} ${response.statusText}`,
+    )
+  }
+  const body = await response.json()
+  const snapshotCache = new CacheItem(getRedis(), CacheType.snapshot, [
+    datasetId,
+    tag,
+  ])
+  await snapshotCache.drop()
+  const snapshotListCache = new CacheItem(getRedis(), CacheType.snapshot, [
+    datasetId,
+  ])
+  await snapshotListCache.drop()
+  return body
 }
 
 /**
@@ -253,7 +274,7 @@ export const getSnapshot = (
   datasetId,
   commitRef,
 ): Promise<SnapshotDocument> => {
-  const url = `${
+  const url = `http://${
     getDatasetWorker(
       datasetId,
     )
@@ -264,12 +285,17 @@ export const getSnapshot = (
     [datasetId, commitRef],
     432000,
   )
-  return cache.get(() =>
-    request
-      .get(url)
-      .set("Accept", "application/json")
-      .then(({ body }) => body)
-  )
+  return cache.get(async () => {
+    const response = await fetch(url, {
+      headers: { Accept: "application/json" },
+    })
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch snapshot "${commitRef}" for dataset "${datasetId}": ${response.status} ${response.statusText}`,
+      )
+    }
+    return await response.json()
+  })
 }
 
 /**

@@ -4,7 +4,6 @@
  * See resolvers for interaction with other data sources.
  */
 import * as Sentry from "@sentry/node"
-import request from "superagent"
 import objectHash from "object-hash"
 import type * as Mongoose from "mongoose"
 import config from "../config"
@@ -68,10 +67,21 @@ export const createDataset = async (
   )
   try {
     const ds = new Dataset({ id: datasetId, uploader })
-    await request
-      .post(`${getDatasetWorker(datasetId)}/datasets/${datasetId}`)
-      .set("Accept", "application/json")
-      .set("Cookie", generateDataladCookie(config)(userInfo))
+    const response = await fetch(
+      `http://${getDatasetWorker(datasetId)}/datasets/${datasetId}`,
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          Cookie: generateDataladCookie(config)(userInfo),
+        },
+      },
+    )
+    if (!response.ok) {
+      throw new Error(
+        `Failed to create dataset "${datasetId}": ${response.status} ${response.statusText}`,
+      )
+    }
     // Write the new dataset to mongo after creation
     await ds.save()
     const md = new Metadata({
@@ -120,8 +130,17 @@ export const deleteDataset = async (datasetId: string, user: UserInfo) => {
     user.id,
     { type: "deleted" },
   )
-  await request
-    .del(`${getDatasetWorker(datasetId)}/datasets/${datasetId}`)
+  const response = await fetch(
+    `http://${getDatasetWorker(datasetId)}/datasets/${datasetId}`,
+    {
+      method: "DELETE",
+    },
+  )
+  if (!response.ok) {
+    throw new Error(
+      `Failed to delete dataset "${datasetId}": ${response.status} ${response.statusText}`,
+    )
+  }
   await Dataset.deleteOne({ id: datasetId }).exec()
   await updateEvent(event)
   return true
@@ -359,40 +378,58 @@ export const addFileString = async (
 /**
  * Commit a draft
  */
-export const commitFiles = (datasetId, user) => {
-  let gitRef
-  const url = `${getDatasetWorker(datasetId)}/datasets/${datasetId}/draft`
-  return request
-    .post(url)
-    .set("Cookie", generateDataladCookie(config)(user))
-    .set("Accept", "application/json")
-    .then((res) => {
-      gitRef = res.body.ref
-      return updateDatasetRevision(datasetId).then(() => gitRef)
-    })
+export const commitFiles = async (datasetId, user) => {
+  const url = `http://${
+    getDatasetWorker(datasetId)
+  }/datasets/${datasetId}/draft`
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      Cookie: generateDataladCookie(config)(user),
+      Accept: "application/json",
+    },
+  })
+  if (!response.ok) {
+    throw new Error(
+      `Failed to commit files for dataset "${datasetId}": ${response.status} ${response.statusText}`,
+    )
+  }
+  const body = await response.json()
+  const gitRef = body.ref
+  await updateDatasetRevision(datasetId)
+  return gitRef
 }
 
 /**
  * Delete existing files in a dataset
  */
-export const deleteFiles = (datasetId, files, user) => {
+export const deleteFiles = async (datasetId, files, user) => {
   const filenames = files.map(({ filename, path }) =>
     filename ? getFileName(path, filename) : encodeFilePath(path)
   )
-  return request
-    .del(filesUrl(datasetId))
-    .set("Cookie", generateDataladCookie(config)(user))
-    .set("Accept", "application/json")
+  const response = await fetch(filesUrl(datasetId), {
+    method: "DELETE",
+    headers: {
+      Cookie: generateDataladCookie(config)(user),
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ filenames }),
     // Fail with an error instead of hanging indefinitely if a worker stalls
-    .timeout({ response: 60000, deadline: 300000 })
-    .send({ filenames })
-    .then(() => filenames)
+    signal: AbortSignal.timeout(300000),
+  })
+  if (!response.ok) {
+    throw new Error(
+      `Failed to delete files from dataset "${datasetId}": ${response.status} ${response.statusText}`,
+    )
+  }
+  return filenames
 }
 
 /**
  * Delete the file's annex object and any public replicas
  */
-export const removeAnnexObject = (
+export const removeAnnexObject = async (
   datasetId,
   snapshot,
   filepath,
@@ -402,30 +439,36 @@ export const removeAnnexObject = (
   const worker = getDatasetWorker(datasetId)
   const url =
     `http://${worker}/datasets/${datasetId}/snapshots/${snapshot}/annex-key/${annexKey}`
-  return request
-    .del(url)
-    .set("Cookie", generateDataladCookie(config)(user))
-    .set("Accept", "application/json")
-    .then(async () => {
-      const existingBAO = await BadAnnexObject.find({ annexKey }).exec()
-      if (existingBAO) {
-        existingBAO.forEach((bAO) => {
-          bAO.remover = user._id
-          bAO.removed = true
-          bAO.save()
-        })
-      } else {
-        const badAnnexObj = new BadAnnexObject({
-          datasetId,
-          snapshot,
-          filepath,
-          annexKey,
-          remover: user._id,
-          removed: true,
-        })
-        badAnnexObj.save()
-      }
+  const response = await fetch(url, {
+    method: "DELETE",
+    headers: {
+      Cookie: generateDataladCookie(config)(user),
+      Accept: "application/json",
+    },
+  })
+  if (!response.ok) {
+    throw new Error(
+      `Failed to remove annex object "${annexKey}" from dataset "${datasetId}": ${response.status} ${response.statusText}`,
+    )
+  }
+  const existingBAO = await BadAnnexObject.find({ annexKey }).exec()
+  if (existingBAO) {
+    existingBAO.forEach((bAO) => {
+      bAO.remover = user._id
+      bAO.removed = true
+      bAO.save()
     })
+  } else {
+    const badAnnexObj = new BadAnnexObject({
+      datasetId,
+      snapshot,
+      filepath,
+      annexKey,
+      remover: user._id,
+      removed: true,
+    })
+    badAnnexObj.save()
+  }
 }
 
 /**

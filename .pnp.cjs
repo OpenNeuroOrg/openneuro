@@ -4430,7 +4430,6 @@ const RAW_RUNTIME_STATE =
           ["redlock", "npm:4.2.0"],\
           ["semver", "npm:5.7.2"],\
           ["sitemap", "npm:2.2.0"],\
-          ["superagent", "npm:3.8.3"],\
           ["ts-node", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:10.9.2"],\
           ["ts-node-dev", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:1.1.6"],\
           ["tsc-watch", "virtual:6d9c0fee0b376eb0bb6824eb7a3246834ef21d870b31f75eebe59bb4d027e50f2607ba168fd29d446567f4e9c2a5cad2442c4741fa92c92e0b7e9145c3a3e3a7#npm:4.5.0"],\
@@ -12071,16 +12070,6 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["form-data", [\
-      ["npm:2.5.1", {\
-        "packageLocation": "./.yarn/cache/form-data-npm-2.5.1-47256351b5-2e2e5e9279.zip/node_modules/form-data/",\
-        "packageDependencies": [\
-          ["asynckit", "npm:0.4.0"],\
-          ["combined-stream", "npm:1.0.8"],\
-          ["form-data", "npm:2.5.1"],\
-          ["mime-types", "npm:2.1.32"]\
-        ],\
-        "linkType": "HARD"\
-      }],\
       ["npm:3.0.1", {\
         "packageLocation": "./.yarn/cache/form-data-npm-3.0.1-d080d436e0-944b40ff63.zip/node_modules/form-data/",\
         "packageDependencies": [\
@@ -12127,13 +12116,6 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["formidable", [\
-      ["npm:1.2.2", {\
-        "packageLocation": "./.yarn/cache/formidable-npm-1.2.2-0f629105a1-85fc8e5ada.zip/node_modules/formidable/",\
-        "packageDependencies": [\
-          ["formidable", "npm:1.2.2"]\
-        ],\
-        "linkType": "HARD"\
-      }],\
       ["npm:1.2.6", {\
         "packageLocation": "./.yarn/cache/formidable-npm-1.2.6-68be5e1519-0ac4690a46.zip/node_modules/formidable/",\
         "packageDependencies": [\
@@ -16680,13 +16662,6 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["mime", [\
-      ["npm:1.6.0", {\
-        "packageLocation": "./.yarn/cache/mime-npm-1.6.0-60ae95038a-b7d98bb1e0.zip/node_modules/mime/",\
-        "packageDependencies": [\
-          ["mime", "npm:1.6.0"]\
-        ],\
-        "linkType": "HARD"\
-      }],\
       ["npm:2.6.0", {\
         "packageLocation": "./.yarn/cache/mime-npm-2.6.0-88b89d8de0-7da117808b.zip/node_modules/mime/",\
         "packageDependencies": [\
@@ -22207,23 +22182,6 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["superagent", [\
-      ["npm:3.8.3", {\
-        "packageLocation": "./.yarn/cache/superagent-npm-3.8.3-8bdf672d54-7226a514eb.zip/node_modules/superagent/",\
-        "packageDependencies": [\
-          ["component-emitter", "npm:1.3.0"],\
-          ["cookiejar", "npm:2.1.4"],\
-          ["debug", "virtual:8bb97bed484f021974a05538f31c077871d2363ce26ebed59b11577446762350604c9011c0660ae55b141dd86d888615a377ccccd7a87c5e54ae38233a22d5a9#npm:3.2.7"],\
-          ["extend", "npm:3.0.2"],\
-          ["form-data", "npm:2.5.1"],\
-          ["formidable", "npm:1.2.2"],\
-          ["methods", "npm:1.1.2"],\
-          ["mime", "npm:1.6.0"],\
-          ["qs", "npm:6.17.0"],\
-          ["readable-stream", "npm:2.3.7"],\
-          ["superagent", "npm:3.8.3"]\
-        ],\
-        "linkType": "HARD"\
-      }],\
       ["npm:6.1.0", {\
         "packageLocation": "./.yarn/cache/superagent-npm-6.1.0-053b76aea5-7d49a4f4d4.zip/node_modules/superagent/",\
         "packageDependencies": [\

@@ -1,4 +1,3 @@
-import request from "superagent"
 import { Readable } from "node:stream"
 import mime from "mime-types"
 import { getFiles } from "../datalad/files"
@@ -11,8 +10,6 @@ import { checkDatasetRead, DeletedDatasetError } from "../graphql/permissions"
  *
  * Access and caching is handled here so that it can be coordinated with other
  * web nodes independent of the DataLad service.
- *
- * Unlike the other handlers, these use superagent for performance reasons
  */
 
 /**
@@ -115,20 +112,32 @@ export const getObject = async (req, res) => {
     res.set("Content-Disposition", `attachment; filename=${filename}`)
   }
   // Backend depends on git object or git-annex key
+  let uri: string
   if (key.length === 40) {
-    const uri = `${worker}/datasets/${datasetId}/objects/${key}`
-    res.set("Content-Type", "application/octet-stream")
-    return request.get(uri).pipe(res)
+    uri = `http://${worker}/datasets/${datasetId}/objects/${key}`
   } else if (key.startsWith("SHA256E-") || key.startsWith("MD5E-")) {
-    const uri = `${worker}/datasets/${datasetId}/annex/${key}`
-    res.set("Content-Type", "application/octet-stream")
-    return request.get(uri).pipe(res)
+    uri = `http://${worker}/datasets/${datasetId}/annex/${key}`
   } else {
     res.set("Content-Type", "application/json")
     res.status(400).send({
       error: "Key must be a git object hash or git-annex key",
     })
+    return
   }
+  res.set("Content-Type", "application/octet-stream")
+  return fetch(uri)
+    .then((r) => {
+      res.status(r.status)
+      if (r.body) {
+        // @ts-expect-error https://github.com/denoland/deno/issues/19620
+        Readable.fromWeb(r.body, { highWaterMark: 4194304 }).pipe(res)
+      } else {
+        res.end()
+      }
+    })
+    .catch((_err) => {
+      res.status(500).send("Internal error transferring requested object")
+    })
 }
 
 /**
@@ -157,6 +166,18 @@ export const getMosaic = async (req, res) => {
   }
   const worker = getDatasetWorker(datasetId)
   res.set("Content-Type", "application/pdf")
-  const uri = `${worker}/datasets/${datasetId}/mosaic/${ref}`
-  return request.get(uri).pipe(res)
+  const uri = `http://${worker}/datasets/${datasetId}/mosaic/${ref}`
+  return fetch(uri)
+    .then((r) => {
+      res.status(r.status)
+      if (r.body) {
+        // @ts-expect-error https://github.com/denoland/deno/issues/19620
+        Readable.fromWeb(r.body, { highWaterMark: 4194304 }).pipe(res)
+      } else {
+        res.end()
+      }
+    })
+    .catch((_err) => {
+      res.status(500).send("Internal error transferring requested mosaic")
+    })
 }
