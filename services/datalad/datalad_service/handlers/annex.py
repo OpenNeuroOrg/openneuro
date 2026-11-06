@@ -7,7 +7,7 @@ import aiofiles
 import falcon
 
 from datalad_service.common.annex import test_key_remote
-from datalad_service.common.stream import update_file
+from datalad_service.common.stream import IncompleteStreamError, update_file
 from datalad_service.handlers.git import _check_git_access, _handle_failed_access
 
 
@@ -24,6 +24,18 @@ def hashdirmixed(key):
 
 def key_to_path(key):
     return os.path.join('.git', 'annex', 'objects', *hashdirmixed(key), key, key)
+
+
+def key_size(key):
+    """Return the size in bytes encoded in a git-annex key, or None if absent.
+
+    Keys look like BACKEND[-sSIZE][-mMTIME][-Sn-Cn]--NAME
+    https://git-annex.branchable.com/internals/key_format/"""
+    fields = key.split('--', 1)[0].split('-')[1:]
+    for field in fields:
+        if field.startswith('s') and field[1:].isdigit():
+            return int(field[1:])
+    return None
 
 
 class GitAnnexResource:
@@ -83,10 +95,28 @@ class GitAnnexResource:
             # Don't allow objects to be replaced
             resp.status = falcon.HTTP_CONFLICT
         else:
+            expected_size = key_size(key)
+            if expected_size is None:
+                expected_size = req.content_length
+            elif req.content_length is not None and req.content_length != expected_size:
+                resp.status = falcon.HTTP_BAD_REQUEST
+                resp.data = b'Content-Length does not match annex key size'
+                return
             os.makedirs(os.path.dirname(annex_object_path), exist_ok=True)
-            # Begin writing stream to temp file and hard link once done
-            # It should not be written unless the full request completes
-            await update_file(annex_object_path, req.stream)
+            # Write stream to a temp file and atomically move it into place
+            # only if the full object was received. Because existing objects
+            # are never replaced, committing a truncated upload is permanent.
+            try:
+                await update_file(
+                    annex_object_path, req.stream, expected_size=expected_size
+                )
+            except IncompleteStreamError as e:
+                self.logger.warning(
+                    'Rejected incomplete annex upload for %s/%s: %s', dataset, key, e
+                )
+                resp.status = falcon.HTTP_BAD_REQUEST
+                resp.data = b'Incomplete upload, object size does not match key'
+                return
             resp.status = falcon.HTTP_OK
 
     async def on_delete(self, req, resp, worker, dataset, key):

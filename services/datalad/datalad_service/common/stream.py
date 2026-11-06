@@ -71,15 +71,34 @@ def _cleanup_temp_file(tmp):
             pass
 
 
-async def update_file(path, stream):
-    """Atomically update a file on disk with a path and source stream."""
+class IncompleteStreamError(Exception):
+    """The source stream ended with a different number of bytes than expected."""
+
+    def __init__(self, expected, received):
+        self.expected = expected
+        self.received = received
+        super().__init__(f'Expected {expected} bytes but received {received}')
+
+
+async def update_file(path, stream, expected_size=None):
+    """Atomically update a file on disk with a path and source stream.
+
+    If expected_size is provided, the target path is only replaced when exactly
+    that many bytes were read. A client disconnect looks like EOF to the stream
+    reader, so without this check a truncated upload would be committed.
+    Raises IncompleteStreamError and leaves the target untouched on mismatch.
+    """
     buf = bytearray()
     tmp = None
+    received = 0
     try:
         while True:
             chunk = await stream.read(CHUNK_SIZE_BYTES)
             if not chunk:
                 break
+            received += len(chunk)
+            if expected_size is not None and received > expected_size:
+                raise IncompleteStreamError(expected_size, received)
             buf.extend(chunk)
             if len(buf) >= WRITE_BUFFER_SIZE:
                 if tmp is None:
@@ -87,6 +106,9 @@ async def update_file(path, stream):
                 else:
                     await asyncio.to_thread(_write_all, tmp, buf)
                 buf.clear()
+
+        if expected_size is not None and received != expected_size:
+            raise IncompleteStreamError(expected_size, received)
 
         if tmp is None:
             await asyncio.to_thread(_write_small_file, path, buf)

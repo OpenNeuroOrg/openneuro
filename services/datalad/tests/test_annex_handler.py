@@ -1,7 +1,9 @@
+import os
+
 import falcon
 from falcon import testing
 
-from datalad_service.handlers.annex import hashdirmixed, key_to_path
+from datalad_service.handlers.annex import hashdirmixed, key_size, key_to_path
 
 
 test_auth = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmZDQ0ZjVjNS1iMjFiLTQyMGItOTU1NS1hZjg1NmVmYzk0NTIiLCJlbWFpbCI6Im5lbGxAc3F1aXNoeW1lZGlhLmNvbSIsInByb3ZpZGVyIjoiZ29vZ2xlIiwibmFtZSI6Ik5lbGwgSGFyZGNhc3RsZSIsImFkbWluIjp0cnVlLCJzY29wZXMiOlsiZGF0YXNldDpnaXQ6d3JpdGUiLCJkYXRhc2V0OmdpdDpyZWFkIl0sImRhdGFzZXQiOiJkczAwMDAwMSIsImlhdCI6MTYwODQxMDYxMiwiZXhwIjoyMTQ3NDgzNjQ3fQ.UctrTJ7OKNRpEMftzhFIMmTkjYDDYl1zrSsNxhtNeO0'
@@ -50,3 +52,31 @@ def test_key_get_head(client):
     assert response.status == falcon.HTTP_OK
     response = client.simulate_head(url, headers={'authorization': test_auth})
     assert response.status == falcon.HTTP_OK
+
+
+def test_key_size():
+    assert key_size('MD5E-s311112--bc8bbbacfd2ff823c2047ead1afec9b3.nii.gz') == 311112
+    assert key_size('SHA256E-s0--e3b0c44298fc1c149afbf4c8996fb924.txt') == 0
+    assert key_size('SHA256E-s10-m1700000000--abc.txt') == 10
+    assert key_size('SHA256-s1-S1048576-C2--abc') == 1
+    assert key_size('URL--https&c%%example.com%file') is None
+    assert key_size('MD5E--bc8bbbacfd2ff823c2047ead1afec9b3') is None
+
+
+def test_key_post_size_mismatch(client, datalad_store):
+    ds_id = 'ds000001'
+    key = 'MD5E-s24--b1946ac92492d2347c6235b4d2611184.nii'
+    url = f'/git/0/{ds_id}/annex/{key}'
+    # Body shorter than the size declared by the key
+    response = client.simulate_post(
+        url, headers={'authorization': test_auth}, body=b'too short'
+    )
+    assert response.status == falcon.HTTP_BAD_REQUEST
+    object_path = os.path.join(datalad_store.get_dataset_path(ds_id), key_to_path(key))
+    assert not os.path.exists(object_path)
+    # The correct object can still be uploaded afterwards
+    response = client.simulate_post(
+        url, headers={'authorization': test_auth}, body=b'x' * 24
+    )
+    assert response.status == falcon.HTTP_OK
+    assert os.path.exists(object_path)
