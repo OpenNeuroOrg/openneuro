@@ -3,7 +3,7 @@ import Comment from "../../models/comment"
 import type { CommentDocument } from "../../models/comment"
 import notifications from "../../libs/notifications"
 import { user } from "./user.js"
-import { checkAdmin } from "../permissions"
+import { checkAdmin, checkDatasetRead } from "../permissions"
 import type { GraphQLContext } from "../builder"
 
 export const comment = (
@@ -61,13 +61,14 @@ export const addComment = async (
     parentId?: string
     comment: string
   },
-  { user }: GraphQLContext,
+  { user, userInfo }: GraphQLContext,
 ) => {
   if (!user) {
     return Promise.reject(
       new Error("You must be logged in to write a comment."),
     )
   }
+  await checkDatasetRead(datasetId, user, userInfo)
   const userObj = await User.findOne({ id: user }).exec()
   if (!userObj.email) {
     return Promise.reject(
