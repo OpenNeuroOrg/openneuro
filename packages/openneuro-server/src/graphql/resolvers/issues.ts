@@ -6,7 +6,11 @@ import type { GraphQLContext } from "../builder"
 /**
  * Issues resolver
  */
-export const issues = async (dataset, _, { userInfo }: GraphQLContext) => {
+export const issues = async (
+  dataset,
+  _,
+  { user, userInfo }: GraphQLContext,
+) => {
   return Issue.findOne({
     id: dataset.revision,
     datasetId: dataset.id,
@@ -23,8 +27,8 @@ export const issues = async (dataset, _, { userInfo }: GraphQLContext) => {
         revalidate(
           null,
           { datasetId: dataset.id, ref: dataset.revision },
-          { userInfo },
-        )
+          { user, userInfo },
+        ).catch(() => {})
       }
       return data ? data.issues : null
     })

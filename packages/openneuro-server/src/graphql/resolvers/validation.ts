@@ -11,7 +11,11 @@ import { checkDatasetWrite } from "../permissions"
 /**
  * Issues resolver for schema validator
  */
-export const validation = async (dataset, _, { userInfo }: GraphQLContext) => {
+export const validation = async (
+  dataset,
+  _,
+  { user, userInfo }: GraphQLContext,
+) => {
   const cache = new CacheItem(
     getRedis(),
     CacheType.validation,
@@ -30,8 +34,8 @@ export const validation = async (dataset, _, { userInfo }: GraphQLContext) => {
           revalidate(
             null,
             { datasetId: dataset.id, ref: dataset.revision },
-            { userInfo },
-          )
+            { user, userInfo },
+          ).catch(() => {})
         }
         if (data) {
           // Return with errors and warning counts
@@ -146,8 +150,9 @@ export const validationUrl = (datasetId, ref) => {
 export const revalidate = async (
   obj,
   { datasetId, ref },
-  { userInfo }: Pick<GraphQLContext, "userInfo">,
+  { user, userInfo }: Pick<GraphQLContext, "user" | "userInfo">,
 ) => {
+  await checkDatasetWrite(datasetId, user, userInfo)
   try {
     const response = await fetch(validationUrl(datasetId, ref), {
       method: "POST",

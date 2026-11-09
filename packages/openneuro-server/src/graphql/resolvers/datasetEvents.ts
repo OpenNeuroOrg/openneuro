@@ -3,7 +3,7 @@ import type { GraphQLContext } from "../builder"
 import { toDbStatus, toGraphqlStatus } from "./response-status"
 import type { DbStatus, GraphqlStatus } from "./response-status"
 import User from "../../models/user"
-import { checkDatasetAdmin } from "../permissions"
+import { checkDatasetAdmin, checkDatasetWrite } from "../permissions"
 import type {
   DatasetEventContributorRequest,
   DatasetEventDocument,
@@ -216,6 +216,7 @@ export async function processContributorRequest(
   await checkDatasetAdmin(datasetId, currentUserId, userInfo)
 
   const originalRequestEvent = await DatasetEvent.findOne({
+    datasetId,
     "event.type": "contributorRequest",
     "event.requestId": requestId,
   }).populate("user")
@@ -225,6 +226,7 @@ export async function processContributorRequest(
   }
 
   const existingResponse = await DatasetEvent.findOne({
+    datasetId,
     "event.type": "contributorRequestResponse",
     "event.requestId": requestId,
   })
@@ -330,9 +332,10 @@ export async function createContributorCitationEvent(
       familyName?: string
     }
   },
-  { user }: GraphQLContext,
+  { user, userInfo }: GraphQLContext,
 ) {
   if (!user) throw new Error("Authentication required.")
+  await checkDatasetWrite(datasetId, user, userInfo)
 
   const finalContributorData = {
     ...contributorData,
