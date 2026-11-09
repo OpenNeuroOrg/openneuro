@@ -12,6 +12,8 @@ import {
 } from "../utils/datacite-utils"
 import type { Contributor, RawDataciteYml } from "../types/datacite"
 import { description } from "./description"
+import { checkDatasetWrite } from "../graphql/permissions"
+import type { GraphQLContext } from "../graphql/builder"
 
 /**
  * GraphQL resolver: fetch contributors for a dataset or snapshot
@@ -93,21 +95,13 @@ export const contributors = async (
 /**
  * GraphQL mutation resolver
  */
-export interface UserInfo {
-  id?: string
-  _id?: string
-}
-
-export interface GraphQLContext {
-  userInfo: UserInfo | null
-}
-
 export const updateContributors = async (
   _parent: DatasetOrSnapshot,
   args: { datasetId: string; newContributors: Contributor[] },
   context: GraphQLContext,
 ) => {
-  const userId = context?.userInfo?.id || context?.userInfo?._id
+  await checkDatasetWrite(args.datasetId, context?.user, context?.userInfo)
+  const userId = context?.userInfo?.id
   if (!userId) {
     return { success: false, dataset: null }
   }
