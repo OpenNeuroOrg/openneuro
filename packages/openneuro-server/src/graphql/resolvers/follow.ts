@@ -1,7 +1,16 @@
 import Subscription from "../../models/subscription"
 import type { GraphQLContext } from "../builder"
+import { checkDatasetRead } from "../permissions"
 
-export const followDataset = async (obj, { datasetId }, { user }: GraphQLContext) => {
+export const followDataset = async (
+  obj,
+  { datasetId },
+  { user, userInfo }: GraphQLContext,
+) => {
+  if (!user) {
+    throw new Error("You must be logged in to follow a dataset.")
+  }
+  await checkDatasetRead(datasetId, user, userInfo)
   const following = await Subscription.findOne({
     datasetId,
     userId: user,
