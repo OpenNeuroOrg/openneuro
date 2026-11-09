@@ -10,6 +10,7 @@ import requests
 from datalad_service.config import GRAPHQL_ENDPOINT
 from datalad_service.broker import broker
 from datalad_service.common.redis import redis_client
+from datalad_service.common.openneuro import generate_service_token
 
 logger = logging.getLogger('datalad_service.' + __name__)
 
@@ -142,6 +143,8 @@ def issues_mutation(dataset_id, ref, issues, validator_metadata):
 
 @broker.task
 async def validate_dataset(dataset_id, dataset_path, ref, cookies=None, user=''):
+    # cookies is unused but kept so tasks enqueued by older workers still run
+    headers = {'authorization': f'Bearer {generate_service_token(dataset_id)}'}
     async with redis_client() as client:
         lock = client.lock(f'validator-lock:{dataset_id}:{ref}', timeout=60 * 60 * 4)
         if await lock.acquire(blocking=False):
@@ -160,7 +163,7 @@ async def validate_dataset(dataset_id, dataset_path, ref, cookies=None, user='')
                                 validator_output_deno['issues'],
                                 DENO_METADATA,
                             ),
-                            cookies=cookies,
+                            headers=headers,
                         )
                         if r.status_code != 200 or 'errors' in r.json():
                             raise Exception(r.text)
@@ -170,7 +173,7 @@ async def validate_dataset(dataset_id, dataset_path, ref, cookies=None, user='')
                             json=summary_mutation(
                                 dataset_id, ref, validator_output_deno, DENO_METADATA
                             ),
-                            cookies=cookies,
+                            headers=headers,
                         )
                         if r.status_code != 200 or 'errors' in r.json():
                             raise Exception(r.text)
