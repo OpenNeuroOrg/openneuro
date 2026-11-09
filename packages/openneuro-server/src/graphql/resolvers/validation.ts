@@ -6,6 +6,7 @@ import { getRedis } from "../../libs/redis"
 import CacheItem from "../../cache/item"
 import { CacheType } from "../../cache/types"
 import type { GraphQLContext } from "../builder"
+import { checkDatasetWrite } from "../permissions"
 
 /**
  * Issues resolver for schema validator
@@ -80,7 +81,11 @@ export const validation = async (dataset, _, { userInfo }: GraphQLContext) => {
 /**
  * Snapshot issues resolver for schema validator
  */
-export const snapshotValidation = async (snapshot, _, context: GraphQLContext) => {
+export const snapshotValidation = async (
+  snapshot,
+  _,
+  context: GraphQLContext,
+) => {
   const dataset = {
     id: snapshot.id.split(":")[0],
     revision: snapshot.hexsha,
@@ -97,7 +102,12 @@ export function validationSeveritySort(a, b) {
  *
  * Returns only a boolean if successful or not
  */
-export const updateValidation = (obj, args) => {
+export const updateValidation = async (
+  obj,
+  args,
+  { user, userInfo }: GraphQLContext,
+) => {
+  await checkDatasetWrite(args.validation.datasetId, user, userInfo)
   // Limit to 50k issues with errors sorted first
   if (args.validation.issues.length > 50000) {
     args.validation.issues.sort(validationSeveritySort)
@@ -133,7 +143,11 @@ export const validationUrl = (datasetId, ref) => {
  * @param {string} args.datasetId Dataset accession number
  * @param {string} args.ref Git hexsha
  */
-export const revalidate = async (obj, { datasetId, ref }, { userInfo }: Pick<GraphQLContext, "userInfo">) => {
+export const revalidate = async (
+  obj,
+  { datasetId, ref },
+  { userInfo }: Pick<GraphQLContext, "userInfo">,
+) => {
   try {
     const response = await fetch(validationUrl(datasetId, ref), {
       method: "POST",

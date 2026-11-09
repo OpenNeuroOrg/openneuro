@@ -1,6 +1,8 @@
 import { getDraftRevision } from "../../datalad/draft"
 import Summary from "../../models/summary"
 import type { SummaryDocument } from "../../models/summary"
+import type { GraphQLContext } from "../builder"
+import { checkDatasetWrite } from "../permissions"
 
 /**
  * Summary resolver
@@ -37,7 +39,12 @@ export async function summary(dataset): Promise<Partial<SummaryDocument>> {
  *
  * Returns the saved summary if successful
  */
-export const updateSummary = (obj, args) => {
+export const updateSummary = async (
+  obj,
+  args,
+  { user, userInfo }: GraphQLContext,
+) => {
+  await checkDatasetWrite(args.summary.datasetId, user, userInfo)
   return Summary.updateOne(
     {
       id: args.summary.id,

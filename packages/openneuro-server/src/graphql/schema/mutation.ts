@@ -117,19 +117,22 @@ builder.mutationType({
       args: {
         summary: t.arg({ type: SummaryInput, required: true }),
       },
-      resolve: (root, args) => Mutation.updateSummary(root, args as never),
+      resolve: (root, args, ctx) =>
+        Mutation.updateSummary(root, args as never, ctx),
     }),
     updateValidation: t.boolean({
       args: {
         validation: t.arg({ type: ValidatorInput, required: true }),
       },
-      resolve: (root, args) => Mutation.updateValidation(root, args as never),
+      resolve: (root, args, ctx) =>
+        Mutation.updateValidation(root, args as never, ctx),
     }),
     updateMosaic: t.boolean({
       args: {
         mosaic: t.arg({ type: MosaicInput, required: true }),
       },
-      resolve: (root, args) => Mutation.updateMosaic(root, args as never),
+      resolve: (root, args, ctx) =>
+        Mutation.updateMosaic(root, args as never, ctx),
     }),
     updatePermissions: t.field({
       type: DatasetPermissions,
@@ -156,8 +159,8 @@ builder.mutationType({
         datasetId: t.arg.id({ required: true }),
         userId: t.arg.string({ required: true }),
       },
-      resolve: (root, args) =>
-        Mutation.removePermissions(root, args as never) as never,
+      resolve: (root, args, ctx) =>
+        Mutation.removePermissions(root, args as never, ctx) as never,
     }),
     removeUser: t.boolean({
       args: {
@@ -295,7 +298,8 @@ builder.mutationType({
         datasetId: t.arg.id({ required: true }),
         metadata: t.arg({ type: MetadataInput, required: true }),
       },
-      resolve: (root, args) => Mutation.addMetadata(root, args as never),
+      resolve: (root, args, ctx) =>
+        Mutation.addMetadata(root, args as never, ctx),
     }),
     prepareUpload: t.field({
       type: UploadMetadata,
