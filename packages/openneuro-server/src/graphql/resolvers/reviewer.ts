@@ -36,7 +36,7 @@ export async function deleteReviewer(
   { user, userInfo }: GraphQLContext,
 ) {
   await checkDatasetAdmin(datasetId, user, userInfo)
-  return Reviewer.findOneAndDelete({ id }).lean().exec()
+  return Reviewer.findOneAndDelete({ id, datasetId }).lean().exec()
 }
 
 /**
