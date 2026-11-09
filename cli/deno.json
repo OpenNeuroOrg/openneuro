@@ -1,7 +1,7 @@
 {
   "name": "@openneuro/cli",
   "license": "MIT",
-  "version": "5.12.0",
+  "version": "5.13.0",
   "exports": "./mod.ts",
   "publish": {
     "include": [
