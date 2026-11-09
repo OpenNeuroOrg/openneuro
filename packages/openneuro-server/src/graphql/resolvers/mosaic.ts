@@ -29,7 +29,12 @@ export const snapshotMosaic = async (snapshot, _, context: GraphQLContext) => {
  *
  * Returns only a boolean if successful or not
  */
-export const updateMosaic = (obj, args) => {
+export const updateMosaic = async (
+  obj,
+  args,
+  { user, userInfo }: GraphQLContext,
+) => {
+  await checkDatasetWrite(args.mosaic.datasetId, user, userInfo)
   return Mosaic.updateOne(
     {
       id: args.mosaic.id,

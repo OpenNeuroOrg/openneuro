@@ -127,10 +127,12 @@ export const updateOrcidPermissions = async (
 /**
  * Remove user permissions on a dataset
  */
-export const removePermissions = (
+export const removePermissions = async (
   obj: unknown,
   args: { datasetId: string; userId: string },
+  { user, userInfo }: GraphQLContext,
 ) => {
+  await checkDatasetAdmin(args.datasetId, user, userInfo)
   return Permission.deleteOne({
     datasetId: args.datasetId,
     userId: args.userId,

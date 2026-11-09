@@ -6,6 +6,7 @@ import type { MetadataDocument } from "../../models/metadata"
 import { latestSnapshot } from "./snapshots"
 import { permissions } from "./permissions"
 import type { GraphQLContext } from "../builder"
+import { checkDatasetWrite } from "../permissions"
 
 /**
  * Summary resolver
@@ -63,7 +64,12 @@ export const metadata = async (
 /**
  * upserts metadata
  */
-export const addMetadata = async (obj, { datasetId, metadata }) => {
+export const addMetadata = async (
+  obj,
+  { datasetId, metadata },
+  { user, userInfo }: GraphQLContext,
+) => {
+  await checkDatasetWrite(datasetId, user, userInfo)
   const result = await MetadataModel.findOneAndUpdate({ datasetId }, metadata, {
     new: true,
     upsert: true,
