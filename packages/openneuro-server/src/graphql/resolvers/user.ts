@@ -199,7 +199,7 @@ export const removeUser = (
   { id }: { id: string },
   { userInfo }: GraphQLContext,
 ) => {
-  if (userInfo.admin) {
+  if (userInfo?.admin) {
     return User.findByIdAndDelete(id).exec()
   } else {
     return Promise.reject(new Error("You must be a site admin to remove users"))
@@ -211,7 +211,7 @@ export const setAdmin = (
   { id, admin }: { id: string; admin: boolean },
   { userInfo }: GraphQLContext,
 ) => {
-  if (userInfo.admin) {
+  if (userInfo?.admin) {
     return User.findOneAndUpdate({ id }, { admin }).exec()
   } else {
     return Promise.reject(
@@ -225,7 +225,7 @@ export const setBlocked = (
   { id, blocked }: { id: string; blocked: boolean },
   { userInfo }: GraphQLContext,
 ) => {
-  if (userInfo.admin) {
+  if (userInfo?.admin) {
     return User.findOneAndUpdate({ id }, { blocked }).exec()
   } else {
     return Promise.reject(new Error("You must be a site admin to block a user"))
