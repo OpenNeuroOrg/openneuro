@@ -3515,10 +3515,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["@nodable/entities", [\
-      ["npm:2.1.0", {\
-        "packageLocation": "./.yarn/cache/@nodable-entities-npm-2.1.0-6eb9f06ac0-355c55e82a.zip/node_modules/@nodable/entities/",\
+      ["npm:3.1.0", {\
+        "packageLocation": "./.yarn/cache/@nodable-entities-npm-3.1.0-574fa66328-b07d97b1da.zip/node_modules/@nodable/entities/",\
         "packageDependencies": [\
-          ["@nodable/entities", "npm:2.1.0"]\
+          ["@nodable/entities", "npm:3.1.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -7862,6 +7862,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["anynum", [\
+      ["npm:1.0.1", {\
+        "packageLocation": "./.yarn/cache/anynum-npm-1.0.1-21f97ee7d8-096acef76c.zip/node_modules/anynum/",\
+        "packageDependencies": [\
+          ["anynum", "npm:1.0.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["aproba", [\
       ["npm:1.2.0", {\
         "packageLocation": "./.yarn/cache/aproba-npm-1.2.0-34129f0778-48def77733.zip/node_modules/aproba/",\
@@ -11696,25 +11705,27 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["fast-xml-builder", [\
-      ["npm:1.2.0", {\
-        "packageLocation": "./.yarn/cache/fast-xml-builder-npm-1.2.0-7008dbf494-5948add779.zip/node_modules/fast-xml-builder/",\
+      ["npm:1.3.1", {\
+        "packageLocation": "./.yarn/cache/fast-xml-builder-npm-1.3.1-871389fcc1-6e2774b07a.zip/node_modules/fast-xml-builder/",\
         "packageDependencies": [\
-          ["fast-xml-builder", "npm:1.2.0"],\
-          ["path-expression-matcher", "npm:1.5.0"],\
-          ["xml-naming", "npm:0.1.0"]\
+          ["fast-xml-builder", "npm:1.3.1"],\
+          ["path-expression-matcher", "npm:1.6.2"],\
+          ["xml-naming", "npm:0.3.0"]\
         ],\
         "linkType": "HARD"\
       }]\
     ]],\
     ["fast-xml-parser", [\
-      ["npm:5.7.1", {\
-        "packageLocation": "./.yarn/cache/fast-xml-parser-npm-5.7.1-94929a6c96-ce7de013ca.zip/node_modules/fast-xml-parser/",\
+      ["npm:5.12.0", {\
+        "packageLocation": "./.yarn/cache/fast-xml-parser-npm-5.12.0-325a5b7672-86b16fd9f4.zip/node_modules/fast-xml-parser/",\
         "packageDependencies": [\
-          ["@nodable/entities", "npm:2.1.0"],\
-          ["fast-xml-builder", "npm:1.2.0"],\
-          ["fast-xml-parser", "npm:5.7.1"],\
-          ["path-expression-matcher", "npm:1.5.0"],\
-          ["strnum", "npm:2.2.3"]\
+          ["@nodable/entities", "npm:3.1.0"],\
+          ["fast-xml-builder", "npm:1.3.1"],\
+          ["fast-xml-parser", "npm:5.12.0"],\
+          ["is-unsafe", "npm:2.0.3"],\
+          ["path-expression-matcher", "npm:1.6.2"],\
+          ["strnum", "npm:2.5.1"],\
+          ["xml-naming", "npm:0.3.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -13219,7 +13230,7 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/hed-validator-npm-4.2.0-e0d3d1487f-5ba8a99a8f.zip/node_modules/hed-validator/",\
         "packageDependencies": [\
           ["core-js-pure", "npm:3.43.0"],\
-          ["fast-xml-parser", "npm:5.7.1"],\
+          ["fast-xml-parser", "npm:5.12.0"],\
           ["hed-validator", "npm:4.2.0"],\
           ["lodash", "npm:4.17.21"],\
           ["pluralize", "npm:8.0.0"],\
@@ -14463,6 +14474,15 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/is-unicode-supported-npm-0.1.0-0833e1bbfb-a2aab86ee7.zip/node_modules/is-unicode-supported/",\
         "packageDependencies": [\
           ["is-unicode-supported", "npm:0.1.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["is-unsafe", [\
+      ["npm:2.0.3", {\
+        "packageLocation": "./.yarn/cache/is-unsafe-npm-2.0.3-d1db57bdfa-c3287873db.zip/node_modules/is-unsafe/",\
+        "packageDependencies": [\
+          ["is-unsafe", "npm:2.0.3"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -18831,10 +18851,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["path-expression-matcher", [\
-      ["npm:1.5.0", {\
-        "packageLocation": "./.yarn/cache/path-expression-matcher-npm-1.5.0-73d258a112-28303bb9ee.zip/node_modules/path-expression-matcher/",\
+      ["npm:1.6.2", {\
+        "packageLocation": "./.yarn/cache/path-expression-matcher-npm-1.6.2-f725f1f519-d7786b1709.zip/node_modules/path-expression-matcher/",\
         "packageDependencies": [\
-          ["path-expression-matcher", "npm:1.5.0"]\
+          ["path-expression-matcher", "npm:1.6.2"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -22145,10 +22165,11 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["strnum", [\
-      ["npm:2.2.3", {\
-        "packageLocation": "./.yarn/cache/strnum-npm-2.2.3-3aa06fd3c4-fb70206301.zip/node_modules/strnum/",\
+      ["npm:2.5.1", {\
+        "packageLocation": "./.yarn/cache/strnum-npm-2.5.1-20c71e3f32-97918f9e6a.zip/node_modules/strnum/",\
         "packageDependencies": [\
-          ["strnum", "npm:2.2.3"]\
+          ["anynum", "npm:1.0.1"],\
+          ["strnum", "npm:2.5.1"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -24705,10 +24726,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["xml-naming", [\
-      ["npm:0.1.0", {\
-        "packageLocation": "./.yarn/cache/xml-naming-npm-0.1.0-6def6e9a28-45abd94ba6.zip/node_modules/xml-naming/",\
+      ["npm:0.3.0", {\
+        "packageLocation": "./.yarn/cache/xml-naming-npm-0.3.0-83875da6c6-1a09c3f147.zip/node_modules/xml-naming/",\
         "packageDependencies": [\
-          ["xml-naming", "npm:0.1.0"]\
+          ["xml-naming", "npm:0.3.0"]\
         ],\
         "linkType": "HARD"\
       }]\
