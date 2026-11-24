@@ -8157,7 +8157,7 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["axios", "npm:1.18.1"],\
           ["follow-redirects", "virtual:cfe396e04f9d811fe025e61204c45b20fa95aeeb72f863d9cf0f07aec679067f9a0d2fe39eb3c317aeb8b92b549644483d65f5e97851fa03255f800f31d04eff#npm:1.16.0"],\
-          ["form-data", "npm:4.0.5"],\
+          ["form-data", "npm:4.0.6"],\
           ["https-proxy-agent", "npm:5.0.1"],\
           ["proxy-from-env", "npm:2.1.0"]\
         ],\
@@ -8168,7 +8168,7 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["axios", "npm:1.8.4"],\
           ["follow-redirects", "virtual:cfe396e04f9d811fe025e61204c45b20fa95aeeb72f863d9cf0f07aec679067f9a0d2fe39eb3c317aeb8b92b549644483d65f5e97851fa03255f800f31d04eff#npm:1.16.0"],\
-          ["form-data", "npm:4.0.0"],\
+          ["form-data", "npm:4.0.6"],\
           ["proxy-from-env", "npm:1.1.0"]\
         ],\
         "linkType": "HARD"\
@@ -12070,35 +12070,15 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["form-data", [\
-      ["npm:3.0.1", {\
-        "packageLocation": "./.yarn/cache/form-data-npm-3.0.1-d080d436e0-944b40ff63.zip/node_modules/form-data/",\
-        "packageDependencies": [\
-          ["asynckit", "npm:0.4.0"],\
-          ["combined-stream", "npm:1.0.8"],\
-          ["form-data", "npm:3.0.1"],\
-          ["mime-types", "npm:2.1.32"]\
-        ],\
-        "linkType": "HARD"\
-      }],\
-      ["npm:4.0.0", {\
-        "packageLocation": "./.yarn/cache/form-data-npm-4.0.0-916facec2d-7264aa760a.zip/node_modules/form-data/",\
-        "packageDependencies": [\
-          ["asynckit", "npm:0.4.0"],\
-          ["combined-stream", "npm:1.0.8"],\
-          ["form-data", "npm:4.0.0"],\
-          ["mime-types", "npm:2.1.32"]\
-        ],\
-        "linkType": "HARD"\
-      }],\
-      ["npm:4.0.5", {\
-        "packageLocation": "./.yarn/cache/form-data-npm-4.0.5-c35fce815a-52ecd6e927.zip/node_modules/form-data/",\
+      ["npm:3.0.5", {\
+        "packageLocation": "./.yarn/cache/form-data-npm-3.0.5-729a6580f3-ad761add6e.zip/node_modules/form-data/",\
         "packageDependencies": [\
           ["asynckit", "npm:0.4.0"],\
           ["combined-stream", "npm:1.0.8"],\
           ["es-set-tostringtag", "npm:2.1.0"],\
-          ["form-data", "npm:4.0.5"],\
-          ["hasown", "npm:2.0.2"],\
-          ["mime-types", "npm:2.1.32"]\
+          ["form-data", "npm:3.0.5"],\
+          ["hasown", "npm:2.0.4"],\
+          ["mime-types", "npm:2.1.35"]\
         ],\
         "linkType": "HARD"\
       }],\
@@ -14801,7 +14781,7 @@ const RAW_RUNTIME_STATE =
           ["cssstyle", "npm:4.0.1"],\
           ["data-urls", "npm:5.0.0"],\
           ["decimal.js", "npm:10.4.3"],\
-          ["form-data", "npm:4.0.0"],\
+          ["form-data", "npm:4.0.6"],\
           ["html-encoding-sniffer", "npm:4.0.0"],\
           ["http-proxy-agent", "npm:7.0.2"],\
           ["https-proxy-agent", "npm:7.0.4"],\
@@ -22189,7 +22169,7 @@ const RAW_RUNTIME_STATE =
           ["cookiejar", "npm:2.1.4"],\
           ["debug", "virtual:428f325a939c2653ad822eb3d75efb02ac311523dd0d4f9645afc39ea00bd86eceac35a9d59c9b6977d76b670a4ef0ae057ea572338a44729aa592711a8c05a3#npm:4.3.2"],\
           ["fast-safe-stringify", "npm:2.1.1"],\
-          ["form-data", "npm:3.0.1"],\
+          ["form-data", "npm:3.0.5"],\
           ["formidable", "npm:1.2.6"],\
           ["methods", "npm:1.1.2"],\
           ["mime", "npm:2.6.0"],\
