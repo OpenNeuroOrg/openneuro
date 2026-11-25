@@ -32,6 +32,15 @@ function createRedisMock() {
   const store = new Map<string, Buffer>()
   const sets = new Map<string, Set<string>>()
 
+  const deleteKeys = (keys: string[]) => {
+    let removed = 0
+    for (const key of keys) {
+      if (store.delete(key)) removed++
+      if (sets.delete(key)) removed++
+    }
+    return removed
+  }
+
   const pipelineOps: (() => [Error | null, unknown])[] = []
   const pipelineMock = {
     getBuffer(key: string) {
@@ -41,12 +50,20 @@ function createRedisMock() {
       })
       return pipelineMock
     },
-    del(key: string) {
+    sadd(key: string, ...members: string[]) {
       pipelineOps.push(() => {
-        store.delete(key)
-        sets.delete(key)
-        return [null, 1]
+        if (!sets.has(key)) sets.set(key, new Set())
+        for (const m of members) sets.get(key)!.add(m)
+        return [null, members.length]
       })
+      return pipelineMock
+    },
+    del(...keys: string[]) {
+      pipelineOps.push(() => [null, deleteKeys(keys)])
+      return pipelineMock
+    },
+    unlink(...keys: string[]) {
+      pipelineOps.push(() => [null, deleteKeys(keys)])
       return pipelineMock
     },
     exec: vi.fn(async () => {
@@ -69,6 +86,16 @@ function createRedisMock() {
       for (const m of members) sets.get(key)!.add(m)
     }),
     smembers: vi.fn(async (key: string) => [...(sets.get(key) ?? [])]),
+    sscanStream: vi.fn((key: string, opts?: { count?: number }) => {
+      const members = [...(sets.get(key) ?? [])]
+      const chunkSize = opts?.count ?? 10
+      return (async function* () {
+        for (let i = 0; i < members.length; i += chunkSize) {
+          yield members.slice(i, i + chunkSize)
+        }
+      })()
+    }),
+    unlink: vi.fn(async (...keys: string[]) => deleteKeys(keys)),
     pipeline: vi.fn(() => {
       pipelineOps.length = 0
       return pipelineMock
@@ -189,26 +216,46 @@ describe("tree cache", () => {
   })
 
   describe("clearDatasetTrees", () => {
-    it("deletes all cached trees and the index", async () => {
+    it("deletes all cached trees, commit tree indexes, and the dataset index", async () => {
       const redis = createRedisMock()
-      // Populate tree data and index
+      // Populate tree data, commit tree index, and dataset index
       await setTree(redis, "t1", [makeEntry({ n: "a" })])
       await setTree(redis, "t2", [makeEntry({ n: "b" })])
+      await setCommitTrees(redis, "t1", ["t1", "t2"])
       await addDatasetTrees(redis, "ds000001", ["t1", "t2"])
 
       await clearDatasetTrees(redis, "ds000001")
 
-      // Individual trees should be gone
+      // Individual trees and commit-tree mapping should be gone
       expect(await getTree(redis, "t1")).toBeNull()
       expect(await getTree(redis, "t2")).toBeNull()
+      expect(await getCommitTrees(redis, "t1")).toBeNull()
       // Index should be gone
       expect(await getDatasetTrees(redis, "ds000001")).toEqual([])
+      expect(redis.unlink).toHaveBeenCalled()
+    })
+
+    it("chunks large tree sets across batched unlink commands", async () => {
+      const redis = createRedisMock()
+      const hashes = Array.from({ length: 1200 }, (_, i) => `hash-${i}`)
+      for (const h of hashes) {
+        await setTree(redis, h, [makeEntry({ n: h })])
+      }
+      await addDatasetTrees(redis, "ds000001", hashes)
+
+      await clearDatasetTrees(redis, "ds000001")
+
+      expect(await getTree(redis, "hash-0")).toBeNull()
+      expect(await getTree(redis, "hash-1199")).toBeNull()
+      expect(await getDatasetTrees(redis, "ds000001")).toEqual([])
+      expect(redis.pipeline).toHaveBeenCalled()
     })
 
     it("does nothing when dataset has no trees", async () => {
       const redis = createRedisMock()
       await clearDatasetTrees(redis, "ds000001")
       expect(redis.pipeline).not.toHaveBeenCalled()
+      expect(redis.unlink).not.toHaveBeenCalled()
     })
   })
 })
