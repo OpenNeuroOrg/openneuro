@@ -25,6 +25,10 @@ export interface TreeEntry {
   l: boolean
 }
 
+export const SCAN_COUNT = 5000
+export const UNLINK_CHUNK_SIZE = 1000
+const SADD_CHUNK_SIZE = 5000
+
 function treeKey(hash: string): string {
   return `tree:${hash}`
 }
@@ -33,7 +37,7 @@ function commitTreesKey(commitHash: string): string {
   return `ct:${commitHash}`
 }
 
-function datasetTreesKey(datasetId: string): string {
+export function datasetTreesKey(datasetId: string): string {
   return `dt:${datasetId}`
 }
 
@@ -122,8 +126,16 @@ export async function addDatasetTrees(
   datasetId: string,
   treeHashes: string[],
 ): Promise<void> {
-  if (treeHashes.length > 0) {
-    await redis.sadd(datasetTreesKey(datasetId), ...treeHashes)
+  if (treeHashes.length === 0) return
+  const key = datasetTreesKey(datasetId)
+  if (treeHashes.length <= SADD_CHUNK_SIZE) {
+    await redis.sadd(key, ...treeHashes)
+  } else {
+    const pipeline = redis.pipeline()
+    for (let i = 0; i < treeHashes.length; i += SADD_CHUNK_SIZE) {
+      pipeline.sadd(key, ...treeHashes.slice(i, i + SADD_CHUNK_SIZE))
+    }
+    await pipeline.exec()
   }
 }
 
@@ -135,18 +147,54 @@ export async function getDatasetTrees(
   return redis.smembers(datasetTreesKey(datasetId))
 }
 
+/**
+ * Unlink full chunks of keys asynchronously in Redis, returning any remaining keys.
+ * When `flushAll` is true, also unlinks any trailing partial chunk.
+ */
+export async function flushUnlinkBatch(
+  redis: Redis,
+  keys: string[],
+  flushAll = false,
+): Promise<string[]> {
+  const limit = flushAll
+    ? keys.length
+    : keys.length - (keys.length % UNLINK_CHUNK_SIZE)
+  if (limit === 0) return keys
+
+  if (limit <= UNLINK_CHUNK_SIZE) {
+    await redis.unlink(...keys.slice(0, limit))
+  } else {
+    const pipeline = redis.pipeline()
+    for (let i = 0; i < limit; i += UNLINK_CHUNK_SIZE) {
+      pipeline.unlink(...keys.slice(i, i + UNLINK_CHUNK_SIZE))
+    }
+    await pipeline.exec()
+  }
+  return keys.slice(limit)
+}
+
 /** Delete all cached trees for a dataset and clean up the index */
 export async function clearDatasetTrees(
   redis: Redis,
   datasetId: string,
 ): Promise<void> {
-  const treeHashes = await getDatasetTrees(redis, datasetId)
-  if (treeHashes.length > 0) {
-    const pipeline = redis.pipeline()
-    for (const hash of treeHashes) {
-      pipeline.del(treeKey(hash))
+  const indexKey = datasetTreesKey(datasetId)
+  const stream = redis.sscanStream(indexKey, { count: SCAN_COUNT })
+  let batch: string[] = []
+  let hasEntries = false
+
+  for await (const hashes of stream) {
+    const hashList = hashes as string[]
+    if (hashList.length === 0) continue
+    hasEntries = true
+    for (const hash of hashList) {
+      batch.push(treeKey(hash), commitTreesKey(hash))
     }
-    pipeline.del(datasetTreesKey(datasetId))
-    await pipeline.exec()
+    batch = await flushUnlinkBatch(redis, batch, false)
+  }
+
+  if (hasEntries) {
+    batch.push(indexKey)
+    await flushUnlinkBatch(redis, batch, true)
   }
 }

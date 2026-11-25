@@ -1,6 +1,33 @@
 import { getRedis } from "../../libs/redis.js"
-import { clearDatasetTrees } from "../../cache/tree"
+import {
+  clearDatasetTrees,
+  datasetTreesKey,
+  flushUnlinkBatch,
+  SCAN_COUNT,
+} from "../../cache/tree"
 import type { GraphQLContext } from "../builder"
+
+async function clearDatasetCacheKeys(datasetId: string): Promise<void> {
+  const redis = getRedis()
+  const treeIndexKey = datasetTreesKey(datasetId)
+  const lockPrefix = `openneuro:create-snapshot-lock:${datasetId}:`
+  const stream = redis.scanStream({
+    match: `*${datasetId}*`,
+    count: SCAN_COUNT,
+  })
+  let batch: string[] = []
+
+  for await (const keys of stream) {
+    for (const key of keys as string[]) {
+      if (key !== treeIndexKey && !key.startsWith(lockPrefix)) {
+        batch.push(key)
+      }
+    }
+    batch = await flushUnlinkBatch(redis, batch, false)
+  }
+
+  await flushUnlinkBatch(redis, batch, true)
+}
 
 /**
  * Clear all cache entries for a given datasetId
@@ -13,20 +40,10 @@ export async function cacheClear(
   // Check for admin and validate datasetId argument
   if (userInfo?.admin && datasetId.length == 8 && datasetId.startsWith("ds")) {
     try {
-      // Clear tree cache entries via the dataset-to-trees index
-      await clearDatasetTrees(getRedis(), datasetId)
-
-      // Also clear non-tree cache keys (descriptions, snapshots, etc.)
-      const stream = getRedis().scanStream({
-        match: `*${datasetId}*`,
-      })
-      const pipeline = getRedis().pipeline()
-      for await (const keys of stream) {
-        for (const key of keys) {
-          pipeline.del(key)
-        }
-      }
-      await pipeline.exec()
+      await Promise.all([
+        clearDatasetTrees(getRedis(), datasetId),
+        clearDatasetCacheKeys(datasetId),
+      ])
       return true
     } catch (_err) {
       return false
